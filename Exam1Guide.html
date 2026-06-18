@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUR256 Med-Surg 1 — Exam Study Guide & Practice Exam</title>
+<style>
+:root{
+  --bg:#fdf7ff; --bg2:#f3ecfe; --card:#ffffff; --card2:#f6f1ff;
+  --ink:#241b38; --ink-dim:#6b6480; --line:#ece4fa;
+  --accent:#6d3bf5; --accent2:#e0399b; --gold:#f59e0b;
+  --good:#10b981; --bad:#f43f5e; --warn:#f97316;
+  --pink:#ec4899; --teal:#06b6d4; --lime:#84cc16; --cyan:#22d3ee;
+  --shadow:0 10px 30px rgba(109,59,245,.14);
+  --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(800px 500px at 8% 0%, rgba(224,57,155,.10), transparent 60%),
+    radial-gradient(900px 600px at 95% 8%, rgba(109,59,245,.12), transparent 55%),
+    radial-gradient(700px 500px at 50% 110%, rgba(6,182,212,.10), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.55; padding-bottom:90px;
+}
+a{color:var(--accent)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+
+/* HEADER */
+header.top{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(110deg,#6d3bf5,#a23bf0,#e0399b,#6d3bf5);
+  background-size:300% 100%;
+  animation:slideGrad 14s ease infinite;
+  backdrop-filter:blur(10px); border-bottom:none;
+  box-shadow:0 6px 22px rgba(109,59,245,.30);
+}
+@keyframes slideGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.top-inner{display:flex;align-items:center;gap:12px;padding:13px 16px;max-width:1000px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-size:1.08rem;letter-spacing:.3px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.18)}
+.brand span{font-size:.72rem;color:rgba(255,255,255,.9)}
+.prog-mini{margin-left:auto;font-size:.72rem;color:rgba(255,255,255,.9);text-align:right}
+.prog-mini b{color:#ffe27a}
+
+/* TABS */
+nav.tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 16px;max-width:1000px;margin:0 auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);
+  color:var(--ink-dim);padding:8px 15px;border-radius:999px;font-size:.82rem;
+  cursor:pointer;white-space:nowrap;transition:transform .15s, box-shadow .15s, border-color .15s;font-weight:700;
+}
+.tab:hover{border-color:var(--accent);transform:translateY(-2px)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(224,57,155,.38);transform:translateY(-1px)}
+
+/* PANELS */
+.panel{display:none;animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+section{margin:22px 0}
+h1.page-title{font-size:1.7rem;margin:20px 0 4px;font-weight:800;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.5px}
+.subtle{color:var(--ink-dim);font-size:.92rem;margin-top:2px}
+
+
+/* CARDS */
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin:16px 0;box-shadow:var(--shadow);overflow:hidden;transition:transform .18s, box-shadow .18s}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--cyan))}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(109,59,245,.18)}
+.card h2{margin:2px 0 6px;font-size:1.2rem;display:flex;align-items:center;gap:8px;font-weight:800}
+.card h3{margin:16px 0 6px;font-size:1.02rem;color:var(--accent);font-weight:800}
+.pill{display:inline-block;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase}
+.pill.hot{background:linear-gradient(135deg,#fb7185,#f43f5e);color:#fff;border:none}
+.pill.med{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;border:none}
+.pill.versed{background:linear-gradient(135deg,#a78bfa,#8b5cf6);color:#fff;border:none}
+.pill.ngn{background:linear-gradient(135deg,#22d3ee,#06b6d4);color:#fff;border:none}
+
+ul.clean{margin:8px 0;padding-left:20px}
+ul.clean li{margin:6px 0}
+ul.clean li::marker{color:var(--accent2)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:8px 0;font-size:.92rem}
+.kv b{color:var(--accent)}
+
+/* HIGH-YIELD callout */
+.hy{border-left:5px solid var(--gold);background:linear-gradient(90deg,rgba(245,158,11,.14),rgba(245,158,11,.03));padding:13px 15px;border-radius:0 14px 14px 0;margin:13px 0}
+.hy .lbl{font-size:.7rem;font-weight:800;color:#d97706;letter-spacing:.6px;text-transform:uppercase}
+.versedbox{border-left:5px solid var(--accent2);background:linear-gradient(90deg,rgba(224,57,155,.13),rgba(224,57,155,.03));padding:13px 15px;border-radius:0 14px 14px 0;margin:13px 0}
+.versedbox .lbl{font-size:.7rem;font-weight:800;color:var(--accent2);letter-spacing:.6px;text-transform:uppercase}
+.trap{border-left:5px solid var(--bad);background:linear-gradient(90deg,rgba(244,63,94,.12),rgba(244,63,94,.03));padding:13px 15px;border-radius:0 14px 14px 0;margin:13px 0}
+.trap .lbl{font-size:.7rem;font-weight:800;color:var(--bad);letter-spacing:.6px;text-transform:uppercase}
+
+/* TABLE */
+table.t{width:100%;border-collapse:collapse;margin:10px 0;font-size:.86rem;border-radius:12px;overflow:hidden}
+table.t th,table.t td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+table.t th{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;border-color:transparent}
+table.t tr:nth-child(even) td{background:rgba(109,59,245,.05)}
+table.t tbody tr:hover td{background:rgba(224,57,155,.07)}
+
+/* VAULT (collapsible) */
+.vault{border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden;background:var(--card2)}
+.vault summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px;user-select:none}
+.vault summary::-webkit-details-marker{display:none}
+.vault summary .chev{margin-left:auto;transition:.2s;color:var(--ink-dim)}
+.vault[open] summary .chev{transform:rotate(90deg)}
+.vault .body{padding:0 16px 16px}
+
+/* BUTTONS */
+.btn{border:none;border-radius:14px;padding:12px 20px;font-weight:800;font-size:.92rem;cursor:pointer;transition:transform .15s, box-shadow .15s, filter .15s}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 6px 18px rgba(109,59,245,.34)}
+.btn.ghost{background:var(--card2);color:var(--accent);border:1.5px solid var(--line)}
+.btn.gold{background:linear-gradient(135deg,#fbbf24,#fb7185);color:#fff;box-shadow:0 6px 18px rgba(244,63,94,.30)}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.btn.primary:hover{box-shadow:0 10px 24px rgba(109,59,245,.42)}
+.btn.gold:hover{box-shadow:0 10px 24px rgba(244,63,94,.4)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn:active{transform:scale(.96)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+
+/* QUIZ */
+.qmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;font-size:.82rem;color:var(--ink-dim)}
+.qbar{height:10px;background:var(--card2);border-radius:999px;overflow:hidden;margin:8px 0 18px}
+.qbar > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--cyan));width:0;transition:.4s}
+.qstem{font-size:1.1rem;font-weight:700;margin:6px 0 16px;line-height:1.5}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--card2);
+  color:var(--ink);padding:14px 16px;border-radius:14px;margin:9px 0;cursor:pointer;transition:transform .12s, border-color .12s, background .12s;font-size:.94rem;position:relative}
+.opt:hover{border-color:var(--accent);transform:translateX(3px)}
+.opt.sel{border-color:var(--accent);background:rgba(109,59,245,.10)}
+.opt.correct{border-color:var(--good);background:rgba(16,185,129,.14)}
+.opt.wrong{border-color:var(--bad);background:rgba(244,63,94,.12)}
+.opt .mark{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-weight:800;font-size:1.1rem}
+.rationale{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);font-size:.92rem;display:none}
+.rationale.show{display:block;animation:fade .2s}
+.rationale .rlbl{font-weight:800;font-size:.74rem;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.rationale.ok{background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.35)}
+.rationale.no{background:rgba(244,63,94,.09);border-color:rgba(244,63,94,.35)}
+.rationale.ok .rlbl{color:var(--good)}
+.rationale.no .rlbl{color:var(--bad)}
+.sata-note{font-size:.78rem;color:#d97706;margin:6px 0 10px;font-weight:700}
+.hintbox{border-left:5px solid var(--teal);background:linear-gradient(90deg,rgba(6,182,212,.13),rgba(6,182,212,.03));padding:12px 15px;border-radius:0 14px 14px 0;margin:12px 0;font-size:.92rem}
+.hintbox .lbl{font-size:.7rem;font-weight:800;color:#0891b2;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+
+/* SCORE */
+.scorecard{text-align:center;padding:34px 18px}
+.scorecard .big{font-size:3.4rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.donut{width:160px;height:160px;margin:12px auto}
+
+/* FLASHCARD */
+.fc-scene{perspective:1200px;margin:16px 0}
+.fc{position:relative;width:100%;min-height:240px;cursor:pointer;transform-style:preserve-3d;transition:transform .55s}
+.fc.flip{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:26px;display:flex;flex-direction:column;justify-content:center;border:none;box-shadow:0 12px 30px rgba(109,59,245,.18)}
+.fc-front{background:linear-gradient(140deg,#7c4dff,#a23bf0,#e0399b);color:#fff}
+.fc-back{background:linear-gradient(140deg,#06b6d4,#0ea5e9,#6d3bf5);color:#fff;transform:rotateY(180deg)}
+.fc-face .tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.85);margin-bottom:8px}
+.fc-face .q{font-size:1.15rem;font-weight:800}
+.fc-face .a{font-size:1.02rem}
+.fc-face .a b{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5)}
+.fc-hint{text-align:center;color:var(--ink-dim);font-size:.78rem;margin-top:8px}
+
+/* CHIP filter */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1.5px solid var(--line);background:var(--card2);color:var(--ink-dim);padding:7px 14px;border-radius:999px;font-size:.8rem;cursor:pointer;font-weight:700;transition:transform .14s, box-shadow .14s}
+.chip:hover{transform:translateY(-2px)}
+.chip.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 5px 14px rgba(224,57,155,.32)}
+
+/* misc */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.top-inner{gap:8px}h1.page-title{font-size:1.45rem}}
+.mono{font-variant-numeric:tabular-nums}
+.center{text-align:center}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
+  padding:11px 20px;border-radius:999px;font-size:.86rem;font-weight:700;opacity:0;transition:.3s;z-index:200;box-shadow:0 8px 24px rgba(109,59,245,.4)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{color:var(--ink-dim);font-size:.78rem;text-align:center;padding:26px 16px}
+.legend{font-size:.78rem;color:var(--ink-dim);display:flex;gap:14px;flex-wrap:wrap;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand"><b>NUR256 · Med-Surg 1</b><span>Aging · Chronic Illness · Cancer · Perioperative · End-of-Life</span></div>
+    <div class="prog-mini" id="progMini">Questions answered: <b id="pmCount">0</b></div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+
+<div class="wrap" id="app"></div>
+
+<div class="toast" id="toast"></div>
+<footer>Built for Des · NUR256 exam prep · Drugs are mapped to the diseases they treat.<br>Your progress saves automatically on this device.</footer>
+
+<script>
+/* ============================================================
+   NUR256 Med-Surg 1 — Exam Study Guide
+   Sourced from Ch 7,8,12,13,14,15,16 lecture slides
+   topic: aging|chronic|cancer|pre|intra|post|eol|meds
+   type:  mc | sata | ngn
+   hot:true  => high-yield / instructor-emphasized
+   ============================================================ */
+const QBANK = [
+/* ---------------- SYSTEMIC AGING (head-to-toe) ---------------- */
+{topic:"aging",type:"mc",hot:true,
+ stem:"The master principle that explains why older adults tolerate illness, surgery, and medications poorly is that aging reduces:",
+ opts:["Intelligence and memory","Physiologic reserve in every body system","The number of chronic diseases","The need for medications"],
+ ans:[1],
+ rat:"Aging = <b>less physiologic reserve</b>. Each system still works at rest but has little extra capacity to handle stress (surgery, infection, blood loss, new drugs). This single idea drives nearly every geriatric exam answer."},
+
+{topic:"aging",type:"sata",hot:true,
+ stem:"Which are NORMAL age-related (head-to-toe) changes the nurse expects in a healthy older adult? Select all that apply.",
+ opts:["Decreased aerobic capacity (~10% per decade)","Decreased skin elasticity and thinner dermis","Decreased kidney mass and filtration rate","Sudden confusion and severe memory loss","Decreased gastric motility and slower absorption"],
+ ans:[0,1,2,4],
+ rat:"Normal aging: lungs lose aerobic capacity, skin thins/loses elasticity, kidneys lose nephrons and GFR, GI motility slows. <b>Sudden confusion is NOT normal aging</b> — it signals delirium, infection, or another acute problem and must be reported."},
+
+{topic:"aging",type:"mc",hot:true,
+ stem:"An 80-year-old is admitted with a UTI. The family says 'she was fine yesterday, now she's confused and agitated.' The nurse recognizes this new confusion as:",
+ opts:["Expected dementia of aging","A normal response to hospitalization","Possible delirium — a medical emergency to report","A sign she needs restraints"],
+ ans:[2],
+ rat:"New, acute confusion = <b>delirium</b>, which is reversible but a medical emergency. In older adults, infection often presents as confusion rather than fever. Delirium is acute/fluctuating; dementia is chronic/gradual. Report immediately and find the cause."},
+
+{topic:"aging",type:"mc",
+ stem:"When administering medications to an older adult, the safest guiding principle is:",
+ opts:["Start high to ensure effect","Start low and go slow","Give all medications at the same time","Avoid assessing kidney/liver function"],
+ ans:[1],
+ rat:"Altered pharmacokinetics (less body water, more fat, lower liver/kidney function) means drugs last longer and accumulate. <b>Start low, go slow</b>, simplify the regimen, and watch for polypharmacy and Beers-criteria drugs."},
+
+{topic:"aging",type:"mc",
+ stem:"The 'geriatric triad' the nurse focuses on preventing during hospitalization includes changes in cognition, incontinence, and:",
+ opts:["Falls","Pressure injuries","Polypharmacy","Malnutrition"],
+ ans:[0],
+ rat:"The classic <b>geriatric triad</b> is cognitive changes, <b>falls</b>, and incontinence. Pressure injuries, polypharmacy, and malnutrition are all real geriatric concerns and common distractors, but they are not the three that define the named triad — falls completes it."},
+
+/* ---------------- CHRONIC ILLNESS / DISABILITY ---------------- */
+{topic:"chronic",type:"mc",hot:true,
+ stem:"A patient newly diagnosed with type 2 diabetes asks, 'When will this be cured?' The nurse's most accurate response reflects that a chronic illness is:",
+ opts:["A condition that resolves once blood glucose normalizes","An ongoing, incurable condition managed long-term to prevent complications","A condition controlled by medication alone without lifestyle change","A temporary illness that becomes acute during flare-ups"],
+ ans:[1],
+ rat:"<b>Chronic = incurable</b> (CDC: lasts 1+ year, needs ongoing care). Normalizing glucose controls but does not cure it; medication alone is not enough — diet, activity, and self-management matter; and a chronic illness is not 'temporary' even though it can have acute flares. The goal is managing symptoms and preventing complications."},
+
+{topic:"chronic",type:"mc",
+ stem:"Which statement uses correct people-first language?",
+ opts:["The diabetic patient in room 4","The patient with diabetes in room 4","The patient suffering from diabetes in room 4","The diabetes patient in room 4"],
+ ans:[1],
+ rat:"<b>People-first language</b> puts the person before the condition: 'patient WITH diabetes.' 'Diabetic patient' and 'diabetes patient' still lead with the disease as a label, and 'suffering from' adds a negative, pity-based framing. The differences are subtle on purpose — people-first phrasing is specifically 'person with [condition].' Always honor individual preference."},
+
+{topic:"chronic",type:"sata",
+ stem:"Which are modifiable risk factors for chronic disease the nurse targets in teaching? Select all that apply.",
+ opts:["Tobacco use","Diet low in fruits/vegetables, high in sodium","Family genetics","Physical inactivity","Excessive alcohol use"],
+ ans:[0,1,3,4],
+ rat:"Modifiable: tobacco, poor diet/high sodium, inactivity, excess alcohol. <b>Genetics is non-modifiable.</b> Health promotion focuses on what the patient can change."},
+
+{topic:"chronic",type:"mc",hot:true,
+ stem:"U.S. veterans have a higher prevalence of multiple chronic conditions. Which combination is specifically noted as common in male veterans?",
+ opts:["Hypertension, arthritis, and COPD","Asthma, eczema, and seasonal allergies","Type 1 diabetes, epilepsy, and migraines","Anxiety, IBS, and chronic sinusitis"],
+ ans:[0],
+ rat:"Male veterans most commonly carry <b>hypertension, arthritis, and COPD</b> (with CAD/cancer rising after 65). The other clusters are all real chronic conditions, but they are not the combination specifically noted as most prevalent in male veterans — the MCC pattern reflects age, service exposures, and cardiopulmonary risk."},
+
+/* ---------------- CANCER: how it affects the body ---------------- */
+{topic:"cancer",type:"mc",hot:true,
+ stem:"Carcinogenesis (how a normal cell becomes cancer) occurs in three steps. The correct order is:",
+ opts:["Promotion → initiation → progression","Initiation → promotion → progression","Progression → promotion → initiation","Metastasis → initiation → promotion"],
+ ans:[1],
+ rat:"<b>Initiation</b> (DNA mutation) → <b>promotion</b> (repeated exposure makes mutated cells proliferate; reversible if agent removed) → <b>progression</b> (cells become malignant, grow blood supply via angiogenesis, invade, and metastasize)."},
+
+{topic:"cancer",type:"sata",hot:true,
+ stem:"How does cancer harm the body? Select all that apply.",
+ opts:["Uncontrolled cell growth with no physiologic demand","Invades and destroys surrounding normal tissue","Spreads (metastasizes) via blood and lymph","Remains encapsulated within a fibrous capsule","Competes for nutrients, causing cachexia/weight loss"],
+ ans:[0,1,2,4],
+ rat:"Malignant cells grow without control, invade and destroy tissue, metastasize via blood/lymph, and drain nutrition (cachexia). The trap is <b>'remains encapsulated within a fibrous capsule'</b> — that describes a BENIGN tumor; malignant tumors are non-encapsulated and infiltrate surrounding tissue. Read this one carefully, because the distractor uses correct-sounding pathology terms."},
+
+{topic:"cancer",type:"mc",hot:true,
+ stem:"Chemotherapy and radiation damage normal cells that divide rapidly. Which tissues are therefore most affected (and most sensitive on the exam)?",
+ opts:["Muscle and brain","Bone marrow, GI epithelium, hair follicles","Bone and cartilage","Tendons and ligaments"],
+ ans:[1],
+ rat:"Rapidly dividing tissues take the hit: <b>bone marrow</b> (→ anemia, neutropenia, thrombocytopenia), <b>GI lining</b> (→ nausea, mucositis, diarrhea), and <b>hair follicles</b> (→ alopecia). Muscle/brain are slow-dividing and radioresistant."},
+
+{topic:"cancer",type:"mc",
+ stem:"The TNM staging system describes a solid tumor. What does each letter stand for?",
+ opts:["Tumor grade, Number of nodes, Mitotic rate","Tumor size/extent, regional lymph Nodes, distant Metastasis","Tissue type, Necrosis level, Malignancy score","Tumor location, Nuclear features, Metastatic risk"],
+ ans:[1],
+ rat:"<b>T</b> = primary tumor size/extent · <b>N</b> = regional lymph Nodes · <b>M</b> = distant Metastasis. The distractors mix in real oncology words (grade, mitotic rate, necrosis, nuclear features) that belong to <b>grading</b>, not staging — staging (TNM) describes how far cancer has spread, while grading describes how abnormal the cells look. Don't confuse the two."},
+
+{topic:"cancer",type:"ngn",hot:true,
+ stem:"NGN — Cancer prevention levels. A nurse plans community cancer programs. Match the action to the correct prevention level by selecting the PRIMARY-prevention activities. Select all that apply.",
+ opts:["Administering the HPV vaccine","Teaching tobacco cessation and healthy diet","Screening mammography to find early cancer","Monitoring a survivor for a second cancer","HBV vaccination to prevent liver cancer"],
+ ans:[0,1,4],
+ rat:"<b>Primary</b> = prevent cancer before it starts: HPV/HBV vaccines, tobacco cessation, diet/activity. <b>Secondary</b> = screening/early detection (mammography, colonoscopy, Pap). <b>Tertiary</b> = monitoring survivors for recurrence/second cancers."},
+
+{topic:"cancer",type:"mc",
+ stem:"Which is an example of SECONDARY cancer prevention?",
+ opts:["HPV vaccination","A low-dose CT lung screening in a smoker","Removing a high-risk colon prophylactically","Survivorship surveillance for recurrence"],
+ ans:[1],
+ rat:"Secondary prevention = <b>screening and early detection</b> (mammography, colonoscopy, Pap/HPV testing, low-dose CT for smokers). Vaccination is primary; survivorship monitoring is tertiary."},
+
+{topic:"cancer",type:"sata",hot:true,
+ stem:"Surgery is used for cancer in several ways. Match the TYPE of cancer surgery to its purpose — select all that are correctly paired.",
+ opts:["Diagnostic: biopsy to obtain tissue for analysis","Prophylactic: remove high-risk tissue before cancer develops","Palliative: relieve symptoms (obstruction, pain) without cure","Reconstructive: restore function or appearance","Curative surgery means the tumor can never recur"],
+ ans:[0,1,2,3],
+ rat:"<b>Diagnostic</b> = biopsy (excisional/incisional/needle, SLNB). <b>Prophylactic</b> = remove high-risk tissue (e.g., mastectomy/colectomy with BRCA or FAP). <b>Palliative</b> = comfort, e.g., debulking, colostomy for obstruction. <b>Reconstructive</b> = function/cosmetic. 'Curative' removes all visible tumor but does not guarantee no recurrence."},
+
+{topic:"cancer",type:"mc",hot:true,
+ stem:"The patient's absolute neutrophil count (ANC) is 450/mm³ after chemotherapy. The nurse's priority is to:",
+ opts:["Place the patient in airborne isolation with an N95 for staff","Implement neutropenic (protective) precautions and monitor for any sign of infection","Administer a prophylactic broad-spectrum antibiotic now","Transfuse packed red blood cells to raise the count"],
+ ans:[1],
+ rat:"<b>ANC < 500 = severe neutropenia</b> (nadir ~7–14 days post-chemo). Priority is <b>protective/neutropenic precautions</b> + watching for infection (fever may be the only sign). Airborne isolation/N95 protects against airborne pathogens, not the patient's own low immunity. Antibiotics are given for actual infection/per protocol, not reflexively. RBC transfusion treats anemia (low H&H), not neutropenia — neutrophils are white cells. The tempting wrong answers all 'sound' like infection care."},
+
+/* ---------------- PREOPERATIVE: prepare the patient ---------------- */
+{topic:"pre",type:"mc",hot:true,
+ stem:"The overall GOAL of preoperative nursing is to:",
+ opts:["Obtain the surgical consent signature and complete the chart","Prepare the patient physically and psychologically and optimize their health before surgery","Begin discharge teaching and arrange home care","Establish IV access and administer preoperative antibiotics"],
+ ans:[1],
+ rat:"The overall GOAL of preop nursing is to <b>prepare the patient (body and mind) and make them as healthy/low-risk as possible</b> before surgery. The others are real preop NURSING TASKS that fall under that goal — witnessing consent, discharge planning, IV access/antibiotics — but they are specific actions, not the overarching goal. Watch for 'goal' vs. 'task' wording."},
+
+{topic:"pre",type:"mc",hot:true,
+ stem:"Regarding informed consent, the nurse's role is to:",
+ opts:["Provide a detailed explanation of the procedure, risks, and alternatives","Witness the voluntary signature and verify understanding, notifying the surgeon if there are gaps","Have the patient sign before giving the preoperative sedative, then proceed regardless of questions","Obtain a family member's signature when the patient is anxious"],
+ ans:[1],
+ rat:"The <b>surgeon explains</b> procedure/risks/alternatives; the <b>nurse witnesses</b> the signature and verifies understanding, alerting the surgeon to any gaps. The 'sign before sedation' option is half-right (consent IS signed before psychoactive meds) but wrong because the nurse must NOT proceed if the patient still has questions. A family member signs only if the patient is legally unable to consent — not merely anxious. The plausible half-truths are the trap."},
+
+{topic:"pre",type:"sata",
+ stem:"Preoperative teaching to prevent postoperative complications includes which of the following? Select all that apply.",
+ opts:["Deep breathing and incentive spirometer use","Coughing and splinting the incision","Early ambulation and leg exercises","Holding all breathing exercises until pain-free","Turning and repositioning"],
+ ans:[0,1,2,4],
+ rat:"Teach <b>deep breathing + incentive spirometry</b> (prevents atelectasis/pneumonia), <b>coughing with splinting</b>, <b>leg exercises + early ambulation</b> (prevents VTE/stasis), and turning. Waiting until pain-free would let complications develop."},
+
+{topic:"pre",type:"mc",
+ stem:"An adult is scheduled for elective surgery in the morning. NPO teaching based on ERAS/guidelines is:",
+ opts:["NPO for a full 24 hours before surgery, including all liquids","Fast 8 hr after fatty food and 6 hr after a light meal/milk; clear liquids may be allowed up to 2 hr before","Stop solids at midnight but allow milk and juice up to the time of surgery","NPO after midnight for everything, with no exceptions for clear liquids"],
+ ans:[1],
+ rat:"Current ERAS guidance: ~8 hr after fatty/fried food, 6 hr after a light meal or milk, and <b>clear liquids up to 2 hr</b> before elective surgery — this prevents aspiration without unnecessary dehydration. '24 hours NPO' over-restricts; milk/juice are NOT clear liquids and need 6 hr; the rigid 'NPO after midnight, no exceptions' is the outdated practice ERAS replaced. The distractors are all old or near-miss rules."},
+
+{topic:"pre",type:"mc",
+ stem:"During medication reconciliation, the nurse notes the patient takes daily aspirin. The expected preoperative instruction is to:",
+ opts:["Hold the aspirin only on the morning of surgery","Stop aspirin/antiplatelets about 7–10 days before surgery","Continue aspirin through surgery since it is over-the-counter","Switch the aspirin to an NSAID until the day of surgery"],
+ ans:[1],
+ rat:"Aspirin irreversibly inhibits platelets for their ~7–10 day lifespan, so it is <b>stopped about 7–10 days pre-op</b> — not just the morning of (too late to recover platelet function). 'OTC so continue' is a trap: being non-prescription doesn't make it safe before surgery. Switching to an NSAID also impairs platelets/raises bleeding risk. Always reconcile and report the full med/herbal list."},
+
+/* ---------------- INTRAOPERATIVE: safety, positioning, MH, fire ---------------- */
+{topic:"intra",type:"mc",hot:true,
+ stem:"The circulating nurse's intraoperative priorities center on patient SAFETY. Which is a key responsibility?",
+ opts:["Setting up the sterile field and passing instruments to the surgeon","Coordinating the room: positioning, counts, asepsis, and verifying patient/site at the time-out","Continuously monitoring vital signs and titrating the anesthetic","Documenting and labeling the tissue specimens at the field"],
+ ans:[1],
+ rat:"The <b>circulating nurse</b> manages the whole room from outside the sterile field — positioning, sponge/needle/instrument counts, asepsis, and time-out verification. Setting up the sterile field and passing instruments is the <b>scrub</b> role; monitoring/titrating anesthesia is the <b>CRNA/anesthesiologist</b>; specimen handling is shared but is a task, not the circulator's central safety role. Each distractor is a real OR job assigned to the wrong person."},
+
+{topic:"intra",type:"sata",hot:true,
+ stem:"To prevent perioperative POSITIONING injury, the nurse should: Select all that apply.",
+ opts:["Pad bony prominences","Maintain correct anatomic alignment","Avoid hyperextending joints","Compress arteries to reduce bleeding","Protect nerves from pressure"],
+ ans:[0,1,2,4],
+ rat:"Proper positioning prevents <b>nerve, skin, and circulatory injury</b>: pad bony prominences, keep alignment, avoid hyperextension, and protect nerves/vessels. You would <b>never</b> compress arteries — that causes ischemia."},
+
+{topic:"intra",type:"mc",hot:true,
+ stem:"The OR is a high fire-risk environment. The fire triangle the team controls consists of an oxidizer (oxygen), an ignition source, and:",
+ opts:["Static electricity from the OR table","Fuel — surgical drapes, alcohol-based prep, and gases","Heat generated by the patient's body","Friction from surgical instruments"],
+ ans:[1],
+ rat:"The fire triangle = oxidizer (oxygen/nitrous), ignition source (laser/electrocautery), and <b>fuel</b> (drapes, alcohol-based prep, GI/airway gases). Static, body heat, and friction sound fire-related but are not the controllable 'fuel' leg — the team manages fuel by letting alcohol prep dry and keeping drapes clear of ignition sources."},
+
+{topic:"intra",type:"ngn",hot:true,
+ stem:"NGN — Malignant hyperthermia. Minutes after induction with a volatile anesthetic and succinylcholine, a patient develops HR 168, rising end-tidal CO2, and jaw rigidity. Select ALL appropriate nursing actions/recognitions.",
+ opts:["Recognize this as malignant hyperthermia","Anticipate giving dantrolene","Continue the triggering anesthetic","Initiate cooling measures and 100% oxygen","Expect a rapid rise in temperature as a LATE sign"],
+ ans:[0,1,3,4],
+ rat:"MH is a genetic hypermetabolic crisis triggered by <b>volatile anesthetics + succinylcholine</b>. EARLY signs: tachycardia, rising EtCO2 (hypercapnia), masseter/jaw rigidity. <b>Temperature spike is a LATE sign.</b> Treatment: STOP the trigger, give <b>dantrolene</b>, cool the patient, 100% O2, correct acidosis/electrolytes. Continuing the trigger would be fatal."},
+
+{topic:"intra",type:"mc",
+ stem:"Which early sign would alert the nurse to malignant hyperthermia FIRST?",
+ opts:["A late, sudden temperature spike to 107°F","Unexplained tachycardia and rising end-tidal CO2","Bradycardia and hypothermia","Decreased blood pressure only"],
+ ans:[1],
+ rat:"The <b>earliest</b> signs are unexplained <b>tachycardia and hypercapnia (rising EtCO2)</b>, often with jaw rigidity. The dramatic temperature rise is a <b>late</b> sign — waiting for it costs critical time."},
+
+{topic:"intra",type:"mc",hot:true,
+ stem:"All nurses, especially perioperative nurses, must screen for and prevent reactions to which common OR allergen?",
+ opts:["Chlorhexidine skin prep","Latex","Povidone-iodine prep","Adhesive tape"],
+ ans:[1],
+ rat:"<b>Latex</b> is the OR allergen every nurse must screen for and prevent (gloves, tubing, tourniquets) — reactions range from contact dermatitis to anaphylaxis. Chlorhexidine, iodine prep, and adhesives CAN cause reactions too, which makes them tempting, but latex is the classic, high-risk perioperative allergen with formal at-risk groups and latex-free protocols."},
+
+/* ---------------- POSTOPERATIVE ---------------- */
+{topic:"post",type:"mc",hot:true,
+ stem:"On admission to the PACU, the nurse's FIRST priority assessment is:",
+ opts:["Level of consciousness and orientation","Airway patency, breathing, and circulation","Pain level and last analgesic given","Surgical site, dressing, and drainage"],
+ ans:[1],
+ rat:"PACU priority is always <b>ABCs</b> — anesthesia depresses airway reflexes and respiration, so a patent airway/oxygenation comes first. LOC, pain, and the surgical site are all genuinely assessed in PACU (not throwaways), but they come AFTER you've confirmed the patient is breathing and perfusing. Use the airway-first rule when options are all real assessments."},
+
+{topic:"post",type:"ngn",hot:true,
+ stem:"NGN — A patient is 6 hours post-abdominal surgery. BP has trended 118/76 → 96/58, HR 88 → 122, urine output is dropping, and the dressing has increasing bright-red drainage. Select ALL appropriate nursing actions.",
+ opts:["Recognize signs of hypovolemic/hemorrhagic shock","Notify the surgeon/escalate through the chain of command","Document and recheck in 4 hours only","Increase monitoring of vital signs and output","Assess the wound and apply pressure as indicated"],
+ ans:[0,1,3,4],
+ rat:"Falling BP + rising HR + falling urine output + bright-red drainage = <b>hemorrhage/hypovolemic shock</b>. Act now: recognize the trend, increase monitoring, assess/apply pressure to the wound, and <b>escalate up the chain of command</b>. Waiting 4 hours could be fatal — trends matter more than a single value."},
+
+{topic:"post",type:"mc",hot:true,
+ stem:"The most common respiratory complication after surgery, which incentive spirometry helps prevent, is:",
+ opts:["Pneumonia","Atelectasis","Pulmonary embolism","Aspiration"],
+ ans:[1],
+ rat:"<b>Atelectasis</b> (alveolar collapse from shallow breathing/anesthesia) is the MOST COMMON postop respiratory complication and the one incentive spirometry directly targets. Pneumonia often FOLLOWS untreated atelectasis; PE and aspiration are serious but far less common. All four are real postop respiratory problems, so this tests 'most common,' not recognition."},
+
+{topic:"post",type:"mc",
+ stem:"A patient has a PCA (patient-controlled analgesia) pump. Which instruction is correct?",
+ opts:["A family member may press the button if the patient is too sedated to do so","Only the patient should press the dose button","The nurse should press the button on a fixed schedule for steady relief","Encourage pressing the button before activity even without pain"],
+ ans:[1],
+ rat:"<b>Only the patient</b> presses the PCA button — that is the built-in overdose safeguard, since an over-sedated patient physically can't press it. 'PCA by proxy' (family or nurse pressing) defeats the safety and is prohibited. Pre-emptively dosing 'before activity without pain' risks oversedation. The distractors all sound caring/helpful, which is the trap."},
+
+{topic:"post",type:"mc",
+ stem:"A postoperative patient's abdominal wound edges separate and a loop of bowel protrudes. This is evisceration. The nurse's immediate action is to:",
+ opts:["Gently reduce the protruding bowel back into the abdomen and reinforce the dressing","Cover with sterile saline-moistened gauze, position low-Fowler with knees flexed, keep NPO, and call the surgeon","Apply a dry pressure dressing and continue the patient's diet as ordered","Cover with a dry sterile dressing and reassess at the next scheduled round"],
+ ans:[1],
+ rat:"For evisceration: <b>cover with sterile SALINE-MOISTENED gauze</b> (keeps tissue viable), low-Fowler with knees bent (reduces tension), NPO (likely return to OR), monitor for shock, and notify the surgeon NOW. Never push organs back in (infection/damage). A DRY dressing lets tissue dry out and die, and 'continue diet/reassess later' dangerously delays. The wrong answers are near-misses (dry vs. moist, delay vs. act)."},
+
+/* ---------------- BEST POSITION FOR BREATHING ---------------- */
+{topic:"post",type:"mc",hot:true,
+ stem:"A patient is short of breath. To maximize breathing capacity and lung expansion, the nurse positions the patient in:",
+ opts:["Supine flat","High-Fowler (sitting upright ~90°)","Trendelenburg (head down)","Prone"],
+ ans:[1],
+ rat:"<b>High-Fowler's (upright sitting)</b> is the best position to enhance breathing — it drops the diaphragm, increases lung expansion and chest excursion, and eases the work of breathing. Flat/Trendelenburg positions push abdominal contents against the diaphragm and worsen dyspnea."},
+
+/* ---------------- MASLOW + NURSING PROCESS ---------------- */
+{topic:"chronic",type:"mc",hot:true,
+ stem:"Using Maslow's hierarchy to prioritize, which patient need does the nurse address FIRST?",
+ opts:["A patient crying because family hasn't visited","A patient with an oxygen saturation of 86% on room air","A patient anxious about losing independence after surgery","A patient asking for help completing advance-directive paperwork"],
+ ans:[1],
+ rat:"By <b>Maslow</b>, physiologic survival needs (airway/breathing/circulation) outrank safety and all psychosocial needs. The <b>O2 sat of 86%</b> is a physiologic emergency, so it comes first. The other three are genuine needs (belonging, esteem, self-actualization) a nurse addresses — just not before oxygenation. None are labeled with their level here, so you have to classify them yourself."},
+
+{topic:"chronic",type:"mc",hot:true,
+ stem:"The nurse is applying the nursing process. What is the correct order of its steps (ADPIE)?",
+ opts:["Assessment → Diagnosis → Planning → Implementation → Evaluation","Diagnosis → Assessment → Implementation → Planning → Evaluation","Planning → Assessment → Diagnosis → Evaluation → Implementation","Implementation → Evaluation → Assessment → Diagnosis → Planning"],
+ ans:[0],
+ rat:"<b>ADPIE</b>: <b>A</b>ssessment (collect data) → <b>D</b>iagnosis (analyze) → <b>P</b>lanning (set goals/outcomes) → <b>I</b>mplementation (act) → <b>E</b>valuation (did it work?). Always assess first; evaluate last. If a step is missing or out of order, it's wrong."},
+
+{topic:"chronic",type:"ngn",
+ stem:"NGN — The nurse begins caring for a newly admitted patient with heart failure. Which action represents the ASSESSMENT step of the nursing process? Select all that apply.",
+ opts:["Auscultating lung sounds and weighing the patient","Reviewing the patient's reported shortness of breath","Setting a goal of 'clear lung sounds by discharge'","Administering the prescribed diuretic","Measuring oxygen saturation and edema"],
+ ans:[0,1,4],
+ rat:"<b>Assessment</b> = collecting subjective and objective data: lung sounds, weight, reported symptoms, O2 sat, edema. Setting a goal is <b>planning</b>; giving the diuretic is <b>implementation</b>. Knowing which step an action belongs to is a classic NGN format."},
+
+/* ---------------- END-OF-LIFE / PALLIATIVE ---------------- */
+{topic:"eol",type:"mc",hot:true,
+ stem:"A patient asks the difference between palliative care and hospice. The nurse correctly explains that palliative care:",
+ opts:["Is only for the last days of life","Focuses on comfort/quality of life and can be given ALONGSIDE curative treatment at any stage","Means stopping all treatment","Is the same as a DNR order"],
+ ans:[1],
+ rat:"<b>Palliative care</b> = comfort and quality of life, appropriate at <b>any age or stage</b> and given alongside curative treatment. <b>Hospice</b> is a subset of palliative care for terminal illness (prognosis ~6 months) when the focus shifts fully to comfort."},
+
+{topic:"eol",type:"mc",
+ stem:"Which document translates a seriously ill patient's wishes into portable medical orders signed by a provider?",
+ opts:["A living will only","POLST (Physician Orders for Life-Sustaining Treatment)","A hospital admission form","An insurance card"],
+ ans:[1],
+ rat:"<b>POLST</b> converts patient preferences into actionable medical orders that transfer across care settings, signed by patient/surrogate and provider. Advance directives also include the living will and durable power of attorney for health care."},
+
+{topic:"eol",type:"sata",
+ stem:"According to Kübler-Ross, which are recognized stages of grief? Select all that apply.",
+ opts:["Denial","Anger","Bargaining","Depression","Acceptance"],
+ ans:[0,1,2,3,4],
+ rat:"Kübler-Ross stages: <b>denial, anger, bargaining, depression, acceptance</b>. Newer models recognize grief is nonlinear and people oscillate between loss- and restoration-oriented coping (Dual Process Model)."},
+
+{topic:"eol",type:"mc",
+ stem:"When using the FICA spiritual assessment, the 'F' stands for:",
+ opts:["Family support system","Faith and belief","Feelings about death","Final wishes"],
+ ans:[1],
+ rat:"In <b>FICA</b>, F = <b>Faith and belief</b> ('Do you consider yourself spiritual/religious? What gives your life meaning?'). The distractors are all genuinely part of a holistic end-of-life assessment — family, feelings about dying, final wishes — which makes them tempting, but the FICA acronym specifically begins with Faith (then Importance, Community, Address in care)."},
+
+{topic:"eol",type:"mc",hot:true,
+ stem:"Which nursing action best supports HOPE for a terminally ill patient?",
+ opts:["Reassuring the patient that a new treatment may still cure them","Controlling pain and helping the patient set meaningful, achievable short-term goals","Focusing conversations on positive topics and steering away from death","Encouraging the family to stay upbeat and hide their own grief"],
+ ans:[1],
+ rat:"Realistic hope at end of life comes from <b>symptom control, dignity, connection, and achievable goals</b> (e.g., a comfortable day, a visit) — not cure. False reassurance about a 'cure' sets up distrust; steering away from death and masking grief block the honest, therapeutic communication dying patients and families need. The wrong answers look kind but are subtly harmful — that's the test."},
+
+/* ---------------- MEDS ↔ DISEASE (connect drug to condition) ---------------- */
+{topic:"meds",type:"mc",hot:true,
+ stem:"Versed (midazolam) is given for moderate sedation before a procedure. The nurse understands its PURPOSE and disease connection is:",
+ opts:["It provides deep general anesthesia and muscle paralysis for surgery","It provides sedation and amnesia (not analgesia) for procedures/anxiety; reversed by flumazenil","It is a potent opioid analgesic for procedural pain control","It is given to blunt the gag reflex and dry oral secretions"],
+ ans:[1],
+ rat:"<b>Versed (midazolam)</b> is a benzodiazepine for <b>moderate sedation + amnesia</b> — NOT general anesthesia, NOT analgesia. Reversal = <b>flumazenil</b>; #1 risk = respiratory depression. It does not paralyze (that's neuromuscular blockers), it's not an opioid (opioids handle pain), and drying secretions is anticholinergics like atropine. Every distractor is a real periop drug effect — assigned to the wrong drug."},
+
+{topic:"meds",type:"mc",hot:true,
+ stem:"A patient with malignant hyperthermia needs emergency drug therapy. Which medication treats the condition?",
+ opts:["Naloxone","Dantrolene","Flumazenil","Epinephrine"],
+ ans:[1],
+ rat:"<b>Dantrolene</b> is the antidote for <b>malignant hyperthermia</b> — it's a skeletal muscle relaxant that stops the hypermetabolic calcium release. (Naloxone→opioids, flumazenil→benzodiazepines.)"},
+
+{topic:"meds",type:"mc",hot:true,
+ stem:"A postoperative patient on opioid analgesia has a respiratory rate of 8 and pinpoint pupils. Which drug does the nurse anticipate?",
+ opts:["Dantrolene","Flumazenil","Naloxone","Ondansetron"],
+ ans:[2],
+ rat:"<b>Naloxone</b> reverses <b>opioid</b> overdose/respiratory depression (RR < 12, pinpoint pupils, sedation). Match the reversal agent to the drug class: opioids→naloxone, benzodiazepines→flumazenil, MH→dantrolene."},
+
+{topic:"meds",type:"mc",
+ stem:"Ondansetron (Zofran) is frequently given to oncology and postoperative patients. Its purpose connects to which problem?",
+ opts:["Diarrhea from chemotherapy","Nausea and vomiting (PONV and chemo-induced)","Anxiety before a procedure","Mucositis and mouth sores"],
+ ans:[1],
+ rat:"<b>Ondansetron</b> (5-HT3 antagonist) targets <b>nausea and vomiting</b> — postop and chemo-induced. The distractors are all real chemo/postop GI problems (diarrhea, mucositis) or periop symptoms (anxiety), which is what makes them tempting, but ondansetron specifically blocks the vomiting reflex; it doesn't treat diarrhea, anxiety, or mucositis."},
+
+{topic:"meds",type:"mc",
+ stem:"A chemotherapy patient develops tumor lysis syndrome. Which drug is used to lower uric acid?",
+ opts:["Allopurinol","Sodium polystyrene sulfonate","Calcium gluconate","Sodium bicarbonate"],
+ ans:[0],
+ rat:"<b>Allopurinol</b> (with IV hydration) lowers <b>uric acid</b> in tumor lysis syndrome by blocking its production. The distractors are all genuinely used in TLS but for OTHER derangements: sodium polystyrene and calcium gluconate manage the HYPERKALEMIA, and bicarbonate was historically used to alkalinize urine. The question asks specifically about uric acid — that's allopurinol (or rasburicase)."},
+
+{topic:"meds",type:"sata",
+ stem:"Match each reversal/antidote to the right emergency. Select the correctly paired statements.",
+ opts:["Flumazenil reverses benzodiazepines (e.g., Versed)","Naloxone reverses opioids","Dantrolene treats malignant hyperthermia","Naloxone reverses Versed","Allopurinol lowers uric acid in tumor lysis syndrome"],
+ ans:[0,1,2,4],
+ rat:"Correct pairs: flumazenil→benzodiazepines, naloxone→opioids, dantrolene→MH, allopurinol→tumor lysis. <b>Naloxone does NOT reverse Versed</b> — that's a classic distractor; benzodiazepines need flumazenil."},
+
+{topic:"meds",type:"mc",
+ stem:"A patient at risk for postoperative venous thromboembolism (VTE) is prescribed an anticoagulant. Which drug class connects to this prevention goal?",
+ opts:["Antiplatelets such as clopidogrel","Anticoagulants such as enoxaparin (low-molecular-weight heparin)","Thrombolytics such as alteplase","Vasodilators such as nitroglycerin"],
+ ans:[1],
+ rat:"Postop VTE PROPHYLAXIS uses <b>anticoagulants</b> — most often <b>enoxaparin (LMWH)</b> or low-dose heparin — plus ambulation and SCDs. Antiplatelets work on arterial clots (not the venous stasis behind DVT); thrombolytics DISSOLVE an existing clot (treatment of a large PE, not routine prevention, and they raise bleeding risk); vasodilators don't prevent clots. The distractors are all real cardiovascular drug classes used in the wrong situation."},
+
+/* ================= ADDED FROM CLASS REVIEW PHOTOS ================= */
+/* ---- Cancer / psychosocial (alopecia) ---- */
+{topic:"cancer",type:"mc",hot:true,
+ stem:"A nurse working with patients who experience alopecia knows that which is the BEST method of helping patients manage the psychosocial impact of this problem?",
+ opts:["Teaching the patient ways to protect the scalp","Assisting the patient to pre-plan for this event","Reassuring the patient that alopecia is temporary","Telling the patient that there are worse side effects"],
+ ans:[1],
+ rat:"<b>Pre-planning</b> (wigs, scarves, hats, support resources before hair loss starts) gives the patient control and best addresses the <b>psychosocial</b> impact. Scalp protection is physical care; 'it's temporary' and 'there are worse effects' dismiss the patient's feelings."},
+
+/* ---- Oncology hand-off prioritization ---- */
+{topic:"cancer",type:"mc",hot:true,
+ stem:"After receiving the hand-off report, which patient would the oncology nurse see FIRST?",
+ opts:["Patient who is neutropenic and in protective isolation","Older patient on chemotherapy with mental status changes","Patient scheduled for radiation therapy today","Patient who is afebrile with a heart rate of 108 beats/min"],
+ ans:[1],
+ rat:"<b>New mental status changes</b> in an older chemo patient signal something acute (infection/sepsis, metabolic, oncologic emergency) and take priority. The neutropenic isolation patient and the scheduled radiation patient are stable; HR 108 while afebrile is the least urgent. Acute change in condition beats a chronic/stable finding."},
+
+/* ---- Pain re-evaluation / chain of command (SBAR) ---- */
+{topic:"post",type:"mc",hot:true,
+ stem:"The nurse is caring for a patient reporting pain of 8/10. The nurse gives the prescribed pain medication. One hour later the patient still reports 8/10. Which action is appropriate now?",
+ opts:["Include in the nursing report that the medication is ineffective","Wait for the provider to make rounds to report the problem","Increase the dosage of the medication","Report to the health-care provider by telephone"],
+ ans:[3],
+ rat:"The medication didn't work, so the nurse <b>evaluates and escalates now</b> — notify the provider by phone (use SBAR). Waiting for rounds delays relief; the nurse cannot independently increase a dose; just charting it isn't enough. This is the evaluation step driving action."},
+
+/* ---- Hypovolemic shock signs ---- */
+{topic:"post",type:"mc",hot:true,
+ stem:"A post-op patient has signs of hypovolemic shock. Which finding would indicate this complication?",
+ opts:["Warm, flushed, dry skin with a bounding pulse","Blood pressure 90/60 mmHg with a heart rate of 120 bpm","Bradycardia with widening pulse pressure","Blood pressure 150/92 mmHg with a heart rate of 58 bpm"],
+ ans:[1],
+ rat:"Hypovolemic shock = <b>falling BP + rising HR</b> (here 90/60, HR 120) with cool, pale, clammy skin and low urine output as the body compensates for lost volume. Warm/flushed/bounding describes early DISTRIBUTIVE (septic/neurogenic) shock; bradycardia with widening pulse pressure suggests neurogenic shock or rising ICP; high BP with bradycardia is essentially the opposite. All four are real hemodynamic patterns — match the pattern to the shock type."},
+
+/* ---- Atelectasis presentation ---- */
+{topic:"post",type:"mc",hot:true,
+ stem:"A new post-op patient presents with SpO2 90%, shallow respirations, and diminished breath sounds in the bases. What do you suspect this is?",
+ opts:["Pneumonia","Atelectasis","CHF","Pulmonary embolism"],
+ ans:[1],
+ rat:"<b>Atelectasis</b> (alveolar collapse) is the most common early postop respiratory complication: low SpO2, shallow breathing, and <b>diminished sounds at the bases</b>. Treat with incentive spirometry, deep breathing, coughing, and early ambulation. Pneumonia usually brings fever/productive cough; CHF brings crackles + fluid overload."},
+
+/* ---- Preop renal labs ---- */
+{topic:"pre",type:"mc",hot:true,
+ stem:"During the preoperative systems review, a patient reveals a history of renal disease. Which labs would need to be evaluated?",
+ opts:["BUN, serum creatinine, electrolytes","H&H, creatinine, LFTs","WBC, PT/INR","Lipid panel, HbA1c"],
+ ans:[0],
+ rat:"Renal function is assessed with <b>BUN, serum creatinine, and electrolytes</b>. Kidneys clear anesthetics and drugs and balance fluids/electrolytes — impaired function raises surgical risk. (LFTs assess liver; PT/INR assess clotting.)"},
+
+/* ---- Older adult drug dosing (system function) ---- */
+{topic:"aging",type:"mc",hot:true,
+ stem:"Older adults typically require smaller drug dosages than younger individuals because of the decreased function of the:",
+ opts:["Lungs and heart","Pancreas and thyroid","Liver and kidneys","Stomach and intestines"],
+ ans:[2],
+ rat:"The <b>liver</b> (metabolism) and <b>kidneys</b> (excretion) decline with age, so drugs are processed and cleared more slowly and can accumulate to toxic levels — hence lower doses. This is the pharmacokinetic basis for 'start low, go slow.'"},
+
+/* ---- Elder abuse situation ---- */
+{topic:"aging",type:"mc",
+ stem:"The nurse assesses an older adult's living arrangements and care needs knowing that elder abuse often occurs in situations in which:",
+ opts:["Stress in the caregiver is overwhelming","Programs for the elderly are not being utilized","There are several generations providing care","The elderly person is not appreciative of those who provide care"],
+ ans:[0],
+ rat:"Elder abuse risk rises when <b>caregiver stress is overwhelming</b> — burnout, exhaustion, and lack of support. Nurses have a legal duty to report suspected abuse and should assess caregiver strain and connect families with respite and support resources."},
+
+/* ---- NGN older-adult prioritization (assess first) ---- */
+{topic:"aging",type:"ngn",hot:true,
+ stem:"NGN — You receive shift report on four older adult clients. Based on the assessment findings, which client should you assess FIRST?",
+ opts:["80-year-old with increased AP chest diameter, SpO2 92%, and a non-productive cough","74-year-old with heart failure: +2 pitting edema, crackles in lower bases, 3-lb weight gain this week","82-year-old with type 2 diabetes, fasting glucose 160, frustrated about the meal schedule","78-year-old admitted for pneumonia who is confused, trying to get out of bed, RR 28 with audible secretions"],
+ ans:[3],
+ rat:"Use ABCs + acute change. The <b>confused pneumonia patient with RR 28 and audible secretions</b> has an airway/breathing problem PLUS new confusion and a safety (fall) risk — assess first. The barrel chest with SpO2 92% is chronic/stable, the HF findings are concerning but expected and not immediately life-threatening, and the glucose of 160 with frustration is lowest priority."},
+
+/* ---- DVT prevention interventions ---- */
+{topic:"post",type:"sata",hot:true,
+ stem:"Which interventions help PREVENT deep vein thrombosis (DVT) in the postoperative patient? Select all that apply.",
+ opts:["Out of bed to chair early and often","Leg exercises on the non-operative side (dorsiflex, rotate ankle)","TED hose and intermittent compression boots","Strict bed rest with legs still","Prophylactic subcutaneous heparin BID"],
+ ans:[0,1,2,4],
+ rat:"DVT prevention = <b>movement + compression + anticoagulation</b>: early OOB, ankle pumps/dorsiflexion, TED hose and sequential compression devices, and prophylactic SC heparin. <b>Strict bed rest with still legs causes venous stasis</b> — the opposite of prevention."},
+
+/* ---- Respiratory complication prevention ---- */
+{topic:"post",type:"sata",
+ stem:"Which nursing interventions help prevent postoperative RESPIRATORY complications? Select all that apply.",
+ opts:["Deep breathing and incentive spirometry","Coughing and early ambulation","Turning in bed and OOB to chair","Keeping the patient flat and still to rest the lungs","Monitoring responses to narcotic (opioid) analgesics"],
+ ans:[0,1,2,4],
+ rat:"Prevent atelectasis/pneumonia with <b>deep breathing, incentive spirometry, coughing, ambulation, turning, and hydration</b>, and <b>monitor opioids</b> (they depress respirations). Lying flat and still promotes secretion pooling and atelectasis — avoid it; favor upright positioning."},
+
+/* ---- AORN safe hand-off communication ---- */
+{topic:"intra",type:"mc",
+ stem:"Following AORN safe hand-off guidelines, which communication strategy should the nurse use during patient hand-off?",
+ opts:["Give a quick verbal summary from memory to keep the handoff brief","Use SBAR with read-back, one speaker at a time, and minimal distractions","Hand off in the hallway so the next nurse can keep moving","Provide only the abnormal findings to save time"],
+ ans:[1],
+ rat:"AORN safe hand-off = <b>SBAR + read-back</b>, one speaker at a time, one patient, minimal distractions, supporting documentation, and time for questions. The distractors all sound efficient — from memory, on the move, abnormals-only — but each drops a safeguard (documentation, focus, completeness) that prevents the communication errors hand-offs are designed to catch."},
+
+/* ---- Latex allergy at-risk groups ---- */
+{topic:"intra",type:"sata",hot:true,
+ stem:"Which patients are at increased risk for a latex allergy/sensitivity? Select all that apply.",
+ opts:["Children with spina bifida","Patients with a history of multiple surgeries","Patients with urogenital abnormalities or spinal cord injuries","Health care workers and people with allergies or asthma","Patients allergic to shellfish or iodine contrast"],
+ ans:[0,1,2,3],
+ rat:"Latex risk groups: <b>spina bifida, multiple surgeries, urogenital/spinal cord conditions, allergies/asthma, and health care workers</b> (repeated glove exposure). The trap is <b>shellfish/iodine allergy</b> — that's the old myth tied to iodinated CONTRAST, not latex. A true cross-reaction exists with certain foods (banana, avocado, kiwi — 'latex-fruit syndrome'), not shellfish."},
+
+/* ---- Priority care to maintain patient safety (preop) ---- */
+{topic:"pre",type:"sata",
+ stem:"Which actions are priority preoperative care to maintain PATIENT SAFETY? Select all that apply.",
+ opts:["Complete preoperative testing and preparation","Maintain normal glucose levels and confirm informed consent","Verify and mark the correct surgical site","Complete preoperative teaching to prevent complications","Withhold anxiety information so the patient stays calm"],
+ ans:[0,1,2,3],
+ rat:"Priority preop safety: testing/prep, glucose control, informed consent, correct-site marking, infection prevention, and teaching — and addressing psychological comfort. The trap is <b>'withhold anxiety information to keep the patient calm'</b>: it sounds caring, but informed patients actually have LESS anxiety and fewer complications. Tailored teaching (not silence) reduces preop fear, postop pain, and anesthesia needs."},
+
+/* ---- Opioid-connected 'A' drug ---- */
+{topic:"meds",type:"mc",hot:true,
+ stem:"Which medication that starts with 'A' is given to reverse opioid-induced slowing of the bowel (postoperative ileus) by blocking opioid effects in the gut?",
+ opts:["Alvimopan","Allopurinol","Acetaminophen","Atropine"],
+ ans:[0],
+ rat:"<b>Alvimopan</b> is a peripherally-acting opioid antagonist used for <b>opioid-induced postoperative ileus</b> — it blocks opioids in the gut to restore bowel function without reversing pain control. (Allopurinol → uric acid/tumor lysis; acetaminophen → opioid-sparing pain control; atropine → bradycardia.)"},
+
+{topic:"meds",type:"mc",
+ stem:"A multimodal (ERAS) pain plan pairs opioids with a non-opioid that starts with 'A' to lower the opioid dose needed. Which drug is this?",
+ opts:["Acetaminophen","Amiodarone","Albuterol","Amlodipine"],
+ ans:[0],
+ rat:"<b>Acetaminophen</b> is a core opioid-sparing analgesic in multimodal/ERAS pathways — combined with NSAIDs it reduces opioid requirements and opioid-related risks (respiratory depression, ileus). Its own overdose antidote is acetylcysteine."},
+
+/* ================= ADDITIONAL QUESTIONS (to 80+) ================= */
+/* ---- Aging ---- */
+{topic:"aging",type:"mc",hot:true,
+ stem:"An older adult is admitted with pneumonia. Which assessment finding should the nurse expect that differs from a younger adult's typical presentation?",
+ opts:["High fever of 103°F","Confusion and functional decline rather than fever","Severe productive cough","Sharp pleuritic chest pain"],
+ ans:[1],
+ rat:"Older adults have blunted immune/temperature responses, so infection often shows as <b>new confusion, weakness, or falls instead of fever</b>. A 103°F fever, severe productive cough, and classic pleuritic pain are the typical younger-adult presentation the older adult may NOT mount — which is exactly why atypical signs are the answer."},
+
+{topic:"aging",type:"sata",
+ stem:"Which nursing interventions reduce fall risk in the hospitalized older adult? Select all that apply.",
+ opts:["Keep the bed in low position with brakes locked","Ensure call light and personal items are within reach","Provide adequate lighting and non-slip footwear","Use physical restraints routinely to prevent wandering","Implement scheduled toileting"],
+ ans:[0,1,2,4],
+ rat:"Fall prevention = low bed, items/call light reachable, good lighting, non-slip footwear, and scheduled toileting (urgency causes falls). <b>Routine restraints are wrong</b> — they increase injury, agitation, and deconditioning, and are a last resort, not a prevention strategy. Use least-restrictive measures first."},
+
+{topic:"aging",type:"mc",
+ stem:"The nurse reviews the medication list of an older adult taking 9 medications. This is an example of polypharmacy, which increases the risk of:",
+ opts:["Better symptom control with fewer side effects","Increased risk of adverse drug reactions, interactions, and falls","More predictable drug levels because doses balance each other","Reduced pill burden once a routine is established"],
+ ans:[1],
+ rat:"<b>Polypharmacy</b> (multiple meds) increases <b>adverse reactions, drug–drug interactions, and falls</b> — the AGS Beers Criteria flags high-risk drugs in older adults. The distractors sound reasonable (better control, balanced levels, easier routine) but polypharmacy actually makes levels LESS predictable, raises (not lowers) pill burden, and the interaction risk outweighs added 'control.' Watch for optimistic-sounding wrong answers."},
+
+/* ---- Chronic ---- */
+{topic:"chronic",type:"mc",
+ stem:"A patient with a new spinal cord injury qualifies for federal assistance. Which program is available specifically to people 65+, those with permanent kidney failure, or qualifying disability?",
+ opts:["Medicaid","Medicare","Supplemental Security Income (SSI)","COBRA continuation coverage"],
+ ans:[1],
+ rat:"<b>Medicare</b> eligibility = age 65+, permanent kidney failure (ESRD), or qualifying long-term disability — exactly the criteria described. Medicaid is <b>need-based</b> (low income/resources); SSI provides cash assistance, not the health coverage tied to these criteria; COBRA temporarily continues an employer plan after job loss. The distractors are all real assistance programs — match the eligibility wording to Medicare."},
+
+{topic:"chronic",type:"mc",hot:true,
+ stem:"A patient with multiple chronic conditions sees several specialists. What is the nurse's most important role in coordinating this care?",
+ opts:["Direct each specialist to manage their condition independently","Coordinate care across specialists, reconcile medications, and watch for conflicting/duplicate treatment","Have the patient prioritize one condition so the plan stays simple","Schedule the appointments and let the providers handle the rest"],
+ ans:[1],
+ rat:"With multiple chronic conditions the nurse's key role is <b>coordination</b> — reconciling meds, spotting conflicting or duplicate therapy, and connecting the specialists' plans. Letting specialists work in silos, making the patient drop a condition, or just booking visits all leave the patient to navigate fragmented care alone, which drives errors and avoidable hospitalizations. The distractors are realistic but passive."},
+
+/* ---- Cancer ---- */
+{topic:"cancer",type:"mc",hot:true,
+ stem:"A chemotherapy patient develops a vesicant extravasation at the IV site. What is the nurse's FIRST action?",
+ opts:["Flush the line with saline","Stop the infusion immediately","Apply heat and continue the infusion","Increase the infusion rate"],
+ ans:[1],
+ rat:"<b>Stop the infusion immediately</b> — a vesicant leaking into tissue causes severe necrosis, so halting exposure comes first, then follow the antidote/protocol. Flushing pushes more vesicant into tissue, continuing (with heat or faster rate) worsens the injury. This is an oncologic emergency."},
+
+{topic:"cancer",type:"sata",
+ stem:"A neutropenic patient is on protective (neutropenic) precautions. Which actions are appropriate? Select all that apply.",
+ opts:["Strict hand hygiene by all staff and visitors","No fresh flowers or raw fruits/vegetables","Monitor temperature for the earliest sign of infection","Place the patient with a roommate who has a cold","Avoid invasive procedures when possible"],
+ ans:[0,1,2,4],
+ rat:"Neutropenic care: meticulous hand hygiene, no fresh flowers/raw produce (bacteria/fungi), monitor temp closely (fever may be the ONLY infection sign), and minimize invasive procedures. <b>A sick roommate is dangerous</b> — neutropenic patients need a private room and protection from anyone with an infection."},
+
+{topic:"cancer",type:"mc",
+ stem:"A patient asks why chemotherapy is given in repeated cycles instead of one large dose. The nurse explains that each cycle:",
+ opts:["Repeated doses guarantee every cancer cell is killed at once","Each dose kills a fraction of dividing cells, so cycles catch more cells as they enter the dividing phase","Repeating low doses prevents any harm to healthy cells","Cycling avoids the need for the body's immune system to clear remaining cells"],
+ ans:[1],
+ rat:"Chemo works by <b>cell-kill (fractional) kinetics</b> — each dose kills a percentage of actively dividing cells, so spaced cycles hit more cells across the cell cycle while letting normal tissue recover between doses. No regimen kills 'every cell at once,' chemo still harms rapidly dividing healthy cells (marrow, GI, hair), and the goal is to reduce the burden enough for the immune system to finish — not bypass it. The distractors are all subtly wrong mechanisms."},
+
+/* ---- Preoperative ---- */
+{topic:"pre",type:"mc",hot:true,
+ stem:"The preoperative nurse is verifying the consent form. The patient says, 'I'm not really sure what they're going to do.' What is the nurse's best action?",
+ opts:["Explain the surgical procedure in detail","Have the patient sign anyway to avoid delay","Notify the surgeon to clarify before the patient signs","Witness the signature and proceed"],
+ ans:[2],
+ rat:"If the patient doesn't understand, consent is not informed — <b>notify the surgeon to clarify</b>, since the surgeon (not the nurse) explains the procedure/risks. The nurse cannot supply that explanation, must never have an uninformed patient sign, and cannot witness a signature for someone who doesn't understand."},
+
+{topic:"pre",type:"mc",
+ stem:"A diabetic patient is scheduled for surgery. Which preoperative goal is a priority to reduce complications?",
+ opts:["Allow glucose to run slightly high to prevent intraoperative hypoglycemia","Maintain controlled (near-normal) glucose to reduce infection and improve healing","Hold all insulin and oral agents for 24 hours before surgery","Give the patient's full usual insulin dose despite being NPO"],
+ ans:[1],
+ rat:"The preop goal is <b>controlled, near-normal glucose</b> — hyperglycemia impairs wound healing and raises SSI risk. 'Run it high to avoid lows' overshoots and harms healing; holding everything for 24 h risks DKA in type 1; giving the FULL usual insulin dose while NPO risks dangerous hypoglycemia. Real practice adjusts the dose (often a reduced basal) — both extremes are wrong, which is the trap."},
+
+{topic:"pre",type:"sata",
+ stem:"Immediate preoperative interventions the nurse completes before transport to the OR include: Select all that apply.",
+ opts:["Confirm patient identity and allergies","Ensure consent is signed","Have the patient void and remove dentures/jewelry/nail polish","Give a large breakfast","Verify the surgical site is marked"],
+ ans:[0,1,2,4],
+ rat:"Immediate preop: verify ID/allergies, signed consent, void, remove dentures/jewelry/polish (airway and assessment safety), and confirm site marking. <b>A large breakfast violates NPO</b> and risks aspiration — patients are NPO before surgery."},
+
+/* ---- Intraoperative ---- */
+{topic:"intra",type:"mc",hot:true,
+ stem:"The OR team performs a 'time-out' before incision. The primary purpose is to:",
+ opts:["Confirm the instrument and sponge counts are correct","Verify correct patient, correct procedure, and correct surgical site","Review the anesthesia plan and confirm airway equipment","Introduce the surgical team members to one another"],
+ ans:[1],
+ rat:"The <b>time-out</b> (just before incision) verifies <b>correct patient, procedure, and site</b> — the National Patient Safety Goal against wrong-site/wrong-patient surgery. Counts, anesthesia readiness, and team introductions are all genuine parts of the broader surgical safety checklist (often the 'sign-in'/'briefing'), but the TIME-OUT specifically is the final patient/procedure/site verification."},
+
+{topic:"intra",type:"mc",
+ stem:"During surgery the patient develops sudden hypotension, bronchospasm, and urticaria after a medication is given. The nurse suspects:",
+ opts:["Malignant hyperthermia","Anaphylaxis","Hypothermia","Anesthesia awareness"],
+ ans:[1],
+ rat:"<b>Anaphylaxis</b>: rapid hypotension, bronchospasm, and urticaria after an allergen (drug, latex). Remove the cause and treat emergently. MH shows tachycardia/rising EtCO2/rigidity/late temp spike; hypothermia is low temperature; anesthesia awareness is intraoperative consciousness — none match the allergic triad."},
+
+{topic:"intra",type:"sata",
+ stem:"Which actions help prevent an operating room fire? Select all that apply.",
+ opts:["Complete a fire-risk assessment during the time-out","Allow alcohol-based prep to dry fully before draping","Manage oxygen concentration near electrocautery/lasers","Store anesthetic gases near ignition sources","Conduct annual fire drills"],
+ ans:[0,1,2,4],
+ rat:"Fire prevention controls the triangle (oxygen + ignition + fuel): risk assessment at time-out, let alcohol prep dry (fuel/vapor), limit O2 buildup near cautery/lasers (ignition), and drill annually. <b>Storing gases near ignition sources</b> is the opposite — it creates fire risk."},
+
+/* ---- Postoperative ---- */
+{topic:"post",type:"mc",hot:true,
+ stem:"A patient is 2 days postoperative and suddenly reports sharp chest pain, dyspnea, and anxiety with a drop in SpO2. The nurse suspects which complication?",
+ opts:["Atelectasis","Pulmonary embolism","Myocardial infarction","Pneumonia"],
+ ans:[1],
+ rat:"<b>Pulmonary embolism</b>: SUDDEN sharp chest pain, dyspnea, anxiety, tachycardia, and a dropping SpO2 a few days postop — classic for a DVT that traveled to the lung. Atelectasis is gradual with diminished bases; an MI gives chest pain but usually with ECG/troponin changes and not a sudden SpO2 drop; pneumonia builds over days with fever and productive cough. All four are real postop chest complaints — the SUDDEN onset + hypoxia points to PE."},
+
+{topic:"post",type:"mc",
+ stem:"Which finding in a postoperative patient most indicates a surgical site infection (SSI)?",
+ opts:["Pink, approximated wound edges","Purulent drainage, increased redness, warmth, and fever","Mild incisional pain on day 1","Serosanguineous drainage in the first 24 hours","A dry intact dressing"],
+ ans:[1],
+ rat:"SSI signs: <b>purulent drainage, spreading redness/warmth, increasing pain, and fever</b>, usually after postop day 3–5. Pink approximated edges and a dry dressing are normal healing; mild day-1 pain is expected; light serosanguineous drainage early on is normal, not infection."},
+
+{topic:"post",type:"ngn",hot:true,
+ stem:"NGN — A patient is 4 hours post-op. Which assessment findings require IMMEDIATE nursing action? Select all that apply.",
+ opts:["BP trending down 120/80 → 94/56 with HR rising to 118","Saturated dressing with bright-red blood","Urine output 15 mL over the last 2 hours","Pain rated 3/10, relieved by repositioning","Restlessness and cool, clammy skin"],
+ ans:[0,1,2,4],
+ rat:"Falling BP with rising HR, frank bleeding, oliguria (<30 mL/hr), and cool/clammy restlessness all point to <b>hemorrhage/hypovolemic shock</b> — act and escalate now. <b>Pain 3/10 relieved by repositioning is expected and stable</b>, so it does not require immediate action."},
+
+/* ---- End-of-life ---- */
+{topic:"eol",type:"mc",
+ stem:"A dying patient's family asks why the nurse keeps repositioning and giving mouth care if the patient is 'not going to make it.' The nurse explains that these comfort measures:",
+ opts:["Help reverse the patient's decline if continued consistently","Maintain the patient's comfort and dignity even when cure is no longer possible","Are required by policy regardless of the patient's wishes","Prevent the family from feeling guilty about the death"],
+ ans:[1],
+ rat:"At end of life, comfort measures (repositioning, mouth care, symptom relief) exist to preserve <b>comfort and dignity</b> — not to reverse decline or prolong life. They are guided by the patient's goals/wishes, not blanket policy, and although they do comfort the family, their purpose is the PATIENT's wellbeing. The distractors each contain a kernel of truth, which is what makes them tempting."},
+
+{topic:"eol",type:"mc",hot:true,
+ stem:"A patient with terminal cancer says, 'I just hope I can make it to my daughter's wedding next month.' What is the nurse's most therapeutic response?",
+ opts:["'You probably won't be here that long.'","'Tell me more about what that day means to you.'","'Let's not talk about sad things.'","'You should focus on getting better.'"],
+ ans:[1],
+ rat:"<b>Exploring meaning</b> ('tell me more...') supports realistic hope and honors the patient's goals — the heart of palliative communication. Crushing the hope, shutting down the conversation, and giving false reassurance about 'getting better' all block therapeutic communication and ignore the patient's needs."}
+];
+
+/* ============================================================
+   FLASHCARDS  (deck: aging|chronic|cancer|peri|mh|eol|meds)
+   ============================================================ */
+const FLASHCARDS = [
+{deck:"aging",q:"The one principle that explains why older adults tolerate stress poorly?",a:"<b>Less physiologic reserve</b> — every system works at rest but has little extra capacity for surgery, infection, or new drugs."},
+{deck:"aging",q:"New, acute confusion in an older adult = ?",a:"<b>Delirium</b> — reversible but a medical emergency. Often the first sign of infection (e.g., UTI). Report it."},
+{deck:"aging",q:"Delirium vs. dementia",a:"Delirium = <b>acute, fluctuating, reversible</b>. Dementia = <b>chronic, gradual, irreversible</b> (e.g., Alzheimer)."},
+{deck:"aging",q:"Safe medication rule for older adults",a:"<b>Start low, go slow.</b> Watch polypharmacy, Beers-criteria drugs, and reduced liver/kidney clearance."},
+{deck:"aging",q:"Head-to-toe normal aging (quick list)",a:"↓ lung aerobic capacity, ↓ skin elasticity, ↓ kidney GFR, ↓ GI motility, ↓ nerve conduction, ↓ bone density/muscle mass."},
+{deck:"aging",q:"The geriatric triad",a:"<b>Cognitive changes, falls, and incontinence</b> — prevent during hospitalization."},
+{deck:"chronic",q:"What does 'chronic' mean?",a:"<b>Incurable</b> — lasts 1+ year, needs ongoing care. Goal = manage symptoms, prevent complications, maximize quality of life."},
+{deck:"chronic",q:"People-first language example",a:"'Patient <b>with</b> diabetes,' not 'the diabetic.' Name the person before the condition; ask preference."},
+{deck:"chronic",q:"Maslow's priority order",a:"<b>Physiologic → Safety → Love/Belonging → Esteem → Self-actualization.</b> ABCs/oxygen before psychosocial needs."},
+{deck:"chronic",q:"The nursing process (ADPIE)",a:"<b>A</b>ssess → <b>D</b>iagnose → <b>P</b>lan → <b>I</b>mplement → <b>E</b>valuate. Assess first, evaluate last."},
+{deck:"chronic",q:"Veterans and chronic disease",a:"Higher burden of <b>multiple chronic conditions</b>: HTN, arthritis, COPD (male); CAD/cancer over 65."},
+{deck:"cancer",q:"Three steps of carcinogenesis",a:"<b>Initiation</b> (DNA mutation) → <b>Promotion</b> (proliferation; reversible) → <b>Progression</b> (malignant, angiogenesis, metastasis)."},
+{deck:"cancer",q:"How does cancer harm the body?",a:"Uncontrolled growth, invades/destroys tissue, <b>metastasizes via blood & lymph</b>, and drains nutrition (cachexia)."},
+{deck:"cancer",q:"Tissues most damaged by chemo/radiation",a:"Rapidly dividing: <b>bone marrow</b> (anemia, neutropenia, ↓platelets), <b>GI lining</b>, <b>hair follicles</b>."},
+{deck:"cancer",q:"ANC < 500 means…",a:"<b>Severe neutropenia</b> (chemo nadir). Neutropenic precautions; watch for the first sign of infection (fever)."},
+{deck:"cancer",q:"TNM staging",a:"<b>T</b>umor size/extent · <b>N</b>odes (regional) · <b>M</b>etastasis (distant). Tis = in situ; M1 = distant spread."},
+{deck:"cancer",q:"Primary vs Secondary vs Tertiary prevention",a:"<b>Primary</b> = prevent (HPV/HBV vaccine, no tobacco). <b>Secondary</b> = screen/detect early (mammogram, colonoscopy). <b>Tertiary</b> = monitor survivors for recurrence."},
+{deck:"cancer",q:"Five types of cancer surgery",a:"<b>Diagnostic</b> (biopsy), <b>Primary/curative</b> (remove tumor), <b>Prophylactic</b> (remove high-risk tissue), <b>Palliative</b> (relieve symptoms), <b>Reconstructive</b> (function/cosmetic)."},
+{deck:"peri",q:"Goal of preoperative nursing",a:"<b>Prepare the patient</b> physically and psychologically; optimize health, educate, verify consent, reduce anxiety."},
+{deck:"peri",q:"Who explains vs. witnesses informed consent?",a:"<b>Surgeon explains</b> procedure/risks/alternatives. <b>Nurse witnesses</b> the signature & verifies understanding. Sign BEFORE sedation."},
+{deck:"peri",q:"Aspirin before surgery",a:"Stop aspirin/antiplatelets <b>7–10 days</b> before surgery (bleeding risk)."},
+{deck:"peri",q:"NPO guideline for elective surgery",a:"~8 hr after fatty food, 6 hr after milk; clear liquids up to <b>2 hr</b> before (ERAS). Prevents aspiration."},
+{deck:"peri",q:"Intraoperative nurse = which priority?",a:"<b>Safety</b>: correct positioning, surgical counts, asepsis, grounding pad, time-out verification of patient/site/procedure."},
+{deck:"peri",q:"Three things an OR fire needs",a:"<b>Oxygen + ignition source (laser/cautery) + fuel (drapes, alcohol prep, gases).</b> Fire-risk check at time-out."},
+{deck:"peri",q:"Best position to enhance breathing",a:"<b>High-Fowler's</b> (upright sitting) — drops the diaphragm, maximizes lung expansion."},
+{deck:"mh",q:"What triggers malignant hyperthermia?",a:"<b>Volatile anesthetics + succinylcholine</b> in a genetically susceptible patient. Hypermetabolic calcium crisis."},
+{deck:"mh",q:"EARLY vs LATE signs of MH",a:"EARLY: <b>tachycardia, rising EtCO2, jaw rigidity.</b> LATE: <b>rapid temperature spike</b> (don't wait for it!)."},
+{deck:"mh",q:"MH treatment",a:"STOP the trigger → give <b>dantrolene</b> → cool the patient → 100% O2 → correct acidosis/electrolytes."},
+{deck:"post",q:"PACU first priority",a:"<b>ABCs</b> — airway, breathing, circulation (anesthesia depresses respiration & reflexes)."},
+{deck:"post",q:"Signs of postop hemorrhage/shock",a:"<b>↓BP + ↑HR trend</b>, ↓urine output, bright-red drainage. Escalate the chain of command — trends matter."},
+{deck:"post",q:"Most common postop respiratory complication",a:"<b>Atelectasis</b> — prevent with incentive spirometry, deep breathing, early ambulation."},
+{deck:"post",q:"PCA pump safety rule",a:"<b>Only the patient</b> presses the button. No family/proxy — an over-sedated patient can't press it."},
+{deck:"post",q:"Wound evisceration — action",a:"Cover with <b>sterile saline-soaked gauze</b>, low-Fowler knees bent, NPO, call surgeon. Never push organs back."},
+{deck:"eol",q:"Palliative care vs. hospice",a:"<b>Palliative</b> = comfort at any stage, alongside curative care. <b>Hospice</b> = terminal (~6 mo), comfort-focused."},
+{deck:"eol",q:"POLST",a:"Portable provider-signed <b>medical orders</b> reflecting patient wishes, valid across care settings."},
+{deck:"eol",q:"Kübler-Ross stages of grief",a:"<b>Denial, Anger, Bargaining, Depression, Acceptance</b> (nonlinear in real life)."},
+{deck:"eol",q:"FICA spiritual assessment",a:"<b>F</b>aith · <b>I</b>mportance · <b>C</b>ommunity · <b>A</b>ddress in care."},
+{deck:"meds",q:"Versed (midazolam) — purpose & disease link",a:"Benzodiazepine for <b>sedation + amnesia</b> (procedures/anxiety) — NOT pain relief. Reversal: <b>flumazenil</b>. Watch respiratory depression."},
+{deck:"meds",q:"Reversal agents (match!)",a:"Opioids→<b>naloxone</b>; benzodiazepines (Versed)→<b>flumazenil</b>; malignant hyperthermia→<b>dantrolene</b>."},
+{deck:"meds",q:"Ondansetron (Zofran) — disease link",a:"Antiemetic for <b>nausea/vomiting</b>: PONV and chemo-induced (ties to chemo's GI toxicity)."},
+{deck:"meds",q:"Allopurinol — disease link",a:"Lowers uric acid in <b>tumor lysis syndrome</b> (oncologic emergency) — with hydration."},
+{deck:"meds",q:"Heparin / enoxaparin — disease link",a:"Anticoagulants to prevent/treat <b>VTE/DVT</b>, a key postoperative complication."},
+{deck:"meds",q:"Opioid 'A' drug for postop ileus",a:"<b>Alvimopan</b> — blocks opioids in the gut to treat opioid-induced ileus (bowels won't move) without reversing pain control."},
+{deck:"meds",q:"Opioid-sparing 'A' drug (ERAS)",a:"<b>Acetaminophen</b> — paired with opioids/NSAIDs to lower the opioid dose needed. Its OD antidote = acetylcysteine."},
+{deck:"post",q:"Preventable postoperative complications (the list)",a:"Pain, hemorrhage, hypovolemic shock, thrombophlebitis/DVT, pulmonary embolus, fluid overload, atelectasis, pneumonia, airway obstruction, surgical site infection (SSI)."},
+{deck:"post",q:"Hypovolemic shock — key signs",a:"<b>↓BP + ↑HR</b> (e.g., 90/60, HR 120), cool/pale/clammy skin, ↓urine output. NOT warm/dry skin or bradycardia."},
+{deck:"post",q:"Atelectasis presentation",a:"Low SpO2, shallow respirations, <b>diminished breath sounds at the bases</b>. Fix: incentive spirometry, deep breathing, cough, ambulate."},
+{deck:"post",q:"Pain still 8/10 one hour after meds — do what?",a:"Evaluate + escalate: <b>notify the provider by phone (SBAR)</b>. Don't wait for rounds, don't change the dose yourself, don't just chart it."},
+{deck:"post",q:"DVT prevention bundle",a:"Early OOB, ankle pumps/dorsiflexion (non-op leg), TED hose + compression boots, prophylactic SC heparin BID. Avoid still bed rest."},
+{deck:"cancer",q:"Alopecia — best psychosocial help",a:"<b>Pre-plan</b> (wigs, scarves, support) before hair loss — gives control. Don't just say 'it's temporary.'"},
+{deck:"cancer",q:"Oncology hand-off: see who first?",a:"<b>Chemo patient with new mental status changes</b> — acute change beats stable findings (neutropenic isolation, scheduled radiation, afebrile HR 108)."},
+{deck:"aging",q:"Why older adults need smaller drug doses",a:"Decreased <b>liver (metabolism) and kidney (excretion)</b> function → drugs accumulate. Basis for 'start low, go slow.'"},
+{deck:"aging",q:"Elder abuse most likely when…",a:"<b>Caregiver stress is overwhelming.</b> Nurses must assess strain, provide respite resources, and report suspected abuse."},
+{deck:"peri",q:"AORN safe hand-off communication",a:"<b>SBAR + read-back</b>, one speaker at a time, one patient, minimal distractions, documentation, questions. Tools: SURPASS checklist."},
+{deck:"peri",q:"Latex allergy — at-risk groups",a:"Spina bifida, multiple surgeries, urogenital/spinal cord issues, allergies/asthma, health care workers. S&S → up to circulatory collapse & death."},
+{deck:"peri",q:"Preop renal disease — which labs?",a:"<b>BUN, creatinine, electrolytes.</b> Kidneys clear drugs/anesthetics & balance fluids."}
+];
+
+/* ============================================================
+   MEDS ↔ DISEASE  (drug tied to the condition it's tested with)
+   ============================================================ */
+const MEDLINKS = [
+{drug:"Versed (midazolam)", cls:"Benzodiazepine", use:"Moderate/procedural sedation, preop anxiety", link:"Used before surgery & procedures; sedation + amnesia (NOT analgesia)", watch:"Respiratory depression — keep airway gear + reversal at bedside; lower dose in older adults", reversal:"Flumazenil"},
+{drug:"Flumazenil", cls:"Benzodiazepine antagonist", use:"Reverse benzodiazepine over-sedation", link:"Antidote when Versed/benzos depress breathing", watch:"May trigger seizures in benzo-dependent patients", reversal:"—"},
+{drug:"Naloxone (Narcan)", cls:"Opioid antagonist", use:"Reverse opioid overdose/respiratory depression", link:"Postop opioid analgesia gone too far (RR<12, pinpoint pupils)", watch:"Short half-life — may need repeat doses; abrupt withdrawal pain", reversal:"—"},
+{drug:"Dantrolene", cls:"Skeletal muscle relaxant", use:"Malignant hyperthermia", link:"Antidote for MH triggered by volatile anesthetics + succinylcholine", watch:"Give immediately; also cool patient, 100% O2, correct acidosis", reversal:"—"},
+{drug:"Ondansetron (Zofran)", cls:"5-HT3 antagonist (antiemetic)", use:"Nausea/vomiting", link:"PONV after anesthesia/opioids; chemo-induced nausea (chemo GI toxicity)", watch:"QT prolongation; headache, constipation", reversal:"—"},
+{drug:"Allopurinol", cls:"Xanthine oxidase inhibitor", use:"Lower uric acid", link:"Tumor lysis syndrome from chemo (oncologic emergency) + gout", watch:"Give with hydration; monitor renal function", reversal:"—"},
+{drug:"Heparin / Enoxaparin", cls:"Anticoagulant", use:"Prevent/treat clots", link:"Postop VTE/DVT prophylaxis (a top surgical complication)", watch:"Bleeding; monitor labs; heparin reversal = protamine sulfate", reversal:"Protamine (heparin)"},
+{drug:"Succinylcholine", cls:"Depolarizing neuromuscular blocker", use:"Rapid intubation paralysis", link:"A KNOWN MH trigger — combined with volatile gases", watch:"Can precipitate malignant hyperthermia; hyperkalemia", reversal:"—"},
+{drug:"Volatile anesthetics (e.g., sevoflurane)", cls:"Inhalation general anesthetic", use:"General anesthesia", link:"MH trigger; eliminated via lungs", watch:"Stop immediately if MH suspected", reversal:"—"},
+{drug:"Acetaminophen / NSAIDs", cls:"Non-opioid analgesics", use:"Multimodal pain control", link:"ERAS pathways — opioid-sparing; reduce opioid need & risks postop", watch:"NSAIDs: bleeding/GI; acetaminophen: liver dose limit", reversal:"Acetylcysteine (acetaminophen OD)"},
+{drug:"Alvimopan", cls:"Peripheral opioid antagonist (gut)", use:"Opioid-induced postoperative ileus", link:"Opioids slow the bowel after surgery — alvimopan restores GI motility without reversing pain relief", watch:"Short-term hospital use; cardiovascular monitoring", reversal:"—"},
+{drug:"Antineoplastics (chemo)", cls:"Cytotoxic agents", use:"Kill cancer cells", link:"Damage rapidly dividing cells → marrow suppression (nadir/ANC), GI, hair", watch:"Neutropenia (ANC<500), extravasation (stop infusion), nausea", reversal:"—"},
+{drug:"Bisphosphonates", cls:"Bone resorption inhibitor", use:"Hypercalcemia of malignancy", link:"Oncologic emergency — high calcium from bone metastasis", watch:"Renal function; with IV hydration", reversal:"—"}
+];
+
+/* ============================================================
+   TOPIC META
+   ============================================================ */
+const TOPICS = {
+  aging:{label:"Aging (Head-to-Toe)", color:"var(--gold)"},
+  chronic:{label:"Chronic & Process", color:"var(--good)"},
+  cancer:{label:"Cancer", color:"var(--pink)"},
+  pre:{label:"Preoperative", color:"var(--accent)"},
+  intra:{label:"Intraoperative", color:"var(--teal)"},
+  post:{label:"Postoperative", color:"var(--accent2)"},
+  eol:{label:"End-of-Life", color:"var(--warn)"},
+  meds:{label:"Meds ↔ Disease", color:"var(--bad)"}
+};
+
+/* ============================================================
+   STORAGE  (adds wrong-answer vault w/ mastery tracking)
+   ============================================================ */
+const KEY="nur256_v3";
+const MASTERY_NEEDED=3;          // must get a vaulted Q right 3x to clear it
+let STATE = loadState();
+function loadState(){try{const s=JSON.parse(localStorage.getItem(KEY));return s?migrate(s):defaults()}catch(e){return defaults()}}
+function defaults(){return{answered:{},correct:{},bestExam:0,examsTaken:0,vault:{}}}
+/* vault is keyed by question signature -> {streak:0}; presence means "still needs work" */
+function migrate(s){ if(!s.vault)s.vault={}; if(!s.answered)s.answered={}; if(!s.correct)s.correct={}; return s; }
+function save(){try{localStorage.setItem(KEY,JSON.stringify(STATE))}catch(e){}}
+
+/* stable signature so vault survives shuffles/index changes */
+function qSig(q){return (q.topic||'')+'::'+(q.stem||'').slice(0,60)}
+
+function recordAnswer(q,ok){
+  const sig=qSig(q);
+  STATE.answered[sig]=true;
+  STATE.correct[sig]=ok;
+  if(ok){
+    if(STATE.vault[sig]){
+      STATE.vault[sig].streak=(STATE.vault[sig].streak||0)+1;
+      if(STATE.vault[sig].streak>=MASTERY_NEEDED){ delete STATE.vault[sig]; }  // mastered -> back to bank
+    }
+  } else {
+    // wrong: (re)add to vault and reset streak
+    STATE.vault[sig]={streak:0};
+  }
+  save();updateMini();
+}
+function vaultList(){ return QBANK.filter(q=>STATE.vault[qSig(q)]); }
+function vaultStreak(q){ const v=STATE.vault[qSig(q)]; return v?(v.streak||0):0; }
+function updateMini(){const el=document.getElementById('pmCount'); if(el) el.textContent=Object.keys(STATE.answered).length}
+
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const TABS=[
+ {id:"home",label:"🏠 Home"},
+ {id:"guide",label:"📖 Study Guide"},
+ {id:"meds",label:"💊 Meds ↔ Disease"},
+ {id:"exam",label:"📝 Practice Exam"},
+ {id:"drill",label:"⚡ Topic Practice"},
+ {id:"vault",label:"🔒 Wrong-Answer Vault"},
+ {id:"cards",label:"🔁 Flashcards"},
+ {id:"hy",label:"🔥 High-Yield"}
+];
+let CURRENT="home";
+function renderTabs(){
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  TABS.forEach(tb=>{
+    const b=document.createElement('button');
+    b.className='tab'+(tb.id===CURRENT?' active':'');
+    let label=tb.label;
+    if(tb.id==='vault'){ const n=vaultList().length; if(n>0) label+=` (${n})`; }
+    b.textContent=label;
+    b.onclick=()=>{CURRENT=tb.id;renderTabs();renderApp();window.scrollTo({top:0,behavior:'smooth'})};
+    t.appendChild(b);
+  });
+}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1800)}
+
+/* ============================================================
+   RENDER ROUTER
+   ============================================================ */
+function renderApp(){
+  if(CURRENT==='__quiz'){renderQuiz();return}
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  ({home:renderHome,guide:renderGuide,meds:renderMeds,
+    exam:renderExam,drill:renderDrill,vault:renderVault,cards:renderCards,hy:renderHY}[CURRENT])(app);
+}
+function go(id){CURRENT=id;renderTabs();renderApp();window.scrollTo({top:0,behavior:'smooth'})}
+function resetProgress(){if(confirm('Reset all progress on this device?')){STATE=defaults();save();renderApp();updateMini();toast('Progress reset')}}
+
+/* ---------- HOME ---------- */
+function renderHome(app){
+  const total=QBANK.length, ans=Object.keys(STATE.answered).length;
+  const cor=Object.values(STATE.correct).filter(Boolean).length;
+  const acc=ans?Math.round(cor/ans*100):0;
+  app.innerHTML=`
+  <h1 class="page-title">NUR256 Med-Surg 1 — Exam Prep</h1>
+  <p class="subtle">Systemic aging · Chronic illness · How cancer affects the body & cancer care · Perioperative (pre/intra/post) · End-of-life. Every drug is mapped to the disease it treats.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>📊 Your progress</h2>
+      <div class="kv">
+        <b>Questions in bank</b><span>${total}</span>
+        <b>Answered</b><span>${ans}</span>
+        <b>Accuracy</b><span>${acc}%</span>
+        <b>Best exam score</b><span>${STATE.bestExam}%</span>
+        <b>Exams taken</b><span>${STATE.examsTaken}</span>
+      </div>
+      <div class="btnrow"><button class="btn ghost" onclick="resetProgress()">Reset progress</button></div>
+    </div>
+    <div class="card">
+      <h2>🎯 How to use this</h2>
+      <ul class="clean">
+        <li><b>Study Guide</b> — every topic your instructor flagged, organized & collapsible.</li>
+        <li><b>Meds ↔ Disease</b> — each drug tied to the condition it treats.</li>
+        <li><b>Practice Exam</b> — pick a focus + length (25 / 50 / all ${total}), scored with rationales.</li>
+        <li><b>Topic Practice</b> — study mode for any single topic with hints.</li>
+        <li><b>Wrong-Answer Vault 🔒</b> — missed questions stick here until you nail them 3× in a row.</li>
+        <li><b>Flashcards</b> — tap to flip the high-yield facts.</li>
+        <li><b>High-Yield 🔥</b> — the fastest-payoff hit list.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🚀 Jump in</h2>
+    <div class="btnrow">
+      <button class="btn primary" onclick="go('exam')">Start full practice exam</button>
+      <button class="btn gold" onclick="go('hy')">See high-yield list</button>
+      <button class="btn ghost" onclick="go('guide')">Open study guide</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📌 What to nail for this exam</h2>
+    <ol class="clean">
+      <li><b>Systemic aging head-to-toe</b> — and the master rule: less physiologic reserve.</li>
+      <li><b>Chronic = incurable</b>; manage symptoms & prevent complications.</li>
+      <li><b>Maslow</b> for prioritizing and the <b>nursing process (ADPIE)</b> and how to apply it.</li>
+      <li><b>How cancer affects the body</b>; primary → tertiary prevention; types of cancer surgery.</li>
+      <li><b>Perioperative roles</b>: preop = prepare; intraop = safety, positioning, MH monitoring, fire risks.</li>
+      <li><b>Best position for breathing</b> = High-Fowler's. Plus meds connected to their diseases.</li>
+    </ol>
+  </div>`;
+}
+
+/* ---------- STUDY GUIDE ---------- */
+function vault(title,bodyHtml,open){return `<details class="vault" ${open?'open':''}><summary>${title}<span class="chev">▶</span></summary><div class="body">${bodyHtml}</div></details>`}
+
+function renderGuide(app){
+  app.innerHTML=`<h1 class="page-title">📖 Study Guide</h1>
+  <p class="subtle">Built from your Ch 7, 8, 12, 13, 14, 15, 16 slides — focused on exactly what was flagged.</p>
+
+  ${vault('🧓 Systemic Changes of Aging (head-to-toe)', `
+    <div class="hy"><div class="lbl">Master principle</div>Aging = <b>less physiologic reserve</b>. Systems work at rest but can't handle the extra load of surgery, infection, blood loss, or new drugs. This drives almost every geriatric answer.</div>
+    <table class="t"><tr><th>System</th><th>Normal age change</th><th>Why it matters</th></tr>
+    <tr><td>Cardiovascular</td><td>↓ heart efficiency, stiffer vessels, ↑ BP</td><td>Lower reserve; symptoms may be atypical (dyspnea, confusion)</td></tr>
+    <tr><td>Respiratory</td><td>↓ aerobic capacity ~10%/decade, weaker chest wall, ↑ residual volume</td><td>Less able to compensate; smoking cessation key</td></tr>
+    <tr><td>Integumentary</td><td>Thinner dermis, ↓ elasticity, ↓ subcutaneous fat</td><td>↑ injury, infection, and temperature dysregulation</td></tr>
+    <tr><td>Genitourinary</td><td>↓ kidney mass & GFR, ↑ incontinence/UTI</td><td>Drugs clear slower; UTI often shows as confusion</td></tr>
+    <tr><td>Gastrointestinal</td><td>↓ taste/smell, slower motility, dry mouth</td><td>Constipation, aspiration risk, poor nutrition</td></tr>
+    <tr><td>Musculoskeletal</td><td>↓ bone density & muscle mass</td><td>Fall & fracture risk; weight-bearing exercise helps</td></tr>
+    <tr><td>Nervous/Sensory</td><td>↓ nerve cells, slower reactions, ↓ vision/hearing</td><td>Falls; new confusion is NOT normal</td></tr></table>
+    <div class="trap"><div class="lbl">Don't get tricked</div><b>Sudden confusion, severe memory loss, big mood swings = NOT normal aging.</b> Suspect delirium, infection, drug toxicity, or electrolyte changes — assess & report.</div>
+    <h3>Delirium vs. Dementia</h3>
+    <ul class="clean"><li><b>Delirium</b> = acute, fluctuating, <b>reversible</b> — a medical emergency (CAM tool).</li>
+    <li><b>Dementia</b> (e.g., Alzheimer) = chronic, gradual, <b>irreversible</b>.</li></ul>
+    <h3>Meds in older adults</h3>
+    <ul class="clean"><li><b>Start low, go slow</b>; simplify the regimen.</li><li>Watch polypharmacy & Beers-criteria drugs.</li><li>Altered pharmacokinetics: less body water, more fat, ↓ liver/kidney clearance.</li></ul>
+    <div class="hy"><div class="lbl">Geriatric triad to prevent in hospital</div>Cognitive changes · <b>Falls</b> · Incontinence.</div>
+    <div class="hy"><div class="lbl">Why smaller drug doses?</div>Decreased <b>liver (metabolism)</b> and <b>kidney (excretion)</b> function — drugs build up. (Not lungs/heart, pancreas/thyroid, or stomach/intestines.)</div>
+    <div class="trap"><div class="lbl">Elder abuse risk</div>Most likely when <b>caregiver stress is overwhelming</b>. Assess caregiver strain, offer respite resources, and report suspected abuse (legal duty).</div>
+  `,true)}
+
+  ${vault('♾️ Chronic Illness & Disability', `
+    <div class="hy"><div class="lbl">Definition</div><b>Chronic means INCURABLE.</b> CDC: lasts 1+ year and needs ongoing care / limits activity. Care goal shifts from cure → <b>manage symptoms, prevent complications, maximize quality of life.</b></div>
+    <ul class="clean">
+      <li><b>People-first language:</b> "patient with diabetes," not "diabetic." Ask preference.</li>
+      <li><b>Modifiable risk factors:</b> tobacco, poor diet/high sodium, inactivity, excess alcohol. (Genetics is non-modifiable.)</li>
+      <li><b>Multiple chronic conditions (MCCs):</b> common & costly; ~⅓ of adults; coordination of care is essential.</li>
+      <li><b>Veterans:</b> higher MCC burden — HTN, arthritis, COPD; CAD/cancer over 65.</li>
+      <li>Self-management + education are the backbone of chronic care.</li>
+    </ul>
+  `)}
+
+  ${vault('🧭 Maslow & the Nursing Process (how to apply it)', `
+    <h3>Maslow's hierarchy — prioritize from the bottom up</h3>
+    <ol class="clean">
+      <li><b>Physiologic</b> — airway, breathing, circulation, oxygen, food, elimination (ALWAYS first)</li>
+      <li><b>Safety</b> — fall prevention, infection control, a safe environment</li>
+      <li><b>Love/Belonging</b> — family, relationships</li>
+      <li><b>Esteem</b> — dignity, control, self-worth</li>
+      <li><b>Self-actualization</b> — growth, meaning, discharge/future goals</li>
+    </ol>
+    <div class="hy"><div class="lbl">Exam move</div>If two needs compete, pick the lower (more basic) one. A low O2 sat (physiologic) beats loneliness (belonging).</div>
+    <h3>The nursing process — ADPIE</h3>
+    <table class="t"><tr><th>Step</th><th>What you do</th></tr>
+    <tr><td><b>A</b>ssessment</td><td>Collect subjective + objective data (vitals, lung sounds, symptoms)</td></tr>
+    <tr><td><b>D</b>iagnosis</td><td>Analyze data → identify the problem</td></tr>
+    <tr><td><b>P</b>lanning</td><td>Set measurable goals/outcomes</td></tr>
+    <tr><td><b>I</b>mplementation</td><td>Carry out interventions (give meds, teach, reposition)</td></tr>
+    <tr><td><b>E</b>valuation</td><td>Did it work? Reassess and revise</td></tr></table>
+    <div class="trap"><div class="lbl">Watch the order</div>Always <b>assess first</b>; <b>evaluate last</b>. NGN items often ask which step an action belongs to.</div>
+  `)}
+
+  ${vault('🎗️ Cancer — How It Affects the Body & Cancer Care', `
+    <h3>How cancer harms the body</h3>
+    <ul class="clean">
+      <li>Starts with <b>DNA mutation</b> → uncontrolled growth with no physiologic demand.</li>
+      <li><b>Invades and destroys</b> surrounding tissue.</li>
+      <li><b>Metastasizes</b> via blood & lymph (malignant cells don't stay put — benign tumors do).</li>
+      <li>Drains nutrition → <b>anorexia–cachexia</b>, weight loss, fatigue, anemia.</li>
+    </ul>
+    <h3>Carcinogenesis — 3 steps</h3>
+    <p><b>Initiation</b> (DNA mutation) → <b>Promotion</b> (mutated cells proliferate; reversible if the agent is removed) → <b>Progression</b> (malignant behavior: angiogenesis, invasion, metastasis).</p>
+    <h3>How chemo & radiation hit the body</h3>
+    <div class="hy"><div class="lbl">Rapidly dividing tissues take the damage</div><b>Bone marrow</b> (anemia, neutropenia, thrombocytopenia) · <b>GI lining</b> (nausea, mucositis, diarrhea) · <b>hair follicles</b> (alopecia). Muscle & brain are slow-dividing → radioresistant.</div>
+    <ul class="clean"><li><b>Nadir</b> = lowest blood counts (~7–14 days post-chemo).</li>
+    <li><b>ANC < 500 = severe neutropenia</b> → neutropenic precautions; first sign of infection may be only fever.</li></ul>
+    <h3>Prevention: primary → secondary → tertiary</h3>
+    <table class="t"><tr><th>Level</th><th>Goal</th><th>Examples</th></tr>
+    <tr><td><b>Primary</b></td><td>Prevent cancer before it starts</td><td>HPV & HBV vaccines, tobacco cessation, diet/activity, sun protection</td></tr>
+    <tr><td><b>Secondary</b></td><td>Screen & detect early</td><td>Mammography, colonoscopy/FOBT, Pap/HPV, low-dose CT for smokers</td></tr>
+    <tr><td><b>Tertiary</b></td><td>Monitor survivors</td><td>Surveillance for recurrence & second cancers, survivorship care plan</td></tr></table>
+    <h3>Types of surgery for cancer</h3>
+    <table class="t"><tr><th>Type</th><th>Purpose</th></tr>
+    <tr><td><b>Diagnostic</b></td><td>Biopsy for tissue diagnosis (excisional, incisional, needle, SLNB)</td></tr>
+    <tr><td><b>Primary / Curative</b></td><td>Remove the entire tumor (± margins, nodes); debulking</td></tr>
+    <tr><td><b>Prophylactic</b></td><td>Remove high-risk tissue before cancer develops (e.g., BRCA mastectomy)</td></tr>
+    <tr><td><b>Palliative</b></td><td>Relieve symptoms (obstruction, pain, bleeding) — not curative</td></tr>
+    <tr><td><b>Reconstructive</b></td><td>Restore function or appearance</td></tr></table>
+    <h3>TNM staging</h3>
+    <p><b>T</b> = tumor size/extent · <b>N</b> = regional lymph nodes · <b>M</b> = distant metastasis. Tis = carcinoma in situ; M1 = distant spread. Grade I (resembles normal) → Grade IV (poorly differentiated, aggressive).</p>
+    <div class="trap"><div class="lbl">Oncologic emergencies</div>Extravasation (STOP infusion), neutropenic sepsis, tumor lysis syndrome (allopurinol + hydration), hypercalcemia, spinal cord compression, SVC syndrome.</div>
+  `)}
+
+  ${vault('🔵 Preoperative — Prepare the Patient', `
+    <div class="hy"><div class="lbl">Goal of preop nursing</div><b>Prepare the patient physically and psychologically</b> and ensure they are as healthy as possible before surgery — assess/optimize, educate, verify consent, reduce anxiety.</div>
+    <h3>Informed consent</h3>
+    <ul class="clean">
+      <li><b>Surgeon explains</b> the procedure, benefits, risks, alternatives.</li>
+      <li><b>Nurse witnesses</b> the voluntary signature & verifies understanding (notify surgeon if questions remain).</li>
+      <li>Must be signed <b>BEFORE</b> sedating/psychoactive premedication.</li>
+    </ul>
+    <h3>Preop teaching (prevents postop complications)</h3>
+    <ul class="clean"><li>Deep breathing + <b>incentive spirometer</b> (prevents atelectasis).</li><li>Coughing & splinting the incision.</li><li>Leg exercises + <b>early ambulation</b> (prevents VTE).</li><li>Turning/repositioning.</li></ul>
+    <h3>Other key preop points</h3>
+    <ul class="clean">
+      <li><b>NPO:</b> ~8 hr after fatty food, 6 hr after milk; clear liquids up to 2 hr before (ERAS) — prevents aspiration.</li>
+      <li><b>Aspirin/antiplatelets:</b> stop ~7–10 days before surgery.</li>
+      <li>Medication reconciliation; beta-blockers usually continued; latex-allergy screening.</li>
+      <li>Remove jewelry, dentures, nail polish; void before OR; verify & mark the site.</li>
+      <li><b>National Patient Safety Goals:</b> prevent VTE, SSIs, wrong-site surgery.</li>
+    </ul>
+  `)}
+
+  ${vault('🟢 Intraoperative — Safety, Positioning, MH, Fire', `
+    <div class="hy"><div class="lbl">Intraop nurse = SAFETY</div>Maintain asepsis, correct <b>positioning</b>, surgical <b>counts</b>, grounding pad, and verify patient/procedure/site during the <b>time-out</b>.</div>
+    <h3>Team roles</h3>
+    <ul class="clean"><li><b>Circulating nurse</b> — coordinates the room, verifies consent/counts, documents, patient advocate (not scrubbed in).</li>
+    <li><b>Scrub role</b> — sterile field, hands instruments, counts.</li>
+    <li><b>CRNA/anesthesiologist</b> — gives & monitors anesthesia.</li><li><b>Surgeon</b> — performs the operation.</li></ul>
+    <h3>Proper positioning in the OR</h3>
+    <ul class="clean"><li>Maintain anatomic alignment; pad bony prominences.</li><li>Avoid hyperextending joints; protect nerves & vessels.</li><li>Prevents nerve injury, pressure injury, and circulatory compromise.</li></ul>
+    <h3>Fire risks (the fire triangle)</h3>
+    <div class="trap"><div class="lbl">OR fire needs 3 things</div><b>Oxygen (oxidizer) + ignition source (laser/cautery) + fuel (drapes, alcohol prep, gases).</b> Fire-risk assessment at the time-out; annual fire drills required.</div>
+    <h3>Monitoring for Malignant Hyperthermia</h3>
+    <ul class="clean">
+      <li><b>Triggers:</b> volatile anesthetics + <b>succinylcholine</b> (genetic susceptibility).</li>
+      <li><b>EARLY signs:</b> unexplained <b>tachycardia</b>, rising <b>end-tidal CO2</b> (hypercapnia), <b>jaw/masseter rigidity</b>.</li>
+      <li><b>LATE sign:</b> rapid temperature spike (don't wait for it).</li>
+      <li><b>Treatment:</b> STOP trigger → <b>dantrolene</b> → cool patient → 100% O2 → correct acidosis/electrolytes.</li>
+    </ul>
+    <h3>Other intraop complications</h3>
+    <p>Anesthesia awareness, PONV, anaphylaxis (incl. <b>latex</b>), hypoxia, hypothermia, retained items, positioning injury.</p>
+    <div class="hy"><div class="lbl">Latex allergy</div>Every nurse's job: identify at-risk patients, use latex-free products, maintain precautions all perioperative phases.</div>
+    <h3>Latex allergy — at-risk & signs</h3>
+    <ul class="clean">
+      <li><b>At risk:</b> genetic predisposition, history of multiple surgeries, children with spina bifida, urogenital abnormalities, spinal cord injuries, allergies/asthma, health care professionals.</li>
+      <li><b>S&S:</b> urticaria, rhinorrhea, bronchospasm, compromised respiratory status → circulatory collapse & death.</li>
+      <li><b>Management:</b> identify those at risk, latex-free environment, latex-free equipment.</li>
+    </ul>
+    <h3>Safe hand-off communication (AORN)</h3>
+    <ul class="clean">
+      <li>Individualized patient report; conversation on that patient only; minimize distractions; <b>one person speaks at a time</b>.</li>
+      <li>Use supporting documentation; identify equipment needs; give an opportunity for questions.</li>
+      <li><b>Strategies:</b> read-back methods, <b>SBAR</b>, standardized checklists/tools/protocols (e.g., SURPASS surgical safety checklist).</li>
+    </ul>
+  `)}
+
+  ${vault('🟣 Postoperative — PACU to Discharge (+ best breathing position)', `
+    <div class="hy"><div class="lbl">PACU first priority</div><b>ABCs</b> — airway, breathing, circulation. Anesthesia depresses respiration & reflexes.</div>
+    <div class="hy"><div class="lbl">Best position to enhance breathing</div><b>High-Fowler's (upright sitting ~90°)</b> — lowers the diaphragm, maximizes lung expansion and chest excursion. Flat/Trendelenburg worsen dyspnea.</div>
+    <h3>Preventable postoperative complications (know the list)</h3>
+    <p>Pain · Hemorrhage · Hypovolemic shock · Thrombophlebitis–DVT · Pulmonary embolus · Fluid overload · Atelectasis · Pneumonia · Airway obstruction · Surgical site infection (SSI).</p>
+    <h3>Watch for complications</h3>
+    <ul class="clean">
+      <li><b>Hemorrhage / hypovolemic shock:</b> ↓BP + ↑HR <b>trend</b>, ↓urine output, bright-red drainage → escalate the chain of command. <b>Trends beat single values.</b></li>
+      <li><b>Atelectasis</b> (most common respiratory complication): low SpO2, shallow breaths, <b>diminished sounds at the bases</b> → incentive spirometry, deep breathing, ambulation.</li>
+      <li><b>VTE/DVT</b> → early ambulation, leg exercises, SCDs, anticoagulants.</li>
+      <li><b>Wound dehiscence/evisceration:</b> cover with sterile saline gauze, low-Fowler knees bent, NPO, call surgeon.</li>
+    </ul>
+    <div class="trap"><div class="lbl">Hypovolemic shock vs. distractors</div>Shock = <b>cool, pale, clammy skin with ↓BP + ↑HR</b>. NOT warm/dry skin, NOT bradycardia with a bounding pulse — those are wrong-answer traps.</div>
+    <h3>Prevent respiratory complications</h3>
+    <p>Monitor vital signs · deep breathing · coughing · incentive spirometry · turning/OOB to chair · ambulating · hydration · avoid positions that decrease ventilation · monitor response to opioid (narcotic) analgesics.</p>
+    <h3>Prevent DVT</h3>
+    <p>OOB to chair early & often · change position on bed rest · leg exercises on the non-op side (dorsiflex, rotate ankle) · TED hose · intermittent compression boots · prophylactic SC heparin BID.</p>
+    <h3>Pain control + bowel recovery</h3>
+    <ul class="clean">
+      <li><b>Re-evaluate, then escalate:</b> if pain is unrelieved after meds, notify the provider by phone (SBAR) — don't wait for rounds or change the dose yourself.</li>
+      <li><b>PCA:</b> only the patient presses the button (no proxy) — a built-in overdose safety.</li>
+      <li>Multimodal/ERAS: <b>acetaminophen</b> + NSAIDs reduce opioid need.</li>
+      <li><b>Alvimopan</b> treats opioid-induced ileus (opioids slow the gut) without reversing pain relief.</li>
+    </ul>
+  `)}
+
+  ${vault('⚫ Palliative & End-of-Life Care', `
+    <div class="hy"><div class="lbl">Palliative vs. Hospice</div><b>Palliative</b> = comfort/quality of life at <b>any stage</b>, alongside curative care. <b>Hospice</b> = a subset for terminal illness (~6-month prognosis), comfort-focused.</div>
+    <ul class="clean">
+      <li><b>Advance directives:</b> living will, durable power of attorney for health care, DNR, and <b>POLST</b> (portable provider-signed orders across settings).</li>
+      <li><b>Kübler-Ross grief stages:</b> denial, anger, bargaining, depression, acceptance (nonlinear in reality).</li>
+      <li><b>FICA spiritual assessment:</b> Faith · Importance · Community · Address in care.</li>
+      <li><b>Hope:</b> foster via pain control, relationships, dignity, achievable goals. Hope-hindering: isolation, uncontrolled pain, devaluing the person.</li>
+      <li>Illness trajectories: sudden death, terminal illness, organ failure, frailty.</li>
+    </ul>
+  `)}
+
+  <div class="btnrow"><button class="btn primary" onclick="go('exam')">Test yourself →</button><button class="btn gold" onclick="go('cards')">Flashcards</button></div>`;
+}
+
+/* ---------- MEDS ↔ DISEASE ---------- */
+function renderMeds(app){
+  app.innerHTML=`<h1 class="page-title">💊 Meds ↔ Disease</h1>
+  <p class="subtle">The big idea this cycle: know each drug's <b>purpose</b> and the <b>disease/condition it connects to</b> — at ATI/NCLEX level. Reversal agents are paired so you don't mix them up.</p>
+  <div class="card">
+    <table class="t">
+      <tr><th>Drug</th><th>Class</th><th>Purpose</th><th>Disease / when it's used</th><th>Watch for</th><th>Reversal/Antidote</th></tr>
+      ${MEDLINKS.map(m=>`<tr>
+        <td><b>${m.drug}</b></td><td>${m.cls}</td><td>${m.use}</td><td>${m.link}</td><td>${m.watch}</td><td>${m.reversal}</td>
+      </tr>`).join('')}
+    </table>
+  </div>
+  <div class="trap"><div class="lbl">The classic reversal-agent trap</div>
+  Opioids → <b>naloxone</b>. Benzodiazepines (Versed) → <b>flumazenil</b>. Malignant hyperthermia → <b>dantrolene</b>. <b>Naloxone does NOT reverse Versed.</b></div>
+  <div class="versedbox"><div class="lbl">Versed (midazolam) in one line</div>
+  Benzodiazepine for <b>sedation + amnesia</b> (procedures/preop anxiety) — <b>not</b> a painkiller. #1 risk = <b>respiratory depression</b>; reversal = <b>flumazenil</b>; older adults get lower, slower dosing.</div>
+  <div class="btnrow"><button class="btn primary" onclick="startQuiz('meds','Meds ↔ Disease Set')">Quiz the meds set</button></div>`;
+}
+
+/* ============================================================
+   HINT GENERATOR
+   Uses an explicit q.hint if present, else builds a useful
+   topic/type-based nudge that points toward the reasoning.
+   ============================================================ */
+const TOPIC_HINTS={
+  aging:"Think 'less physiologic reserve' and whether a finding is NORMAL aging vs. an acute change to report.",
+  chronic:"Chronic = incurable; think management, coordination, Maslow, and the nursing process (ADPIE).",
+  cancer:"Think how cancer/treatment affects rapidly dividing cells, prevention levels, or which patient is least stable.",
+  pre:"Preop = prepare & keep safe: consent (surgeon explains/nurse witnesses), NPO, labs, glucose, correct site.",
+  intra:"Intraop = SAFETY: positioning, counts, time-out, fire triangle (O2+ignition+fuel), MH, latex.",
+  post:"Postop: use ABCs and TRENDS. Falling BP + rising HR = shock; act and escalate over a single stable value.",
+  eol:"Palliative = comfort at any stage; focus on dignity, realistic hope, and therapeutic communication.",
+  meds:"Tie the drug to its DISEASE and match reversal agents (opioid→naloxone, benzo→flumazenil, MH→dantrolene)."
+};
+function hintFor(q){
+  if(q.hint) return q.hint;
+  let h=TOPIC_HINTS[q.topic]||"Re-read the stem for the key word (FIRST, BEST, PRIORITY, EXCEPT).";
+  if(q.type==='sata') h+=" Select ALL correct options — evaluate each one independently (true or false).";
+  if(q.type==='ngn') h+=" NGN: decide which findings/actions are urgent vs. stable/expected.";
+  // surface a priority cue if the stem uses a classic keyword
+  const m=(q.stem||'').match(/\b(first|best|priority|most|immediate|initial|EXCEPT|not)\b/i);
+  if(m && !q.hint) h="Key word in the stem: \u201c"+m[0].toUpperCase()+"\u201d. "+h;
+  return h;
+}
+
+/* ============================================================
+   QUIZ ENGINE  (Exam, Topic Practice, Vault mastery)
+   ============================================================ */
+let QZ=null;
+function buildSession(list,title,opts){
+  opts=opts||{};
+  return {
+    list:list.slice(), i:0,
+    picks:list.map(()=>[]), locked:list.map(()=>false), hintOpen:list.map(()=>false),
+    title,
+    isExam: !!opts.isExam,
+    isVault: !!opts.isVault,
+    backTab: opts.backTab || (opts.isExam?'exam':'drill')
+  };
+}
+function startQuiz(topicOrAll,title){
+  let list = topicOrAll==='all' ? QBANK.slice() : QBANK.filter(q=>q.topic===topicOrAll);
+  const isExam=title.includes('Exam');
+  if(isExam) shuffle(list);
+  QZ=buildSession(list,title,{isExam,backTab:isExam?'exam':'drill'});
+  CURRENT='__quiz'; renderTabs(); renderQuiz(); window.scrollTo({top:0,behavior:'smooth'});
+}
+/* Exam with a chosen length (25 / 50 / all), optionally limited to a focus pool */
+function startExam(count,pool,title){
+  let list=(pool&&pool.length)?pool.slice():QBANK.slice();
+  shuffle(list);
+  if(count!=='all') list=list.slice(0, Math.min(count, list.length));
+  QZ=buildSession(list,title||('Practice Exam ('+(count==='all'?list.length:count)+' Q)'),{isExam:true,backTab:'exam'});
+  CURRENT='__quiz'; renderTabs(); renderQuiz(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function startVaultSession(){
+  let list=vaultList();
+  if(!list.length){ toast('Vault is empty — nice work!'); return; }
+  shuffle(list);
+  QZ=buildSession(list,'Wrong-Answer Vault',{isVault:true,backTab:'vault'});
+  CURRENT='__quiz'; renderTabs(); renderQuiz(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+
+function renderQuiz(){
+  const app=document.getElementById('app');
+  const q=QZ.list[QZ.i];
+  const isSATA=q.type==='sata';
+  const tc=TOPICS[q.topic];
+  const pct=Math.round((QZ.i)/QZ.list.length*100);
+  const picks=QZ.picks[QZ.i];
+  const locked=QZ.locked[QZ.i];
+  const hintShown=QZ.hintOpen[QZ.i];
+  let optsHtml=q.opts.map((o,k)=>{
+    let cls='opt';
+    if(picks.includes(k)) cls+=' sel';
+    if(locked){
+      if(q.ans.includes(k)) cls+=' correct';
+      else if(picks.includes(k)) cls+=' wrong';
+    }
+    let mark='';
+    if(locked){ if(q.ans.includes(k))mark='<span class="mark" style="color:var(--good)">✓</span>'; else if(picks.includes(k))mark='<span class="mark" style="color:var(--bad)">✗</span>';}
+    return `<button class="${cls}" onclick="pick(${k})" ${locked?'disabled':''}>${o}${mark}</button>`;
+  }).join('');
+  const typeLabel = q.type==='ngn'?'<span class="pill ngn">NGN</span>':(isSATA?'<span class="pill med">Select All</span>':'');
+  const hotLabel = q.hot?'<span class="pill hot">High-Yield</span>':'';
+  const vaultLabel = QZ.isVault?`<span class="pill" style="background:rgba(255,159,80,.16);color:var(--warn);border:1px solid var(--warn)">Mastery ${vaultStreak(q)}/${MASTERY_NEEDED}</span>`:'';
+
+  let rationaleHtml='';
+  if(locked){
+    const ok=arrEq(picks.slice().sort(),q.ans.slice().sort());
+    let masteryNote='';
+    if(QZ.isVault){
+      const st=vaultStreak(q);
+      if(ok && !STATE.vault[qSig(q)]) masteryNote=`<div style="margin-top:8px;color:var(--good)"><b>✓ Mastered!</b> ${MASTERY_NEEDED} correct in a row — this question returns to the main bank.</div>`;
+      else if(ok) masteryNote=`<div style="margin-top:8px;color:var(--warn)">Streak: <b>${st}/${MASTERY_NEEDED}</b> — keep going to clear it from the vault.</div>`;
+      else masteryNote=`<div style="margin-top:8px;color:var(--bad)">Streak reset to <b>0/${MASTERY_NEEDED}</b> — you'll see this one again.</div>`;
+    } else if(!ok){
+      masteryNote=`<div style="margin-top:8px;color:var(--warn)">📌 Added to your <b>Wrong-Answer Vault</b> — answer it correctly ${MASTERY_NEEDED}× to clear it.</div>`;
+    }
+    rationaleHtml=`<div class="rationale show ${ok?'ok':'no'}">
+      <div class="rlbl">${ok?'✓ Correct':'✗ Not quite'}</div>
+      <div><b>Correct answer:</b> ${q.ans.map(a=>q.opts[a]).join(' · ')}</div>
+      <div style="margin-top:8px"><b>Why:</b> ${q.rat}</div>
+      ${masteryNote}
+    </div>`;
+  }
+
+  let hintHtml='';
+  if(hintShown && !locked){
+    hintHtml=`<div class="hintbox"><div class="lbl">💡 Hint</div>${hintFor(q)}</div>`;
+  }
+
+  app.innerHTML=`
+    <div class="qmeta">
+      <span class="pill" style="background:rgba(124,197,255,.12);color:${tc.color};border:1px solid ${tc.color}">${tc.label}</span>
+      ${typeLabel} ${hotLabel} ${vaultLabel}
+      <span style="margin-left:auto" class="mono">Q ${QZ.i+1} / ${QZ.list.length}</span>
+    </div>
+    <div class="qbar"><div style="width:${pct}%"></div></div>
+    ${isSATA?'<div class="sata-note">⚠ Select ALL that apply — no partial credit on NCLEX.</div>':''}
+    <div class="qstem">${q.stem}</div>
+    ${optsHtml}
+    ${hintHtml}
+    ${rationaleHtml}
+    <div class="btnrow">
+      ${!locked?`<button class="btn ghost" onclick="toggleHint()">${hintShown?'Hide hint':'💡 Hint'}</button>`:''}
+      ${!locked?`<button class="btn primary" onclick="lockAnswer()" ${picks.length?'':'disabled'}>Submit answer</button>`:''}
+      ${locked && QZ.i<QZ.list.length-1?`<button class="btn primary" onclick="nextQ()">Next →</button>`:''}
+      ${locked && QZ.i===QZ.list.length-1?`<button class="btn gold" onclick="finishQuiz()">See results</button>`:''}
+      ${QZ.i>0?`<button class="btn ghost" onclick="prevQ()">← Back</button>`:''}
+      <button class="btn ghost" onclick="exitQuiz()">Exit</button>
+    </div>`;
+}
+function toggleHint(){QZ.hintOpen[QZ.i]=!QZ.hintOpen[QZ.i];renderQuiz()}
+function arrEq(a,b){return a.length===b.length&&a.every((v,i)=>v===b[i])}
+function pick(k){
+  if(QZ.locked[QZ.i])return;
+  const q=QZ.list[QZ.i], picks=QZ.picks[QZ.i];
+  if(q.type==='sata'){
+    const idx=picks.indexOf(k); if(idx>-1)picks.splice(idx,1); else picks.push(k);
+  } else { QZ.picks[QZ.i]=[k]; }
+  renderQuiz();
+}
+function lockAnswer(){
+  QZ.locked[QZ.i]=true;
+  const q=QZ.list[QZ.i];
+  const ok=arrEq(QZ.picks[QZ.i].slice().sort(),q.ans.slice().sort());
+  recordAnswer(q,ok);
+  renderTabs(); // refresh vault count badge
+  renderQuiz();
+}
+function nextQ(){if(QZ.i<QZ.list.length-1){QZ.i++;renderQuiz();window.scrollTo({top:0,behavior:'smooth'})}}
+function prevQ(){if(QZ.i>0){QZ.i--;renderQuiz();window.scrollTo({top:0,behavior:'smooth'})}}
+function exitQuiz(){CURRENT=QZ.backTab;renderTabs();renderApp()}
+function finishQuiz(){
+  let correct=0;
+  QZ.list.forEach((q,i)=>{ if(arrEq(QZ.picks[i].slice().sort(),q.ans.slice().sort()))correct++; });
+  const score=Math.round(correct/QZ.list.length*100);
+  if(QZ.isExam){ STATE.examsTaken++; if(score>STATE.bestExam)STATE.bestExam=score; save(); }
+  const wrongs=QZ.list.map((q,i)=>({q,i})).filter(x=>!arrEq(QZ.picks[x.i].slice().sort(),x.q.ans.slice().sort()));
+  const app=document.getElementById('app');
+  const ring = score>=80?'var(--good)':score>=65?'var(--gold)':'var(--bad)';
+  const vaultN=vaultList().length;
+  app.innerHTML=`
+    <div class="card scorecard">
+      <div class="big">${score}%</div>
+      <div style="color:var(--ink-dim)">${correct} of ${QZ.list.length} correct</div>
+      <svg class="donut" viewBox="0 0 36 36">
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--card2)" stroke-width="3"/>
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="${ring}" stroke-width="3"
+          stroke-dasharray="${score} ${100-score}" stroke-dashoffset="25" stroke-linecap="round"/>
+      </svg>
+      <div style="margin-top:6px">${score>=80?'Strong — you are exam-ready on this set.':score>=65?'Solid. Hit the misses below.':'Review the rationales below, then retake.'}</div>
+      <div class="btnrow" style="justify-content:center">
+        <button class="btn primary" onclick="retake()">Retake</button>
+        ${vaultN?`<button class="btn gold" onclick="go('vault')">Study vault (${vaultN})</button>`:''}
+        <button class="btn ghost" onclick="exitQuiz()">Done</button>
+      </div>
+    </div>
+    ${wrongs.length?`<div class="card"><h2>📕 Review your misses (${wrongs.length})</h2>${
+      wrongs.map(x=>`<div style="border-top:1px solid var(--line);padding:12px 0">
+        <div style="font-weight:600;margin-bottom:6px">${x.q.stem}</div>
+        <div style="color:var(--good);font-size:.9rem"><b>Correct:</b> ${x.q.ans.map(a=>x.q.opts[a]).join(' · ')}</div>
+        <div style="color:var(--ink-dim);font-size:.88rem;margin-top:5px"><b>Why:</b> ${x.q.rat}</div>
+      </div>`).join('')
+    }</div>`:`<div class="card center"><h2>🎉 Perfect set — no misses!</h2></div>`}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function retake(){
+  if(QZ.isVault){ startVaultSession(); return; }
+  if(QZ.isExam){ startExam(QZ.list.length>=QBANK.length?'all':QZ.list.length, null, QZ.title); return; }
+  startQuiz(QZ.list[0].topic, QZ.title);
+}
+
+/* ---------- EXAM TAB (length selector + focus) ---------- */
+let examLen=25;            // 25 | 50 | 'all'
+let examFocus='all';       // 'all' | 'hot' | topic key
+function setExamLen(n){examLen=n;renderExam(document.getElementById('app'))}
+function setExamFocus(f){examFocus=f;renderExam(document.getElementById('app'))}
+function focusPool(){
+  if(examFocus==='all') return QBANK.slice();
+  if(examFocus==='hot') return QBANK.filter(q=>q.hot);
+  return QBANK.filter(q=>q.topic===examFocus);
+}
+function launchExam(){
+  const pool=focusPool();
+  const focusName = examFocus==='all'?'All topics':(examFocus==='hot'?'High-Yield':TOPICS[examFocus].label);
+  const n = examLen==='all'?pool.length:Math.min(examLen,pool.length);
+  startExam(examLen,pool,`Exam · ${focusName} (${n} Q)`);
+}
+function renderExam(app){
+  const counts={};Object.keys(TOPICS).forEach(k=>counts[k]=QBANK.filter(q=>q.topic===k).length);
+  const pool=focusPool();
+  const avail=pool.length;
+  const lenBtns=[25,50,'all'].map(n=>{
+    const label=n==='all'?`All (${avail})`:`${n}`;
+    const dis=(n!=='all' && avail<n)?'disabled':'';
+    return `<button class="chip ${examLen===n?'on':''}" ${dis} onclick="setExamLen(${n==='all'?"'all'":n})">${label}</button>`;
+  }).join('');
+  const focusChips=[`<button class="chip ${examFocus==='all'?'on':''}" onclick="setExamFocus('all')">All topics (${QBANK.length})</button>`,
+    `<button class="chip ${examFocus==='hot'?'on':''}" onclick="setExamFocus('hot')">🔥 High-Yield (${QBANK.filter(q=>q.hot).length})</button>`]
+    .concat(Object.keys(TOPICS).map(k=>`<button class="chip ${examFocus===k?'on':''}" onclick="setExamFocus('${k}')">${TOPICS[k].label} (${counts[k]})</button>`)).join('');
+  const willGet = examLen==='all'?avail:Math.min(examLen,avail);
+  app.innerHTML=`<h1 class="page-title">📝 Practice Exam</h1>
+  <p class="subtle">Shuffled, scored at the end with full rationales. Every question has a hint and explains why each option is right or wrong. ${QBANK.length} questions total · NGN + SATA included.</p>
+
+  <div class="card">
+    <h2>1 · Choose exam focus</h2>
+    <p class="subtle" style="margin-bottom:8px">Test everything, drill the high-yield set, or zero in on one topic.</p>
+    <div class="chips">${focusChips}</div>
+  </div>
+
+  <div class="card">
+    <h2>2 · Choose length</h2>
+    <div class="chips">${lenBtns}</div>
+    <div class="legend" style="margin-top:10px">
+      <span><span class="dot" style="background:var(--teal)"></span>NGN</span>
+      <span><span class="dot" style="background:var(--gold)"></span>Select-all</span>
+      <span><span class="dot" style="background:var(--bad)"></span>High-yield</span>
+    </div>
+    <div class="btnrow">
+      <button class="btn primary" onclick="launchExam()">Start exam — ${willGet} question${willGet===1?'':'s'}</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>What's in the bank</h2>
+    <div class="kv">
+      ${Object.keys(TOPICS).map(k=>`<b>${TOPICS[k].label}</b><span>${counts[k]} questions</span>`).join('')}
+    </div>
+  </div>`;
+}
+function startHotExam(){examFocus='hot';examLen='all';launchExam();}
+
+/* ---------- TOPIC PRACTICE TAB (study mode by topic) ---------- */
+let drillTopic='all';
+function renderDrill(app){
+  const counts={all:QBANK.length};Object.keys(TOPICS).forEach(k=>counts[k]=QBANK.filter(q=>q.topic===k).length);
+  app.innerHTML=`<h1 class="page-title">⚡ Topic Practice</h1>
+  <p class="subtle">Pick a topic and practice in study mode — instant feedback, hints, and a full rationale after every question.</p>
+  <div class="card">
+    <h2>Choose a topic</h2>
+    <div class="chips">
+      <button class="chip ${drillTopic==='all'?'on':''}" onclick="setDrill('all')">All (${counts.all})</button>
+      ${Object.keys(TOPICS).map(k=>`<button class="chip ${drillTopic===k?'on':''}" onclick="setDrill('${k}')">${TOPICS[k].label} (${counts[k]})</button>`).join('')}
+    </div>
+    <div class="btnrow"><button class="btn primary" id="drillStart">Start practice</button></div>
+  </div>`;
+  document.getElementById('drillStart').setAttribute('onclick',`startQuiz('${drillTopic}','${drillTopic==='all'?'All-Topics Practice':TOPICS[drillTopic].label+' Practice'}')`);
+}
+function setDrill(t){drillTopic=t;renderDrill(document.getElementById('app'))}
+
+/* ---------- WRONG-ANSWER VAULT TAB ---------- */
+function renderVault(app){
+  const list=vaultList();
+  const byTopic={}; list.forEach(q=>{byTopic[q.topic]=(byTopic[q.topic]||0)+1;});
+  app.innerHTML=`<h1 class="page-title">🔒 Wrong-Answer Vault</h1>
+  <p class="subtle">Every question you miss lands here. Answer it correctly <b>${MASTERY_NEEDED} times</b> to unlock it and send it back to the main bank.</p>
+  ${list.length? `
+    <div class="card">
+      <h2>${list.length} question${list.length===1?'':'s'} to master</h2>
+      <div class="kv">
+        ${Object.keys(byTopic).map(k=>`<b>${TOPICS[k].label}</b><span>${byTopic[k]} in vault</span>`).join('')}
+      </div>
+      <div class="btnrow"><button class="btn gold" onclick="startVaultSession()">Study the vault (${list.length} Q)</button></div>
+    </div>
+    <div class="card">
+      <h2>Mastery progress</h2>
+      ${list.map(q=>{const st=vaultStreak(q);const pct=Math.round(st/MASTERY_NEEDED*100);
+        return `<div style="border-top:1px solid var(--line);padding:10px 0">
+          <div style="font-size:.9rem;margin-bottom:6px">${q.stem.length>90?q.stem.slice(0,90)+'…':q.stem}</div>
+          <div class="qbar" style="margin:0"><div style="width:${pct}%"></div></div>
+          <div style="font-size:.75rem;color:var(--ink-dim);margin-top:4px">${st}/${MASTERY_NEEDED} correct in a row</div>
+        </div>`}).join('')}
+    </div>`
+  : `<div class="card center">
+       <h2>🎉 Your vault is empty</h2>
+       <p class="subtle">Miss a question anywhere and it'll show up here for focused review. Nothing to master right now.</p>
+       <div class="btnrow" style="justify-content:center"><button class="btn primary" onclick="go('exam')">Take a practice exam</button></div>
+     </div>`}`;
+}
+
+/* ---------- FLASHCARDS ---------- */
+let fcDeck='all', fcIdx=0;
+const FC_DECKS={all:"All",aging:"Aging",chronic:"Chronic & Process",cancer:"Cancer",peri:"Perioperative",mh:"Malignant Hyperthermia",post:"Postoperative",eol:"End-of-Life",meds:"Meds ↔ Disease"};
+function fcList(){return fcDeck==='all'?FLASHCARDS:FLASHCARDS.filter(c=>c.deck===fcDeck)}
+function renderCards(app){
+  const list=fcList(); if(fcIdx>=list.length)fcIdx=0;
+  const c=list[fcIdx];
+  app.innerHTML=`<h1 class="page-title">🔁 Flashcards</h1>
+  <p class="subtle">Tap the card to flip. ${list.length} cards in this deck.</p>
+  <div class="card">
+    <div class="chips">
+      ${Object.keys(FC_DECKS).map(k=>`<button class="chip ${fcDeck===k?'on':''}" onclick="setDeck('${k}')">${FC_DECKS[k]}</button>`).join('')}
+    </div>
+    <div class="fc-scene">
+      <div class="fc" id="fc" onclick="flipCard()">
+        <div class="fc-face fc-front"><div class="tag">${FC_DECKS[c.deck]||c.deck} · Question</div><div class="q">${c.q}</div></div>
+        <div class="fc-face fc-back"><div class="tag">Answer</div><div class="a">${c.a}</div></div>
+      </div>
+    </div>
+    <div class="fc-hint">Card ${fcIdx+1} of ${list.length}</div>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn ghost" onclick="fcPrev()">← Prev</button>
+      <button class="btn primary" onclick="flipCard()">Flip</button>
+      <button class="btn ghost" onclick="fcNext()">Next →</button>
+    </div>
+  </div>`;
+}
+function setDeck(d){fcDeck=d;fcIdx=0;renderCards(document.getElementById('app'))}
+function flipCard(){document.getElementById('fc').classList.toggle('flip')}
+function fcNext(){const l=fcList();fcIdx=(fcIdx+1)%l.length;renderCards(document.getElementById('app'))}
+function fcPrev(){const l=fcList();fcIdx=(fcIdx-1+l.length)%l.length;renderCards(document.getElementById('app'))}
+
+/* ---------- HIGH-YIELD ---------- */
+function renderHY(app){
+  const hot=QBANK.filter(q=>q.hot);
+  app.innerHTML=`<h1 class="page-title">🔥 High-Yield Hit List</h1>
+  <p class="subtle">The fastest-payoff facts, straight from what your instructor emphasized.</p>
+
+  <div class="hy"><div class="lbl">Aging — head to toe</div>
+  <ul class="clean">
+    <li><b>Less physiologic reserve</b> — the master principle.</li>
+    <li>New/acute confusion = <b>delirium</b> (reversible emergency); often a UTI sign.</li>
+    <li>Delirium = acute/reversible · dementia = chronic/irreversible.</li>
+    <li>Meds: <b>start low, go slow</b>; watch polypharmacy.</li>
+    <li>Geriatric triad: cognition, <b>falls</b>, incontinence.</li>
+  </ul></div>
+
+  <div class="hy"><div class="lbl">Chronic illness, Maslow & nursing process</div>
+  <ul class="clean">
+    <li><b>Chronic = incurable</b> → manage symptoms, prevent complications.</li>
+    <li><b>Maslow</b>: physiologic (ABCs/oxygen) before psychosocial.</li>
+    <li><b>ADPIE</b>: Assess → Diagnose → Plan → Implement → Evaluate (assess first, evaluate last).</li>
+    <li>People-first language; modifiable risk factors (tobacco, diet, inactivity, alcohol).</li>
+  </ul></div>
+
+  <div class="hy"><div class="lbl">Cancer</div>
+  <ul class="clean">
+    <li>Cancer = uncontrolled growth that <b>invades + metastasizes</b> (blood/lymph) and drains nutrition.</li>
+    <li>Carcinogenesis: <b>initiation → promotion → progression</b>.</li>
+    <li>Chemo/radiation hit <b>marrow, GI lining, hair</b>; ANC <500 = severe neutropenia.</li>
+    <li>Prevention: <b>primary</b> (vaccines, no tobacco) → <b>secondary</b> (screening) → <b>tertiary</b> (survivor monitoring).</li>
+    <li>Surgery types: diagnostic, primary/curative, prophylactic, palliative, reconstructive.</li>
+  </ul></div>
+
+  <div class="hy"><div class="lbl">Perioperative</div>
+  <ul class="clean">
+    <li>Preop = <b>prepare the patient</b>; nurse witnesses consent (surgeon explains), signed before sedation.</li>
+    <li>Intraop = <b>safety</b>: positioning, counts, time-out; OR fire = O2 + ignition + fuel.</li>
+    <li><b>MH</b>: early = tachycardia + ↑EtCO2 + jaw rigidity; late = temp spike → <b>dantrolene</b>.</li>
+    <li>Atelectasis = most common postop respiratory complication (incentive spirometry).</li>
+    <li><b>High-Fowler's</b> = best position to enhance breathing.</li>
+  </ul></div>
+
+  <div class="hy"><div class="lbl">Postop / End-of-life / Meds</div>
+  <ul class="clean">
+    <li>Hemorrhage = ↓BP + ↑HR <b>trend</b> → escalate chain of command. PCA: patient only.</li>
+    <li>Palliative = comfort at any stage (alongside curative); hospice = terminal (~6 mo).</li>
+    <li>Reversals: opioids→<b>naloxone</b>, benzos/Versed→<b>flumazenil</b>, MH→<b>dantrolene</b>.</li>
+    <li>Versed = sedation + amnesia (not analgesia); watch respiratory depression.</li>
+  </ul></div>
+
+  <div class="btnrow"><button class="btn gold" onclick="startHotExam()">Quiz the high-yield set (${hot.length} Q)</button></div>`;
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+renderTabs(); renderApp(); updateMini();
+</script>
+</body>
+</html>
