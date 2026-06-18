@@ -739,7 +739,99 @@ const QBANK = [
  stem:"A patient with terminal cancer says, 'I just hope I can make it to my daughter's wedding next month.' What is the nurse's most therapeutic response?",
  opts:["'You probably won't be here that long.'","'Tell me more about what that day means to you.'","'Let's not talk about sad things.'","'You should focus on getting better.'"],
  ans:[1],
- rat:"<b>Exploring meaning</b> ('tell me more...') supports realistic hope and honors the patient's goals — the heart of palliative communication. Crushing the hope, shutting down the conversation, and giving false reassurance about 'getting better' all block therapeutic communication and ignore the patient's needs."}
+ rat:"<b>Exploring meaning</b> ('tell me more...') supports realistic hope and honors the patient's goals — the heart of palliative communication. Crushing the hope, shutting down the conversation, and giving false reassurance about 'getting better' all block therapeutic communication and ignore the patient's needs."},
+
+/* ================= CANCER WARNING SIGNS / COMPLICATIONS (from infographics) ================= */
+{topic:"cancer",type:"mc",hot:true,
+ stem:"The mnemonic CAUTION helps identify the seven warning signs of cancer. Which finding fits the 'U' in CAUTION?",
+ opts:["Unexplained fatigue lasting several weeks","Unusual bleeding or discharge","Unilateral weakness or numbness","Uncontrolled high blood pressure"],
+ ans:[1],
+ rat:"In <b>CAUTION</b>, U = <b>Unusual bleeding or discharge</b>. The full mnemonic: Change in bowel/bladder habits, A sore that won't heal, Unusual bleeding/discharge, Thickening or lump, Indigestion/difficulty swallowing, Obvious change in a wart/mole, Nagging cough/hoarseness. Fatigue, focal weakness, and hypertension are real concerns but aren't the classic CAUTION warning signs."},
+
+{topic:"cancer",type:"sata",hot:true,
+ stem:"Using the CAUTION (UP) warning signs of cancer, which findings should prompt the nurse to recommend further evaluation? Select all that apply.",
+ opts:["A sore that does not heal","A change in bowel or bladder habits","Obvious change in a wart or mole","A nagging cough or persistent hoarseness","Mild seasonal nasal congestion that resolves with antihistamines"],
+ ans:[0,1,2,3],
+ rat:"CAUTION + UP warning signs: <b>C</b>hange in bowel/bladder, <b>A</b> sore that won't heal, <b>U</b>nusual bleeding/discharge, <b>T</b>hickening/lump, <b>I</b>ndigestion/dysphagia, <b>O</b>bvious wart/mole change, <b>N</b>agging cough/hoarseness — plus <b>U</b>nexplained weight loss and <b>P</b>ernicious anemia. Seasonal congestion that resolves with antihistamines is a benign, self-limiting symptom — not a red flag."},
+
+{topic:"cancer",type:"mc",
+ stem:"A patient reports an 18-lb weight loss over two months without trying, plus fatigue and new anemia. Applying cancer warning-sign knowledge, the nurse recognizes this as:",
+ opts:["An expected change with aging","Possible warning signs of cancer (unexplained weight loss, pernicious anemia) needing evaluation","A normal response to seasonal appetite changes","A sign the patient simply needs iron supplements"],
+ ans:[1],
+ rat:"<b>Unexplained weight loss and pernicious anemia</b> extend the CAUTION mnemonic ('UP') and are red flags warranting workup. Significant unintentional weight loss is never just 'aging' or seasonal appetite, and reflexively giving iron without evaluating the cause could delay a cancer diagnosis. Investigate the underlying cause first."},
+
+{topic:"cancer",type:"mc",hot:true,
+ stem:"A patient with cancer is at risk for several complications from BOTH the disease and its treatment. Which set correctly groups the major complications the nurse monitors for?",
+ opts:["Pain, infection, and altered nutrition","Hypertension, hyperlipidemia, and gout","Constipation, insomnia, and dry skin","Allergies, heartburn, and muscle cramps"],
+ ans:[0],
+ rat:"Cancer and its treatment threaten the patient with <b>pain, infection, and altered nutrition (anorexia–cachexia)</b> — the big three to monitor. The other clusters list real but minor or unrelated issues; they aren't the priority cancer complications driven by tumor growth, marrow suppression, and GI/metabolic effects."},
+
+{topic:"cancer",type:"mc",hot:true,
+ stem:"Why is a neutropenic cancer patient at risk of having a serious infection go unnoticed?",
+ opts:["They always run a very high fever that masks other signs","With too few neutrophils they may have infection while appearing nearly asymptomatic","Neutropenia makes them immune to most infections","Antibiotics prevent any signs from appearing"],
+ ans:[1],
+ rat:"With treatment-induced neutropenia the patient lacks the white cells that create the usual inflammatory signs, so <b>infection can be present while the patient appears almost asymptomatic</b> — a low-grade fever may be the ONLY clue. They are MORE vulnerable, not immune, and antibiotics treat infection rather than hide it. This is why any temperature elevation is treated as an emergency."},
+
+{topic:"cancer",type:"sata",
+ stem:"A nurse teaches a neutropenic patient how to prevent infection at home. Which instructions are appropriate? Select all that apply.",
+ opts:["Strict hand washing and meticulous hygiene/skin care","Avoid crowds and people with infections","Practice safe food handling and avoid raw/undercooked foods","Monitor temperature daily and report any fever immediately","Garden daily to stay active and boost mood"],
+ ans:[0,1,2,3],
+ rat:"Neutropenic precautions: rigorous hand washing/skin care, avoid crowds and sick contacts, safe food practices (no raw/undercooked or unwashed foods), and check temperature daily — report any fever at once. <b>Gardening exposes the patient to soil-borne fungi and bacteria</b>, a real infection risk for the immunocompromised, so it's discouraged during neutropenia."},
+
+{topic:"cancer",type:"mc",
+ stem:"A cancer patient develops anorexia–cachexia. Which lab values does the nurse monitor to evaluate nutritional status, and which foods are recommended?",
+ opts:["BUN/creatinine; low-protein, low-calorie foods","Albumin and prealbumin; soft, nonirritating, high-calorie, high-protein foods","Potassium and sodium; clear liquids only","Hemoglobin A1c; low-fat, high-fiber foods"],
+ ans:[1],
+ rat:"Nutritional status is tracked with <b>albumin and prealbumin</b> (protein stores), and patients are encouraged to eat <b>soft, nonirritating, high-calorie, high-protein</b> foods, with antiemetics/appetite stimulants and enteral or parenteral nutrition as needed. BUN/creatinine assess kidneys; A1c tracks glucose — neither measures nutritional protein status, and low-calorie/clear-liquid diets worsen cachexia."},
+
+{topic:"cancer",type:"sata",
+ stem:"Which nursing actions are appropriate for managing cancer-related PAIN? Select all that apply.",
+ opts:["Perform a comprehensive pain assessment and set management goals with the patient","Use pharmacologic options: NSAIDs, opioids, and adjuvants such as corticosteroids","Add non-pharmacologic measures: guided imagery, relaxation breathing, distraction, massage","Refer to a pain management or palliative care specialist when needed","Withhold opioids to avoid addiction even when pain is severe"],
+ ans:[0,1,2,3],
+ rat:"Cancer pain care: assess thoroughly and set goals, combine pharmacologic (NSAIDs, opioids, adjuvant corticosteroids) with non-pharmacologic methods (imagery, relaxation, distraction, massage, acupuncture), and refer to pain/palliative specialists. <b>Withholding needed opioids over addiction fears is undertreatment</b> — fear of addiction should not deny a cancer patient effective pain relief."},
+
+{topic:"cancer",type:"mc",hot:true,
+ stem:"Which statement correctly distinguishes a MALIGNANT tumor from a benign one?",
+ opts:["Malignant cells are well-differentiated and encapsulated","Malignant cells are undifferentiated, invade surrounding tissue, and metastasize","Malignant tumors grow slowly and never cause systemic effects","Malignant tumors stay localized and rarely cause death"],
+ ans:[1],
+ rat:"<b>Malignant</b> cells are <b>undifferentiated</b> (little resemblance to origin tissue), overcome contact inhibition to <b>invade/infiltrate</b>, and <b>metastasize</b> via blood/lymph, often causing systemic effects (anemia, weight loss, CACS) and, untreated, death. Well-differentiated, encapsulated, slow-growing, localized, and non-systemic all describe BENIGN tumors."},
+
+{topic:"cancer",type:"mc",
+ stem:"A nurse provides psychosocial nursing care to a newly diagnosed cancer patient. Which approach best reflects appropriate care?",
+ opts:["Limit discussion of the diagnosis to avoid upsetting the patient","Build an open, honest relationship; offer active listening, reassurance, and accurate information","Tell the patient to stay positive and avoid asking questions","Focus only on the physical treatment and leave emotions to the family"],
+ ans:[1],
+ rat:"Psychosocial cancer care means building an <b>open, honest relationship</b>, maintaining realistic hope, and offering <b>active listening, reassurance, and accurate information</b> about the cancer and treatment. Avoiding the diagnosis, dismissing questions with forced positivity, or ignoring emotions all undermine trust and the patient's coping."},
+
+/* ================= HEPATOTOXICITY & AGING DRUG METABOLISM ================= */
+{topic:"meds",type:"mc",hot:true,
+ stem:"A patient takes acetaminophen for pain and also drinks alcohol regularly. The nurse is most concerned about which adverse effect, and what is the antidote?",
+ opts:["Nephrotoxicity; antidote is sodium bicarbonate","Hepatotoxicity; antidote is acetylcysteine (Mucomyst)","Ototoxicity; antidote is calcium gluconate","Cardiotoxicity; antidote is dantrolene"],
+ ans:[1],
+ rat:"Acetaminophen in excess — and especially combined with alcohol — causes <b>hepatotoxicity</b> (liver damage); the antidote is <b>acetylcysteine (Mucomyst)</b>. Stay within the daily limit and assess liver function. Sodium bicarbonate, calcium gluconate, and dantrolene treat unrelated problems (acidosis/aspirin, hyperkalemia/hypocalcemia, malignant hyperthermia)."},
+
+{topic:"meds",type:"sata",hot:true,
+ stem:"A patient is started on a medication known to be hepatotoxic. Which nursing actions are appropriate? Select all that apply.",
+ opts:["Monitor liver function tests (AST, ALT, bilirubin)","Teach the patient to avoid or limit alcohol","Assess for jaundice, dark urine, and right-upper-quadrant pain","Encourage extra acetaminophen for any discomfort","Review the full medication and herbal list for other liver-stressing agents"],
+ ans:[0,1,2,4],
+ rat:"For a hepatotoxic drug: monitor <b>LFTs (AST, ALT, bilirubin)</b>, limit alcohol, watch for <b>jaundice, dark urine, RUQ pain, fatigue</b>, and reconcile other liver-stressing meds/herbs. <b>Encouraging extra acetaminophen is wrong</b> — it adds more hepatotoxic load. Stacking liver-toxic agents compounds the damage."},
+
+{topic:"aging",type:"mc",hot:true,
+ stem:"The nurse understands that as a person ages, drugs tend to remain active in the body longer and reach higher levels. The primary reason is:",
+ opts:["The stomach absorbs drugs faster with age","Declining liver metabolism and kidney excretion slow drug breakdown and elimination","Older adults have more body water to dilute drugs","Aging speeds up the cytochrome P450 enzymes"],
+ ans:[1],
+ rat:"With aging, <b>liver metabolism slows and kidney excretion declines</b>, so drugs are broken down and cleared more slowly — levels rise and effects last longer, increasing toxicity and adverse-reaction risk. This is the pharmacokinetic basis for 'start low, go slow.' Aging actually <b>decreases</b> total body water and tends to slow (not speed) hepatic enzymes."},
+
+{topic:"aging",type:"sata",
+ stem:"Which age-related changes increase an older adult's risk of drug toxicity? Select all that apply.",
+ opts:["Decreased liver mass and blood flow (slower metabolism)","Decreased kidney function (slower excretion)","Increased body fat that stores fat-soluble drugs longer","Decreased total body water concentrating water-soluble drugs","Increased serum albumin that binds more drug"],
+ ans:[0,1,2,3],
+ rat:"Aging raises toxicity risk through: slower <b>hepatic metabolism</b>, reduced <b>renal excretion</b>, more body fat (prolongs fat-soluble drug effect), and less body water (higher concentration of water-soluble drugs). The trap is the last option: serum <b>albumin DECREASES</b> with age/illness, leaving MORE free (active) drug — not more bound — which also raises toxicity."},
+
+{topic:"meds",type:"mc",
+ stem:"An older adult on several medications, including one cleared by the liver, asks why the provider started a low dose. The nurse's best explanation is that:",
+ opts:["Low doses never cause side effects","Age-related decline in liver and kidney function means lower doses prevent drug accumulation and toxicity","Older adults always need higher doses to feel an effect","The pharmacy ran out of the regular dose"],
+ ans:[1],
+ rat:"Because aging <b>slows hepatic metabolism and renal excretion</b>, standard doses can accumulate to toxic levels, so providers 'start low and go slow.' Low doses still can cause effects (just less risk), older adults generally need the SAME or LOWER doses (not higher), and the explanation is physiologic, not a supply issue."}
 ];
 
 /* ============================================================
