@@ -168,7 +168,12 @@ table.t tbody tr:hover td{background:rgba(224,57,155,.07)}
 
 /* misc */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.top-inner{gap:8px}h1.page-title{font-size:1.45rem}}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.top-inner{gap:8px}h1.page-title{font-size:1.45rem}
+  /* Wide tables scroll sideways as one unit — keeps text readable */
+  table.t{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:.88rem;border-radius:12px}
+  table.t td,table.t th{min-width:140px}
+  table.t td:first-child,table.t th:first-child{min-width:112px}
+}
 .mono{font-variant-numeric:tabular-nums}
 .center{text-align:center}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
@@ -821,6 +826,24 @@ const QBANK = [
  ans:[1],
  rat:"With aging, <b>liver metabolism slows and kidney excretion declines</b>, so drugs are broken down and cleared more slowly — levels rise and effects last longer, increasing toxicity and adverse-reaction risk. This is the pharmacokinetic basis for 'start low, go slow.' Aging actually <b>decreases</b> total body water and tends to slow (not speed) hepatic enzymes."},
 
+{topic:"aging",type:"mc",hot:true,
+ stem:"A nursing student asks the difference between arteriosclerosis and atherosclerosis. The best explanation is:",
+ opts:["They are two unrelated vascular diseases","Arteriosclerosis is general hardening/stiffening of arteries; atherosclerosis is a specific type with fatty plaque buildup inside the vessel","Atherosclerosis is the general term and arteriosclerosis is one form of it","Both terms only describe vein, not artery, changes"],
+ ans:[1],
+ rat:"<b>Arteriosclerosis</b> = the broad term for <b>hardening and thickening</b> of arterial walls (loss of elasticity). <b>Atherosclerosis</b> is a <b>specific subtype</b> where fatty <b>plaque (atheroma)</b> builds up inside the lumen, narrowing it and risking clot/MI/stroke. The relationship is reversed in the 'atherosclerosis is the general term' option — atherosclerosis is the subtype, not the umbrella — and both involve arteries, not veins."},
+
+{topic:"aging",type:"mc",
+ stem:"Which finding is the hallmark that distinguishes ATHEROSCLEROSIS specifically from general arteriosclerosis?",
+ opts:["Loss of arterial elasticity with stiffening","Fatty plaque (lipid/cholesterol atheroma) deposited inside the vessel lumen","An increase in systolic blood pressure","Thickening of the arterial wall with age"],
+ ans:[1],
+ rat:"The defining feature of <b>atherosclerosis</b> is <b>lipid/cholesterol plaque (atheroma) inside the lumen</b>, which narrows the vessel and can rupture to form clots. Loss of elasticity, wall thickening, and rising systolic BP occur in arteriosclerosis broadly (and with normal vascular aging) — they don't specifically require the fatty plaque that defines atherosclerosis."},
+
+{topic:"aging",type:"sata",
+ stem:"A patient has atherosclerosis. Which modifiable risk factors should the nurse target in teaching? Select all that apply.",
+ opts:["Elevated LDL and low HDL cholesterol","Cigarette smoking","Hypertension and diabetes","Sedentary lifestyle and obesity","Family history of heart disease"],
+ ans:[0,1,2,3],
+ rat:"Atherosclerosis is driven by <b>modifiable</b> factors: high LDL/low HDL, smoking, hypertension, diabetes, inactivity, and obesity — all targets for teaching and prevention. <b>Family history is a real risk factor but is NON-modifiable</b>, so it can't be changed through teaching; the question asks specifically for modifiable factors."},
+
 {topic:"aging",type:"sata",
  stem:"Which age-related changes increase an older adult's risk of drug toxicity? Select all that apply.",
  opts:["Decreased liver mass and blood flow (slower metabolism)","Decreased kidney function (slower excretion)","Increased body fat that stores fat-soluble drugs longer","Decreased total body water concentrating water-soluble drugs","Increased serum albumin that binds more drug"],
@@ -850,6 +873,8 @@ const FLASHCARDS = [
 {deck:"chronic",q:"The nursing process (ADPIE)",a:"<b>A</b>ssess → <b>D</b>iagnose → <b>P</b>lan → <b>I</b>mplement → <b>E</b>valuate. Assess first, evaluate last."},
 {deck:"chronic",q:"Veterans and chronic disease",a:"Higher burden of <b>multiple chronic conditions</b>: HTN, arthritis, COPD (male); CAD/cancer over 65."},
 {deck:"cancer",q:"Three steps of carcinogenesis",a:"<b>Initiation</b> (DNA mutation) → <b>Promotion</b> (proliferation; reversible) → <b>Progression</b> (malignant, angiogenesis, metastasis)."},
+{deck:"cancer",q:"Benign vs. malignant — the biggest differences?",a:"<b>Benign:</b> well-differentiated, encapsulated, slow, localized, <b>does NOT metastasize</b>, rarely lethal. <b>Malignant:</b> undifferentiated, invades tissue, fast, systemic effects, <b>metastasizes</b> via blood/lymph, fatal if uncontrolled."},
+{deck:"cancer",q:"Why can neutropenia hide a serious infection?",a:"Neutrophils create the <b>visible signs</b> (pus, redness, swelling, fever). Without them, infection signs are <b>blunted or absent</b> — a <b>low-grade fever may be the only clue</b>, and the patient can be infected yet <b>asymptomatic</b>. Treat any fever as an emergency."},
 {deck:"cancer",q:"How does cancer harm the body?",a:"Uncontrolled growth, invades/destroys tissue, <b>metastasizes via blood & lymph</b>, and drains nutrition (cachexia)."},
 {deck:"cancer",q:"Tissues most damaged by chemo/radiation",a:"Rapidly dividing: <b>bone marrow</b> (anemia, neutropenia, ↓platelets), <b>GI lining</b>, <b>hair follicles</b>."},
 {deck:"cancer",q:"ANC < 500 means…",a:"<b>Severe neutropenia</b> (chemo nadir). Neutropenic precautions; watch for the first sign of infection (fever)."},
@@ -1088,6 +1113,12 @@ function renderGuide(app){
     <div class="hy"><div class="lbl">Geriatric triad to prevent in hospital</div>Cognitive changes · <b>Falls</b> · Incontinence.</div>
     <div class="hy"><div class="lbl">Why smaller drug doses?</div>Decreased <b>liver (metabolism)</b> and <b>kidney (excretion)</b> function — drugs build up. (Not lungs/heart, pancreas/thyroid, or stomach/intestines.)</div>
     <div class="trap"><div class="lbl">Elder abuse risk</div>Most likely when <b>caregiver stress is overwhelming</b>. Assess caregiver strain, offer respite resources, and report suspected abuse (legal duty).</div>
+    <h3>Arteriosclerosis vs. Atherosclerosis (know the difference!)</h3>
+    <table class="t"><tr><th>Term</th><th>What it is</th><th>Key point</th></tr>
+    <tr><td><b>Arteriosclerosis</b></td><td>General <b>hardening &amp; thickening</b> of the arterial wall — vessels lose elasticity and stiffen</td><td>The <b>broad</b> term. "Arterio" = artery, "sclerosis" = hardening. Stiff vessels ↑ systolic BP and afterload.</td></tr>
+    <tr><td><b>Atherosclerosis</b></td><td>A <b>specific type</b> of arteriosclerosis: fatty <b>plaque (atheroma)</b> of cholesterol/lipids builds up <b>inside</b> the vessel lumen</td><td>"Ather" = fatty/gruel. Narrows the lumen → ischemia; plaque can rupture → clot → MI/stroke. The cause of CAD &amp; PAD.</td></tr></table>
+    <div class="hy"><div class="lbl">Memory hook</div><b>Atherosclerosis is a subtype of arteriosclerosis.</b> All atherosclerosis is arteriosclerosis, but not all arteriosclerosis is atherosclerosis. Think: <b>Ather</b>o = <b>A</b> fatty buildup (plaque inside); <b>Arterio</b>sclerosis = <b>A</b>ll-around <b>A</b>rtery hardening.</div>
+    <div class="trap"><div class="lbl">Don't get tricked</div>Both stiffen vessels, but only <b>atherosclerosis</b> involves <b>plaque/lipid buildup in the lumen</b>. Risk factors for atherosclerosis: high LDL/low HDL, smoking, HTN, diabetes, obesity, sedentary lifestyle. It accelerates with aging as vessels already stiffen.</div>
   `,true)}
 
   ${vault('♾️ Chronic Illness & Disability', `
@@ -1129,12 +1160,58 @@ function renderGuide(app){
       <li><b>Metastasizes</b> via blood & lymph (malignant cells don't stay put — benign tumors do).</li>
       <li>Drains nutrition → <b>anorexia–cachexia</b>, weight loss, fatigue, anemia.</li>
     </ul>
+    <h3>Benign vs. Malignant cells (Table 12-1)</h3>
+    <table class="t"><thead><tr><th>Characteristic</th><th>Benign</th><th>Malignant</th></tr></thead>
+    <tr><td><b>Cell type / differentiation</b></td><td data-label="Benign"><b>Well-differentiated</b> — cells resemble the normal tissue they came from</td><td data-label="Malignant"><b>Undifferentiated (anaplastic)</b> — little or no resemblance to the tissue of origin</td></tr>
+    <tr><td><b>Mode of growth</b></td><td data-label="Benign">Grows by <b>expansion</b>; usually <b>encapsulated</b>; does NOT infiltrate surrounding tissue</td><td data-label="Malignant">Grows at the periphery, overcomes contact inhibition, and <b>invades/infiltrates</b> surrounding tissue</td></tr>
+    <tr><td><b>Rate of growth</b></td><td data-label="Benign">Usually <b>slow</b></td><td data-label="Malignant"><b>Variable & often rapid</b> — the more anaplastic, the faster it grows</td></tr>
+    <tr><td><b>Metastasis</b></td><td data-label="Benign"><b>Does NOT metastasize</b> — stays localized</td><td data-label="Malignant"><b>Spreads</b> via blood & lymph to distant sites (and across body cavities)</td></tr>
+    <tr><td><b>General (systemic) effects</b></td><td data-label="Benign">Usually a <b>localized</b> phenomenon; no systemic effects unless it presses on a vital structure</td><td data-label="Malignant">Often causes <b>systemic effects</b> — anemia, weakness, weight loss, cachexia (CACS), inflammation</td></tr>
+    <tr><td><b>Tissue destruction</b></td><td data-label="Benign">Usually does NOT damage tissue unless location blocks blood flow</td><td data-label="Malignant">Often <b>extensive tissue damage</b> as it outgrows its blood supply; may release destructive substances</td></tr>
+    <tr><td><b>Ability to cause death</b></td><td data-label="Benign">Usually does <b>not cause death</b> unless its location interferes with vital function</td><td data-label="Malignant"><b>Eventually fatal</b> unless growth is controlled</td></tr></table>
+    <div class="hy"><div class="lbl">Fast recall</div><b>Benign = Bounded:</b> well-differentiated, encapsulated, slow, localized, no metastasis, rarely lethal. <b>Malignant = Migrates:</b> undifferentiated, invasive, fast, systemic effects, metastasizes, lethal if uncontrolled.</div>
+    <div class="trap"><div class="lbl">Don't get tricked</div>"Encapsulated," "well-differentiated," and "stays localized" all describe a <b>BENIGN</b> tumor — even when the rest of a question sounds scary. The single biggest differentiator on exams: <b>malignant cells metastasize; benign cells do not.</b></div>
     <h3>Carcinogenesis — 3 steps</h3>
     <p><b>Initiation</b> (DNA mutation) → <b>Promotion</b> (mutated cells proliferate; reversible if the agent is removed) → <b>Progression</b> (malignant behavior: angiogenesis, invasion, metastasis).</p>
     <h3>How chemo & radiation hit the body</h3>
     <div class="hy"><div class="lbl">Rapidly dividing tissues take the damage</div><b>Bone marrow</b> (anemia, neutropenia, thrombocytopenia) · <b>GI lining</b> (nausea, mucositis, diarrhea) · <b>hair follicles</b> (alopecia). Muscle & brain are slow-dividing → radioresistant.</div>
     <ul class="clean"><li><b>Nadir</b> = lowest blood counts (~7–14 days post-chemo).</li>
     <li><b>ANC < 500 = severe neutropenia</b> → neutropenic precautions; first sign of infection may be only fever.</li></ul>
+
+    <h3>⚠️ How neutropenia MASKS infection (high-yield)</h3>
+    <div class="trap"><div class="lbl">Why infections hide in neutropenic patients</div>Neutrophils are the white cells that create the <b>visible signs of infection</b> — pus, redness, swelling, and a strong fever come from the inflammatory response neutrophils drive. When chemo/radiation wipes them out, <b>the patient can have a serious infection while looking almost normal.</b> Classic signs may be <b>blunted or absent</b>, so:
+    <ul class="clean" style="margin-top:8px">
+      <li>A <b>low-grade fever may be the ONLY sign</b> — and is treated as an <b>emergency</b> (neutropenic sepsis can be fatal fast).</li>
+      <li>Patients <b>may be infected AND asymptomatic</b> — never wait for "obvious" signs before acting.</li>
+      <li>No/little pus or redness does NOT mean no infection — they can't mount the response to make it.</li>
+    </ul></div>
+    <div class="hy"><div class="lbl">What to monitor & teach</div>Check <b>temperature daily</b> (report any fever immediately), watch for subtle clues — <b>cough, diarrhea, sore throat, burning with urination, new fatigue</b>. Teach: <b>strict hand hygiene</b>, meticulous skin/mouth care, <b>avoid crowds & sick people</b>, wear a mask in public, <b>safe food practices</b> (no raw/undercooked or unwashed foods), no fresh flowers/raw produce, avoid gardening/soil. Administer <b>hematopoietic (myeloid) growth factors</b> as ordered. <b>Notify the HCP immediately</b> at any sign of infection.</div>
+
+    <h3>🚩 Warning signs of cancer — CAUTION (UP)</h3>
+    <div class="hy"><div class="lbl">Memorize this</div>
+    <b>C</b> — Change in bowel or bladder habits<br>
+    <b>A</b> — A sore that does not heal<br>
+    <b>U</b> — Unusual bleeding or discharge<br>
+    <b>T</b> — Thickening or lump (breast or elsewhere)<br>
+    <b>I</b> — Indigestion or difficulty swallowing<br>
+    <b>O</b> — Obvious change in a wart or mole<br>
+    <b>N</b> — Nagging cough or persistent hoarseness<br>
+    <span style="opacity:.85">…plus <b>U</b> — Unexplained weight loss &nbsp;·&nbsp; <b>P</b> — Pernicious anemia</span></div>
+
+    <h3>Complications of cancer & treatment — the big 3</h3>
+    <p>Both the <b>disease itself</b> and its <b>treatment</b> cause these. Know them as a trio:</p>
+    <table class="t"><thead><tr><th>Complication</th><th>Why it happens</th><th>Nursing care</th></tr></thead>
+    <tr><td><b>Pain</b></td><td data-label="Why it happens">Tumor pressure/invasion + treatment; acute & chronic</td><td data-label="Nursing care">Full pain assessment + goals; <b>pharm</b> (NSAIDs, opioids, adjuvant corticosteroids) + <b>non-pharm</b> (imagery, relaxation, distraction, massage, acupuncture); refer to pain/palliative specialist. Don't withhold opioids over addiction fears.</td></tr>
+    <tr><td><b>Infection</b></td><td data-label="Why it happens">Tissue damage, necrosis, tumors compressing organs, ↓ immunity, <b>treatment-induced neutropenia</b></td><td data-label="Nursing care">See neutropenia box above — monitor temp, prevent exposure, growth factors, notify HCP immediately. Remember: <b>may be asymptomatic.</b></td></tr>
+    <tr><td><b>Altered nutrition</b></td><td data-label="Why it happens">GI tumors, treatment nausea, anorexia, ↓ absorption, ↑ cancer-related metabolism → deficient intake, malnutrition, <b>cachexia</b></td><td data-label="Nursing care">Weigh regularly; monitor <b>albumin & prealbumin</b>; soft, nonirritating, <b>high-calorie/high-protein</b> foods; antiemetics + appetite stimulants; enteral/parenteral if needed; avoid smoking/alcohol/spicy; refer to dietitian.</td></tr></table>
+    <div class="hy"><div class="lbl">Cachexia</div><b>Extreme muscle wasting & atrophy</b> from the cancer's increased metabolic demand + poor intake — a hallmark of advanced malignancy (part of CACS: cancer anorexia–cachexia syndrome).</div>
+
+    <h3>Psychosocial nursing care (newly diagnosed)</h3>
+    <ul class="clean">
+      <li>Build an <b>open, honest relationship</b>; maintain realistic <b>hope</b>; bring a caring attitude.</li>
+      <li>Offer <b>active listening, reassurance, and accurate information</b> about the cancer and treatment.</li>
+      <li>Don't shut down hard conversations or force false positivity — that breaks trust.</li>
+    </ul>
     <h3>Prevention: primary → secondary → tertiary</h3>
     <table class="t"><tr><th>Level</th><th>Goal</th><th>Examples</th></tr>
     <tr><td><b>Primary</b></td><td>Prevent cancer before it starts</td><td>HPV & HBV vaccines, tobacco cessation, diet/activity, sun protection</td></tr>
