@@ -1453,7 +1453,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function renderQuiz(){
   const app=document.getElementById('app');
   const q=QZ.list[QZ.i];
-  const isSATA=q.type==='sata';
+  const isSATA=isMulti(q);
   const tc=TOPICS[q.topic];
   const pct=Math.round((QZ.i)/QZ.list.length*100);
   const picks=QZ.picks[QZ.i];
@@ -1521,11 +1521,12 @@ function renderQuiz(){
     </div>`;
 }
 function toggleHint(){QZ.hintOpen[QZ.i]=!QZ.hintOpen[QZ.i];renderQuiz()}
-function arrEq(a,b){return a.length===b.length&&a.every((v,i)=>v===b[i])}
+function arrEq(a,b){if(a.length!==b.length)return false;const x=a.slice().sort((m,n)=>m-n),y=b.slice().sort((m,n)=>m-n);return x.every((v,i)=>v===y[i])}
+function isMulti(q){return q.type==='sata'||q.type==='ngn'}
 function pick(k){
   if(QZ.locked[QZ.i])return;
   const q=QZ.list[QZ.i], picks=QZ.picks[QZ.i];
-  if(q.type==='sata'){
+  if(isMulti(q)){
     const idx=picks.indexOf(k); if(idx>-1)picks.splice(idx,1); else picks.push(k);
   } else { QZ.picks[QZ.i]=[k]; }
   renderQuiz();
