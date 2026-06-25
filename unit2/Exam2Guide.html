@@ -291,7 +291,7 @@ const SECTIONS=[
   {id:'blood',label:'🩸 Transfusion',emoji:'🩸'},
   {id:'drill',label:'⚡ Rapid Drill',emoji:'⚡'},
   {id:'games',label:'🎮 Games',emoji:'🎮'},
-  {id:'exam',label:'📝 Exam (113Q)',emoji:'📝'},
+  {id:'exam',label:'📝 Exam (119Q)',emoji:'📝'},
 ];
 
 /* build nav + section containers */
@@ -391,7 +391,7 @@ document.getElementById('sec-home').innerHTML=`
     <tr><td><b>Day 4</b></td><td>🦠 Pneumonia + 🩺 Airway/Tubes</td><td>VAP bundle, ET/trach care</td></tr>
     <tr><td><b>Day 5</b></td><td>🧯 Chest Tubes + 🩸 Transfusion + 🔬 TB + 🌬️ COPD</td><td>The "easy points" your prof loves</td></tr>
     <tr><td><b>Day 6</b></td><td>🎮 Games</td><td>Matching, Speed Round, mixed quizzes</td></tr>
-    <tr><td><b>Day 7</b></td><td>📝 113-Question Exam</td><td>Sit it like the real thing. Review every miss.</td></tr>
+    <tr><td><b>Day 7</b></td><td>📝 119-Question Exam</td><td>Sit it like the real thing. Review every miss.</td></tr>
   </table>
 </div>
 
@@ -738,6 +738,15 @@ document.getElementById('sec-abg').innerHTML=`
   <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"MUD PILES" (metabolic acidosis) & "Vomit = Alkalosis"</div><div class="exp">Lose acid from the stomach (vomiting/NG suction) → blood goes alkaline. Diarrhea loses bicarb → acidosis.</div></div>
 </div>
 
+<div class="card">
+  <h3>🔢 Anion Gap (metabolic acidosis sub-types)</h3>
+  <ul class="clean">
+    <li><b>Normal anion gap</b> (8–12 mEq/L): caused by a <b>direct loss of bicarb</b> — e.g., diarrhea, diuretics.</li>
+    <li><b>High anion gap:</b> caused by <b>added acids</b> — e.g., lactic acidosis, DKA, renal failure.</li>
+  </ul>
+  <div class="hy">⭐ In metabolic acidosis, watch potassium: acidosis shifts <b>K⁺ out of cells → hyperkalemia</b>. As you correct it, K⁺ can swing low. <b>Kussmaul respirations</b> (deep, rapid) are the lungs compensating by blowing off CO₂.</div>
+</div>
+
 <div class="abg-sim">
   <h3 style="margin-top:0">🎮 ABG Simulator — drill mode</h3>
   <p style="font-size:.85rem;color:var(--muted)">Read the values, then pick the disorder. Hit "New ABG" for endless practice.</p>
@@ -921,7 +930,8 @@ document.getElementById('sec-acute').innerHTML=`
   <p>Severe inflammatory lung injury → <b>noncardiogenic pulmonary edema</b>, diffuse alveolar damage, surfactant dysfunction.</p>
   <div class="hy">⭐ <b>HALLMARK: hypoxemia REFRACTORY to oxygen</b> (O₂ doesn't fix it) + <b>bilateral infiltrates</b> on CXR. Rapid onset (within ~72h of trigger).</div>
   <p><b>Causes:</b> sepsis, trauma, aspiration, pancreatitis, severe pneumonia.</p>
-  <p><b>Tx:</b> mechanical ventilation with <b>PEEP</b>, treat underlying cause. BNP helps rule out cardiac cause. Mortality 27–50%.</p>
+  <p><b>Tx:</b> mechanical ventilation with <b>PEEP</b> (keeps alveoli open), treat underlying cause. <b>Prone positioning ~every 12 hours</b> improves oxygenation (esp. COVID-19). Nutritional support <b>35–45 kcal/kg/day</b> (enteral preferred). BNP helps rule out a cardiac cause. Mortality 27–50%.</p>
+  <p><b>Why it happens:</b> inflammation opens capillaries → fluid + WBCs flood lung tissue; <b>surfactant (which normally keeps alveoli open) is washed out</b> → alveolar collapse + severe shunting.</p>
   <div class="mnem"><div class="tag">🧠 Tell ARDS apart</div><div class="big">"O₂ won't fix it + both lungs white = ARDS"</div></div>
 </div>
 
@@ -1113,6 +1123,17 @@ document.getElementById('sec-chesttube').innerHTML=`
   <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"3 sides taped = air out, none in"</div><div class="exp">Taping all 4 sides could trap air → tension pneumothorax.</div></div>
 </div>
 
+<div class="card">
+  <h3>❓ Why a chest tube + a few finer points</h3>
+  <ul class="clean">
+    <li><b>Purpose:</b> remove air or fluid/blood from the pleural space (e.g., pneumothorax, hemothorax) so the lung can re-expand and negative pressure is restored.</li>
+    <li><b>Normal pleural pressure is negative</b> (subatmospheric); a breach lets in atmospheric pressure and collapses the lung.</li>
+    <li>The <b>suction chamber holds water to atmospheric pressure to maintain the seal</b>. When it's connected to <b>wall suction, you get more suction to pull off more fluid/air</b>.</li>
+    <li><b>Measure and mark drainage every few hours</b> (note color and amount). Report sudden large or bright-red output.</li>
+    <li>Typical suction setting is around <b>−20 cm H₂O</b>.</li>
+  </ul>
+</div>
+
 <div id="quiz-chesttube"></div>
 `;
 renderFlips('sec-chesttube',[
@@ -1296,24 +1317,47 @@ document.getElementById('sec-blood').innerHTML=`
 </div>
 
 <div class="card">
+  <h3>🩸 Getting & starting the blood (exact sequence)</h3>
+  <ul class="clean">
+    <li><b>Spike the bag with Normal Saline FIRST, flush the IV, THEN get the blood</b> from the blood bank.</li>
+    <li><b>⏰ You have only 30 MINUTES from the time you pick up blood from the blood bank to START the infusion.</b> If you can't start in time, return it — don't let it sit warming at the bedside.</li>
+    <li>Start <b>slowly</b> for the first 15 minutes.</li>
+  </ul>
+  <div class="hy">⭐ <b>Two key clocks, don't mix them up:</b> <b>30 minutes</b> = max time from blood-bank pickup to START the infusion. <b>4 hours</b> = max time to FINISH infusing one unit (bacterial growth risk after that).</div>
+</div>
+
+<div class="card">
   <h3>⏱️ DURING the transfusion</h3>
   <ul class="clean">
     <li><b>Stay with the patient for the first 15 minutes</b> — most reactions happen early. Run slowly at first.</li>
-    <li>Each unit must infuse within <b>4 hours</b> (infection risk after that).</li>
-    <li>Monitor for reaction: fever, chills, back/flank pain, hypotension, dyspnea, hives, dark urine.</li>
-    <li><b>If a reaction occurs:</b> STOP the blood, keep the NS line open, notify provider, stay with patient.</li>
+    <li>After the first 15 min, <b>monitor frequently (every 30 min to 1 hour)</b> until complete, taking vital signs.</li>
+    <li>Each unit must <b>finish within 4 hours</b> (infection risk after that).</li>
+    <li>Monitor for reaction: fever, chills, back/flank pain, hypotension, dyspnea, itching/hives, confusion, dizziness, dark urine.</li>
+    <li>Also watch for <b>fluid overload</b>: swelling, weight gain, shortness of breath (especially heart/kidney patients).</li>
   </ul>
   <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Consent • Cross-match • Catheter • Check vitals • Companion (stay 15 min)"</div></div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🚨 Reaction: mild vs. severe</h3>
+  <ul class="clean">
+    <li><b>Severe (hemolytic/anaphylactic):</b> chills, fever, back pain, hypotension, dyspnea, dark urine → <b>STOP the blood, clamp the line, open the Normal Saline, notify provider, stay with the patient.</b></li>
+    <li><b>Mild (urticaria/hives only):</b> may be treated with <b>antihistamines</b> per provider order; sometimes resumed slowly. Follow facility policy.</li>
+  </ul>
+  <div class="hy">⭐ The FIRST action for any suspected reaction is always to <b>STOP the blood</b> while keeping IV access open with NS.</div>
 </div>
 
 <div class="card">
   <h3>💉 IV Therapy & Access</h3>
   <ul class="clean">
-    <li><b>Aseptic technique</b> for IV insertion, central lines, and dressing changes.</li>
-    <li><b>Irritating/vesicant meds</b> (iron, potassium, chemo, TPN, vasopressors) → central line preferred; always check for <b>infiltration</b>.</li>
+    <li><b>Aseptic technique</b> for IV insertion, central lines, and dressing changes. Wear gloves; clean injection ports before use.</li>
+    <li><b>Irritating/vesicant meds</b> (iron, potassium, chemo, TPN, vasopressors) → central line preferred; always check the site for problems.</li>
     <li><b>Peripheral IV</b> = short-term. Assess for redness, swelling, infiltration, phlebitis.</li>
-    <li><b>Central lines</b> (PICC, tunneled, port) = long-term, TPN, vesicants. Complication = <b>CLABSI</b> (prevent with sterile technique + chlorhexidine).</li>
+    <li><b>Central lines</b> (PICC, tunneled, port) = long-term, TPN, vesicants. Complication = <b>CLABSI</b> (prevent with sterile technique + chlorhexidine prep).</li>
+    <li><b>Dressing changes:</b> weekly, or sooner if soiled/loose/peeling.</li>
+    <li><b>NEVER IV push potassium.</b></li>
   </ul>
+  <div class="hy">⭐ <b>Infiltration vs. Extravasation:</b> <b>Infiltration</b> = a <b>non-vesicant</b> fluid/med leaks into surrounding tissue. <b>Extravasation</b> = a <b>vesicant</b> (tissue-damaging) med leaks into tissue (e.g., chemo, potassium). Both need <b>frequent site checks</b> — stop the infusion immediately if suspected.</div>
 </div>
 
 <div id="quiz-blood"></div>
@@ -1509,6 +1553,12 @@ const DRILL_POOL=[
   {q:'Albumin keeps fluid in the vessels because it is a…',o:['Crystalloid','Colloid/protein','Electrolyte','Diuretic'],c:1,r:'Albumin is a colloid (protein) that holds fluid intravascularly via oncotic pressure.'},
   {q:'A salt substitute is dangerous in which condition?',o:['Hyponatremia','Hyperkalemia','Hypocalcemia','Hypomagnesemia'],c:1,r:'Salt substitutes contain potassium — avoid in hyperkalemia.'},
   {q:'Two-nurse verification is required before giving?',o:['Oral antibiotics','Blood products','Normal saline','Incentive spirometry'],c:1,r:'Blood products require two-nurse identity/type verification.'}
+  ,{q:'How long do you have from picking up blood from the blood bank to START the infusion?',o:['15 minutes','30 minutes','1 hour','4 hours'],c:1,r:'Start within 30 minutes of retrieval; if you can\'t, return it to the blood bank.'}
+  ,{q:'A vesicant (e.g., chemo, potassium) leaking into the tissue is called?',o:['Infiltration','Extravasation','Phlebitis','Infection'],c:1,r:'Extravasation = a tissue-damaging vesicant leaks out. Infiltration is a non-vesicant leak.'}
+  ,{q:'Before getting blood, you spike the bag with ____ first.',o:['D5W','Lactated Ringer\'s','Normal saline','Sterile water'],c:2,r:'Prime/spike with normal saline first, flush the IV, then retrieve the blood.'}
+  ,{q:'A normal anion gap metabolic acidosis is caused by?',o:['Added acids (DKA, lactic)','Direct loss of bicarb (diarrhea)','Vomiting','Hyperventilation'],c:1,r:'Normal-gap acidosis = bicarb loss (diarrhea, diuretics). High-gap = added acids.'}
+  ,{q:'Prone positioning in ARDS is typically done about every?',o:['2 hours','6 hours','12 hours','24 hours'],c:2,r:'Prone positioning ~every 12 hours improves oxygenation in ARDS.'}
+  ,{q:'A central line dressing should be changed?',o:['Every shift','Weekly or if soiled/loose','Daily','Only on discharge'],c:1,r:'Change central line dressings weekly, or sooner if soiled, loose, or peeling.'}
 ];
 
 let drillList=[], drillIdx=0, drillScore=0, drillStreak=0, drillBest=0, drillAnswered=false;
@@ -1712,13 +1762,19 @@ const EXAM=[
 {q:'The maximum time a unit of blood should hang/infuse is:',o:['2 hours','4 hours','6 hours','8 hours'],c:1,t:'single',r:'A unit must be completed within 4 hours to prevent bacterial growth.'},
 {q:'The nurse should remain with the patient and monitor most closely during which part of a transfusion?',o:['The last 15 minutes','The first 15 minutes','Only at the end','Hourly throughout only'],c:1,t:'single',r:'Most severe reactions occur early — stay and monitor closely for the first 15 minutes.'},
 {q:'Which IV solution is the ONLY fluid compatible with blood products?',o:['D5W','0.45% NS','0.9% Normal Saline','Lactated Ringer\'s'],c:2,t:'single',r:'Only 0.9% normal saline is hung with blood. Dextrose hemolyzes RBCs; LR\'s calcium promotes clotting.'},
+{q:'A nurse retrieves a unit of blood from the blood bank. Within what time frame must the infusion be STARTED?',o:['Within 15 minutes','Within 30 minutes','Within 1 hour','Within 4 hours'],c:1,t:'single',r:'Blood must be started within 30 minutes of retrieval from the blood bank; if it cannot be started, return it rather than letting it warm at the bedside.'},
+{q:'Match the transfusion time limits. Which statements are correct? (Select all that apply)',o:['Start within 30 minutes of pickup','Finish one unit within 4 hours','Stay with the patient the first 15 minutes','Hang with normal saline only','It is fine to let blood sit at the bedside for 2 hours before starting'],c:[0,1,2,3],t:'multi',r:'30 min to start, 4 hours to finish, stay for the first 15 minutes, NS only. Blood should never sit warming at the bedside.'},
+{q:'The nurse is preparing to start a transfusion. Place the prep in order conceptually — which is the correct first step at the IV?',o:['Get the blood, then find an IV','Spike the bag with normal saline and flush the IV, then retrieve the blood','Prime the tubing with D5W','Start the blood, then verify consent'],c:1,t:'single',r:'Establish NS-primed, patent IV first; verify consent/type & cross; THEN retrieve and start the blood.'},
+{q:'A chemotherapy drug infiltrates and damages surrounding tissue. This is documented as:',o:['Infiltration','Extravasation','Phlebitis','Thrombosis'],c:1,t:'single',r:'A vesicant (tissue-damaging) leak = extravasation. A non-vesicant leak = infiltration.'},
+{q:'A patient has metabolic acidosis from severe diarrhea. The expected anion gap is:',o:['High anion gap','Normal anion gap','Negative anion gap','Anion gap does not apply'],c:1,t:'single',r:'Bicarb loss from diarrhea causes a NORMAL anion gap metabolic acidosis; added-acid states (DKA, lactic acidosis) cause a HIGH gap.'},
+{q:'Which interventions are appropriate in the management of ARDS? (Select all that apply)',o:['Mechanical ventilation with PEEP','Prone positioning about every 12 hours','Treat the underlying cause','High supplemental oxygen alone usually corrects the hypoxemia','Nutritional support'],c:[0,1,2,4],t:'multi',r:'ARDS hypoxemia is refractory to oxygen, so O2 alone will not fix it. PEEP, prone positioning, treating the cause, and nutrition are all part of care.'},
 ];
 
 let examState={}, examIdx=0, examSubmitted=false;
 function renderExam(){
   const c=document.getElementById('sec-exam');
   c.innerHTML=`
-    <h2 class="sec-title"><span class="sec-emoji">📝</span> 113-Question Practice Exam</h2>
+    <h2 class="sec-title"><span class="sec-emoji">📝</span> 119-Question Practice Exam</h2>
     <p class="intro-line">NextGen NCLEX style — multiple choice + Select All That Apply, just like your professor. Answer all, then submit for your score & full rationale review.</p>
     <div class="tipbar">⏱️ <b>Tip:</b> Treat this like the real exam — no notes, no peeking. For SATA, read every option independently ("is THIS one true or false?"). Aim for 75%+ before test day.</div>
     <div id="examBody"></div>
