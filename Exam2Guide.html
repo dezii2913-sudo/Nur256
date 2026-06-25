@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>NUR 256 Med-Surg Unit 2 — Interactive Study Guide</title>
+<style>
+:root{
+  --bg:#fef6ff; --bg2:#fff;
+  --ink:#2a1a3e; --muted:#6b5b7e;
+  --card:#ffffff; --card-border:#f0d9ff;
+  --pink:#ff5ca8; --pink-soft:#ffe0f0;
+  --purple:#8b5cf6; --purple-soft:#ede4ff;
+  --teal:#0fb5b5; --teal-soft:#d4f7f5;
+  --amber:#ff9f1c; --amber-soft:#fff0d6;
+  --green:#2dd4a7; --green-soft:#d6fbef;
+  --red:#ff5470; --red-soft:#ffe0e6;
+  --blue:#3b82f6; --blue-soft:#dbeafe;
+  --shadow:0 4px 18px rgba(139,92,246,.14);
+  --radius:18px;
+}
+[data-theme="night"]{
+  --bg:#13111c; --bg2:#1c1830;
+  --ink:#f3ecff; --muted:#b3a6cc;
+  --card:#221d36; --card-border:#352c52;
+  --pink:#ff6fb5; --pink-soft:#3a1f33;
+  --purple:#a78bfa; --purple-soft:#2c2447;
+  --teal:#2dd4cf; --teal-soft:#10302f;
+  --amber:#ffb84d; --amber-soft:#3a2c12;
+  --green:#3ee7b8; --green-soft:#0f3329;
+  --red:#ff6b85; --red-soft:#3a1820;
+  --blue:#60a5fa; --blue-soft:#13243f;
+  --shadow:0 4px 22px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:linear-gradient(135deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.55;transition:background .3s,color .3s;
+  padding-bottom:80px;
+}
+body.mobile-mode{max-width:480px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,.15)}
+body.mobile-mode .grid2,body.mobile-mode .grid3{grid-template-columns:1fr!important}
+body.mobile-mode .topbar h1{font-size:1.05rem}
+body.mobile-mode .content{padding:14px}
+
+/* TOP BAR */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  color:#fff;padding:12px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;flex-wrap:wrap;
+  box-shadow:0 2px 14px rgba(0,0,0,.18);
+}
+.topbar h1{font-size:1.2rem;margin:0;font-weight:800;letter-spacing:.3px}
+.topbar .sub{font-size:.72rem;opacity:.9;font-weight:500;display:block}
+.toggles{display:flex;gap:8px;flex-wrap:wrap}
+.tbtn{
+  background:rgba(255,255,255,.22);border:none;color:#fff;
+  padding:8px 12px;border-radius:30px;font-size:.8rem;font-weight:700;
+  cursor:pointer;backdrop-filter:blur(4px);transition:.2s;white-space:nowrap;
+}
+.tbtn:hover{background:rgba(255,255,255,.38)}
+.tbtn:active{transform:scale(.94)}
+
+/* PROGRESS */
+.progwrap{padding:10px 16px 0}
+.progbar-bg{background:var(--card-border);border-radius:20px;height:14px;overflow:hidden}
+.progbar{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:20px;transition:width .5s}
+.progtext{font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px;font-weight:600}
+
+/* NAV TABS */
+.nav{
+  display:flex;gap:8px;overflow-x:auto;padding:12px 16px;
+  scrollbar-width:thin;-webkit-overflow-scrolling:touch;
+}
+.nav button{
+  flex:0 0 auto;border:2px solid var(--card-border);background:var(--card);
+  color:var(--ink);padding:9px 15px;border-radius:30px;font-weight:700;
+  font-size:.82rem;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.nav button.active{background:var(--purple);color:#fff;border-color:var(--purple);transform:scale(1.04)}
+.nav button:active{transform:scale(.95)}
+
+.content{max-width:920px;margin:0 auto;padding:18px}
+.section{display:none;animation:fade .4s}
+.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+h2.sec-title{font-size:1.5rem;margin:6px 0 4px;color:var(--pink);font-weight:800;display:flex;align-items:center;gap:8px}
+.sec-emoji{font-size:1.6rem}
+.intro-line{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+
+/* CARDS */
+.card{
+  background:var(--card);border:2px solid var(--card-border);border-radius:var(--radius);
+  padding:16px 18px;margin:14px 0;box-shadow:var(--shadow);
+}
+.card h3{margin:0 0 10px;font-size:1.12rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.pill{display:inline-block;padding:3px 11px;border-radius:30px;font-size:.72rem;font-weight:800;margin:2px 4px 2px 0}
+.p-pink{background:var(--pink-soft);color:var(--pink)}
+.p-purple{background:var(--purple-soft);color:var(--purple)}
+.p-teal{background:var(--teal-soft);color:var(--teal)}
+.p-amber{background:var(--amber-soft);color:var(--amber)}
+.p-green{background:var(--green-soft);color:var(--green)}
+.p-red{background:var(--red-soft);color:var(--red)}
+.p-blue{background:var(--blue-soft);color:var(--blue)}
+
+ul.clean{margin:8px 0;padding-left:22px}
+ul.clean li{margin:5px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* MNEMONIC BOX */
+.mnem{
+  background:linear-gradient(135deg,var(--amber-soft),var(--pink-soft));
+  border:2px dashed var(--amber);border-radius:14px;padding:12px 15px;margin:12px 0;
+}
+.mnem .tag{font-size:.7rem;font-weight:900;color:var(--amber);letter-spacing:1px;text-transform:uppercase}
+.mnem .big{font-size:1.1rem;font-weight:800;margin:4px 0;color:var(--ink)}
+.mnem .exp{font-size:.86rem;color:var(--muted)}
+
+/* HIGH YIELD */
+.hy{background:var(--red-soft);border-left:5px solid var(--red);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.9rem}
+.hy b{color:var(--red)}
+.prof{background:var(--teal-soft);border-left:5px solid var(--teal);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.9rem}
+.prof b{color:var(--teal)}
+.prof .tag{font-size:.66rem;font-weight:900;letter-spacing:1px;color:var(--teal);text-transform:uppercase;display:block;margin-bottom:2px}
+
+/* TABLES */
+table.lab{width:100%;border-collapse:collapse;margin:10px 0;font-size:.88rem}
+table.lab th{background:var(--purple);color:#fff;padding:8px;text-align:left;font-size:.8rem}
+table.lab td{padding:8px;border-bottom:1px solid var(--card-border)}
+table.lab tr:nth-child(even){background:var(--purple-soft)}
+.val{font-weight:800;color:var(--pink);white-space:nowrap}
+
+/* FLIP CARDS */
+.flipgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.flip{perspective:1000px;height:130px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  padding:12px;text-align:center;font-weight:700}
+.flip-f{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:.95rem}
+.flip-b{background:var(--card);border:2px solid var(--teal);color:var(--ink);
+  transform:rotateY(180deg);font-size:.85rem;font-weight:600}
+
+/* QUIZ */
+.quiz-card{background:var(--card);border:2px solid var(--card-border);border-radius:var(--radius);padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+.qnum{font-size:.72rem;font-weight:900;color:var(--purple);letter-spacing:1px}
+.qtype{font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:20px;background:var(--blue-soft);color:var(--blue);margin-left:6px}
+.qtext{font-size:1rem;font-weight:700;margin:8px 0 12px}
+.opt{
+  display:block;width:100%;text-align:left;background:var(--bg2);
+  border:2px solid var(--card-border);border-radius:12px;padding:11px 14px;
+  margin:7px 0;cursor:pointer;font-size:.92rem;color:var(--ink);transition:.15s;font-weight:600;
+}
+.opt:hover{border-color:var(--purple);transform:translateX(3px)}
+.opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.opt.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.opt.sel-multi{border-color:var(--purple);background:var(--purple-soft)}
+.opt:disabled{cursor:default}
+.rationale{margin-top:10px;padding:11px 14px;border-radius:12px;background:var(--amber-soft);
+  border-left:4px solid var(--amber);font-size:.86rem;display:none}
+.rationale.show{display:block;animation:fade .3s}
+.rationale b{color:var(--amber)}
+.submit-multi{background:var(--purple);color:#fff;border:none;padding:9px 18px;border-radius:30px;
+  font-weight:800;cursor:pointer;margin-top:8px;font-size:.85rem}
+.submit-multi:active{transform:scale(.95)}
+.quiz-score{font-size:1.05rem;font-weight:800;text-align:center;padding:14px;border-radius:14px;
+  background:var(--green-soft);color:var(--green);margin:14px 0}
+
+/* BUTTONS */
+.btn{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;border:none;
+  padding:12px 22px;border-radius:30px;font-weight:800;cursor:pointer;font-size:.95rem;
+  box-shadow:var(--shadow);transition:.2s;margin:6px 4px}
+.btn:active{transform:scale(.95)}
+.btn.ghost{background:var(--card);color:var(--purple);border:2px solid var(--purple)}
+.center{text-align:center}
+
+/* MATCHING GAME */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0}
+.match-col{display:flex;flex-direction:column;gap:9px}
+.match-item{padding:11px;border-radius:12px;border:2px solid var(--card-border);background:var(--card);
+  cursor:pointer;font-weight:700;font-size:.85rem;text-align:center;transition:.15s}
+.match-item.sel{border-color:var(--purple);background:var(--purple-soft);transform:scale(1.03)}
+.match-item.done{background:var(--green-soft);border-color:var(--green);color:var(--green);cursor:default;opacity:.7}
+.match-item.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ABG SIMULATOR */
+.abg-sim{background:var(--card);border:2px solid var(--card-border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.abg-vals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.abg-box{text-align:center;padding:12px;border-radius:12px;background:var(--purple-soft)}
+.abg-box .lbl{font-size:.7rem;font-weight:800;color:var(--muted)}
+.abg-box .num{font-size:1.4rem;font-weight:900;color:var(--purple)}
+.abg-answers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+
+/* SPEED ROUND */
+.speed-card{font-size:1.3rem;font-weight:800;text-align:center;padding:30px 18px;
+  background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border-radius:var(--radius);margin:14px 0;min-height:90px;display:flex;align-items:center;justify-content:center}
+.timer{font-size:2rem;font-weight:900;text-align:center;color:var(--pink)}
+
+/* EXAM */
+.exam-q{background:var(--card);border:2px solid var(--card-border);border-radius:16px;padding:16px;margin:12px 0}
+.exam-nav{position:sticky;bottom:0;background:var(--card);border-top:2px solid var(--card-border);
+  padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:40;border-radius:16px 16px 0 0;margin-top:16px}
+.exam-dots{display:flex;flex-wrap:wrap;gap:4px;max-width:60%}
+.dot{width:13px;height:13px;border-radius:50%;background:var(--card-border)}
+.dot.answered{background:var(--teal)}
+.dot.current{background:var(--pink);transform:scale(1.3)}
+
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-soft);color:var(--green);
+  padding:5px 12px;border-radius:30px;font-size:.78rem;font-weight:800;margin:3px}
+
+.foot{text-align:center;color:var(--muted);font-size:.78rem;padding:24px 16px}
+details{margin:8px 0;background:var(--bg2);border-radius:12px;padding:4px 12px;border:1px solid var(--card-border)}
+summary{cursor:pointer;font-weight:800;padding:8px 0;font-size:.92rem}
+details[open] summary{color:var(--purple)}
+.kbd{display:inline-block;background:var(--ink);color:var(--bg);padding:1px 7px;border-radius:5px;font-size:.78rem;font-weight:700}
+.tipbar{background:var(--blue-soft);border-radius:12px;padding:10px 14px;font-size:.84rem;margin:10px 0;color:var(--ink)}
+</style>
+</head>
+<body data-theme="day">
+
+<div class="topbar">
+  <div>
+    <h1>🧪 NUR 256 — Unit 2 Study Lab</h1>
+    <span class="sub">Fluids • Electrolytes • ABGs • Respiratory • Chest Tubes</span>
+  </div>
+  <div class="toggles">
+    <button class="tbtn" id="themeBtn" onclick="toggleTheme()">🌙 Night</button>
+    <button class="tbtn" id="mobileBtn" onclick="toggleMobile()">📱 Phone</button>
+  </div>
+</div>
+
+<div class="progwrap">
+  <div class="progbar-bg"><div class="progbar" id="progbar"></div></div>
+  <div class="progtext" id="progtext">0 quiz questions answered • Let's go! 💪</div>
+</div>
+
+<div class="nav" id="nav"></div>
+
+<div class="content" id="content"></div>
+
+<div class="foot">
+  Built from your Ch 10, 17, 19 slides + speaker notes + lecture notes + professor's test blueprint.<br>
+  You have a week — chip away one section a day. You've got this, Des. 💜
+</div>
+
+<script>
+/* ============ THEME / MOBILE TOGGLES ============ */
+function toggleTheme(){
+  const b=document.body, btn=document.getElementById('themeBtn');
+  if(b.getAttribute('data-theme')==='day'){b.setAttribute('data-theme','night');btn.textContent='☀️ Day';}
+  else{b.setAttribute('data-theme','day');btn.textContent='🌙 Night';}
+}
+function toggleMobile(){
+  const b=document.body, btn=document.getElementById('mobileBtn');
+  b.classList.toggle('mobile-mode');
+  btn.textContent=b.classList.contains('mobile-mode')?'🖥️ Desktop':'📱 Phone';
+}
+
+/* ============ PROGRESS TRACKER ============ */
+let answeredQs=new Set(); let totalTrackable=0;
+function bumpProgress(id){ if(!answeredQs.has(id)){answeredQs.add(id);updateProg();} }
+function updateProg(){
+  const pct=totalTrackable?Math.round(answeredQs.size/totalTrackable*100):0;
+  document.getElementById('progbar').style.width=pct+'%';
+  const msgs=["Let's go! 💪","Warming up! 🔥","Nice momentum! ⭐","Crushing it! 🚀","Almost there! 🎯","NCLEX-ready! 👑"];
+  const m=msgs[Math.min(msgs.length-1,Math.floor(pct/20))];
+  document.getElementById('progtext').textContent=`${answeredQs.size} quiz questions answered • ${m}`;
+}
+
+/* ============ SECTIONS DEFINITION ============ */
+const SECTIONS=[
+  {id:'home',label:'🏠 Start',emoji:'🏠'},
+  {id:'fluids',label:'💧 Fluids',emoji:'💧'},
+  {id:'lytes',label:'⚡ Electrolytes',emoji:'⚡'},
+  {id:'iv',label:'💉 IV Fluids',emoji:'💉'},
+  {id:'abg',label:'🫁 ABGs',emoji:'🫁'},
+  {id:'resp-assess',label:'🔍 Resp Assess',emoji:'🔍'},
+  {id:'acute',label:'🚨 Acute Resp',emoji:'🚨'},
+  {id:'pneumonia',label:'🦠 Pneumonia',emoji:'🦠'},
+  {id:'airway',label:'🩺 Airway/Tubes',emoji:'🩺'},
+  {id:'chesttube',label:'🧯 Chest Tubes',emoji:'🧯'},
+  {id:'copd',label:'🌬️ COPD/Asthma',emoji:'🌬️'},
+  {id:'tb',label:'🔬 TB',emoji:'🔬'},
+  {id:'blood',label:'🩸 Transfusion',emoji:'🩸'},
+  {id:'drill',label:'⚡ Rapid Drill',emoji:'⚡'},
+  {id:'games',label:'🎮 Games',emoji:'🎮'},
+  {id:'exam',label:'📝 Exam (113Q)',emoji:'📝'},
+];
+
+/* build nav + section containers */
+const nav=document.getElementById('nav'), content=document.getElementById('content');
+SECTIONS.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.textContent=s.label; b.onclick=()=>showSection(s.id);
+  b.id='nav-'+s.id; if(i===0)b.classList.add('active'); nav.appendChild(b);
+  const sec=document.createElement('div'); sec.className='section'+(i===0?' active':''); sec.id='sec-'+s.id; content.appendChild(sec);
+});
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============ MINI QUIZ ENGINE ============ */
+let quizCounter=0;
+/* q = {q, type:'single'|'multi', opts:[], correct:index or [indices], rat} */
+function renderQuiz(containerId, questions, title){
+  const c=document.getElementById(containerId);
+  const wrap=document.createElement('div');
+  if(title){const h=document.createElement('h3');h.innerHTML='🧠 '+title;wrap.appendChild(h);}
+  questions.forEach(q=>{
+    quizCounter++; totalTrackable++;
+    const qid='q'+quizCounter;
+    const card=document.createElement('div'); card.className='quiz-card';
+    const typeLabel=q.type==='multi'?'Select All That Apply':'Multiple Choice';
+    card.innerHTML=`<div><span class="qnum">QUESTION ${quizCounter}</span><span class="qtype">${typeLabel}</span></div><div class="qtext">${q.q}</div>`;
+    const optsBox=document.createElement('div');
+    if(q.type==='multi'){
+      const selected=new Set();
+      q.opts.forEach((o,idx)=>{
+        const btn=document.createElement('button'); btn.className='opt'; btn.innerHTML=o;
+        btn.onclick=()=>{ if(btn.disabled)return; if(selected.has(idx)){selected.delete(idx);btn.classList.remove('sel-multi');}else{selected.add(idx);btn.classList.add('sel-multi');} };
+        optsBox.appendChild(btn);
+      });
+      const sub=document.createElement('button'); sub.className='submit-multi'; sub.textContent='Check Answer ✓';
+      const rat=document.createElement('div'); rat.className='rationale'; rat.innerHTML='<b>Rationale:</b> '+q.rat;
+      sub.onclick=()=>{
+        const btns=optsBox.querySelectorAll('.opt');
+        btns.forEach((b,idx)=>{ b.disabled=true; b.classList.remove('sel-multi');
+          if(q.correct.includes(idx))b.classList.add('correct');
+          else if(selected.has(idx))b.classList.add('wrong');
+        });
+        rat.classList.add('show'); sub.style.display='none'; bumpProgress(qid);
+      };
+      card.appendChild(optsBox); card.appendChild(sub); card.appendChild(rat);
+    } else {
+      const rat=document.createElement('div'); rat.className='rationale'; rat.innerHTML='<b>Rationale:</b> '+q.rat;
+      q.opts.forEach((o,idx)=>{
+        const btn=document.createElement('button'); btn.className='opt'; btn.innerHTML=o;
+        btn.onclick=()=>{
+          const btns=optsBox.querySelectorAll('.opt'); btns.forEach(b=>b.disabled=true);
+          if(idx===q.correct)btn.classList.add('correct');
+          else{btn.classList.add('wrong'); btns[q.correct].classList.add('correct');}
+          rat.classList.add('show'); bumpProgress(qid);
+        };
+        optsBox.appendChild(btn);
+      });
+      card.appendChild(optsBox); card.appendChild(rat);
+    }
+    wrap.appendChild(card);
+  });
+  c.appendChild(wrap);
+}
+
+/* ============ FLIP CARDS ============ */
+function renderFlips(containerId, cards){
+  const c=document.getElementById(containerId);
+  const grid=document.createElement('div'); grid.className='flipgrid';
+  cards.forEach(fc=>{
+    const f=document.createElement('div'); f.className='flip';
+    f.innerHTML=`<div class="flip-in"><div class="flip-f">${fc.f}</div><div class="flip-b">${fc.b}</div></div>`;
+    f.onclick=()=>f.classList.toggle('flipped');
+    grid.appendChild(f);
+  });
+  c.appendChild(grid);
+}
+</script>
+
+<script>
+/* ============ HOME ============ */
+document.getElementById('sec-home').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🏠</span> Welcome to Your Study Lab</h2>
+<p class="intro-line">Everything from your Chapter 10, 17 & 19 slides, the hidden speaker notes, both lecture docs, and your professor's actual test blueprint — turned into something you can actually study with ADHD brain.</p>
+
+<div class="card">
+  <h3>🗺️ How to use this (1-week plan)</h3>
+  <table class="lab">
+    <tr><th>Day</th><th>Focus</th><th>Do this</th></tr>
+    <tr><td><b>Day 1</b></td><td>💧 Fluids + ⚡ Electrolytes</td><td>Read cards, flip flashcards, take both mini quizzes</td></tr>
+    <tr><td><b>Day 2</b></td><td>💉 IV Fluids + 🫁 ABGs</td><td>Use the ABG Simulator until it's automatic</td></tr>
+    <tr><td><b>Day 3</b></td><td>🔍 Resp Assessment + 🚨 Acute Resp</td><td>Atelectasis, ARF, ARDS quizzes</td></tr>
+    <tr><td><b>Day 4</b></td><td>🦠 Pneumonia + 🩺 Airway/Tubes</td><td>VAP bundle, ET/trach care</td></tr>
+    <tr><td><b>Day 5</b></td><td>🧯 Chest Tubes + 🩸 Transfusion + 🔬 TB + 🌬️ COPD</td><td>The "easy points" your prof loves</td></tr>
+    <tr><td><b>Day 6</b></td><td>🎮 Games</td><td>Matching, Speed Round, mixed quizzes</td></tr>
+    <tr><td><b>Day 7</b></td><td>📝 113-Question Exam</td><td>Sit it like the real thing. Review every miss.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>🎯 Your professor's "WILL be on the test" list</h3>
+  <p style="font-size:.88rem;color:var(--muted)">Pulled straight from your Unit 2 blueprint + slide notes:</p>
+  <span class="pill p-red">Hypo/Iso/Hypertonic fluids</span>
+  <span class="pill p-red">Pneumonia assessment findings</span>
+  <span class="pill p-red">What to do BEFORE blood transfusion</span>
+  <span class="pill p-red">Asthma manifestations</span>
+  <span class="pill p-red">COPD</span>
+  <span class="pill p-red">Resp/Asthma/TB drugs</span>
+  <span class="pill p-red">TB test & treatment</span>
+  <span class="pill p-red">Chest tube management</span>
+  <span class="pill p-red">ABG + compensation</span>
+  <span class="pill p-red">Fluid deficit slide (ALL of it)</span>
+  <span class="pill p-red">Lab values</span>
+  <span class="pill p-red">I&O = best fluid indicator</span>
+  <span class="pill p-red">Sputum colors</span>
+</div>
+
+<div class="tipbar">💡 <b>ADHD tip:</b> Toggle <span class="kbd">🌙 Night</span> mode if bright screens drain you, and <span class="kbd">📱 Phone</span> mode reformats everything to one column for studying on your phone. Your progress bar fills as you answer quiz questions — chase the dopamine. 😄</div>
+`;
+
+/* ============ FLUIDS ============ */
+document.getElementById('sec-fluids').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">💧</span> Fluid Balance & Disturbances</h2>
+<p class="intro-line">Where the water lives, what moves it, and what happens when there's too little (deficit) or too much (overload).</p>
+
+<div class="card">
+  <h3>🧊 The Basics — Where fluid lives</h3>
+  <ul class="clean">
+    <li>Body fluid ≈ <b>60% of adult weight</b> (more in infants, less in elderly & in higher body fat).</li>
+    <li><b>ICF (intracellular)</b> = ⅔ of body fluid. Most influential ion = <b>Potassium (K⁺)</b>.</li>
+    <li><b>ECF (extracellular)</b> = ⅓ of body fluid (intravascular, interstitial, transcellular). Most influential ion = <b>Sodium (Na⁺)</b>.</li>
+  </ul>
+  <div class="mnem">
+    <div class="tag">🧠 Mnemonic</div>
+    <div class="big">"PIES & SODA"</div>
+    <div class="exp"><b>P</b>otassium <b>I</b>nside (intracellular) the cell • <b>SOD</b>ium <b>A</b>round it (extracellular). Sodium controls ECF, Potassium controls ICF.</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>🔀 Fluid Movement Mechanisms</h3>
+  <div class="grid2">
+    <div>
+      <p><b>Osmosis</b> 💧→🧂<br>Water moves across a membrane toward <b>higher</b> solute concentration.<br><i>"Water follows salt."</i></p>
+      <p><b>Diffusion</b> 🔵→⚪<br>Solutes move from <b>high → low</b> concentration until balanced (e.g., O₂/CO₂ at alveoli).</p>
+    </div>
+    <div>
+      <p><b>Filtration</b> 🚰<br>Water/solutes pushed by <b>pressure</b> (kidneys filter ~180 L plasma/day).</p>
+      <p><b>Active Transport</b> ⚡<br>Against the gradient — needs <b>ATP energy</b> (Na⁺/K⁺ pump: 3 Na⁺ out, 2 K⁺ in).</p>
+    </div>
+  </div>
+  <div class="prof"><span class="tag">📌 Professor's note</span><b>Albumin</b> is a colloid protein made by the <b>liver</b>. It's <b>oncotic pressure</b> — it PULLS water into the intravascular space. <b>Low albumin → fluid leaks into tissues → edema.</b> Know what happens with too little.</div>
+</div>
+
+<div class="card">
+  <h3>🧬 Hormones that control fluid</h3>
+  <table class="lab">
+    <tr><th>Hormone</th><th>Trigger</th><th>Action</th><th>Trick</th></tr>
+    <tr><td><b>ADH</b></td><td>Dehydration, blood loss, ↑ osmolality</td><td>Kidneys hold water, ↓ urine, stimulates thirst</td><td><span class="pill p-teal">"ADds Da H₂O"</span></td></tr>
+    <tr><td><b>Aldosterone</b></td><td>Low BP (via RAAS)</td><td>Retains Na⁺ & water, excretes K⁺</td><td><span class="pill p-teal">"Save Salt"</span></td></tr>
+    <tr><td><b>RAAS</b></td><td>Low BP / low kidney perfusion</td><td>Renin→Angio I→II = vasoconstriction + aldosterone + ADH</td><td><span class="pill p-teal">ACE inhibitors BLOCK this</span></td></tr>
+    <tr><td><b>ANP/BNP</b></td><td>HIGH volume (heart stretch)</td><td>Excrete Na⁺ & water, ↓ BP</td><td><span class="pill p-teal">High BNP = CHF/overload</span></td></tr>
+  </table>
+  <div class="prof"><span class="tag">📌 Professor's note</span>Low BP → kidney → <b>Renin</b> → Angiotensinogen → Angiotensin I → (ACE) → <b>Angiotensin II = potent vasoconstrictor</b> → ↑BP, releases aldosterone AND ADH. <b>ACE inhibitors block the vasoconstriction.</b></div>
+</div>
+
+<div class="grid2">
+  <div class="card" style="border-color:var(--amber)">
+    <h3>🏜️ Fluid Volume DEFICIT (Hypovolemia)</h3>
+    <span class="pill p-amber">Think: DRY</span>
+    <p><b>Causes:</b> vomiting, diarrhea, hemorrhage, NG suction, burns, sweating, diabetes insipidus (no ADH), laxative abuse, poor intake.</p>
+    <p><b>Signs:</b> thirst, ↑HR, ↑RR, ↓BP, dry mucous membranes, poor skin turgor, urine &lt;25 mL/hr, ↑ urine specific gravity.</p>
+    <p><b>Labs:</b> ↑Hct, ↑BUN, <b>BUN:Cr &gt;20:1</b>, dilutional ↑ electrolytes.</p>
+    <p><b>Tx:</b> Isotonic IV (NS or LR), oral fluids, treat cause, strict I&O, daily weights.</p>
+  </div>
+  <div class="card" style="border-color:var(--blue)">
+    <h3>🌊 Fluid Volume EXCESS (Hypervolemia)</h3>
+    <span class="pill p-blue">Think: WET</span>
+    <p><b>Causes:</b> CHF, kidney failure, cirrhosis, excess IV fluids, high Na⁺ intake.</p>
+    <p><b>Signs:</b> edema, JVD, crackles, ↑weight, pulmonary edema (frothy sputum), HTN, bounding pulse, CVP &gt;6.</p>
+    <p><b>Labs:</b> ↓Hct, ↓BUN (dilution), ↓ osmolality.</p>
+    <p><b>Tx:</b> diuretics, restrict Na⁺ & fluids, daily weights, semi-Fowler, dialysis if severe.</p>
+  </div>
+</div>
+
+<div class="hy">⭐ <b>HIGH YIELD:</b> The <b>BEST indicator of fluid status = daily weight.</b> The best way to detect a fluid deficit clinically = <b>I&O (intake & output).</b> Both show up on exams constantly. <b>1 kg = ~1 L of fluid.</b></div>
+
+<div id="quiz-fluids"></div>
+`;
+renderFlips('sec-fluids',[
+  {f:'Most influential ion INSIDE the cell?',b:'Potassium (K⁺) — controls ICF'},
+  {f:'Most influential ion OUTSIDE the cell?',b:'Sodium (Na⁺) — controls ECF'},
+  {f:'Low albumin causes…?',b:'Edema — fluid leaks out of vessels into tissues'},
+  {f:'Best indicator of fluid STATUS?',b:'Daily weight (1 kg ≈ 1 L)'},
+  {f:'BUN:Creatinine ratio in fluid deficit?',b:'>20:1 (normal is 10:1)'},
+  {f:'"ADds Da H₂O" = which hormone?',b:'ADH — makes kidneys retain water'},
+]);
+renderQuiz('quiz-fluids',[
+  {q:'A post-op patient has BP 88/56, HR 118, dry mucous membranes, and urine output of 18 mL/hr. Which IV fluid does the nurse anticipate FIRST?',type:'single',
+   opts:['A. 0.45% Normal Saline','B. 0.9% Normal Saline','C. D5W','D. 3% Saline'],correct:1,
+   rat:'This is hypovolemia/hypotension. The first-line fluid is an <b>isotonic crystalloid (0.9% NS or LR)</b> to expand intravascular volume. Hypotonic (0.45%, D5W) would worsen low BP; 3% is hypertonic and reserved for severe hyponatremia.'},
+  {q:'The nurse is monitoring a patient with heart failure. Which findings indicate FLUID VOLUME EXCESS? (Select all that apply)',type:'multi',
+   opts:['A. Jugular vein distention','B. Crackles in the lungs','C. Poor skin turgor','D. Bounding pulse','E. Weight gain of 2 kg overnight'],correct:[0,1,3,4],
+   rat:'JVD, crackles, bounding pulse, and rapid weight gain are all "WET" signs of <b>hypervolemia</b>. Poor skin turgor is a "DRY" sign of <b>deficit</b>, not excess.'},
+  {q:'Which assessment is the BEST indicator of a patient\'s daily fluid status?',type:'single',
+   opts:['A. Blood pressure','B. Skin turgor','C. Daily weight','D. Urine color'],correct:2,
+   rat:'<b>Daily weight</b> is the single most reliable indicator of fluid status — a gain or loss of 1 kg equals roughly 1 liter of fluid. Take it at the same time, same scale, same clothing.'},
+]);
+</script>
+
+<script>
+/* ============ ELECTROLYTES ============ */
+document.getElementById('sec-lytes').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">⚡</span> Electrolytes</h2>
+<p class="intro-line">Memorize the normal values cold — then it's just "too high vs too low." Tap any flashcard to flip.</p>
+
+<div class="card">
+  <h3>📋 Normal Values (memorize these!)</h3>
+  <table class="lab">
+    <tr><th>Electrolyte</th><th>Normal Range</th></tr>
+    <tr><td>Sodium (Na⁺)</td><td class="val">135–145 mEq/L</td></tr>
+    <tr><td>Potassium (K⁺)</td><td class="val">3.5–5.0 mEq/L</td></tr>
+    <tr><td>Calcium (Ca²⁺)</td><td class="val">8.6–10.2 mg/dL</td></tr>
+    <tr><td>Magnesium (Mg²⁺)</td><td class="val">1.5–2.5 mEq/L</td></tr>
+    <tr><td>Chloride (Cl⁻)</td><td class="val">96–106 mEq/L</td></tr>
+    <tr><td>Phosphorus</td><td class="val">2.5–4.5 mg/dL</td></tr>
+  </table>
+  <div class="mnem">
+    <div class="tag">🧠 Order trick (highest→lowest number-ish)</div>
+    <div class="big">"Na 135, K 3.5, Ca 8.6, Mg 1.5"</div>
+    <div class="exp">Calcium & Mag have an inverse buddy relationship — when you fix one, watch the other.</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>🧂 SODIUM — controls water & the brain</h3>
+  <div class="grid2">
+    <div><span class="pill p-red">Hypo &lt;135</span><br><b>Brain SWELLS</b> → confusion, headache, seizures, coma. Causes: SIADH, excess water, diuretics.<br><i>Tx: neuro checks, seizure precautions, hypertonic 3% saline if severe.</i></div>
+    <div><span class="pill p-amber">Hyper &gt;145</span><br><b>Brain SHRINKS</b> → thirst, restless, agitation, dry membranes, ↑HR. Causes: water loss, too much Na.<br><i>Tx: hypotonic fluids / D5W, monitor neuro.</i></div>
+  </div>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Salt = Stay; No Salt = Swell"</div><div class="exp">HYPOnatremia → brain SWELLS (think water rushing INTO low-salt cells). HYPERnatremia → cells shrivel, you're THIRSTY.</div></div>
+</div>
+
+<div class="card">
+  <h3>🍌 POTASSIUM — the CARDIAC electrolyte</h3>
+  <div class="grid2">
+    <div><span class="pill p-red">Hypo &lt;3.5</span><br>Everything SLOWS: weakness, ↓bowel sounds, constipation, <b>flat T wave + U wave</b>, dysrhythmias.<br><i>Causes: diuretics, vomiting, diarrhea, NG suction. Tx: K replacement + cardiac monitor.</i></div>
+    <div><span class="pill p-amber">Hyper &gt;5.0</span><br>Heart gets IRRITABLE: weakness, <b>peaked T waves</b>, dysrhythmias.<br><i>Causes: renal failure, ACE inhibitors, tissue damage, acidosis.</i></div>
+  </div>
+  <div class="hy">⭐ <b>EMERGENCY for Hyperkalemia (in order):</b> 1️⃣ Calcium gluconate (protects heart) → 2️⃣ Insulin + D50 (pushes K into cells) → 3️⃣ Sodium bicarb → 4️⃣ Dialysis. <br><b>NCLEX favorite:</b> Calcium gluconate PROTECTS the heart but does NOT lower potassium.</div>
+  <div class="hy">🚫 <b>NEVER IV push potassium</b> — it can stop the heart. Always dilute & infuse slowly on a pump. Foods high in K: bananas, potatoes, avocados, oranges.</div>
+  <div class="mnem"><div class="tag">🧠 ECG trick</div><div class="big">"Tall Tents vs Flat U"</div><div class="exp"><b>Hyper</b>kalemia = <b>peaked/tall T waves</b> (tall tents). <b>Hypo</b>kalemia = <b>flat T + U wave</b>.</div></div>
+</div>
+
+<div class="card">
+  <h3>🦴 CALCIUM</h3>
+  <div class="grid2">
+    <div><span class="pill p-red">Hypo &lt;8.6</span><br><b>Tetany!</b> ⊕ Chvostek (tap cheek→twitch), ⊕ Trousseau (BP cuff→hand spasm), seizures, laryngospasm.<br><i>Tx: calcium gluconate + vitamin D.</i></div>
+    <div><span class="pill p-amber">Hyper &gt;10.2</span><br><b>"Stones, Bones, Groans, Moans"</b>: kidney stones, bone pain, constipation, confusion.<br><i>Tx: fluids, calcitonin, bisphosphonates.</i></div>
+  </div>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">CHVOSTEK = CHEEK • TROUSSEAU = TOURNIQUET</div><div class="exp">Both are signs of LOW calcium (hypocalcemia → muscles twitchy/tetany).</div></div>
+</div>
+
+<div class="card">
+  <h3>🧲 MAGNESIUM (acts like Calcium's twin)</h3>
+  <div class="grid2">
+    <div><span class="pill p-red">Hypo &lt;1.5</span><br>Tremors, hyperreflexia, seizures, ⊕ Chvostek/Trousseau (just like low Ca!).<br><i>Tx: magnesium sulfate.</i></div>
+    <div><span class="pill p-amber">Hyper &gt;2.5</span><br>Lethargy, hypotension, <b>bradycardia, decreased/absent reflexes, respiratory depression.</b><br><i>Tx: STOP mag sources, calcium gluconate, dialysis.</i></div>
+  </div>
+  <div class="hy">⭐ <b>Memory:</b> <b>Low Mg = HYPER</b> (twitchy, seizures). <b>High Mg = HYPO</b> (sleepy, slow, ↓reflexes). Mag and Calcium move <b>together</b> — low Mg often comes with low Ca.</div>
+</div>
+
+<div class="card">
+  <h3>⚡ One-Line Rapid Recall</h3>
+  <ul class="clean">
+    <li>Hyponatremia = <b>Seizures</b> (brain swells)</li>
+    <li>Hypernatremia = <b>Thirst</b></li>
+    <li>Hypokalemia = <b>U waves</b> (flat T)</li>
+    <li>Hyperkalemia = <b>Peaked T waves</b></li>
+    <li>Hypocalcemia = <b>Chvostek / Trousseau</b></li>
+    <li>Hypercalcemia = <b>Constipation / stones</b></li>
+    <li>Calcium gluconate = <b>Hyperkalemia heart protector</b></li>
+  </ul>
+</div>
+
+<div id="quiz-lytes"></div>
+`;
+renderFlips('sec-lytes',[
+  {f:'Normal Potassium?',b:'3.5 – 5.0 mEq/L'},
+  {f:'Normal Sodium?',b:'135 – 145 mEq/L'},
+  {f:'Normal Calcium?',b:'8.6 – 10.2 mg/dL'},
+  {f:'Normal Magnesium?',b:'1.5 – 2.5 mEq/L'},
+  {f:'Peaked T waves = ?',b:'HYPERkalemia'},
+  {f:'U waves + flat T = ?',b:'HYPOkalemia'},
+  {f:'⊕ Chvostek & Trousseau = ?',b:'HYPOcalcemia (also low Mg)'},
+  {f:'First drug for hyperkalemia?',b:'Calcium gluconate (protects heart, does NOT lower K)'},
+  {f:'Can you IV PUSH potassium?',b:'NEVER. Dilute & infuse slowly on a pump.'},
+  {f:'Low Mg makes you…?',b:'HYPER — tremors, seizures, hyperreflexia'},
+]);
+renderQuiz('quiz-lytes',[
+  {q:'A patient with chronic kidney disease has a potassium of 6.8 mEq/L and peaked T waves on the monitor. Which medication should the nurse prepare FIRST?',type:'single',
+   opts:['A. Furosemide (Lasix)','B. Calcium gluconate','C. Potassium chloride','D. Sodium bicarbonate'],correct:1,
+   rat:'<b>Calcium gluconate</b> is given first to stabilize/protect the cardiac membrane from the dysrhythmia risk. It does NOT lower potassium — insulin+D50, bicarb, and dialysis do that — but protecting the heart is the immediate priority.'},
+  {q:'Which clinical findings would the nurse expect in a patient with HYPOcalcemia? (Select all that apply)',type:'multi',
+   opts:['A. Positive Trousseau sign','B. Constipation','C. Positive Chvostek sign','D. Tetany','E. Kidney stones'],correct:[0,2,3],
+   rat:'Hypocalcemia causes neuromuscular irritability: positive <b>Trousseau</b> (hand spasm with BP cuff), positive <b>Chvostek</b> (facial twitch), and <b>tetany</b>. Constipation and kidney stones are signs of HYPERcalcemia.'},
+  {q:'A patient is admitted with a sodium level of 122 mEq/L. Which is the priority nursing intervention?',type:'single',
+   opts:['A. Encourage extra free water','B. Institute seizure precautions','C. Restrict potassium intake','D. Apply warm compresses'],correct:1,
+   rat:'Severe hyponatremia causes the brain to swell, leading to confusion and <b>seizures</b>. Seizure precautions and neuro checks are the priority. Adding free water would dilute sodium further and worsen it.'},
+  {q:'A patient on a loop diuretic reports muscle weakness and leg cramps. The nurse notes a flattened T wave and a U wave on the ECG. Which electrolyte imbalance is most likely?',type:'single',
+   opts:['A. Hyperkalemia','B. Hypocalcemia','C. Hypokalemia','D. Hypermagnesemia'],correct:2,
+   rat:'Loop diuretics waste potassium. <b>Hypokalemia</b> classically shows weakness, cramps, a <b>flat T wave and a U wave</b>. Peaked T waves would indicate hyperkalemia.'},
+]);
+</script>
+
+<script>
+/* ============ IV FLUIDS ============ */
+document.getElementById('sec-iv').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">💉</span> IV Fluids (Tonicity)</h2>
+<p class="intro-line">Your professor said hypo/iso/hypertonic WILL be tested. Master the "where does the water go" logic.</p>
+
+<div class="card">
+  <h3>🩸 ISOTONIC — "Stays Put"</h3>
+  <span class="pill p-green">Same osmolality as blood</span>
+  <p>Stays in the <b>intravascular space</b> → expands blood volume. Doesn't shift in or out of cells.</p>
+  <p><b>Examples:</b> 0.9% Normal Saline, Lactated Ringer's (LR)</p>
+  <p><b>Use for:</b> dehydration, hypotension, shock, blood loss, surgery, burns, sepsis</p>
+  <div class="prof"><span class="tag">📌 Professor's note</span><b>Normal Saline is the ONLY fluid you can hang with blood.</b> LR ≈ "like real blood plasma" (has Na, K, Ca, lactate).</div>
+</div>
+
+<div class="card">
+  <h3>🍇 HYPOTONIC — "Water INTO cells"</h3>
+  <span class="pill p-blue">Lower osmolality than blood</span>
+  <p>Water shifts <b>OUT of vessels and INTO cells</b> → cells plump up.</p>
+  <p><b>Examples:</b> 0.45% Normal Saline (½ NS)</p>
+  <p><b>Use for:</b> cellular dehydration, hypernatremia</p>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Dry raisins → become grapes"</div><div class="exp">Hypotonic fluid swells the cells.</div></div>
+  <div class="hy">⚠️ <b>WATCH FOR: brain swelling / cerebral edema.</b> Don't give to head-injury patients.</div>
+</div>
+
+<div class="card">
+  <h3>🧂 HYPERTONIC — "Water OUT of cells"</h3>
+  <span class="pill p-red">Higher osmolality than blood</span>
+  <p>PULLS water <b>OUT of cells INTO the vessels</b> → shrinks cells, expands blood volume.</p>
+  <p><b>Examples:</b> 3% Saline, D5NS, D5½NS, D10W</p>
+  <p><b>Use for:</b> severe hyponatremia, cerebral edema</p>
+  <div class="hy">⚠️ <b>WATCH FOR: fluid overload & pulmonary edema.</b> Use cautiously in cardiac/renal patients. Give slowly, monitor lungs.</div>
+</div>
+
+<div class="card">
+  <h3>🎯 The Decision Shortcut</h3>
+  <table class="lab">
+    <tr><th>Situation</th><th>Give</th></tr>
+    <tr><td>Patient is dry / low BP / shock</td><td><b>Isotonic (NS or LR)</b></td></tr>
+    <tr><td>Cells are dry (cellular dehydration)</td><td><b>Hypotonic (0.45% NS)</b></td></tr>
+    <tr><td>Sodium dangerously low</td><td><b>Hypertonic (3% saline)</b></td></tr>
+  </table>
+  <div class="mnem"><div class="tag">🧠 Quick associations</div>
+    <div class="big">NS = "Needs Salt" • LR = "like blood pLasma" • D5W = "Dessert (sugar water)"</div>
+  </div>
+  <div class="hy">⭐ When ANY IV is running, check: <b>Lungs, BP, HR, Urine output, edema/swelling.</b> For irritating meds (iron, potassium) → always check for <b>infiltration</b>.</div>
+</div>
+
+<div id="quiz-iv"></div>
+`;
+renderFlips('sec-iv',[
+  {f:'Which IV fluid can hang with blood?',b:'ONLY 0.9% Normal Saline'},
+  {f:'Hypotonic fluid — water goes where?',b:'INTO the cells (raisins→grapes). Watch brain swelling.'},
+  {f:'Hypertonic fluid — water goes where?',b:'OUT of cells into vessels. Watch pulmonary edema.'},
+  {f:'Isotonic examples?',b:'0.9% NS and Lactated Ringer\'s'},
+  {f:'3% saline is used for…?',b:'Severe hyponatremia / cerebral edema'},
+  {f:'Patient in shock — which fluid?',b:'Isotonic (NS or LR)'},
+]);
+renderQuiz('quiz-iv',[
+  {q:'A patient with severe hyponatremia (Na 118) and seizure activity is prescribed 3% saline. Which is the priority nursing assessment during infusion?',type:'single',
+   opts:['A. Blood glucose','B. Lung sounds for fluid overload','C. Bowel sounds','D. Pupil size'],correct:1,
+   rat:'3% saline is <b>hypertonic</b> — it pulls water into the vasculature and can rapidly cause <b>fluid overload and pulmonary edema</b>. Monitor lung sounds closely and infuse slowly.'},
+  {q:'Which IV solutions are ISOTONIC? (Select all that apply)',type:'multi',
+   opts:['A. 0.9% Normal Saline','B. 0.45% Normal Saline','C. Lactated Ringer\'s','D. 3% Saline','E. D5W (in the bag, before metabolism)'],correct:[0,2],
+   rat:'<b>0.9% NS and Lactated Ringer\'s</b> are isotonic. 0.45% is hypotonic, 3% is hypertonic. D5W is isotonic in the bag but acts hypotonic once dextrose is metabolized — for exam "match the classic answer," NS and LR are the safest isotonic choices.'},
+  {q:'A nurse is preparing to administer a blood transfusion. Which IV fluid must be used to prime the line?',type:'single',
+   opts:['A. Lactated Ringer\'s','B. D5W','C. 0.9% Normal Saline','D. 0.45% Normal Saline'],correct:2,
+   rat:'<b>Only 0.9% Normal Saline</b> is compatible with blood. LR contains calcium which can cause clotting; dextrose solutions cause hemolysis (RBCs swell and burst).'},
+]);
+</script>
+
+<script>
+/* ============ ABGs + SIMULATOR ============ */
+document.getElementById('sec-abg').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🫁</span> ABGs & Acid-Base</h2>
+<p class="intro-line">ROME makes this almost automatic. Then drill the live simulator below until you don't even think.</p>
+
+<div class="card">
+  <h3>📋 Normal Values</h3>
+  <table class="lab">
+    <tr><th>Value</th><th>Normal</th><th>Means</th></tr>
+    <tr><td>pH</td><td class="val">7.35–7.45</td><td>&lt;7.35 acidosis • &gt;7.45 alkalosis</td></tr>
+    <tr><td>PaCO₂</td><td class="val">35–45 mmHg</td><td>LUNGS (acid)</td></tr>
+    <tr><td>HCO₃⁻</td><td class="val">22–26 mEq/L</td><td>KIDNEYS (bicarb)</td></tr>
+    <tr><td>PaO₂</td><td class="val">80–100 mmHg</td><td>oxygenation</td></tr>
+    <tr><td>SaO₂</td><td class="val">95–100%</td><td>O₂ saturation</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🏛️ The ROME Method</h3>
+  <div class="mnem"><div class="tag">🧠 The whole trick</div>
+    <div class="big">ROME = Respiratory Opposite, Metabolic Equal</div>
+    <div class="exp"><b>Respiratory:</b> pH & CO₂ go OPPOSITE directions. <b>Metabolic:</b> pH & HCO₃ go the SAME (equal) direction.</div>
+  </div>
+  <p><b>5 Steps:</b></p>
+  <ul class="clean">
+    <li><b>Step 1 — pH:</b> &lt;7.35 = acidosis, &gt;7.45 = alkalosis. (This NAMES it.)</li>
+    <li><b>Step 2 — CO₂ (lungs):</b> high or low?</li>
+    <li><b>Step 3 — HCO₃ / bicarb (kidneys):</b> high or low?</li>
+    <li><b>Step 4 — Match:</b> pH matches HCO₃ → <b>METABOLIC</b>. pH opposite CO₂ → <b>RESPIRATORY</b>.</li>
+    <li><b>Step 5 — Compensation:</b> Is the other system also abnormal (trying to fix it)?</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>🩹 Compensation levels</h3>
+  <ul class="clean">
+    <li><b>Uncompensated:</b> pH abnormal, ONE system abnormal, other normal.</li>
+    <li><b>Partially compensated:</b> pH abnormal, BOTH systems abnormal.</li>
+    <li><b>Fully compensated:</b> pH NORMAL (but on the acidic or alkalotic side), BOTH systems abnormal.</li>
+  </ul>
+  <div class="hy">⭐ Lungs compensate FAST (minutes), kidneys compensate SLOW (hours-days). Lungs & kidneys compensate for EACH OTHER.</div>
+</div>
+
+<div class="card">
+  <h3>🎯 Causes Cheat Sheet</h3>
+  <table class="lab">
+    <tr><th>Disorder</th><th>pH</th><th>Cause memory hook</th></tr>
+    <tr><td>Respiratory ACIDosis</td><td>↓</td><td>CO₂ retainer: COPD, asthma, pneumonia, opioids, hypoventilation</td></tr>
+    <tr><td>Respiratory ALKALosis</td><td>↑</td><td>Blowing off CO₂: anxiety, pain, fever, PE, hyperventilation</td></tr>
+    <tr><td>Metabolic ACIDosis</td><td>↓</td><td>DKA, renal failure, diarrhea (→ Kussmaul resp to blow off acid)</td></tr>
+    <tr><td>Metabolic ALKALosis</td><td>↑</td><td>Vomiting, NG suction, antacids, diuretics</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"MUD PILES" (metabolic acidosis) & "Vomit = Alkalosis"</div><div class="exp">Lose acid from the stomach (vomiting/NG suction) → blood goes alkaline. Diarrhea loses bicarb → acidosis.</div></div>
+</div>
+
+<div class="abg-sim">
+  <h3 style="margin-top:0">🎮 ABG Simulator — drill mode</h3>
+  <p style="font-size:.85rem;color:var(--muted)">Read the values, then pick the disorder. Hit "New ABG" for endless practice.</p>
+  <div class="abg-vals">
+    <div class="abg-box"><div class="lbl">pH</div><div class="num" id="abg-ph">—</div></div>
+    <div class="abg-box"><div class="lbl">PaCO₂</div><div class="num" id="abg-co2">—</div></div>
+    <div class="abg-box"><div class="lbl">HCO₃⁻</div><div class="num" id="abg-hco3">—</div></div>
+  </div>
+  <div class="abg-answers" id="abg-answers"></div>
+  <div class="rationale" id="abg-rat"></div>
+  <div class="center"><button class="btn" onclick="newABG()">🎲 New ABG</button><span class="badge" id="abg-streak">Streak: 0 🔥</span></div>
+</div>
+
+<div id="quiz-abg"></div>
+`;
+
+/* ABG Simulator logic */
+const ABG_TYPES=[
+  {name:'Respiratory Acidosis',ph:'low',co2:'high',hco3:'normal',ex:'pH 7.28, CO₂ 55, HCO₃ 24 — COPD/hypoventilation. pH opposite CO₂ = respiratory; CO₂ high = acidosis.'},
+  {name:'Respiratory Alkalosis',ph:'high',co2:'low',hco3:'normal',ex:'pH 7.52, CO₂ 28, HCO₃ 24 — hyperventilation/anxiety. pH opposite CO₂ = respiratory; CO₂ low = alkalosis.'},
+  {name:'Metabolic Acidosis',ph:'low',co2:'normal',hco3:'low',ex:'pH 7.29, CO₂ 40, HCO₃ 16 — DKA/diarrhea. pH matches HCO₃ = metabolic; HCO₃ low = acidosis.'},
+  {name:'Metabolic Alkalosis',ph:'high',co2:'normal',hco3:'high',ex:'pH 7.50, CO₂ 40, HCO₃ 30 — vomiting/NG suction. pH matches HCO₃ = metabolic; HCO₃ high = alkalosis.'},
+  {name:'Respiratory Acidosis (compensating)',ph:'lowN',co2:'high',hco3:'high',ex:'pH 7.36, CO₂ 55, HCO₃ 30 — kidneys retaining HCO₃ to fix it. pH near-normal on acid side + both abnormal = compensating respiratory acidosis.'},
+  {name:'Metabolic Acidosis (compensating)',ph:'lowN',co2:'low',hco3:'low',ex:'pH 7.37, CO₂ 30, HCO₃ 17 — lungs blowing off CO₂ (Kussmaul) to fix it. Both abnormal, pH on acid side = compensating metabolic acidosis.'},
+];
+let abgCurrent=null, abgStreak=0;
+function rnd(lo,hi,dec){const v=lo+Math.random()*(hi-lo);return dec?v.toFixed(2):Math.round(v);}
+function newABG(){
+  const t=ABG_TYPES[Math.floor(Math.random()*ABG_TYPES.length)]; abgCurrent=t;
+  let ph;
+  if(t.ph==='low')ph=rnd(7.15,7.33,2); else if(t.ph==='high')ph=rnd(7.47,7.58,2);
+  else if(t.ph==='lowN')ph=rnd(7.35,7.39,2); else ph=rnd(7.36,7.44,2);
+  let co2 = t.co2==='high'?rnd(48,60):t.co2==='low'?rnd(26,33):rnd(36,44);
+  let hco3 = t.hco3==='high'?rnd(28,34):t.hco3==='low'?rnd(14,20):rnd(22,26);
+  document.getElementById('abg-ph').textContent=ph;
+  document.getElementById('abg-co2').textContent=co2;
+  document.getElementById('abg-hco3').textContent=hco3;
+  document.getElementById('abg-rat').classList.remove('show');
+  const box=document.getElementById('abg-answers'); box.innerHTML='';
+  const choices=['Respiratory Acidosis','Respiratory Alkalosis','Metabolic Acidosis','Metabolic Alkalosis'];
+  const correctBase=t.name.split(' (')[0];
+  choices.forEach(ch=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=ch; b.style.margin='0';
+    b.onclick=()=>{
+      box.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+      const rat=document.getElementById('abg-rat');
+      if(ch===correctBase){b.classList.add('correct');abgStreak++;rat.innerHTML='✅ <b>Correct!</b> '+t.ex;}
+      else{b.classList.add('wrong');box.querySelectorAll('.opt').forEach(x=>{if(x.textContent===correctBase)x.classList.add('correct')});abgStreak=0;rat.innerHTML='❌ Actual: <b>'+correctBase+'</b>. '+t.ex;}
+      if(t.name.includes('compensating'))rat.innerHTML+=' <i>(This one is also COMPENSATING — both systems abnormal, pH near normal.)</i>';
+      rat.classList.add('show');
+      document.getElementById('abg-streak').textContent='Streak: '+abgStreak+' 🔥';
+    };
+    box.appendChild(b);
+  });
+}
+newABG();
+
+renderFlips('sec-abg',[
+  {f:'ROME stands for?',b:'Respiratory Opposite, Metabolic Equal'},
+  {f:'Normal pH?',b:'7.35 – 7.45'},
+  {f:'CO₂ is controlled by?',b:'The LUNGS (it\'s the acid)'},
+  {f:'HCO₃ is controlled by?',b:'The KIDNEYS (it\'s the bicarb)'},
+  {f:'Vomiting/NG suction causes?',b:'Metabolic Alkalosis (losing acid)'},
+  {f:'DKA causes?',b:'Metabolic Acidosis'},
+  {f:'Kussmaul respirations compensate for?',b:'Metabolic acidosis (blowing off CO₂)'},
+  {f:'Fully compensated means?',b:'pH NORMAL, both CO₂ & HCO₃ abnormal'},
+]);
+renderQuiz('quiz-abg',[
+  {q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 24. How does the nurse interpret this?',type:'single',
+   opts:['A. Metabolic acidosis','B. Respiratory acidosis, uncompensated','C. Respiratory alkalosis','D. Metabolic alkalosis, compensated'],correct:1,
+   rat:'pH is low (acidosis). CO₂ is high and moves OPPOSITE the pH → respiratory. HCO₃ is normal → no compensation yet. = <b>uncompensated respiratory acidosis</b> (think COPD, opioids).'},
+  {q:'ABG: pH 7.50, PaCO₂ 40, HCO₃ 30. Which conditions could cause this? (Select all that apply)',type:'multi',
+   opts:['A. Prolonged vomiting','B. Nasogastric suction','C. Diarrhea','D. Excessive antacid use','E. Diabetic ketoacidosis'],correct:[0,1,3],
+   rat:'pH high + HCO₃ high (same direction) = <b>metabolic alkalosis</b>. Vomiting, NG suction (losing stomach acid) and antacids all cause it. Diarrhea and DKA cause metabolic ACIDosis.'},
+  {q:'ABG: pH 7.37, PaCO₂ 30, HCO₃ 17. This represents:',type:'single',
+   opts:['A. Fully compensated metabolic acidosis','B. Uncompensated respiratory alkalosis','C. Partially compensated respiratory acidosis','D. Normal ABG'],correct:0,
+   rat:'pH is normal but on the <b>acidic side</b> (7.37). HCO₃ is low (metabolic acidosis) and the lungs have blown off CO₂ (low CO₂) to compensate. Both abnormal + normal pH = <b>fully compensated metabolic acidosis</b>.'},
+]);
+</script>
+
+<script>
+/* ============ RESP ASSESSMENT ============ */
+document.getElementById('sec-resp-assess').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🔍</span> Respiratory Assessment</h2>
+<p class="intro-line">The "how the lungs work + what you hear/see" chapter (Ch 17).</p>
+
+<div class="card">
+  <h3>🌬️ Key Definitions</h3>
+  <ul class="clean">
+    <li><b>Ventilation:</b> air moving in/out (mechanics — diaphragm, chest cage). <i>Inspiration = active/energy; expiration = passive.</i></li>
+    <li><b>Respiration:</b> the whole gas-exchange process.</li>
+    <li><b>Diffusion:</b> O₂/CO₂ swap at the alveolar–capillary membrane.</li>
+    <li><b>Perfusion:</b> blood flow through pulmonary vessels (right ventricle → pulmonary artery).</li>
+    <li><b>Hypoxia</b> = low O₂ in tissues. <b>Hypoxemia</b> = low O₂ in the blood.</li>
+    <li><b>Hemoglobin</b> = the RBC protein that carries O₂.</li>
+  </ul>
+  <div class="prof"><span class="tag">📌 Slide note</span>Humans are <b>negative-pressure breathers</b> — the chest expands, pressure drops, air rushes in. Also <b>know tidal volume</b> (air in/out per normal breath).</div>
+  <div class="hy">⭐ Ventilation & perfusion must be <b>matched (V/Q)</b> to live. A <b>V/Q mismatch</b> = the root problem in pneumonia, ARDS, PE.</div>
+</div>
+
+<div class="card">
+  <h3>🚩 Common Symptoms of Respiratory Disease</h3>
+  <span class="pill p-purple">Dyspnea</span><span class="pill p-purple">Cough</span><span class="pill p-purple">Sputum</span>
+  <span class="pill p-purple">Chest pain</span><span class="pill p-purple">Wheezing</span><span class="pill p-purple">Hemoptysis</span>
+  <p style="margin-top:8px"><b>Chest pain</b> often signals obstruction. <b>Hemoptysis</b> = coughing up blood.</p>
+  <div class="hy">⭐ <b>Cyanosis is a LATE sign</b> of hypoxia. Bluish in lighter skin, grayish in darker skin. Central (lips/tongue) is worse than peripheral (fingers/toes/earlobes).</div>
+</div>
+
+<div class="card">
+  <h3>🎵 Adventitious (abnormal) Breath Sounds — KNOW THESE</h3>
+  <table class="lab">
+    <tr><th>Sound</th><th>Means</th><th>Seen in</th></tr>
+    <tr><td><b>Crackles</b> (rales)</td><td>Fluid in alveoli</td><td>CHF, pneumonia, pulmonary edema</td></tr>
+    <tr><td><b>Wheezes</b></td><td>Narrowed airways</td><td>Asthma, COPD</td></tr>
+    <tr><td><b>Rhonchi</b></td><td>Secretions in larger airways</td><td>Bronchitis, pneumonia</td></tr>
+    <tr><td><b>Stridor</b> 🚨</td><td>Upper-airway obstruction</td><td>EMERGENCY — croup, foreign body, anaphylaxis</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Crackles = wet • Wheeze = tight • Stridor = scary"</div></div>
+</div>
+
+<div class="card">
+  <h3>🫳 Other Assessment Pearls</h3>
+  <ul class="clean">
+    <li><b>Clubbing</b> of fingers = chronic hypoxia (lung disease, congenital heart disease).</li>
+    <li><b>Barrel chest</b> (↑ AP diameter, normal ratio is 1:2) = <b>classic COPD/emphysema</b> (slide note!).</li>
+    <li>Normal RR = <b>12–20/min</b>. Pulse ox normal = <b>95–100%</b>.</li>
+    <li><b>ABGs = gold standard</b> for respiratory failure.</li>
+  </ul>
+</div>
+
+<div id="quiz-resp-assess"></div>
+`;
+renderQuiz('quiz-resp-assess',[
+  {q:'A nurse auscultates fine crackles at the lung bases of a patient with heart failure. What do crackles most likely indicate?',type:'single',
+   opts:['A. Narrowed airways','B. Fluid in the alveoli','C. Upper airway obstruction','D. Pleural inflammation'],correct:1,
+   rat:'<b>Crackles</b> = fluid in the alveoli, classic for CHF and pneumonia. Narrowed airways = wheezes; upper-airway obstruction = stridor.'},
+  {q:'Which finding is a LATE sign of hypoxia?',type:'single',
+   opts:['A. Restlessness','B. Tachycardia','C. Central cyanosis','D. Anxiety'],correct:2,
+   rat:'<b>Cyanosis is a LATE sign.</b> The earliest signs of hypoxia are restlessness, anxiety, and tachycardia — those come first and are your chance to intervene early.'},
+  {q:'Which breath sound is considered a medical EMERGENCY requiring immediate attention?',type:'single',
+   opts:['A. Wheezes','B. Crackles','C. Rhonchi','D. Stridor'],correct:3,
+   rat:'<b>Stridor</b> signals upper-airway obstruction — a true emergency (anaphylaxis, foreign body, severe croup). Act on the airway immediately.'},
+]);
+
+/* ============ ACUTE RESP ============ */
+document.getElementById('sec-acute').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🚨</span> Acute Respiratory Disorders</h2>
+<p class="intro-line">Atelectasis, Acute Tracheobronchitis, Acute Respiratory Failure & ARDS.</p>
+
+<div class="card">
+  <h3>🎈 Atelectasis — collapsed alveoli</h3>
+  <p><b>Most common type = OBSTRUCTIVE</b> (blockage → trapped air absorbed → collapse). Most common timing = post-op.</p>
+  <p><b>Causes:</b> post-op, mucus plugs, shallow breathing, pain, prolonged supine/bedrest, foreign body, tumors.</p>
+  <p><b>Signs:</b> ↑work of breathing, dyspnea, ↑HR, ↑RR, ↓breath sounds + crackles over the area, SpO₂ &lt;92%, patchy/white on CXR.</p>
+  <p><b>Prevention/Tx:</b> <b>turn q2h</b>, early ambulation, deep breathing/coughing, <b>incentive spirometer</b> (inhale deep, hold 3 sec, keep float in "best" zone), pulmonary toilet.</p>
+  <div class="mnem"><div class="tag">🧠 IS technique</div><div class="big">Incentive Spirometer = "Sip slow, hold, keep the ball UP"</div></div>
+</div>
+
+<div class="card">
+  <h3>🗣️ Acute Tracheobronchitis</h3>
+  <p>Inflammation of trachea + bronchi, usually <b>follows a viral URI</b> that travels down. Can progress to pneumonia.</p>
+  <p><b>Signs:</b> dry irritating cough (→ later purulent sputum), fever, chills, night sweats, headache, malaise, stridor/wheeze.</p>
+  <p><b>Tx:</b> antibiotics if bacterial (per culture), <b>↑ fluids to thin secretions</b>, cool vapor/steam, mild analgesics, rest. <b>AVOID antihistamines</b> (dry out secretions) and avoid cough suppressants (you need to clear secretions).</p>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🆘 Acute Respiratory Failure (ARF)</h3>
+  <p>Sudden, life-threatening failure of gas exchange.</p>
+  <div class="hy">⭐ <b>CRITERIA (memorize):</b> PaO₂ &lt; 60 mmHg AND/OR PaCO₂ &gt; 50 mmHg with pH &lt; 7.35.</div>
+  <p><b>Causes:</b> overdose, chest trauma, neuromuscular (myasthenia gravis), COPD exacerbation, asthma, airway obstruction.</p>
+  <ul class="clean">
+    <li><b>EARLY:</b> restlessness, fatigue, headache, air hunger, ↑HR, ↑BP (compensating).</li>
+    <li><b>LATE:</b> confusion, lethargy, tachypnea, cyanosis, diaphoresis → respiratory arrest.</li>
+  </ul>
+  <p><b>Tx:</b> O₂, intubation + mechanical ventilation, treat the cause.</p>
+  <div class="prof"><span class="tag">📌 Slide note</span>Respiratory arrest → cardiac arrest = "the body just gives up." Catch the EARLY signs.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>💥 ARDS — Acute Respiratory Distress Syndrome</h3>
+  <p>Severe inflammatory lung injury → <b>noncardiogenic pulmonary edema</b>, diffuse alveolar damage, surfactant dysfunction.</p>
+  <div class="hy">⭐ <b>HALLMARK: hypoxemia REFRACTORY to oxygen</b> (O₂ doesn't fix it) + <b>bilateral infiltrates</b> on CXR. Rapid onset (within ~72h of trigger).</div>
+  <p><b>Causes:</b> sepsis, trauma, aspiration, pancreatitis, severe pneumonia.</p>
+  <p><b>Tx:</b> mechanical ventilation with <b>PEEP</b>, treat underlying cause. BNP helps rule out cardiac cause. Mortality 27–50%.</p>
+  <div class="mnem"><div class="tag">🧠 Tell ARDS apart</div><div class="big">"O₂ won't fix it + both lungs white = ARDS"</div></div>
+</div>
+
+<div id="quiz-acute"></div>
+`;
+renderFlips('sec-acute',[
+  {f:'Most common type of atelectasis?',b:'Obstructive'},
+  {f:'ARF criteria?',b:'PaO₂ <60 and/or PaCO₂ >50 with pH <7.35'},
+  {f:'Hallmark of ARDS?',b:'Hypoxemia refractory to O₂ + bilateral infiltrates'},
+  {f:'Earliest sign of respiratory failure?',b:'Restlessness'},
+  {f:'Atelectasis prevention #1?',b:'Turn q2h, incentive spirometer, deep breathing'},
+  {f:'Ventilator setting for ARDS?',b:'PEEP'},
+]);
+renderQuiz('quiz-acute',[
+  {q:'A post-operative patient has decreased breath sounds in the right base, SpO₂ 89%, and shallow breathing due to incisional pain. Which is the priority nursing action to prevent atelectasis?',type:'single',
+   opts:['A. Restrict fluids','B. Encourage incentive spirometer use and deep breathing','C. Place patient flat and limit movement','D. Administer a cough suppressant'],correct:1,
+   rat:'Atelectasis is prevented by <b>lung expansion</b>: incentive spirometry, deep breathing, coughing, turning q2h, and early ambulation. Lying flat and suppressing cough would worsen collapse.'},
+  {q:'Which findings would confirm ARDS rather than cardiogenic pulmonary edema? (Select all that apply)',type:'multi',
+   opts:['A. Hypoxemia that does NOT improve with supplemental oxygen','B. Bilateral infiltrates on chest x-ray','C. Elevated BNP','D. Rapid onset after sepsis or aspiration','E. Resolution with diuretics alone'],correct:[0,1,3],
+   rat:'ARDS = <b>refractory hypoxemia</b>, <b>bilateral infiltrates</b>, and rapid onset after an inflammatory trigger (sepsis, aspiration). A <b>high BNP suggests a cardiac cause</b>, not ARDS, and ARDS does not resolve with diuretics alone.'},
+  {q:'A patient with COPD has ABGs showing PaO₂ 55 and PaCO₂ 58 with pH 7.31. The nurse recognizes this as:',type:'single',
+   opts:['A. Normal for everyone','B. Acute respiratory failure','C. Metabolic alkalosis','D. Mild hypoxemia only'],correct:1,
+   rat:'PaO₂ <60 AND PaCO₂ >50 with pH <7.35 meets the criteria for <b>acute respiratory failure</b>. This patient needs prompt intervention.'},
+]);
+</script>
+
+<script>
+/* ============ PNEUMONIA ============ */
+document.getElementById('sec-pneumonia').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🦠</span> Pneumonia</h2>
+<p class="intro-line">Your professor flagged "pneumonia assessment findings" as a guaranteed test point. Plus the VAP bundle.</p>
+
+<div class="card">
+  <h3>📚 The 4 Types (the 48-hour rule)</h3>
+  <table class="lab">
+    <tr><th>Type</th><th>Definition</th></tr>
+    <tr><td><b>CAP</b> (community)</td><td>In community OR within first 48h of admission</td></tr>
+    <tr><td><b>HCAP</b> (healthcare)</td><td>Recent healthcare contact — often MDROs</td></tr>
+    <tr><td><b>HAP</b> (hospital)</td><td>≥48h AFTER admission (not incubating at admit)</td></tr>
+    <tr><td><b>VAP</b> (ventilator)</td><td>≥48h after intubation/mechanical ventilation</td></tr>
+  </table>
+  <div class="hy">⭐ Most common bacterial cause of CAP = <b>Streptococcus pneumoniae</b>. HAP/VAP often = multidrug-resistant (MDROs): Pseudomonas, MRSA, Klebsiella.</div>
+</div>
+
+<div class="card">
+  <h3>🔎 Assessment Findings (HIGH YIELD)</h3>
+  <ul class="clean">
+    <li>Fever, chills, night sweats</li>
+    <li><b>Pleuritic chest pain</b></li>
+    <li><b>Productive cough</b> (purulent sputum)</li>
+    <li><b>Crackles</b> (air moving over wet areas)</li>
+    <li>Dyspnea, tachypnea, tachycardia</li>
+    <li><b>Dullness on percussion</b> + ↑ tactile fremitus (consolidation)</li>
+    <li>In <b>elderly</b>: may be atypical — confusion, weakness, ↓appetite (watch mental status!)</li>
+  </ul>
+  <div class="prof"><span class="tag">📌 Sputum colors (know these!)</span>Rusty/blood-tinged = pneumococcal • purulent (yellow/green) = bacterial • thin/mucoid = viral • frothy pink = pulmonary edema • foul-smelling = lung abscess/anaerobic.</div>
+</div>
+
+<div class="card">
+  <h3>🩺 Diagnosis & Treatment</h3>
+  <p><b>Diagnosis:</b> chest x-ray, sputum culture, blood cultures, CBC, physical exam, bronchoscopy (severe).</p>
+  <p><b>Treatment:</b> antibiotics (pathogen-specific; viral = supportive only), <b>hydration 2–3 L/day</b>, O₂, pulmonary toilet/CPT, incentive spirometry, rest, nutrition (small frequent meals), vaccines (pneumococcal, COVID, RSV, flu).</p>
+  <div class="prof"><span class="tag">📌 Slide note</span><b>CPT = "gorilla pat the patient's chest"</b> (chest physiotherapy loosens secretions). Patients respond to antibiotics in <b>24–48 hours</b>.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🛡️ The VAP Bundle (your prof said KNOW THIS)</h3>
+  <p>How to prevent Ventilator-Associated Pneumonia:</p>
+  <ul class="clean">
+    <li><b>H</b>ead of bed elevated 30–45°</li>
+    <li><b>O</b>ral care with chlorhexidine (q4h)</li>
+    <li><b>B</b> — sedation vacations (daily wean readiness)</li>
+    <li>Peptic ulcer (stress ulcer) prophylaxis</li>
+    <li>DVT prophylaxis</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Heads up, Clean mouth, Wake up, Protect gut & legs"</div></div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>🫗 Aspiration Pneumonia</h3>
+  <p>Inhaling foreign material (gastric contents, food). Gastric acid damages cilia → impaired clearance → inflammation → hypoxemia.</p>
+  <div class="hy">⭐ <b>MORE COMMON IN THE RIGHT LUNG</b> — the right mainstem bronchus is straighter & wider (slide note!).</div>
+  <p><b>Risk factors:</b> stroke, dysphagia, ↓LOC, sedation, CNS depressants (alcohol, drugs), NG tube / ET tube (epiglottis can't fully close), tube feeding.</p>
+  <p><b>Prevention:</b> HOB 30–45°, swallow eval, upright for meals, verify feeding tube placement, minimize sedation.</p>
+</div>
+
+<div class="card">
+  <h3>⚠️ Complications</h3>
+  <p><b>Septic shock:</b> hypotension + tachycardia (<b>weak, thready, fast pulse</b>), fatigue, respiratory failure (slide note).</p>
+  <p><b>Pleural effusion:</b> fluid in pleural space compresses lung → <b>decreased breath sounds, dull percussion, dyspnea</b>. Tx = <b>thoracentesis</b> (sit patient upright, watch for pneumothorax after) or chest tube. Empyema (pus) needs 4–6 weeks antibiotics.</p>
+</div>
+
+<div id="quiz-pneumonia"></div>
+`;
+renderFlips('sec-pneumonia',[
+  {f:'Most common bacterial cause of CAP?',b:'Streptococcus pneumoniae'},
+  {f:'The "48-hour rule" — HAP develops when?',b:'≥48 hours after hospital admission'},
+  {f:'Aspiration pneumonia favors which lung?',b:'The RIGHT (straighter mainstem bronchus)'},
+  {f:'Rusty/blood-tinged sputum suggests?',b:'Pneumococcal pneumonia'},
+  {f:'Top VAP prevention step?',b:'HOB elevated 30-45° + oral chlorhexidine'},
+  {f:'Treatment for pleural effusion?',b:'Thoracentesis (sit upright, watch for pneumothorax)'},
+  {f:'Hydration goal in pneumonia?',b:'2-3 L/day (thins secretions)'},
+  {f:'Septic shock pulse?',b:'Weak, thready, fast (tachycardic) + low BP'},
+]);
+renderQuiz('quiz-pneumonia',[
+  {q:'Which assessment findings would the nurse expect in a patient with bacterial pneumonia? (Select all that apply)',type:'multi',
+   opts:['A. Productive cough with purulent sputum','B. Crackles over the affected lobe','C. Dullness to percussion','D. Hyperresonance throughout','E. Pleuritic chest pain'],correct:[0,1,2,4],
+   rat:'Pneumonia produces <b>purulent cough, crackles, dullness to percussion</b> (consolidation = fluid-filled lung), and <b>pleuritic chest pain</b>. Hyperresonance is heard with air-trapping conditions like COPD/pneumothorax, not consolidation.'},
+  {q:'A nurse is caring for a mechanically ventilated patient. Which interventions are part of the VAP bundle? (Select all that apply)',type:'multi',
+   opts:['A. Keep head of bed flat','B. Elevate head of bed 30–45°','C. Oral care with chlorhexidine','D. Daily sedation vacation','E. Stress ulcer prophylaxis'],correct:[1,2,3,4],
+   rat:'The VAP bundle = <b>HOB 30–45°, chlorhexidine oral care, daily sedation vacations, peptic ulcer prophylaxis, and DVT prophylaxis</b>. Keeping the HOB flat would INCREASE aspiration and VAP risk.'},
+  {q:'An 82-year-old is admitted with new-onset confusion, weakness, and decreased appetite but no fever. The nurse should suspect:',type:'single',
+   opts:['A. Normal aging','B. Pneumonia presenting atypically','C. Dehydration only','D. Anxiety'],correct:1,
+   rat:'In <b>older adults, pneumonia often presents atypically</b> — confusion, weakness, anorexia, and altered mental status rather than classic fever. A change in mental status is an early red flag.'},
+  {q:'A patient recovering from a stroke with dysphagia is at high risk for aspiration pneumonia. Which intervention best reduces this risk?',type:'single',
+   opts:['A. Lay the patient flat during meals','B. Keep HOB elevated 30–45° and perform a swallow evaluation','C. Use a straw for all liquids','D. Feed quickly to reduce fatigue'],correct:1,
+   rat:'Aspiration prevention = <b>HOB elevated 30–45°, swallow evaluation, upright positioning, small bites, and avoiding straws</b>. Lying flat or rushing increases aspiration risk.'},
+]);
+</script>
+
+<script>
+/* ============ AIRWAY / TUBES ============ */
+document.getElementById('sec-airway').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🩺</span> Airway: ET Tubes & Tracheostomy</h2>
+<p class="intro-line">Cuff pressures, positioning, and what to keep at the bedside.</p>
+
+<div class="card">
+  <h3>🫁 Endotracheal (ET) Tube</h3>
+  <p>Passed through mouth (preferred) or nose into trachea. Used for airway protection, suctioning, and mechanical ventilation.</p>
+  <div class="hy">⭐ <b>CUFF PRESSURE = 20–25 mmHg.</b> Too HIGH → tracheal ischemia/necrosis. Too LOW → aspiration risk.</div>
+  <p><b>Care:</b> suction PRN, warmed humidified O₂, oral care, semi-Fowler position. Downsides: can't talk, ↓cough reflex, thick secretions.</p>
+</div>
+
+<div class="card">
+  <h3>🔵 Tracheostomy</h3>
+  <p>Surgical airway for long-term ventilation, airway obstruction, or aspiration prevention.</p>
+  <div class="grid2">
+    <div><b>EARLY complications:</b> bleeding, pneumothorax, tube dislodgement, air embolism, subcutaneous emphysema.</div>
+    <div><b>LATE complications:</b> infection, tracheal stenosis, tracheoesophageal fistula, tracheal necrosis.</div>
+  </div>
+  <div class="hy">⭐ <b>KEEP AT BEDSIDE:</b> obturator, an extra trach (same size), an extra trach (one size smaller), and suction equipment. If the trach comes out: stay with patient, call for help, replace if trained.</div>
+</div>
+
+<div id="quiz-airway"></div>
+`;
+renderFlips('sec-airway',[
+  {f:'ET/trach cuff pressure?',b:'20–25 mmHg'},
+  {f:'Cuff pressure too HIGH causes?',b:'Tracheal ischemia / necrosis'},
+  {f:'Cuff pressure too LOW causes?',b:'Aspiration'},
+  {f:'Keep at trach bedside?',b:'Obturator, same-size trach, smaller trach, suction'},
+  {f:'Best position for airway/vent patient?',b:'Semi-Fowler'},
+  {f:'Early trach complication?',b:'Bleeding, pneumothorax, tube dislodgement'},
+]);
+renderQuiz('quiz-airway',[
+  {q:'The nurse is checking an endotracheal tube cuff. Which pressure is within the safe range?',type:'single',
+   opts:['A. 10 mmHg','B. 22 mmHg','C. 35 mmHg','D. 45 mmHg'],correct:1,
+   rat:'Safe cuff pressure is <b>20–25 mmHg</b>. Below that risks aspiration; above 25 risks tracheal ischemia and necrosis.'},
+  {q:'Which items must the nurse keep at the bedside of a patient with a new tracheostomy? (Select all that apply)',type:'multi',
+   opts:['A. Obturator','B. Spare trach tube of the same size','C. Spare trach tube one size smaller','D. Suction equipment','E. A bottle of sterile water for drinking'],correct:[0,1,2,3],
+   rat:'Bedside essentials = <b>obturator, same-size spare trach, smaller-size spare trach, and suction equipment</b> — everything needed to reestablish the airway if the tube dislodges.'},
+]);
+
+/* ============ CHEST TUBES ============ */
+document.getElementById('sec-chesttube').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🧯</span> Chest Tube Management</h2>
+<p class="intro-line">Your professor's speaker notes went DEEP here — that means it's coming. This is "easy points" if you know the chambers.</p>
+
+<div class="card" style="border-color:var(--pink)">
+  <h3>🫧 The 3 Chambers (the whole game)</h3>
+  <table class="lab">
+    <tr><th>Chamber</th><th>What it does</th><th>Bubbling rule</th></tr>
+    <tr><td><b>1. Drainage/collection</b></td><td>Collects blood & pus</td><td>Measure every few hours, mark the level</td></tr>
+    <tr><td><b>2. Water seal</b></td><td>One-way valve (air out, not in)</td><td>🚨 <b>Continuous bubbling = AIR LEAK</b> → notify MD. Intermittent/tidaling = NORMAL.</td></tr>
+    <tr><td><b>3. Suction control</b></td><td>Controls suction strength</td><td><b>Continuous gentle bubbling = NORMAL</b> when on wall suction.</td></tr>
+  </table>
+  <div class="hy">⭐ The #1 tested distinction: <b>Continuous bubbling in the WATER SEAL chamber = leak (BAD, call MD, possible tension pneumothorax).</b> Continuous bubbling in the SUCTION chamber = expected.</div>
+</div>
+
+<div class="card">
+  <h3>🛏️ Safety Rules (straight from your prof's notes)</h3>
+  <ul class="clean">
+    <li><b>Keep the drainage system BELOW chest level — NEVER above.</b></li>
+    <li>Keep <b>occlusive gauze + tape at the bedside</b> in case the tube comes out.</li>
+    <li>If the tube is <b>pulled out of the patient:</b> cover with sterile occlusive (petroleum) gauze taped on <b>3 sides</b> (lets air escape, prevents air entering → avoids tension pneumothorax).</li>
+    <li>If the tube <b>disconnects from the system:</b> submerge the end in sterile water (re-establish water seal).</li>
+    <li>Do NOT routinely clamp or "milk/strip" the tube (can cause tension pneumothorax).</li>
+    <li><b>Tidaling</b> (fluid rises/falls with breathing) in the water seal = normal, good sign.</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"3 sides taped = air out, none in"</div><div class="exp">Taping all 4 sides could trap air → tension pneumothorax.</div></div>
+</div>
+
+<div id="quiz-chesttube"></div>
+`;
+renderFlips('sec-chesttube',[
+  {f:'Continuous bubbling in WATER SEAL chamber?',b:'AIR LEAK — bad, notify MD (tension pneumo risk)'},
+  {f:'Continuous bubbling in SUCTION chamber?',b:'NORMAL when on wall suction'},
+  {f:'Chest tube accidentally pulled OUT?',b:'Occlusive gauze taped on 3 sides'},
+  {f:'Where do you keep the drainage system?',b:'BELOW chest level, never above'},
+  {f:'Tube disconnects from drainage system?',b:'Submerge end in sterile water'},
+  {f:'Tidaling means?',b:'Normal — fluid moving with breathing'},
+]);
+renderQuiz('quiz-chesttube',[
+  {q:'A nurse observes continuous, vigorous bubbling in the WATER SEAL chamber of a chest drainage system. What does this indicate?',type:'single',
+   opts:['A. Normal functioning','B. The lung has fully re-expanded','C. An air leak in the system','D. The suction is too low'],correct:2,
+   rat:'<b>Continuous bubbling in the water seal chamber signals an air leak</b> — check connections and notify the provider; it can lead to tension pneumothorax. Intermittent bubbling/tidaling is normal.'},
+  {q:'A patient\'s chest tube is accidentally pulled out. What is the nurse\'s priority action?',type:'single',
+   opts:['A. Reinsert the tube immediately','B. Cover the site with sterile occlusive gauze taped on three sides','C. Apply a tight dressing taped on all four sides','D. Lay the patient flat'],correct:1,
+   rat:'Cover with <b>sterile occlusive gauze taped on THREE sides</b> — this lets trapped air escape while preventing air from being sucked in, avoiding a tension pneumothorax. Taping all four sides could trap air.'},
+  {q:'Which chest tube observations are NORMAL/expected? (Select all that apply)',type:'multi',
+   opts:['A. Tidaling in the water seal chamber','B. Gentle continuous bubbling in the suction control chamber','C. Continuous bubbling in the water seal chamber','D. Drainage system kept below chest level','E. Occlusive gauze available at the bedside'],correct:[0,1,3,4],
+   rat:'Normal: <b>tidaling, gentle bubbling in the SUCTION chamber, system below chest level, bedside gauze ready</b>. Continuous bubbling in the WATER SEAL chamber is abnormal (air leak).'},
+]);
+</script>
+
+<script>
+/* ============ COPD / ASTHMA ============ */
+document.getElementById('sec-copd').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🌬️</span> COPD & Asthma</h2>
+<p class="intro-line">Your professor specifically listed COPD + asthma manifestations + drugs as test points.</p>
+
+<div class="card">
+  <h3>🚬 COPD — progressive, IRREVERSIBLE airflow obstruction</h3>
+  <p>Includes <b>chronic bronchitis + emphysema</b>. #1 risk factor = <b>cigarette smoking</b>.</p>
+  <p><b>Manifestations:</b> chronic cough, sputum, dyspnea, <b>barrel chest</b>, weight loss, hypoxemia, hypercapnia.</p>
+  <div class="hy">⭐ <b>O₂ GOAL FOR COPD = 88–92%</b> (NOT 95-100%!). COPD patients are chronic CO₂ retainers — too much O₂ can suppress their drive to breathe.</div>
+  <p><b>Diagnostics:</b> spirometry. <b>Complications:</b> respiratory failure, pneumonia, cor pulmonale, pneumothorax.</p>
+  <p><b>Interventions:</b> <b>pursed-lip breathing</b>, tripod position, smoking cessation, energy conservation, bronchodilators, inhaled steroids, O₂.</p>
+</div>
+
+<div class="card">
+  <h3>🐦 Chronic Bronchitis vs Emphysema</h3>
+  <table class="lab">
+    <tr><th>Chronic Bronchitis</th><th>Emphysema</th></tr>
+    <tr><td>"Blue Bloater"</td><td>"Pink Puffer"</td></tr>
+    <tr><td>Productive cough, excess mucus</td><td>Dyspnea, alveolar destruction</td></tr>
+    <tr><td>Cyanosis common</td><td>Thin, barrel chest</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Blue Bloater Bronchitis • Pink Puffer emPhysema"</div></div>
+</div>
+
+<div class="card">
+  <h3>💨 Asthma — chronic inflammation with REVERSIBLE obstruction</h3>
+  <p><b>Manifestations:</b> wheezing, cough, chest tightness, dyspnea, prolonged expiration.</p>
+  <p><b>Triggers:</b> smoke, allergens, exercise, cold air, infection.</p>
+  <p><b>Peak flow zones:</b> 🟢 Green = good control • 🟡 Yellow = caution • 🔴 Red = medical alert.</p>
+  <div class="hy">🚨 <b>CRITICAL NCLEX SIGN:</b> In a severe asthma attack, if <b>wheezing suddenly DISAPPEARS</b> → that's <b>impending respiratory failure</b> (no air is moving!). Not improvement — emergency!</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🆘 Status Asthmaticus</h3>
+  <p>Life-threatening asthma attack not responding to routine therapy.</p>
+  <p><b>ABGs:</b> EARLY = respiratory ALKALosis (hyperventilating). LATE = respiratory ACIDosis (tiring out, retaining CO₂) → danger.</p>
+  <p><b>Tx:</b> O₂, albuterol, corticosteroids, intubation if needed.</p>
+</div>
+
+<div class="card">
+  <h3>💊 Respiratory & Asthma Drugs (test point!)</h3>
+  <table class="lab">
+    <tr><th>Drug class</th><th>Use</th><th>Examples</th></tr>
+    <tr><td><b>SABA</b> (quick relief)</td><td>Acute attack — RESCUE</td><td>Albuterol</td></tr>
+    <tr><td><b>LABA</b> (long-acting)</td><td>Maintenance (never alone)</td><td>Salmeterol</td></tr>
+    <tr><td><b>Inhaled corticosteroids</b></td><td>Long-term control (rinse mouth!)</td><td>Fluticasone, budesonide</td></tr>
+    <tr><td><b>Leukotriene modifiers</b></td><td>Long-term control</td><td>Montelukast</td></tr>
+    <tr><td><b>Anticholinergic</b></td><td>COPD bronchodilation</td><td>Ipratropium</td></tr>
+  </table>
+  <div class="hy">⭐ Inhaler order: <b>bronchodilator FIRST, wait, then steroid.</b> Always <b>rinse mouth after inhaled steroids</b> (prevents oral thrush). Albuterol = rescue; if used &gt;2x/week, asthma is poorly controlled.</div>
+</div>
+
+<div id="quiz-copd"></div>
+`;
+renderFlips('sec-copd',[
+  {f:'O₂ saturation goal for COPD?',b:'88–92%'},
+  {f:'Wheezing SUDDENLY disappears in asthma attack?',b:'Impending respiratory failure — EMERGENCY'},
+  {f:'Best breathing technique for COPD?',b:'Pursed-lip breathing'},
+  {f:'Quick-relief asthma drug?',b:'Albuterol (SABA)'},
+  {f:'Long-term asthma controller?',b:'Inhaled corticosteroids'},
+  {f:'After inhaled steroid, the patient should?',b:'Rinse mouth (prevents thrush)'},
+  {f:'"Blue Bloater" = ?',b:'Chronic bronchitis'},
+  {f:'"Pink Puffer" = ?',b:'Emphysema'},
+  {f:'COPD #1 risk factor?',b:'Cigarette smoking'},
+  {f:'COPD diagnostic test?',b:'Spirometry'},
+]);
+renderQuiz('quiz-copd',[
+  {q:'A nurse is caring for a patient with COPD. Which oxygen saturation goal is appropriate?',type:'single',
+   opts:['A. 95–100%','B. 88–92%','C. 80–85%','D. 100% always'],correct:1,
+   rat:'COPD patients are chronic CO₂ retainers; the target is <b>88–92%</b>. Over-oxygenating can suppress their hypoxic drive to breathe.'},
+  {q:'During a severe asthma attack, the nurse notes that the patient\'s previously loud wheezing has suddenly stopped. What does this indicate?',type:'single',
+   opts:['A. The attack is resolving','B. The medication worked','C. Impending respiratory failure','D. The patient needs less oxygen'],correct:2,
+   rat:'A <b>silent chest</b> during a severe attack means almost no air is moving — a sign of <b>impending respiratory failure</b>. This is an emergency requiring immediate intervention, NOT a sign of improvement.'},
+  {q:'Which statements about asthma/COPD medications are correct? (Select all that apply)',type:'multi',
+   opts:['A. Albuterol is a rescue medication for acute symptoms','B. Inhaled corticosteroids are for long-term control','C. Patients should rinse the mouth after inhaled steroids','D. A bronchodilator should be used before an inhaled steroid','E. LABAs should be used alone as rescue therapy'],correct:[0,1,2,3],
+   rat:'Albuterol = rescue; inhaled steroids = long-term control with mouth rinsing to prevent thrush; bronchodilator goes first to open airways. <b>LABAs are NOT rescue meds and should never be used alone.</b>'},
+  {q:'Which manifestations are characteristic of COPD? (Select all that apply)',type:'multi',
+   opts:['A. Barrel chest','B. Pursed-lip breathing','C. Reversible airway obstruction','D. Chronic productive cough','E. Hypercapnia'],correct:[0,1,3,4],
+   rat:'COPD = barrel chest, pursed-lip breathing, chronic cough, hypercapnia. Obstruction in COPD is <b>irreversible</b> — reversible obstruction describes asthma.'},
+]);
+
+/* ============ TB ============ */
+document.getElementById('sec-tb').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🔬</span> Tuberculosis (TB)</h2>
+<p class="intro-line">Test & treatment specifically flagged by your professor.</p>
+
+<div class="card">
+  <h3>🦠 The Basics</h3>
+  <p>Organism = <b>Mycobacterium tuberculosis</b>. Transmission = <b>AIRBORNE droplets</b>.</p>
+  <p><b>Symptoms:</b> chronic cough, <b>night sweats</b>, <b>weight loss</b>, fatigue, low-grade fever, <b>hemoptysis</b>.</p>
+  <div class="hy">⭐ <b>Isolation = AIRBORNE.</b> Negative-pressure room + <b>N95 mask</b> for staff. Patient wears a surgical mask if transported.</div>
+</div>
+
+<div class="card">
+  <h3>🧪 Testing & Diagnosis</h3>
+  <ul class="clean">
+    <li><b>Mantoux (PPD) skin test:</b> read in <b>48–72 hours</b>. Measure <b>induration</b> (raised area), not redness.</li>
+    <li><b>IGRA blood tests:</b> QuantiFERON Gold, T-SPOT.</li>
+    <li><b>Confirmatory test = sputum culture</b> (acid-fast bacilli).</li>
+  </ul>
+  <div class="hy">⭐ A positive skin test = <b>exposure</b>, not active disease. Confirm active TB with sputum culture + chest x-ray.</div>
+</div>
+
+<div class="card">
+  <h3>💊 Treatment — RIPE Therapy</h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Watch for</th></tr>
+    <tr><td><b>R</b>ifampin</td><td>Orange/red body fluids (harmless), ↑ liver enzymes</td></tr>
+    <tr><td><b>I</b>soniazid (INH)</td><td>Hepatotoxicity, peripheral neuropathy (give B6/pyridoxine)</td></tr>
+    <tr><td><b>P</b>yrazinamide</td><td>Hepatotoxicity, ↑ uric acid (gout)</td></tr>
+    <tr><td><b>E</b>thambutol</td><td>Optic neuritis (vision changes — report!)</td></tr>
+  </table>
+  <div class="hy">⭐ Treatment lasts <b>6–12 months</b> — adherence is everything. Patient is <b>no longer infectious after 3 consecutive negative sputum cultures.</b> Watch all RIPE drugs for liver toxicity.</div>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">RIPE = the 4 TB drugs • "Rifampin turns pee oRange"</div></div>
+</div>
+
+<div id="quiz-tb"></div>
+`;
+renderFlips('sec-tb',[
+  {f:'TB isolation precaution?',b:'Airborne — negative pressure + N95'},
+  {f:'When to read a Mantoux/PPD?',b:'48–72 hours (measure induration)'},
+  {f:'Confirmatory TB test?',b:'Sputum culture (acid-fast bacilli)'},
+  {f:'RIPE drugs?',b:'Rifampin, Isoniazid, Pyrazinamide, Ethambutol'},
+  {f:'Ethambutol side effect?',b:'Optic neuritis (vision changes)'},
+  {f:'Isoniazid — give what to prevent neuropathy?',b:'Vitamin B6 (pyridoxine)'},
+  {f:'When is TB patient no longer infectious?',b:'After 3 consecutive negative sputum cultures'},
+  {f:'Rifampin harmless side effect?',b:'Orange/red body fluids'},
+]);
+renderQuiz('quiz-tb',[
+  {q:'A patient\'s Mantoux test is being read. When should the nurse assess the result, and what is measured?',type:'single',
+   opts:['A. 24 hours; measure redness','B. 48–72 hours; measure induration','C. 1 week; measure redness','D. Immediately; measure the wheal'],correct:1,
+   rat:'Read the Mantoux at <b>48–72 hours</b> and measure the <b>induration</b> (the raised, hardened area), not the redness.'},
+  {q:'A patient on RIPE therapy for TB reports their urine has turned orange. What is the nurse\'s best response?',type:'single',
+   opts:['A. Stop the medication immediately','B. This is an expected, harmless effect of rifampin','C. This indicates kidney failure','D. Reduce fluid intake'],correct:1,
+   rat:'<b>Rifampin causes harmless orange/red discoloration of body fluids</b> (urine, sweat, tears). Reassure the patient and warn it can stain contact lenses.'},
+  {q:'Which precautions are required for a patient with active pulmonary TB? (Select all that apply)',type:'multi',
+   opts:['A. Negative-pressure room','B. N95 respirator for staff','C. Standard precautions only','D. Surgical mask on patient during transport','E. Door kept open for ventilation'],correct:[0,1,3],
+   rat:'TB requires <b>airborne precautions</b>: negative-pressure room (door CLOSED), N95 for staff, and a surgical mask on the patient if transported. Standard precautions alone are insufficient.'},
+]);
+
+/* ============ BLOOD TRANSFUSION ============ */
+document.getElementById('sec-blood').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🩸</span> Blood Transfusion & IV Therapy</h2>
+<p class="intro-line">"What to do BEFORE a blood transfusion" is a named test key point. Free points if you know the steps.</p>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>✅ BEFORE you hang blood</h3>
+  <ul class="clean">
+    <li><b>Informed consent</b> signed.</li>
+    <li><b>Type & cross-match</b> completed.</li>
+    <li>A <b>working, large-bore IV</b> (18–20 gauge).</li>
+    <li>Baseline <b>vital signs</b>.</li>
+    <li><b>Two-nurse verification</b> of patient ID + blood product.</li>
+    <li>Prime the line with <b>0.9% Normal Saline ONLY</b> (never LR or dextrose).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>⏱️ DURING the transfusion</h3>
+  <ul class="clean">
+    <li><b>Stay with the patient for the first 15 minutes</b> — most reactions happen early. Run slowly at first.</li>
+    <li>Each unit must infuse within <b>4 hours</b> (infection risk after that).</li>
+    <li>Monitor for reaction: fever, chills, back/flank pain, hypotension, dyspnea, hives, dark urine.</li>
+    <li><b>If a reaction occurs:</b> STOP the blood, keep the NS line open, notify provider, stay with patient.</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Consent • Cross-match • Catheter • Check vitals • Companion (stay 15 min)"</div></div>
+</div>
+
+<div class="card">
+  <h3>💉 IV Therapy & Access</h3>
+  <ul class="clean">
+    <li><b>Aseptic technique</b> for IV insertion, central lines, and dressing changes.</li>
+    <li><b>Irritating/vesicant meds</b> (iron, potassium, chemo, TPN, vasopressors) → central line preferred; always check for <b>infiltration</b>.</li>
+    <li><b>Peripheral IV</b> = short-term. Assess for redness, swelling, infiltration, phlebitis.</li>
+    <li><b>Central lines</b> (PICC, tunneled, port) = long-term, TPN, vesicants. Complication = <b>CLABSI</b> (prevent with sterile technique + chlorhexidine).</li>
+  </ul>
+</div>
+
+<div id="quiz-blood"></div>
+`;
+renderFlips('sec-blood',[
+  {f:'Only fluid compatible with blood?',b:'0.9% Normal Saline'},
+  {f:'How long can a unit of blood hang?',b:'Up to 4 hours'},
+  {f:'Stay with patient for how long after starting blood?',b:'First 15 minutes'},
+  {f:'First action if transfusion reaction?',b:'STOP blood, keep NS line open, notify MD'},
+  {f:'Needed before blood: 3 C\'s?',b:'Consent, Cross-match, working Catheter (IV)'},
+  {f:'Irritating meds (iron/K) — check for?',b:'Infiltration'},
+]);
+renderQuiz('quiz-blood',[
+  {q:'Which actions must the nurse complete BEFORE starting a blood transfusion? (Select all that apply)',type:'multi',
+   opts:['A. Verify informed consent','B. Confirm type and cross-match','C. Ensure a patent IV with normal saline','D. Obtain baseline vital signs','E. Prime the tubing with lactated Ringer\'s'],correct:[0,1,2,3],
+   rat:'Before transfusion: <b>consent, type & cross-match, patent IV primed with NORMAL SALINE, and baseline vitals</b> (plus two-nurse verification). <b>Never use LR</b> — its calcium can cause clotting.'},
+  {q:'How long should the nurse remain with the patient after starting a blood transfusion?',type:'single',
+   opts:['A. The entire 4 hours','B. The first 15 minutes','C. The first 60 minutes','D. No need to stay'],correct:1,
+   rat:'Stay for the <b>first 15 minutes</b> and run slowly — most serious (hemolytic) reactions occur early. After that, monitor per protocol.'},
+  {q:'A patient receiving blood develops fever, chills, and low back pain 10 minutes into the transfusion. What is the nurse\'s FIRST action?',type:'single',
+   opts:['A. Slow the transfusion','B. Stop the blood and keep the saline line open','C. Give acetaminophen','D. Continue and document'],correct:1,
+   rat:'These are signs of a transfusion reaction. <b>STOP the blood immediately</b>, keep the NS line open (to maintain access and support BP), then notify the provider and stay with the patient.'},
+]);
+</script>
+
+<script>
+/* ============ GAMES ============ */
+document.getElementById('sec-games').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🎮</span> Study Games</h2>
+<p class="intro-line">Active recall = the #1 way memory sticks. Play these between reading sessions.</p>
+
+<div class="card">
+  <h3>🔗 Matching Game — Tap to Match</h3>
+  <p style="font-size:.85rem;color:var(--muted)">Tap a term on the left, then its match on the right. Green = correct!</p>
+  <div id="matchControls" class="center"><button class="btn" onclick="startMatch()">🎲 New Round</button> <span class="badge" id="matchScore">Matched: 0 / 6</span></div>
+  <div class="match-wrap" id="matchBoard"></div>
+</div>
+
+<div class="card">
+  <h3>⚡ Speed Round — Flash Recall</h3>
+  <p style="font-size:.85rem;color:var(--muted)">A prompt flashes. Say the answer OUT LOUD, then tap to reveal. Beat the clock!</p>
+  <div class="speed-card" id="speedCard" onclick="revealSpeed()">Tap "Start" to begin ⚡</div>
+  <div class="center">
+    <button class="btn" onclick="startSpeed()">▶️ Start</button>
+    <button class="btn ghost" onclick="nextSpeed()">Next ➡️</button>
+    <span class="badge" id="speedCount">Card 0</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>🎯 Mixed Rapid-Fire Quiz</h3>
+  <p style="font-size:.85rem;color:var(--muted)">10 random questions across every topic. Good warm-up before the big exam.</p>
+  <div id="quiz-mixed"></div>
+</div>
+`;
+
+/* MATCHING GAME */
+const MATCH_SETS=[
+  [['Peaked T waves','Hyperkalemia'],['U wave','Hypokalemia'],['Chvostek sign','Hypocalcemia'],['Brain swells/seizures','Hyponatremia'],['Stones & bones','Hypercalcemia'],['Thirst','Hypernatremia']],
+  [['0.9% NS','Isotonic'],['0.45% NS','Hypotonic'],['3% Saline','Hypertonic'],['Only fluid with blood','Normal Saline'],['Raisins → grapes','Hypotonic effect'],['Pulls water from cells','Hypertonic effect']],
+  [['Crackles','Fluid in alveoli'],['Wheezes','Narrowed airways'],['Stridor','Upper airway EMERGENCY'],['Rhonchi','Secretions'],['Barrel chest','COPD'],['Refractory hypoxemia','ARDS']],
+  [['Water seal continuous bubbling','Air leak'],['Tube pulled out','Tape gauze 3 sides'],['ET cuff pressure','20-25 mmHg'],['VAP prevention','HOB 30-45°'],['COPD O₂ goal','88-92%'],['Confirm TB','Sputum culture']],
+];
+let matchSel=null, matchDone=0, matchCurrent=null;
+function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);}
+function startMatch(){
+  matchCurrent=MATCH_SETS[Math.floor(Math.random()*MATCH_SETS.length)];
+  matchDone=0; matchSel=null;
+  document.getElementById('matchScore').textContent='Matched: 0 / 6';
+  const board=document.getElementById('matchBoard'); board.innerHTML='';
+  const left=document.createElement('div'); left.className='match-col';
+  const right=document.createElement('div'); right.className='match-col';
+  matchCurrent.forEach((pair,i)=>{
+    const l=document.createElement('div'); l.className='match-item'; l.textContent=pair[0]; l.dataset.id=i; l.dataset.side='L';
+    l.onclick=()=>pickMatch(l); left.appendChild(l);
+  });
+  shuffle(matchCurrent.map((p,i)=>({t:p[1],id:i}))).forEach(o=>{
+    const r=document.createElement('div'); r.className='match-item'; r.textContent=o.t; r.dataset.id=o.id; r.dataset.side='R';
+    r.onclick=()=>pickMatch(r); right.appendChild(r);
+  });
+  board.appendChild(left); board.appendChild(right);
+}
+function pickMatch(el){
+  if(el.classList.contains('done'))return;
+  if(!matchSel){ if(el.dataset.side!=='L'){return;} matchSel=el; el.classList.add('sel'); return; }
+  if(el.dataset.side!=='R'){ matchSel.classList.remove('sel'); matchSel=el.dataset.side==='L'?el:null; if(matchSel)matchSel.classList.add('sel'); return; }
+  if(el.dataset.id===matchSel.dataset.id){
+    el.classList.add('done'); matchSel.classList.add('done'); matchSel.classList.remove('sel'); matchSel=null; matchDone++;
+    document.getElementById('matchScore').textContent='Matched: '+matchDone+' / 6';
+    if(matchDone===6)document.getElementById('matchScore').textContent='🎉 All matched! Play again!';
+  } else {
+    el.classList.add('shake'); matchSel.classList.add('shake');
+    const s=matchSel; setTimeout(()=>{el.classList.remove('shake');s.classList.remove('shake','sel');},420); matchSel=null;
+  }
+}
+startMatch();
+
+/* SPEED ROUND */
+const SPEED=[
+  ['Normal K⁺?','3.5–5.0 mEq/L'],['Normal Na⁺?','135–145 mEq/L'],['Normal Ca²⁺?','8.6–10.2 mg/dL'],
+  ['Normal pH?','7.35–7.45'],['Normal PaCO₂?','35–45 mmHg'],['Normal HCO₃?','22–26 mEq/L'],
+  ['ROME?','Respiratory Opposite, Metabolic Equal'],['Best fluid status indicator?','Daily weight'],
+  ['Only fluid with blood?','0.9% Normal Saline'],['COPD O₂ goal?','88–92%'],
+  ['ET cuff pressure?','20–25 mmHg'],['Water seal continuous bubbling?','Air leak!'],
+  ['First drug for hyperkalemia?','Calcium gluconate'],['Read PPD in?','48–72 hours'],
+  ['Confirmatory TB test?','Sputum culture'],['Hallmark of ARDS?','Hypoxemia refractory to O₂'],
+  ['Earliest sign of hypoxia?','Restlessness'],['Wheezing vanishes in asthma attack?','Impending respiratory failure'],
+  ['Aspiration favors which lung?','Right'],['Most common CAP organism?','Strep pneumoniae'],
+  ['RIPE drugs?','Rifampin, Isoniazid, Pyrazinamide, Ethambutol'],['Vomiting causes which acid-base?','Metabolic alkalosis'],
+  ['DKA causes which acid-base?','Metabolic acidosis'],['Chvostek/Trousseau = ?','Hypocalcemia'],
+  ['Stay with blood transfusion for?','First 15 minutes'],['Blood hangs max?','4 hours'],
+];
+let speedIdx=-1, speedShown=false, speedList=[];
+function startSpeed(){ speedList=shuffle(SPEED.slice()); speedIdx=-1; nextSpeed(); }
+function nextSpeed(){
+  if(speedList.length===0)speedList=shuffle(SPEED.slice());
+  speedIdx++; if(speedIdx>=speedList.length)speedIdx=0;
+  speedShown=false;
+  document.getElementById('speedCard').innerHTML=speedList[speedIdx][0]+'<br><span style="font-size:.8rem;opacity:.7">(tap to reveal)</span>';
+  document.getElementById('speedCount').textContent='Card '+(speedIdx+1);
+}
+function revealSpeed(){
+  if(speedIdx<0)return;
+  if(!speedShown){ document.getElementById('speedCard').innerHTML='✅ '+speedList[speedIdx][1]; speedShown=true; }
+  else nextSpeed();
+}
+
+renderQuiz('quiz-mixed',[
+  {q:'A patient with vomiting for 3 days has ABG pH 7.49, PaCO₂ 41, HCO₃ 30. Interpretation?',type:'single',opts:['A. Respiratory acidosis','B. Metabolic alkalosis','C. Metabolic acidosis','D. Respiratory alkalosis'],correct:1,rat:'pH high + HCO₃ high (same direction) = metabolic alkalosis. Vomiting loses stomach acid.'},
+  {q:'Which is the priority for a patient with potassium of 6.9?',type:'single',opts:['A. Encourage bananas','B. Prepare calcium gluconate','C. Give a potassium supplement','D. Restrict fluids'],correct:1,rat:'Calcium gluconate protects the heart in hyperkalemia. Never add more potassium.'},
+  {q:'COPD patient — which O₂ sat is the goal?',type:'single',opts:['A. 100%','B. 95-99%','C. 88-92%','D. 80%'],correct:2,rat:'88-92% to avoid suppressing the hypoxic respiratory drive.'},
+  {q:'Continuous bubbling in the water seal chamber means?',type:'single',opts:['A. Normal','B. Lung re-expanded','C. Air leak','D. Suction too high'],correct:2,rat:'Continuous water-seal bubbling = air leak; notify provider.'},
+  {q:'Which is the only IV fluid compatible with blood?',type:'single',opts:['A. LR','B. D5W','C. 0.9% NS','D. 0.45% NS'],correct:2,rat:'Only 0.9% Normal Saline — LR has calcium (clots), dextrose hemolyzes RBCs.'},
+  {q:'Aspiration pneumonia most commonly affects which lung?',type:'single',opts:['A. Left','B. Right','C. Both equally','D. Neither'],correct:1,rat:'The right mainstem bronchus is straighter and wider.'},
+  {q:'A positive PPD (Mantoux) is read by measuring?',type:'single',opts:['A. Redness','B. Induration','C. Warmth','D. The wheal size'],correct:1,rat:'Measure induration (raised hardened area) at 48-72 hours.'},
+  {q:'Earliest sign of hypoxia?',type:'single',opts:['A. Cyanosis','B. Restlessness','C. Bradycardia','D. Coma'],correct:1,rat:'Restlessness/anxiety is earliest; cyanosis is a LATE sign.'},
+  {q:'Best indicator of a patient\'s daily fluid status?',type:'single',opts:['A. BP','B. Skin turgor','C. Daily weight','D. Heart rate'],correct:2,rat:'Daily weight — 1 kg ≈ 1 L of fluid.'},
+  {q:'Wheezing suddenly disappears during a severe asthma attack. This means?',type:'single',opts:['A. Improvement','B. Impending respiratory failure','C. Medication worked','D. Needs less O₂'],correct:1,rat:'A silent chest = no air movement = impending respiratory failure. Emergency.'},
+]);
+</script>
+
+
+<script>
+/* ============ RAPID DRILL ============ */
+const DRILL_POOL=[
+  {q:'Most influential ion in the EXTRAcellular fluid?',o:['Potassium','Sodium','Calcium','Magnesium'],c:1,r:'Sodium dominates the ECF; potassium dominates the ICF.'},
+  {q:'Most influential ion in the INTRAcellular fluid?',o:['Sodium','Chloride','Potassium','Bicarb'],c:2,r:'Potassium is the principal intracellular cation.'},
+  {q:'BEST indicator of fluid balance?',o:['Blood pressure','Daily weight','Skin turgor','Thirst'],c:1,r:'Daily weight — 1 kg ≈ 1 L of fluid.'},
+  {q:'Normal serum potassium range?',o:['1.5–2.5','3.5–5.0','8.5–10.5','135–145'],c:1,r:'K+ normal is 3.5–5.0 mEq/L.'},
+  {q:'Normal serum sodium range?',o:['135–145','3.5–5.0','9–11','22–26'],c:0,r:'Na+ normal is 135–145 mEq/L.'},
+  {q:'First drug to PROTECT the heart in hyperkalemia?',o:['Insulin','Calcium gluconate','Sodium bicarb','Furosemide'],c:1,r:'Calcium gluconate stabilizes the cardiac membrane (does not lower K).'},
+  {q:'Chvostek and Trousseau signs indicate?',o:['Hypercalcemia','Hypocalcemia','Hyperkalemia','Hypernatremia'],c:1,r:'Both are signs of hypocalcemia (increased neuromuscular excitability).'},
+  {q:'Tall peaked T waves on ECG suggest?',o:['Hypokalemia','Hyperkalemia','Hypocalcemia','Hypernatremia'],c:1,r:'Peaked T waves are classic for hyperkalemia.'},
+  {q:'Isotonic IV fluid?',o:['0.45% NS','3% Saline','0.9% Normal Saline','D10W'],c:2,r:'0.9% NS is isotonic; LR and (in-bag) D5W are too.'},
+  {q:'Hypertonic IV fluid?',o:['0.45% NS','3% Saline','0.9% NS','D5W in bag'],c:1,r:'3% saline is hypertonic — pulls fluid out of cells.'},
+  {q:'Hypotonic fluid moves water…',o:['Out of cells','Into cells','Stays in vessels','Into bone'],c:1,r:'Hypotonic fluids shift water into cells, causing them to swell.'},
+  {q:'ROME stands for?',o:['Respiratory Opposite, Metabolic Equal','Renal Output Measures Excretion','Rapid O₂ Means Emergency','Reduce Output, More Electrolytes'],c:0,r:'Respiratory Opposite, Metabolic Equal — the ABG shortcut.'},
+  {q:'Lungs control which value?',o:['HCO₃','PaCO₂','Sodium','Potassium'],c:1,r:'Lungs regulate CO₂ (the acid side).'},
+  {q:'Kidneys control which value?',o:['PaCO₂','HCO₃ / bicarb','Sodium','PaO₂'],c:1,r:'Kidneys regulate bicarb (HCO₃).'},
+  {q:'pH 7.28, CO₂ 55, HCO₃ 24 =',o:['Respiratory acidosis','Metabolic acidosis','Respiratory alkalosis','Metabolic alkalosis'],c:0,r:'pH down, CO₂ up (opposite = respiratory), bicarb normal = respiratory acidosis.'},
+  {q:'pH 7.50, CO₂ 40, HCO₃ 30 =',o:['Respiratory acidosis','Metabolic alkalosis','Respiratory alkalosis','Metabolic acidosis'],c:1,r:'pH up, bicarb up (same = metabolic), CO₂ normal = metabolic alkalosis.'},
+  {q:'Vomiting/NG suction causes?',o:['Metabolic acidosis','Metabolic alkalosis','Respiratory acidosis','Respiratory alkalosis'],c:1,r:'Losing stomach acid raises pH → metabolic alkalosis.'},
+  {q:'DKA causes which acid-base imbalance?',o:['Metabolic acidosis','Metabolic alkalosis','Respiratory acidosis','Respiratory alkalosis'],c:0,r:'Ketoacids drop pH → metabolic acidosis (Kussmaul breathing compensates).'},
+  {q:'Anxiety hyperventilation causes?',o:['Respiratory acidosis','Respiratory alkalosis','Metabolic acidosis','Metabolic alkalosis'],c:1,r:'Blowing off CO₂ raises pH → respiratory alkalosis.'},
+  {q:'Earliest sign of hypoxia?',o:['Cyanosis','Restlessness/anxiety','Clubbing','Bradycardia'],c:1,r:'Restlessness/anxiety is earliest; cyanosis is late.'},
+  {q:'Barrel chest is associated with?',o:['Asthma','COPD/emphysema','Pneumonia','Pleural effusion'],c:1,r:'Chronic air trapping in COPD enlarges the AP diameter.'},
+  {q:'High-pitched musical sound on expiration =',o:['Crackles','Wheezes','Friction rub','Stridor'],c:1,r:'Wheezes come from narrowed airways.'},
+  {q:'ARDS hallmark?',o:['Hypoxemia that corrects with O₂','Refractory hypoxemia','High PaO₂','Productive cough'],c:1,r:'ARDS = refractory hypoxemia that does not improve with oxygen.'},
+  {q:'Acute respiratory failure: PaO₂ and PaCO₂ thresholds?',o:['PaO₂<60, PaCO₂>50','PaO₂>90, PaCO₂<30','PaO₂<80, PaCO₂>40','PaO₂<70, PaCO₂>45'],c:0,r:'ARF: PaO₂ under 60 and PaCO₂ over 50 with pH under 7.35.'},
+  {q:'Pneumonia 48+ hours after admission is called?',o:['Community-acquired','Hospital-acquired','Aspiration','Atypical'],c:1,r:'48-hour rule = hospital-acquired (nosocomial).'},
+  {q:'Aspiration pneumonia favors which lung?',o:['Left','Right','Both apices','Neither'],c:1,r:'Right main bronchus is wider/more vertical → aspiration goes right.'},
+  {q:'Rust-colored sputum suggests?',o:['Pseudomonas','Strep pneumoniae','TB','Viral'],c:1,r:'Rust-colored sputum is classic for pneumococcal pneumonia.'},
+  {q:'ET/trach cuff pressure should be?',o:['5–10 mmHg','20–25 mmHg','30–40 mmHg','50 mmHg'],c:1,r:'20–25 mmHg seals without causing tracheal necrosis.'},
+  {q:'Continuous bubbling in the WATER SEAL chamber =',o:['Normal','Air leak','Suction too high','Lung re-expanded'],c:1,r:'Continuous water-seal bubbling signals an air leak.'},
+  {q:'If a chest tube is dislodged, cover the site with petroleum gauze taped on…',o:['All 4 sides','3 sides','1 side','Do not cover'],c:1,r:'Tape 3 sides so air escapes but cannot re-enter (prevents tension pneumothorax).'},
+  {q:'Gentle tidaling in the water-seal chamber means?',o:['Air leak','Normal','Clot','Tension pneumo'],c:1,r:'Tidaling with respiration is normal.'},
+  {q:'Target SpO₂ for most COPD patients?',o:['100%','95–100%','88–92%','<85%'],c:2,r:'88–92% preserves the hypoxic drive.'},
+  {q:'Silent chest in status asthmaticus means?',o:['Improving','Impending respiratory failure','Meds worked','Less O₂ needed'],c:1,r:'No air movement = emergency, impending failure.'},
+  {q:'Correct inhaler order?',o:['Steroid then bronchodilator','Bronchodilator then steroid','Only steroid','Order doesn\'t matter'],c:1,r:'Bronchodilator first opens airways, then the steroid penetrates deeper.'},
+  {q:'After an inhaled corticosteroid the patient should?',o:['Use for acute attacks','Rinse the mouth','Hold breath 30 sec','Skip the spacer'],c:1,r:'Rinse the mouth to prevent oral thrush (candidiasis).'},
+  {q:'Confirmatory test for active TB?',o:['Mantoux','Chest x-ray','Sputum culture','CBC'],c:2,r:'Sputum culture for acid-fast bacilli confirms active TB.'},
+  {q:'Mantoux test is read by measuring?',o:['Redness','Induration','Warmth','Wheal'],c:1,r:'Measure induration at 48–72 hours, not redness.'},
+  {q:'TB precautions require?',o:['Surgical mask','N95 + negative-pressure room','Gown only','Positive-pressure room'],c:1,r:'TB is airborne — N95 and negative-pressure isolation.'},
+  {q:'Rifampin commonly causes?',o:['Hearing loss','Orange body fluids','Blue skin','Tooth loss'],c:1,r:'Rifampin turns urine/sweat/tears orange (harmless).'},
+  {q:'RIPE drugs for TB are?',o:['Rifampin, Isoniazid, Pyrazinamide, Ethambutol','Rifampin, Insulin, Penicillin, Epinephrine','Ranitidine, Iron, Potassium, Estrogen','Rifampin, Ibuprofen, Prednisone, Enoxaparin'],c:0,r:'Rifampin, Isoniazid, Pyrazinamide, Ethambutol.'},
+  {q:'Only IV fluid compatible with blood?',o:['D5W','0.45% NS','0.9% Normal Saline','LR'],c:2,r:'Only 0.9% NS; dextrose hemolyzes RBCs and LR\'s calcium clots.'},
+  {q:'Maximum time to infuse one unit of blood?',o:['2 hrs','4 hrs','6 hrs','8 hrs'],c:1,r:'Complete within 4 hours to prevent bacterial growth.'},
+  {q:'Most severe transfusion reactions occur during the…',o:['First 15 minutes','Last 15 minutes','Second hour','Next day'],c:0,r:'Stay and monitor closely the first 15 minutes.'},
+  {q:'A transfusion reaction is suspected. FIRST action?',o:['Slow the rate','Stop blood, keep NS open','Give Tylenol','Document'],c:1,r:'Stop the blood immediately and maintain IV access with NS.'},
+  {q:'Insensible fluid losses include?',o:['Urine and stool','Sweat and breathing','Vomit and drainage','Blood loss'],c:1,r:'Insensible = unmeasurable: perspiration and respiration.'},
+  {q:'A BUN:creatinine ratio over 20:1 with hemoconcentration suggests?',o:['Fluid overload','Fluid volume deficit','Hyperkalemia','Alkalosis'],c:1,r:'High ratio + hemoconcentration = fluid volume deficit.'},
+  {q:'Kussmaul (deep rapid) respirations are the body compensating for?',o:['Metabolic acidosis','Metabolic alkalosis','Respiratory acidosis','Hypokalemia'],c:0,r:'Lungs blow off CO₂ to compensate for metabolic acidosis (e.g., DKA).'},
+  {q:'Albumin keeps fluid in the vessels because it is a…',o:['Crystalloid','Colloid/protein','Electrolyte','Diuretic'],c:1,r:'Albumin is a colloid (protein) that holds fluid intravascularly via oncotic pressure.'},
+  {q:'A salt substitute is dangerous in which condition?',o:['Hyponatremia','Hyperkalemia','Hypocalcemia','Hypomagnesemia'],c:1,r:'Salt substitutes contain potassium — avoid in hyperkalemia.'},
+  {q:'Two-nurse verification is required before giving?',o:['Oral antibiotics','Blood products','Normal saline','Incentive spirometry'],c:1,r:'Blood products require two-nurse identity/type verification.'}
+];
+
+let drillList=[], drillIdx=0, drillScore=0, drillStreak=0, drillBest=0, drillAnswered=false;
+const DRILL_ROUND=25;
+
+function startDrill(){
+  drillList=shuffle(DRILL_POOL.slice()).slice(0,DRILL_ROUND);
+  drillIdx=0; drillScore=0; drillStreak=0; drillAnswered=false;
+  renderDrillQ();
+}
+function renderDrillQ(){
+  const host=document.getElementById('drillBody');
+  if(drillIdx>=drillList.length){ return drillFinish(); }
+  const q=drillList[drillIdx];
+  drillAnswered=false;
+  let opts=q.o.map((o,i)=>`<button class="opt" onclick="answerDrill(${i})">${o}</button>`).join('');
+  host.innerHTML=`
+    <div class="drill-top">
+      <span class="drill-count">Question ${drillIdx+1} / ${drillList.length}</span>
+      <span class="drill-score">✅ ${drillScore} &nbsp; 🔥 Streak ${drillStreak}</span>
+    </div>
+    <div class="drill-bar"><div class="drill-bar-fill" style="width:${(drillIdx/drillList.length)*100}%"></div></div>
+    <div class="quiz-q"><div class="q-text">${q.q}</div><div class="opts" id="drillOpts">${opts}</div>
+    <div class="rat" id="drillRat"></div></div>
+    <div class="center"><button class="btn ghost" id="drillNextBtn" style="display:none" onclick="nextDrill()">Next ➡️</button></div>
+  `;
+}
+function answerDrill(i){
+  if(drillAnswered) return;
+  drillAnswered=true;
+  const q=drillList[drillIdx];
+  const opts=document.querySelectorAll('#drillOpts .opt');
+  opts.forEach((b,idx)=>{
+    b.classList.add('disabled');
+    if(idx===q.c) b.classList.add('correct');
+    if(idx===i && i!==q.c) b.classList.add('wrong');
+  });
+  const rat=document.getElementById('drillRat');
+  if(i===q.c){ drillScore++; drillStreak++; if(drillStreak>drillBest)drillBest=drillStreak;
+    rat.innerHTML='✅ <b>Correct!</b> '+q.r; }
+  else { drillStreak=0; rat.innerHTML='❌ <b>Not quite.</b> '+q.r; }
+  rat.classList.add('show');
+  bumpProgress('drill-'+drillIdx);
+  document.getElementById('drillNextBtn').style.display='inline-block';
+}
+function nextDrill(){ drillIdx++; renderDrillQ(); }
+function drillFinish(){
+  const host=document.getElementById('drillBody');
+  const pct=Math.round((drillScore/drillList.length)*100);
+  let msg = pct>=90?'🌟 Outstanding — you know this cold!':pct>=75?'💪 Solid pass — test-ready zone!':pct>=60?'📈 Getting there — run it again to lock it in.':'🌱 Keep drilling — every round builds the pathway.';
+  host.innerHTML=`
+    <div class="card center" style="border-color:var(--teal)">
+      <h2 style="margin-top:0">Round Complete!</h2>
+      <div class="drill-final">${drillScore} / ${drillList.length} &nbsp;(${pct}%)</div>
+      <p>Best streak this round: 🔥 ${drillBest}</p>
+      <p>${msg}</p>
+      <button class="btn" onclick="startDrill()" style="background:linear-gradient(90deg,var(--teal),var(--green))">🔀 New Shuffled Round</button>
+    </div>`;
+}
+
+document.getElementById('sec-drill').innerHTML=`
+  <h2 class="sec-title"><span class="sec-emoji">⚡</span> Rapid Drill</h2>
+  <p class="intro-line">A fresh, reshuffled ${DRILL_ROUND}-question round every time — instant feedback, live score, and a streak counter. Great for quick reps between study blocks or a warm-up before the big exam.</p>
+  <div class="tipbar">⚡ <b>How to use:</b> Answer fast, read the rationale on every one (right or wrong), and chase your streak. Hit "New Shuffled Round" as many times as you want — the questions reorder so it never feels stale.</div>
+  <div id="drillBody"></div>
+`;
+startDrill();
+</script>
+
+<script>
+/* ============ 70-QUESTION PRACTICE EXAM ============ */
+const EXAM=[
+// FLUIDS & ELECTROLYTES (1-18)
+{q:'A patient is admitted with severe dehydration. Which IV fluid does the nurse anticipate administering first?',o:['0.45% NS','D5W','0.9% Normal Saline','D10W'],c:2,t:'single',r:'Isotonic 0.9% NS expands intravascular volume first-line for hypovolemia.'},
+{q:'Which ion is the most abundant in the intracellular fluid?',o:['Sodium','Potassium','Calcium','Chloride'],c:1,t:'single',r:'Potassium is the principal ICF cation; sodium dominates the ECF.'},
+{q:'A nurse identifies which finding as the BEST indicator of fluid balance?',o:['Blood pressure','Daily weight','Skin turgor','Urine color'],c:1,t:'single',r:'Daily weight is most reliable; 1 kg ≈ 1 L of fluid.'},
+{q:'A patient with a BUN:creatinine ratio of 25:1, increased hematocrit, and dry mucous membranes most likely has:',o:['Fluid volume excess','Fluid volume deficit','Hyperkalemia','Metabolic alkalosis'],c:1,t:'single',r:'A ratio >20:1 with hemoconcentration indicates fluid volume deficit.'},
+{q:'Which signs indicate fluid volume EXCESS? (Select all that apply)',o:['Crackles','JVD','Poor skin turgor','Bounding pulse','Weight gain'],c:[0,1,3,4],t:'multi',r:'Crackles, JVD, bounding pulse, and weight gain are "WET" signs. Poor turgor = deficit.'},
+{q:'Albumin, a colloid produced by the liver, primarily functions to:',o:['Move sodium into cells','Pull water into the intravascular space','Excrete potassium','Buffer acids'],c:1,t:'single',r:'Albumin exerts oncotic pressure pulling water into vessels; low albumin → edema.'},
+{q:'A potassium level of 6.8 mEq/L with peaked T waves requires which FIRST intervention?',o:['Furosemide','Calcium gluconate','Potassium chloride','Encourage bananas'],c:1,t:'single',r:'Calcium gluconate stabilizes the cardiac membrane immediately.'},
+{q:'Which interventions are correct for hyperkalemia? (Select all that apply)',o:['Insulin with dextrose','Calcium gluconate','Sodium bicarbonate','Salt substitutes','Dialysis if severe'],c:[0,1,2,4],t:'multi',r:'Insulin+dextrose drives K into cells, calcium protects the heart, bicarb shifts K, dialysis removes it. Salt substitutes CONTAIN potassium — avoid.'},
+{q:'A patient with a sodium of 121 mEq/L is at greatest risk for:',o:['Constipation','Seizures','Hypertension','Kidney stones'],c:1,t:'single',r:'Severe hyponatremia swells the brain → seizures. Institute seizure precautions.'},
+{q:'A nurse notes a positive Trousseau sign. This indicates:',o:['Hypercalcemia','Hypocalcemia','Hyperkalemia','Hypernatremia'],c:1,t:'single',r:'Carpal spasm with BP cuff (Trousseau) signals hypocalcemia/tetany.'},
+{q:'Which foods should the nurse recommend to a patient with hypokalemia? (Select all that apply)',o:['Bananas','Potatoes','White rice','Oranges','Avocados'],c:[0,1,3,4],t:'multi',r:'Bananas, potatoes, oranges, and avocados are potassium-rich.'},
+{q:'A magnesium level of 1.0 mEq/L would most likely produce:',o:['Bradycardia','Hyporeflexia','Tremors and seizures','Respiratory depression'],c:2,t:'single',r:'LOW magnesium causes HYPER-excitability: tremors, hyperreflexia, seizures.'},
+{q:'Which IV solution would the nurse use cautiously in a patient with heart failure due to fluid overload risk?',o:['0.45% NS','3% Saline','D5W','0.225% NS'],c:1,t:'single',r:'Hypertonic 3% saline pulls fluid into vessels and can overload the heart.'},
+{q:'A hypotonic solution such as 0.45% NS causes water to move:',o:['Out of cells','Into cells','Into the vasculature only','Out of the body'],c:1,t:'single',r:'Hypotonic fluids shift water INTO cells (raisins → grapes). Watch for cerebral edema.'},
+{q:'Which assessment finding indicates hypernatremia?',o:['Seizures from brain swelling','Intense thirst and dry mucous membranes','Peaked T waves','Carpopedal spasm'],c:1,t:'single',r:'Hypernatremia draws water out of cells → thirst, dry membranes, agitation.'},
+{q:'Why must potassium NEVER be administered by IV push?',o:['It causes hypoglycemia','It can cause fatal cardiac dysrhythmias','It is too thick','It stains the skin'],c:1,t:'single',r:'Rapid IV potassium can cause cardiac arrest; always dilute and infuse slowly.'},
+{q:'Which hormone is released in response to low blood pressure and causes sodium/water retention?',o:['ANP','Aldosterone','BNP','Calcitonin'],c:1,t:'single',r:'Aldosterone ("Save Salt") retains Na and water and excretes K.'},
+{q:'A high BNP level most likely indicates:',o:['Dehydration','Fluid overload / heart failure','Hypokalemia','Respiratory alkalosis'],c:1,t:'single',r:'BNP rises when the heart is stretched by excess volume (CHF).'},
+// ABGs (19-28)
+{q:'ABG: pH 7.30, PaCO₂ 55, HCO₃ 24. The interpretation is:',o:['Metabolic acidosis','Uncompensated respiratory acidosis','Respiratory alkalosis','Metabolic alkalosis'],c:1,t:'single',r:'Low pH, high CO₂ (opposite), normal HCO₃ = uncompensated respiratory acidosis.'},
+{q:'ABG: pH 7.50, PaCO₂ 30, HCO₃ 24. This represents:',o:['Respiratory acidosis','Respiratory alkalosis','Metabolic acidosis','Metabolic alkalosis'],c:1,t:'single',r:'High pH, low CO₂ (opposite) = respiratory alkalosis (hyperventilation/anxiety).'},
+{q:'ABG: pH 7.29, PaCO₂ 38, HCO₃ 16. This indicates:',o:['Metabolic acidosis','Respiratory acidosis','Metabolic alkalosis','Respiratory alkalosis'],c:0,t:'single',r:'Low pH matches low HCO₃ (same direction) = metabolic acidosis (DKA, diarrhea).'},
+{q:'ABG: pH 7.37, PaCO₂ 55, HCO₃ 31. This represents:',o:['Uncompensated respiratory acidosis','Fully compensated respiratory acidosis','Metabolic alkalosis','Normal'],c:1,t:'single',r:'Normal pH on the acidic side with both CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis.'},
+{q:'Which conditions cause metabolic acidosis? (Select all that apply)',o:['Diabetic ketoacidosis','Diarrhea','Vomiting','Renal failure','NG suction'],c:[0,1,3],t:'multi',r:'DKA, diarrhea, and renal failure cause metabolic acidosis. Vomiting and NG suction cause metabolic ALKalosis.'},
+{q:'The ROME mnemonic stands for:',o:['Renal Opposite, Metabolic Equal','Respiratory Opposite, Metabolic Equal','Respiratory Only, Metabolic Even','Reverse Oxygen, Match Electrolytes'],c:1,t:'single',r:'Respiratory Opposite (pH & CO₂ opposite), Metabolic Equal (pH & HCO₃ same direction).'},
+{q:'Kussmaul respirations are a compensatory response to:',o:['Respiratory acidosis','Metabolic acidosis','Metabolic alkalosis','Respiratory alkalosis'],c:1,t:'single',r:'Deep rapid Kussmaul breathing blows off CO₂ to compensate for metabolic acidosis.'},
+{q:'In the body, PaCO₂ is regulated by the ____ and HCO₃ is regulated by the ____.',o:['kidneys / lungs','lungs / kidneys','heart / liver','brain / spleen'],c:1,t:'single',r:'Lungs control CO₂ (acid); kidneys control bicarbonate.'},
+{q:'A patient hyperventilating from anxiety would develop which acid-base imbalance?',o:['Respiratory acidosis','Respiratory alkalosis','Metabolic acidosis','Metabolic alkalosis'],c:1,t:'single',r:'Blowing off CO₂ raises pH → respiratory alkalosis.'},
+{q:'Which is the criterion for acute respiratory failure?',o:['PaO₂ <60 and/or PaCO₂ >50 with pH <7.35','PaO₂ >100','PaCO₂ <35','pH 7.40'],c:0,t:'single',r:'PaO₂ <60 and/or PaCO₂ >50 with acidosis defines acute respiratory failure.'},
+{q:'A normal pH but abnormal CO₂ and HCO₃ indicates:',o:['Uncompensated','Partially compensated','Fully compensated','No imbalance'],c:2,t:'single',r:'Normal pH with both systems abnormal = fully compensated.'},
+// RESP ASSESSMENT & ACUTE (29-44)
+{q:'Crackles heard on auscultation most often indicate:',o:['Narrowed airways','Fluid in the alveoli','Upper airway obstruction','Pleural friction'],c:1,t:'single',r:'Crackles = fluid in alveoli (CHF, pneumonia).'},
+{q:'Which adventitious sound is a medical emergency?',o:['Wheezes','Rhonchi','Stridor','Fine crackles'],c:2,t:'single',r:'Stridor = upper airway obstruction, an emergency.'},
+{q:'Clubbing of the fingers is a sign of:',o:['Acute infection','Chronic hypoxia','Dehydration','Hyperkalemia'],c:1,t:'single',r:'Clubbing reflects chronic hypoxia (lung/cardiac disease).'},
+{q:'A barrel chest is most associated with:',o:['Asthma','Pneumonia','COPD/emphysema','Pleural effusion'],c:2,t:'single',r:'Increased AP diameter (barrel chest) is classic for COPD/emphysema.'},
+{q:'The most common type of atelectasis is:',o:['Nonobstructive','Obstructive','Chronic','Compression'],c:1,t:'single',r:'Obstructive atelectasis (blockage → gas reabsorption → collapse) is most common.'},
+{q:'Which interventions PREVENT atelectasis in a post-op patient? (Select all that apply)',o:['Incentive spirometry','Turning every 2 hours','Bed rest in supine position','Early ambulation','Deep breathing and coughing'],c:[0,1,3,4],t:'multi',r:'Lung expansion + mobility prevent atelectasis. Prolonged supine bed rest worsens it.'},
+{q:'The hallmark of ARDS is:',o:['Wheezing','Hypoxemia refractory to oxygen','Productive cough','Bradycardia'],c:1,t:'single',r:'Refractory hypoxemia (O₂ doesn\'t help) + bilateral infiltrates = ARDS.'},
+{q:'Which ventilator strategy is used in ARDS?',o:['Low FiO₂ only','PEEP','No humidification','Routine extubation'],c:1,t:'single',r:'PEEP keeps alveoli open to improve oxygenation in ARDS.'},
+{q:'The earliest sign of hypoxia is:',o:['Cyanosis','Restlessness','Coma','Bradycardia'],c:1,t:'single',r:'Restlessness/anxiety appears first; cyanosis is late.'},
+{q:'A patient with acute tracheobronchitis should AVOID which medication?',o:['Antibiotics','Antihistamines','Analgesics','Antipyretics'],c:1,t:'single',r:'Antihistamines dry secretions, making them harder to clear.'},
+{q:'Which statement about ventilation and perfusion is correct?',o:['They are unrelated','A V/Q mismatch impairs gas exchange','Perfusion means air movement','Ventilation is blood flow'],c:1,t:'single',r:'Ventilation (air) and perfusion (blood) must match; a mismatch impairs gas exchange.'},
+{q:'Cyanosis is best described as:',o:['An early sign of hypoxia','A late sign of hypoxia','A sign of fluid overload','Normal in older adults'],c:1,t:'single',r:'Cyanosis is a LATE indicator of hypoxia.'},
+{q:'Which symptoms suggest acute respiratory failure is progressing to a LATE/critical stage? (Select all that apply)',o:['Confusion','Central cyanosis','Restlessness only','Diaphoresis','Lethargy'],c:[0,1,3,4],t:'multi',r:'Confusion, cyanosis, diaphoresis, and lethargy are late/progressive signs. Isolated restlessness is early.'},
+{q:'A patient on mechanical ventilation suddenly desaturates. The nurse should first:',o:['Document and wait','Assess the patient and airway/tubing','Increase tube feeding','Lower the HOB'],c:1,t:'single',r:'Always assess the patient and check airway/equipment first (DOPE: Displacement, Obstruction, Pneumothorax, Equipment).'},
+{q:'Incentive spirometry technique should instruct the patient to:',o:['Exhale forcefully into the device','Inhale slowly and hold for 3 seconds','Breathe rapidly and shallowly','Use it once daily'],c:1,t:'single',r:'Slow deep inhalation with a 3-second hold maximizes alveolar expansion.'},
+{q:'Tidal volume is best defined as:',o:['Maximum air exhaled','Air remaining after exhalation','Air moved in/out with each normal breath','Total lung capacity'],c:2,t:'single',r:'Tidal volume = the air moved with each normal breath.'},
+{q:'A patient with restlessness, tachycardia, and air hunger but pink skin is showing ____ signs of respiratory compromise.',o:['late','early','terminal','no'],c:1,t:'single',r:'These are early/compensatory signs — intervene now, before cyanosis appears.'},
+// PNEUMONIA & AIRWAY (45-58)
+{q:'The most common bacterial cause of community-acquired pneumonia is:',o:['Pseudomonas','Streptococcus pneumoniae','MRSA','Klebsiella'],c:1,t:'single',r:'S. pneumoniae is the leading CAP organism.'},
+{q:'Hospital-acquired pneumonia (HAP) is defined as developing:',o:['Within 24 hours of admission','48 hours or more after admission','Before admission','Only in the ICU'],c:1,t:'single',r:'HAP develops ≥48 hours after admission and was not incubating at admit.'},
+{q:'Which assessment findings are expected in pneumonia? (Select all that apply)',o:['Purulent productive cough','Pleuritic chest pain','Crackles','Hyperresonance to percussion','Dullness to percussion'],c:[0,1,2,4],t:'multi',r:'Consolidation produces crackles and DULLNESS (not hyperresonance), plus purulent cough and pleuritic pain.'},
+{q:'Aspiration pneumonia most commonly affects the:',o:['Left upper lobe','Right lung','Left lower lobe','Pleural space'],c:1,t:'single',r:'The right mainstem bronchus is straighter and wider → aspiration favors the right.'},
+{q:'Which interventions are part of the VAP bundle? (Select all that apply)',o:['HOB elevated 30-45°','Daily oral care with chlorhexidine','Sedation vacations','Keeping patient supine and flat','DVT prophylaxis'],c:[0,1,2,4],t:'multi',r:'The VAP bundle includes HOB elevation, oral chlorhexidine, sedation vacations, DVT and stress ulcer prophylaxis. Flat positioning increases aspiration.'},
+{q:'An older adult with pneumonia may present atypically with:',o:['High spiking fevers only','Confusion and weakness','Severe chest pain only','No symptoms ever'],c:1,t:'single',r:'Elderly patients often show confusion, weakness, and anorexia rather than classic fever.'},
+{q:'Rusty or blood-tinged sputum is most associated with:',o:['Viral bronchitis','Pneumococcal pneumonia','Pulmonary edema','Lung abscess'],c:1,t:'single',r:'Rusty sputum classically suggests pneumococcal pneumonia.'},
+{q:'Foul-smelling sputum suggests:',o:['Asthma','Lung abscess or anaerobic infection','Pulmonary edema','Viral cold'],c:1,t:'single',r:'Foul-smelling sputum points to lung abscess/anaerobic or bronchiectasis.'},
+{q:'The recommended fluid intake for a patient with pneumonia (no contraindication) is:',o:['Restrict to 1 L/day','2-3 L/day','500 mL/day','NPO'],c:1,t:'single',r:'2-3 L/day thins and mobilizes secretions.'},
+{q:'Safe endotracheal tube cuff pressure is:',o:['10-15 mmHg','20-25 mmHg','30-35 mmHg','40-45 mmHg'],c:1,t:'single',r:'20-25 mmHg; too high causes necrosis, too low allows aspiration.'},
+{q:'Which items must be kept at the bedside of a patient with a tracheostomy? (Select all that apply)',o:['Obturator','Same-size spare trach','Smaller-size spare trach','Suction equipment','Oral airway only'],c:[0,1,2,3],t:'multi',r:'Obturator, both spare trachs, and suction equipment must be at the bedside.'},
+{q:'A late complication of tracheostomy is:',o:['Bleeding','Tracheal stenosis','Pneumothorax','Tube dislodgement'],c:1,t:'single',r:'Tracheal stenosis is a late complication; bleeding and pneumothorax are early.'},
+{q:'The treatment for a pleural effusion to remove fluid is:',o:['Bronchoscopy','Thoracentesis','Intubation','Spirometry'],c:1,t:'single',r:'Thoracentesis drains pleural fluid; sit the patient upright and watch for pneumothorax after.'},
+{q:'Signs of septic shock (a pneumonia complication) include: (Select all that apply)',o:['Hypotension','Weak, thready, rapid pulse','Bradycardia with hypertension','Fatigue','Respiratory failure'],c:[0,1,3,4],t:'multi',r:'Septic shock = hypotension, weak/thready tachycardic pulse, fatigue, respiratory failure.'},
+// CHEST TUBE, COPD, ASTHMA, TB, BLOOD (59-70)
+{q:'Continuous bubbling in the WATER SEAL chamber of a chest tube indicates:',o:['Normal function','An air leak','Lung re-expansion','Suction is off'],c:1,t:'single',r:'Continuous water-seal bubbling = air leak; notify the provider.'},
+{q:'If a chest tube is accidentally pulled out, the nurse should:',o:['Reinsert it','Cover with occlusive gauze taped on 3 sides','Tape on all 4 sides','Clamp the chest'],c:1,t:'single',r:'Tape gauze on 3 sides — air escapes, none enters, preventing tension pneumothorax.'},
+{q:'Which chest tube practices are correct? (Select all that apply)',o:['Keep system below chest level','Keep gauze at bedside','Routinely milk/strip the tubing','Tidaling in water seal is normal','Submerge end in sterile water if it disconnects'],c:[0,1,3,4],t:'multi',r:'Keep below chest level, gauze ready, expect tidaling, and re-establish a water seal if disconnected. Do NOT routinely milk/strip tubing.'},
+{q:'The oxygen saturation goal for a patient with COPD is:',o:['100%','95-99%','88-92%','75-80%'],c:2,t:'single',r:'88-92% avoids suppressing the hypoxic drive.'},
+{q:'During a severe asthma attack, the sudden ABSENCE of wheezing indicates:',o:['Improvement','Impending respiratory failure','The patient is cured','Less oxygen is needed'],c:1,t:'single',r:'A silent chest = no air moving = impending respiratory failure.'},
+{q:'Which manifestations are characteristic of asthma? (Select all that apply)',o:['Wheezing','Chest tightness','Cough','Reversible obstruction','Permanent alveolar destruction'],c:[0,1,2,3],t:'multi',r:'Asthma = wheezing, tightness, cough, and REVERSIBLE obstruction. Alveolar destruction is emphysema.'},
+{q:'A patient using an inhaled corticosteroid should be taught to:',o:['Use it for acute attacks','Rinse the mouth after use','Hold breath for 30 seconds','Use it before the bronchodilator'],c:1,t:'single',r:'Rinse the mouth to prevent oral candidiasis (thrush). Bronchodilator goes first, steroid second.'},
+{q:'The confirmatory diagnostic test for active TB is:',o:['Mantoux skin test','Chest x-ray','Sputum culture','CBC'],c:2,t:'single',r:'Sputum culture for acid-fast bacilli confirms active TB.'},
+{q:'A Mantoux (PPD) test is read in 48-72 hours by measuring:',o:['Redness','Induration','Warmth','The wheal'],c:1,t:'single',r:'Measure the induration (raised firm area), not redness.'},
+{q:'Which precautions and teaching apply to a patient on RIPE therapy for TB? (Select all that apply)',o:['Airborne isolation with N95','Rifampin turns body fluids orange','Report vision changes with ethambutol','Stop meds once feeling better','Adherence for the full 6-12 months'],c:[0,1,2,4],t:'multi',r:'Airborne precautions, expect orange fluids (rifampin), report visual changes (ethambutol = optic neuritis), and complete the full course. Stopping early causes resistance.'},
+{q:'Before initiating a blood transfusion, the nurse must: (Select all that apply)',o:['Verify informed consent','Confirm type and cross-match','Establish a patent IV with normal saline','Obtain baseline vital signs','Prime tubing with D5W'],c:[0,1,2,3],t:'multi',r:'Consent, type/cross, patent IV with NS, baseline vitals, and two-nurse verification. Never use dextrose (hemolyzes RBCs).'},
+{q:'A patient develops chills, fever, and back pain 10 minutes into a transfusion. The nurse\'s FIRST action is to:',o:['Slow the infusion','Stop the blood and keep the NS line open','Administer acetaminophen','Document and continue'],c:1,t:'single',r:'STOP the blood immediately and maintain IV access with NS, then notify the provider.'},
+// === EXPANDED PRACTICE SET (added) ===
+// Fluids & Electrolytes
+{q:'An older adult presents with poor skin turgor, dry mucous membranes, postural hypotension, and a urine specific gravity of 1.035. The nurse recognizes this as:',o:['Fluid volume excess','Fluid volume deficit','Hyponatremia','SIADH'],c:1,t:'single',r:'Concentrated urine (high specific gravity) + hypotension + dry membranes = fluid volume deficit.'},
+{q:'Which assessment findings indicate fluid volume EXCESS? (Select all that apply)',o:['Bounding pulse','Jugular vein distention','Crackles in the lungs','Dry, sticky mucous membranes','Weight gain'],c:[0,1,2,4],t:'multi',r:'FVE = bounding pulse, JVD, crackles, edema, and weight gain. Dry sticky membranes point to deficit, not excess.'},
+{q:'A patient receiving IV fluids develops a new cough, dyspnea, and crackles. The nurse should FIRST:',o:['Increase the IV rate','Slow or stop the infusion and raise the head of bed','Give the next dose of antibiotic','Lay the patient flat'],c:1,t:'single',r:'These are signs of fluid overload/pulmonary edema — slow the infusion and sit the patient up to ease breathing.'},
+{q:'Which patient is at highest risk for hypernatremia?',o:['A patient drinking large amounts of water','A patient with watery diarrhea and no fluid intake','A patient on a low-sodium diet','A patient with SIADH'],c:1,t:'single',r:'Loss of water (diarrhea) without replacement concentrates sodium → hypernatremia.'},
+{q:'A nurse reviews labs: Na 122 mEq/L. Which findings does the nurse expect? (Select all that apply)',o:['Confusion','Muscle cramps','Seizures if severe','Extreme thirst with flushed skin','Headache'],c:[0,1,2,4],t:'multi',r:'Hyponatremia causes neuro changes: confusion, cramps, headache, seizures. Flushed skin + extreme thirst is hypernatremia.'},
+// Electrolytes deeper
+{q:'A patient with a serum potassium of 6.8 mEq/L shows peaked T waves on the monitor. After calcium gluconate, which is the next priority intervention?',o:['Give a potassium supplement','Administer IV insulin with dextrose','Encourage high-potassium foods','Hold all IV fluids'],c:1,t:'single',r:'After stabilizing the heart with calcium, insulin+dextrose drives potassium back into the cells.'},
+{q:'Which signs are associated with HYPOcalcemia? (Select all that apply)',o:['Positive Trousseau sign','Positive Chvostek sign','Numbness/tingling around the mouth','Constipation and kidney stones','Muscle twitching'],c:[0,1,2,4],t:'multi',r:'Hypocalcemia = increased excitability: Trousseau, Chvostek, perioral tingling, twitching, tetany. Stones/constipation are HYPERcalcemia.'},
+{q:'A patient with chronic alcohol use disorder is admitted. The nurse anticipates a deficiency of which electrolyte that can cause torsades de pointes?',o:['Sodium','Magnesium','Chloride','Phosphorus'],c:1,t:'single',r:'Hypomagnesemia is common in alcohol use and predisposes to torsades de pointes.'},
+{q:'Which food choice is BEST for a patient who needs to increase potassium?',o:['White rice','Banana and spinach','Egg whites','Cheese'],c:1,t:'single',r:'Bananas and leafy greens are potassium-rich. Useful for patients on potassium-wasting diuretics.'},
+// IV fluids
+{q:'A patient with cerebral edema is ordered a hypertonic solution. Which is hypertonic?',o:['0.9% Normal Saline','0.45% Normal Saline','3% Saline','Lactated Ringer\'s'],c:2,t:'single',r:'3% saline is hypertonic — it pulls fluid out of swollen cells, useful for cerebral edema. Monitor closely.'},
+{q:'Which IV solutions are isotonic? (Select all that apply)',o:['0.9% Normal Saline','Lactated Ringer\'s','D5W (in the bag)','0.45% Normal Saline','3% Saline'],c:[0,1,2],t:'multi',r:'0.9% NS, LR, and D5W (isotonic in the bag) are isotonic. 0.45% is hypotonic; 3% is hypertonic.'},
+{q:'A hypotonic solution like 0.45% NS will cause fluid to:',o:['Stay in the vessels','Move INTO the cells','Pull OUT of the cells','Have no effect'],c:1,t:'single',r:'Hypotonic fluids shift water into cells (cells swell) — think rehydrating a dehydrated cell.'},
+// ABG
+{q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 25. Interpret:',o:['Respiratory acidosis, uncompensated','Metabolic acidosis','Respiratory alkalosis','Metabolic alkalosis'],c:0,t:'single',r:'pH low + CO₂ high (opposite directions = respiratory) + HCO₃ normal = uncompensated respiratory acidosis.'},
+{q:'ABG: pH 7.49, PaCO₂ 40, HCO₃ 30. Interpret:',o:['Respiratory alkalosis','Metabolic alkalosis, uncompensated','Metabolic acidosis','Respiratory acidosis'],c:1,t:'single',r:'pH high + HCO₃ high (same direction = metabolic) + CO₂ normal = uncompensated metabolic alkalosis. Think vomiting/NG suction.'},
+{q:'ABG: pH 7.37, PaCO₂ 58, HCO₃ 32. Interpret:',o:['Uncompensated respiratory acidosis','Fully compensated respiratory acidosis','Metabolic alkalosis','Respiratory alkalosis'],c:1,t:'single',r:'pH normal but on the acidic side, with BOTH CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis (kidneys retained bicarb to fix it).'},
+{q:'A patient with a severe asthma attack has been working hard to breathe for hours. ABG shows a rising PaCO₂ toward normal after being low. This change most likely indicates:',o:['The patient is improving','Impending respiratory failure/fatigue','Respiratory alkalosis worsening','Metabolic compensation'],c:1,t:'single',r:'A "normalizing" or rising CO₂ in a tiring asthmatic is an ominous sign of fatigue and impending respiratory failure — not improvement.'},
+{q:'Which conditions cause metabolic acidosis? (Select all that apply)',o:['Diabetic ketoacidosis','Severe diarrhea','Renal failure','Vomiting','Prolonged NG suction'],c:[0,1,2],t:'multi',r:'DKA, diarrhea, and renal failure cause metabolic acidosis. Vomiting and NG suction cause metabolic ALKalosis.'},
+// Respiratory assessment
+{q:'While auscultating, the nurse hears a high-pitched, musical sound on expiration. This is documented as:',o:['Crackles (rales)','Wheezes','Pleural friction rub','Stridor'],c:1,t:'single',r:'Wheezes are high-pitched musical sounds from narrowed airways, often on expiration (asthma, COPD).'},
+{q:'A barrel-shaped chest with an increased anteroposterior diameter is a classic finding in:',o:['Asthma','Chronic COPD/emphysema','Pneumonia','Pleural effusion'],c:1,t:'single',r:'Chronic air trapping in COPD/emphysema produces the barrel chest (increased AP diameter).'},
+{q:'Which finding is the EARLIEST sign of hypoxia?',o:['Cyanosis','Restlessness/anxiety','Bradycardia','Clubbing of fingers'],c:1,t:'single',r:'Restlessness and anxiety are early hypoxia signs. Cyanosis is late; clubbing reflects chronic hypoxia.'},
+// Acute lower respiratory
+{q:'A post-op patient refuses to deep breathe due to pain and develops diminished breath sounds at the right base. The priority is to prevent:',o:['Pneumothorax','Atelectasis','Pulmonary embolism','Pleural effusion'],c:1,t:'single',r:'Shallow breathing collapses alveoli → atelectasis. Encourage incentive spirometry, coughing, deep breathing.'},
+{q:'Which are diagnostic criteria/hallmarks of acute respiratory failure? (Select all that apply)',o:['PaO₂ less than 60 mmHg','PaCO₂ greater than 50 mmHg','pH less than 7.35','SpO₂ of 99%','pH greater than 7.50'],c:[0,1,2],t:'multi',r:'ARF: PaO₂ under 60, PaCO₂ over 50, and pH under 7.35. SpO₂ 99% and alkalotic pH do not fit.'},
+{q:'The hallmark of acute respiratory distress syndrome (ARDS) is:',o:['Hypoxemia that improves with oxygen','Refractory hypoxemia that does NOT improve with oxygen','High PaO₂','A productive green cough'],c:1,t:'single',r:'ARDS is defined by refractory hypoxemia — low O₂ that stays low despite high supplemental oxygen.'},
+// Pneumonia
+{q:'A patient develops a fever, productive cough, and an infiltrate 72 hours after admission. This is classified as:',o:['Community-acquired pneumonia','Hospital-acquired pneumonia','Aspiration pneumonia','Fungal pneumonia'],c:1,t:'single',r:'Pneumonia developing 48+ hours after admission = hospital-acquired (nosocomial).'},
+{q:'Which interventions are part of the ventilator-associated pneumonia (VAP) bundle? (Select all that apply)',o:['Elevate head of bed 30-45 degrees','Daily sedation interruption/readiness to wean','Oral care with chlorhexidine','Keep the patient flat','DVT and peptic ulcer prophylaxis'],c:[0,1,2,4],t:'multi',r:'VAP bundle: HOB elevated, daily sedation vacation/wean assessment, oral chlorhexidine care, and DVT/PUD prophylaxis. Keeping flat increases aspiration risk.'},
+{q:'Aspiration pneumonia most commonly affects which area of the lungs?',o:['Left upper lobe','Right lung (right main bronchus)','Both apices equally','The pleural space'],c:1,t:'single',r:'The right main bronchus is wider and more vertical, so aspirated material tends to go right.'},
+{q:'Rust-colored sputum is most classically associated with:',o:['Pseudomonas','Streptococcus pneumoniae','Tuberculosis','Viral pneumonia'],c:1,t:'single',r:'Rust-colored sputum classically suggests pneumococcal (Strep pneumoniae) pneumonia.'},
+// Airway management
+{q:'The recommended cuff pressure for an endotracheal or tracheostomy tube is:',o:['5-10 mmHg','20-25 mmHg','30-40 mmHg','50 mmHg'],c:1,t:'single',r:'Keep cuff pressure 20-25 mmHg — high enough to seal, low enough to avoid tracheal necrosis.'},
+{q:'Which items should be kept at the bedside of a patient with a new tracheostomy? (Select all that apply)',o:['Obturator','Spare trach tube (same size and one smaller)','Suction equipment','A scalpel','Resuscitation bag'],c:[0,1,2,4],t:'multi',r:'Keep obturator, spare trach tubes (same and smaller), suction, and a manual resuscitation bag. A scalpel is not standard bedside trach equipment.'},
+// Chest tubes
+{q:'The nurse notes continuous bubbling in the WATER SEAL chamber of a chest drainage system. This indicates:',o:['Normal functioning','An air leak in the system','The suction is too low','The lung has re-expanded'],c:1,t:'single',r:'Continuous bubbling in the water-seal chamber signals an air leak — assess connections; persistent leak with worsening status can mean tension pneumothorax.'},
+{q:'Which actions are correct for chest tube management? (Select all that apply)',o:['Keep the drainage system below chest level','Tape connections securely','If the tube is dislodged, cover with petroleum gauze taped on 3 sides','Routinely clamp the tube during transport','Keep an occlusive dressing and clamp at the bedside'],c:[0,1,2,4],t:'multi',r:'System below chest, secure taped connections, 3-sided dressing if dislodged (lets air escape, prevents tension pneumo), and emergency supplies at bedside. Routine clamping is dangerous — it can cause tension pneumothorax.'},
+{q:'Gentle tidaling (fluid moving with respiration) in the water-seal chamber means:',o:['An air leak','Normal functioning','The tube is clotted','Tension pneumothorax'],c:1,t:'single',r:'Tidaling is normal and reflects pressure changes with breathing. Absence of tidaling may mean an obstruction or re-expanded lung.'},
+// COPD / asthma
+{q:'The target oxygen saturation for most patients with COPD is:',o:['100%','95-100%','88-92%','Below 85%'],c:2,t:'single',r:'In COPD, aim for 88-92% to avoid blunting the hypoxic drive while still oxygenating.'},
+{q:'A patient in status asthmaticus suddenly has a "silent chest" with no audible wheezing. This indicates:',o:['The attack is resolving','Severe airway obstruction/impending respiratory failure','Good response to bronchodilators','Pneumothorax'],c:1,t:'single',r:'A silent chest means almost no air movement — an emergency sign of impending respiratory failure, not improvement.'},
+{q:'Which teaching points are correct for inhaler use? (Select all that apply)',o:['Use the bronchodilator before the corticosteroid','Rinse mouth after the corticosteroid','Wait about 1 minute between puffs','Use a short-acting beta agonist as a daily controller','Use a spacer to improve delivery'],c:[0,1,2,4],t:'multi',r:'Bronchodilator first, rinse after steroid, wait between puffs, use a spacer. SABAs are rescue meds, NOT daily controllers.'},
+// TB
+{q:'Airborne precautions for tuberculosis require which type of respirator/room?',o:['Surgical mask, any room','N95 respirator and a negative-pressure room','Gown and gloves only','Positive-pressure room'],c:1,t:'single',r:'TB is airborne — use an N95 (or higher) and a negative-pressure (airborne isolation) room.'},
+{q:'A patient on rifampin should be taught that the medication may:',o:['Cause hearing loss','Turn body fluids orange','Cause blue-gray skin','Stain teeth permanently'],c:1,t:'single',r:'Rifampin harmlessly turns urine, sweat, and tears orange and can stain soft contact lenses.'},
+{q:'Which statement by a patient indicates correct understanding of TB treatment?',o:['"I can stop the medicine when I feel better."','"I must take all the medicines for the full 6 to 12 months."','"One medication is enough."','"I only need treatment if I have a cough."'],c:1,t:'single',r:'Full adherence to the multi-drug regimen for the entire course prevents resistance and relapse.'},
+// Blood transfusion
+{q:'The maximum time a unit of blood should hang/infuse is:',o:['2 hours','4 hours','6 hours','8 hours'],c:1,t:'single',r:'A unit must be completed within 4 hours to prevent bacterial growth.'},
+{q:'The nurse should remain with the patient and monitor most closely during which part of a transfusion?',o:['The last 15 minutes','The first 15 minutes','Only at the end','Hourly throughout only'],c:1,t:'single',r:'Most severe reactions occur early — stay and monitor closely for the first 15 minutes.'},
+{q:'Which IV solution is the ONLY fluid compatible with blood products?',o:['D5W','0.45% NS','0.9% Normal Saline','Lactated Ringer\'s'],c:2,t:'single',r:'Only 0.9% normal saline is hung with blood. Dextrose hemolyzes RBCs; LR\'s calcium promotes clotting.'},
+];
+
+let examState={}, examIdx=0, examSubmitted=false;
+function renderExam(){
+  const c=document.getElementById('sec-exam');
+  c.innerHTML=`
+    <h2 class="sec-title"><span class="sec-emoji">📝</span> 113-Question Practice Exam</h2>
+    <p class="intro-line">NextGen NCLEX style — multiple choice + Select All That Apply, just like your professor. Answer all, then submit for your score & full rationale review.</p>
+    <div class="tipbar">⏱️ <b>Tip:</b> Treat this like the real exam — no notes, no peeking. For SATA, read every option independently ("is THIS one true or false?"). Aim for 75%+ before test day.</div>
+    <div id="examBody"></div>
+    <div class="exam-nav">
+      <button class="btn ghost" onclick="examPrev()">⬅️ Prev</button>
+      <div class="exam-dots" id="examDots"></div>
+      <button class="btn" onclick="examNext()">Next ➡️</button>
+    </div>
+    <div class="center" style="margin-top:14px"><button class="btn" onclick="submitExam()" style="background:linear-gradient(90deg,var(--teal),var(--green))">✅ Submit Exam & See Score</button></div>
+    <div id="examResult"></div>
+  `;
+  drawExamQ();
+}
+function drawExamQ(){
+  const q=EXAM[examIdx];
+  const body=document.getElementById('examBody');
+  const typeLabel=q.t==='multi'?'Select All That Apply':'Multiple Choice';
+  let html=`<div class="exam-q"><div><span class="qnum">QUESTION ${examIdx+1} of ${EXAM.length}</span><span class="qtype">${typeLabel}</span></div><div class="qtext">${q.q}</div>`;
+  q.o.forEach((opt,i)=>{
+    const letter=String.fromCharCode(65+i);
+    let cls='opt';
+    const cur=examState[examIdx];
+    if(q.t==='multi'){ if(cur&&cur.includes(i))cls+=' sel-multi'; }
+    else { if(cur===i)cls+=' sel-multi'; }
+    html+=`<button class="${cls}" onclick="examPick(${i})">${letter}. ${opt}</button>`;
+  });
+  html+=`</div>`;
+  body.innerHTML=html;
+  drawDots();
+}
+function drawDots(){
+  const d=document.getElementById('examDots'); d.innerHTML='';
+  EXAM.forEach((_,i)=>{
+    const dot=document.createElement('div'); dot.className='dot';
+    if(examState[i]!==undefined && !(Array.isArray(examState[i])&&examState[i].length===0))dot.classList.add('answered');
+    if(i===examIdx)dot.classList.add('current');
+    dot.onclick=()=>{examIdx=i;drawExamQ();};
+    d.appendChild(dot);
+  });
+}
+function examPick(i){
+  const q=EXAM[examIdx];
+  if(q.t==='multi'){
+    if(!examState[examIdx])examState[examIdx]=[];
+    const arr=examState[examIdx];
+    const idx=arr.indexOf(i);
+    if(idx>-1)arr.splice(idx,1); else arr.push(i);
+  } else {
+    examState[examIdx]=i;
+  }
+  drawExamQ();
+}
+function examNext(){ if(examIdx<EXAM.length-1){examIdx++;drawExamQ();window.scrollTo({top:0,behavior:'smooth'});} }
+function examPrev(){ if(examIdx>0){examIdx--;drawExamQ();window.scrollTo({top:0,behavior:'smooth'});} }
+function arrEq(a,b){if(!a||!b)return false;a=[...a].sort();b=[...b].sort();return a.length===b.length&&a.every((v,i)=>v===b[i]);}
+function submitExam(){
+  let correct=0;
+  EXAM.forEach((q,i)=>{
+    const ans=examState[i];
+    if(q.t==='multi'){ if(arrEq(ans,q.c))correct++; }
+    else { if(ans===q.c)correct++; }
+  });
+  const pct=Math.round(correct/EXAM.length*100);
+  let msg = pct>=85?'🌟 Outstanding — you\'re exam-ready!':pct>=75?'✅ Passing! Polish your misses and you\'re golden.':pct>=60?'💪 Getting there — review the rationales below and retake.':'📚 Keep grinding — go back through the sections, then retry.';
+  let html=`<div class="quiz-score">You scored ${correct} / ${EXAM.length} (${pct}%)<br>${msg}</div>`;
+  html+=`<h3 style="color:var(--pink)">📖 Full Review (your answers + rationales)</h3>`;
+  EXAM.forEach((q,i)=>{
+    const ans=examState[i];
+    let isCorrect = q.t==='multi'?arrEq(ans,q.c):ans===q.c;
+    const yourTxt = ans===undefined||(Array.isArray(ans)&&ans.length===0) ? '(no answer)' :
+      (q.t==='multi'?ans.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+ans));
+    const correctTxt = q.t==='multi'?q.c.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+q.c);
+    html+=`<div class="exam-q" style="border-color:${isCorrect?'var(--green)':'var(--red)'}">
+      <div class="qnum">Q${i+1} ${isCorrect?'✅':'❌'}</div>
+      <div class="qtext" style="font-size:.92rem">${q.q}</div>
+      <div style="font-size:.85rem"><b>Your answer:</b> ${yourTxt} &nbsp;|&nbsp; <b>Correct:</b> ${correctTxt}</div>
+      <div class="rationale show" style="margin-top:8px"><b>Rationale:</b> ${q.r}</div>
+    </div>`;
+  });
+  html+=`<div class="center"><button class="btn" onclick="resetExam()">🔄 Retake Exam</button></div>`;
+  document.getElementById('examResult').innerHTML=html;
+  document.getElementById('examResult').scrollIntoView({behavior:'smooth'});
+}
+function resetExam(){ examState={}; examIdx=0; examSubmitted=false; document.getElementById('examResult').innerHTML=''; drawExamQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+renderExam();
+
+/* init progress total */
+updateProg();
+</script>
+
+</body>
+</html>
