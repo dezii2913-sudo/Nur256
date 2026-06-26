@@ -289,6 +289,9 @@ const SECTIONS=[
   {id:'copd',label:'🌬️ COPD/Asthma',emoji:'🌬️'},
   {id:'tb',label:'🔬 TB',emoji:'🔬'},
   {id:'blood',label:'🩸 Transfusion',emoji:'🩸'},
+  {id:'clinical',label:'🧠 Clinical Judgment',emoji:'🧠'},
+  {id:'tricks',label:'🎯 Trick Questions',emoji:'🎯'},
+  {id:'adpie',label:'🔄 Nursing Process',emoji:'🔄'},
   {id:'drill',label:'⚡ Rapid Drill',emoji:'⚡'},
   {id:'games',label:'🎮 Games',emoji:'🎮'},
   {id:'exam',label:'📝 Exam (119Q)',emoji:'📝'},
@@ -390,7 +393,7 @@ document.getElementById('sec-home').innerHTML=`
     <tr><td><b>Day 3</b></td><td>🔍 Resp Assessment + 🚨 Acute Resp</td><td>Atelectasis, ARF, ARDS quizzes</td></tr>
     <tr><td><b>Day 4</b></td><td>🦠 Pneumonia + 🩺 Airway/Tubes</td><td>VAP bundle, ET/trach care</td></tr>
     <tr><td><b>Day 5</b></td><td>🧯 Chest Tubes + 🩸 Transfusion + 🔬 TB + 🌬️ COPD</td><td>The "easy points" your prof loves</td></tr>
-    <tr><td><b>Day 6</b></td><td>🎮 Games</td><td>Matching, Speed Round, mixed quizzes</td></tr>
+    <tr><td><b>Day 6</b></td><td>🧠 Clinical + 🎯 Trick Qs + 🔄 Nursing Process</td><td>He flagged BOTH critical-thinking traps AND more ADPIE/implementation questions. Drill "which step am I in" + "what do I do first."</td></tr>
     <tr><td><b>Day 7</b></td><td>📝 119-Question Exam</td><td>Sit it like the real thing. Review every miss.</td></tr>
   </table>
 </div>
@@ -1499,6 +1502,471 @@ renderQuiz('quiz-mixed',[
 ]);
 </script>
 
+
+
+<script>
+/* ============ CLINICAL JUDGMENT (critical thinking) ============ */
+document.getElementById('sec-clinical').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🧠</span> Clinical Judgment & Critical Thinking</h2>
+<p class="intro-line">Your professor said this test is heavy on critical & clinical thinking. These questions don't ask "what is it" — they ask "what do you DO, what do you do FIRST, and who do you see FIRST." Train the thinking, not just the facts.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🎯 How to attack a critical-thinking question</h3>
+  <ul class="clean">
+    <li><b>1. Spot the question type.</b> "First action," "priority," "most concerning," "best response," "which patient first," "what to delegate." The type tells you what they want.</li>
+    <li><b>2. ABCs, then Maslow.</b> Airway → Breathing → Circulation beats everything. A physiological/safety need beats a psychosocial one.</li>
+    <li><b>3. Acute &amp; unstable &amp; unexpected beats chronic &amp; stable &amp; expected.</b> The patient who is <i>changing</i> is the one to worry about.</li>
+    <li><b>4. Assess before you act</b> — UNLESS it's a true emergency where the answer is obvious (then act). If two answers are an assessment and an intervention, usually assess first.</li>
+    <li><b>5. Don't pick the answer that abandons, delays, or passes the buck</b> if you can handle it yourself. But never act outside your scope either.</li>
+    <li><b>6. "First" ≠ "all correct."</b> Several options can be things you'd do — pick the one you'd do <i>first</i> or that addresses the biggest threat.</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"ABC → Maslow → Acute/Unstable → Assess vs Act"</div><div class="exp">Run every priority question through that order and the answer usually falls out.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🔑 Unit-2 "worry signs" — the answers that scream PRIORITY</h3>
+  <ul class="clean">
+    <li><b>Restlessness / anxiety / confusion</b> = EARLY hypoxia. Pick this over "cyanosis" (which is LATE).</li>
+    <li><b>Silent chest / wheezing suddenly gone</b> in asthma = impending respiratory failure. Emergency.</li>
+    <li><b>Rising or "normalizing" CO₂</b> in a tiring asthma/resp patient = they're failing, not improving.</li>
+    <li><b>Continuous bubbling in the WATER SEAL</b> = air leak / possible tension pneumothorax.</li>
+    <li><b>Peaked T waves</b> (hyperkalemia) = cardiac emergency → calcium gluconate protects the heart first.</li>
+    <li><b>Na⁺ &lt;135 with neuro changes</b> (seizure, severe confusion) = priority over a stable lab.</li>
+    <li><b>New crackles + dyspnea during an IV/transfusion</b> = fluid overload → slow/stop it, sit them up.</li>
+    <li><b>Transfusion reaction signs in the first 15 min</b> → STOP blood, NS open, then assess/notify.</li>
+  </ul>
+</div>
+
+<div id="quiz-clinical"></div>
+`;
+
+renderQuiz('quiz-clinical',[
+  {q:'A nurse is caring for four patients. Who should the nurse assess FIRST?',type:'single',
+   opts:['A. A COPD patient with an O₂ sat of 90% on 2 L',"B. An asthma patient whose wheezing has suddenly become a 'silent chest'",'C. A pneumonia patient with a temp of 100.8°F','D. A patient with a chest tube and gentle tidaling in the water seal'],correct:1,
+   rat:'A silent chest = no air movement = impending respiratory failure. The COPD sat of 90% is acceptable (goal 88–92%), the low-grade fever is expected with pneumonia, and tidaling is normal. B is acute, unstable, and unexpected.'},
+
+  {q:'A patient receiving a unit of packed RBCs reports chills and low back pain 10 minutes into the transfusion. What is the nurse\'s FIRST action?',type:'single',
+   opts:['A. Slow the transfusion rate','B. Stop the blood and keep the normal saline line open','C. Take a full set of vital signs','D. Notify the provider'],correct:1,
+   rat:'These are signs of an acute hemolytic reaction. The FIRST action is to STOP the blood immediately while maintaining IV access with NS. Vitals, provider notification, and documentation come right after — but stopping the blood protects the patient now.'},
+
+  {q:'A nurse picks up a unit of blood from the blood bank but the patient is in the bathroom and the IV has infiltrated. The nurse cannot start the infusion. What is the BEST action?',type:'single',
+   opts:['A. Keep the blood at the bedside until a new IV is placed','B. Start the blood through the infiltrated IV slowly','C. Return the blood to the blood bank since it can\'t be started within 30 minutes','D. Put the blood in the unit refrigerator'],correct:2,
+   rat:'Blood must be started within 30 minutes of leaving the blood bank and must never sit warming at the bedside or be stored in a regular unit fridge. If you can\'t start it in time, return it to the blood bank.'},
+
+  {q:'A post-op patient is restless and anxious with an O₂ sat of 93%. What should the nurse do FIRST?',type:'single',
+   opts:['A. Administer a PRN sedative for anxiety','B. Reposition, encourage deep breathing, and reassess oxygenation','C. Document the anxiety and continue rounds','D. Call the provider for a psych consult'],correct:1,
+   rat:'Restlessness and anxiety are EARLY signs of hypoxia — treat the oxygenation, not the "anxiety." Sedating a hypoxic patient is dangerous. Reposition, promote lung expansion, and reassess.'},
+
+  {q:'An ABG shows pH 7.30, PaCO₂ 58, HCO₃ 26 in a patient with a COPD exacerbation. Which intervention is the priority?',type:'single',
+   opts:['A. Administer high-flow 100% oxygen by non-rebreather','B. Improve ventilation (position, bronchodilators, controlled O₂ to keep sat 88–92%)','C. Give IV sodium bicarbonate','D. Encourage the patient to breathe into a paper bag'],correct:1,
+   rat:'This is respiratory acidosis from hypoventilation. The fix is improving ventilation and giving controlled oxygen (target 88–92% in COPD). Slamming 100% O₂ can blunt the hypoxic drive; bicarb and rebreathing don\'t address the trapped CO₂.'},
+
+  {q:'A nurse notes CONTINUOUS bubbling in the water-seal chamber of a patient\'s chest drainage system. The patient\'s breathing is becoming labored. What is the priority concern?',type:'single',
+   opts:['A. This is normal functioning','B. An air leak that could progress to a tension pneumothorax','C. The suction is set too low','D. The lung has fully re-expanded'],correct:1,
+   rat:'Continuous water-seal bubbling = air leak. Combined with worsening respiratory status, suspect a developing tension pneumothorax — assess connections and the patient, and notify the provider.'},
+
+  {q:'A patient with a potassium of 6.9 mEq/L has peaked T waves on the monitor. Which prescribed order should the nurse question/clarify?',type:'single',
+   opts:['A. IV calcium gluconate','B. IV insulin with dextrose','C. A potassium-sparing diuretic','D. Prepare for possible dialysis'],correct:2,
+   rat:'In hyperkalemia you want to lower potassium. A potassium-SPARING diuretic would make it worse and should be questioned. Calcium gluconate (heart protection), insulin+dextrose (shifts K into cells), and dialysis are all appropriate.'},
+
+  {q:'A nurse is starting an IV potassium infusion and the patient reports burning at the site. The nurse should FIRST:',type:'single',
+   opts:['A. Slow the rate and continue','B. Stop the infusion and assess the site for infiltration/extravasation','C. Apply a warm compress and keep infusing','D. Document and reassess in 1 hour'],correct:1,
+   rat:'Potassium is a vesicant — burning suggests infiltration/extravasation, which can cause tissue damage. Stop the infusion and assess the site immediately. Never IV-push potassium, and never keep running a painful vesicant.'},
+
+  {q:'Which patient finding during a transfusion is the MOST concerning and requires immediate action?',type:'single',
+   opts:['A. The patient feels a little cold and asks for a blanket','B. New crackles, dyspnea, and a jump in blood pressure','C. The IV site is slightly cool to touch','D. The patient is anxious about needles'],correct:1,
+   rat:'New crackles + dyspnea + rising BP signal circulatory/fluid overload (TACO). Slow or stop the infusion and sit the patient up. The other findings are minor or non-urgent.'},
+
+  {q:'A patient with pneumonia who was alert this morning is now confused and pulling at the sheets. The family says "that\'s not like him." What is the nurse\'s priority interpretation?',type:'single',
+   opts:['A. Normal aging','B. A possible sign of worsening hypoxia or sepsis','C. Boredom','D. Sundowning that can be ignored'],correct:1,
+   rat:'A NEW change in mental status — especially in an older adult with pneumonia — is a red flag for hypoxia, sepsis, or deterioration. Assess oxygenation and perfusion; don\'t dismiss it as expected.'},
+
+  {q:'A patient with a chest tube accidentally pulls the tube out of their chest. What should the nurse do FIRST?',type:'single',
+   opts:['A. Lay the patient flat and call radiology','B. Cover the site with sterile occlusive (petroleum) gauze taped on 3 sides','C. Reinsert the chest tube','D. Clamp the drainage tubing'],correct:1,
+   rat:'For a dislodged chest tube, immediately cover the insertion site with petroleum/occlusive gauze taped on THREE sides — this lets air escape but prevents air from re-entering and causing a tension pneumothorax. Then notify the provider.'},
+
+  {q:'A nurse must give morning meds, hang a new IV bag, ambulate a patient, and respond to a vent alarm. Which does the nurse address FIRST?',type:'single',
+   opts:['A. Morning meds','B. The ventilator alarm','C. Ambulation','D. Hanging the IV bag'],correct:1,
+   rat:'A ventilator alarm is an airway/breathing issue and takes priority over routine tasks. ABCs first — always rule out a true emergency (disconnection, obstruction, distress) before scheduled care.'},
+
+  {q:'A patient with fluid volume deficit has these findings. Which one tells the nurse the patient is responding to treatment?',type:'single',
+   opts:['A. Urine output increases from 15 mL/hr to 40 mL/hr','B. Urine specific gravity rises to 1.035','C. Heart rate increases from 90 to 120','D. Blood pressure drops further when standing'],correct:0,
+   rat:'Improving urine output (toward ≥30 mL/hr) shows restored perfusion and fluid status. Rising specific gravity, climbing HR, and worsening orthostatic drop all indicate continued/worsening deficit.'},
+
+  {q:'A patient with severe asthma has been working hard to breathe. The latest ABG shows the PaCO₂ has risen from 28 to 41 (now "normal"). How should the nurse interpret this?',type:'single',
+   opts:['A. The patient is improving — CO₂ is normalizing','B. The patient is tiring and heading toward respiratory failure','C. The patient now has metabolic alkalosis','D. No action needed'],correct:1,
+   rat:'In a tiring asthmatic who was hyperventilating (low CO₂), a "normalizing" or rising CO₂ is an ominous sign of fatigue and impending respiratory failure — escalate, don\'t relax.'},
+
+  {q:'Which nursing actions are appropriate for a patient on a ventilator to prevent VAP? (Select all that apply)',type:'multi',
+   opts:['A. Keep the head of the bed at 30–45 degrees','B. Perform oral care with chlorhexidine','C. Keep the patient flat to promote rest','D. Daily "sedation vacation" / readiness-to-wean assessment','E. Provide DVT and peptic ulcer prophylaxis'],correct:[0,1,3,4],
+   rat:'The VAP bundle: HOB elevated, chlorhexidine oral care, daily sedation interruption with wean assessment, and DVT/PUD prophylaxis. Lying flat raises aspiration risk and is wrong.'},
+
+  {q:'A nurse delegates to assistive personnel (AP). Which task is appropriate to delegate?',type:'single',
+   opts:['A. Assessing a new transfusion reaction','B. Teaching pursed-lip breathing to a new COPD patient','C. Recording intake and output and reporting the values','D. Interpreting an ABG result'],correct:2,
+   rat:'Measuring and recording I&O is within AP scope. Assessment, teaching, and interpretation require a nurse\'s judgment and cannot be delegated.'},
+
+  {q:'A patient with metabolic acidosis from DKA is breathing deeply and rapidly (Kussmaul respirations). What does the nurse understand about this finding?',type:'single',
+   opts:['A. It is a sign the patient is panicking and needs sedation','B. It is the body compensating by blowing off CO₂','C. It indicates respiratory alkalosis','D. It should be suppressed with oxygen'],correct:1,
+   rat:'Kussmaul respirations are a compensatory response — the lungs blow off CO₂ (acid) to raise the pH. Suppressing or sedating this would worsen the acidosis. Treat the underlying DKA.'},
+
+  {q:'Four patients need attention. Based on priority, who does the nurse see FIRST?',type:'single',
+   opts:['A. A patient due for scheduled oral antibiotics','B. A patient whose pulse oximetry just dropped to 84% with increased work of breathing','C. A patient asking about discharge teaching','D. A stable post-op patient requesting pain medication'],correct:1,
+   rat:'A falling O₂ sat with increased work of breathing is an airway/breathing emergency — see this patient first. The others are important but stable and non-urgent.'},
+
+  {q:'A patient with hypocalcemia has a positive Trousseau sign and reports tingling around the mouth. What is the priority nursing concern?',type:'single',
+   opts:['A. Constipation','B. Airway compromise from laryngospasm and risk of seizures','C. Kidney stones','D. Hypertension'],correct:1,
+   rat:'Hypocalcemia increases neuromuscular excitability — the priority is airway (laryngospasm) and seizure risk. Institute seizure precautions and monitor the airway. Stones/constipation are HYPERcalcemia.'},
+
+  {q:'A nurse is about to hang blood and sees the only available IV fluid running is D5½NS. What should the nurse do?',type:'single',
+   opts:['A. Use the D5½NS to prime the line','B. Obtain 0.9% normal saline — it is the only fluid compatible with blood','C. Use lactated Ringer\'s instead','D. Run the blood without any priming fluid'],correct:1,
+   rat:'Only 0.9% normal saline is hung with blood. Dextrose solutions hemolyze RBCs and LR\'s calcium can promote clotting. Get NS before proceeding.'},
+
+  {q:'A patient with a new tracheostomy suddenly has difficulty breathing and the tube appears dislodged. Which items at the bedside are MOST important right now? (Select all that apply)',type:'multi',
+   opts:['A. Obturator','B. Spare trach tube (same size and one size smaller)','C. A manual resuscitation bag','D. A box of oral medications','E. Suction equipment'],correct:[0,1,2,4],
+   rat:'For an airway emergency you need the obturator, spare trach tubes (same + smaller), a resuscitation bag, and suction. Oral meds are irrelevant to the immediate airway threat.'},
+
+  {q:'A patient is admitted with suspected TB. Which action is the priority?',type:'single',
+   opts:['A. Place the patient in a private room on airborne precautions with a negative-pressure room','B. Draw blood cultures','C. Start a regular diet','D. Place the patient in a semi-private room'],correct:0,
+   rat:'TB is airborne — the FIRST priority is protecting others by placing the patient in a negative-pressure room with airborne precautions (staff in N95s). Diagnostics and care follow once isolation is set.'},
+
+  {q:'A patient receiving IV fluids for dehydration develops a cough, dyspnea, and crackles. After slowing the infusion and sitting the patient up, what should the nurse do NEXT?',type:'single',
+   opts:['A. Resume the original IV rate','B. Notify the provider and continue to monitor respiratory status / vital signs','C. Lay the patient flat','D. Discontinue all IV access'],correct:1,
+   rat:'After the immediate actions (slow infusion, high-Fowler), notify the provider and keep monitoring. Resuming the rate or lying flat would worsen overload; pulling all access is unnecessary.'},
+
+  {q:'Which assessment finding in a patient with pneumonia would the nurse report to the provider IMMEDIATELY?',type:'single',
+   opts:['A. Temperature of 100.6°F','B. A weak, thready, rapid pulse with falling blood pressure','C. Productive cough with yellow sputum','D. Fatigue after ambulating'],correct:1,
+   rat:'A weak, thready, fast pulse with hypotension signals septic shock — a life-threatening complication of pneumonia. Report immediately. The other findings are expected with pneumonia.'},
+
+  {q:'A nurse reviews orders for a patient with fluid volume EXCESS from heart failure. Which order should the nurse question?',type:'single',
+   opts:['A. Daily weights','B. Sodium restriction','C. Infuse 1 L of 0.9% normal saline over 1 hour','D. Administer the prescribed loop diuretic'],correct:2,
+   rat:'A patient already fluid-overloaded should not get a rapid isotonic bolus — that would worsen the overload. Daily weights, sodium restriction, and diuretics are all appropriate; question the saline bolus.'},
+
+  {q:'A patient\'s ABG: pH 7.34, PaCO₂ 60, HCO₃ 31. The nurse recognizes this as which state, and what does it tell you about the patient?',type:'single',
+   opts:['A. Uncompensated respiratory acidosis — acute','B. Fully compensated respiratory acidosis — chronic (e.g., COPD)','C. Metabolic alkalosis','D. Respiratory alkalosis'],correct:1,
+   rat:'pH is near-normal but on the acidic side, with BOTH CO₂ and HCO₃ elevated — the kidneys have retained bicarb to compensate. This pattern fits a chronic CO₂ retainer (COPD) rather than an acute crisis.'}
+],'Scenario Practice — What Would You Do?');
+</script>
+
+
+<script>
+/* ============ TRICK-QUESTION TRAINER ============ */
+document.getElementById('sec-tricks').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🎯</span> Trick-Question Trainer</h2>
+<p class="intro-line">Your professor loves "what is NOT," "the BEST," and "the ONLY" questions. These have predictable traps — once you see the pattern, they get easy. Read every question TWICE and circle the key word before you look at the options.</p>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>⚠️ The #1 rule for all of these: find the KEY WORD first</h3>
+  <ul class="clean">
+    <li>Before reading the answers, underline the word that controls the question: <b>NOT • EXCEPT • BEST • FIRST • ONLY • MOST • LEAST • ALWAYS • NEVER • INITIAL • PRIORITY</b>.</li>
+    <li>Negative words flip your brain — you're now hunting the <i>wrong/false</i> option, so 3 answers will be TRUE and look tempting. That's the trap.</li>
+    <li>Cover the options, answer in your head, THEN look. Harder to be led astray.</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Read it twice, key word slice."</div></div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🚫 "What is NOT / EXCEPT" questions</h3>
+  <ul class="clean">
+    <li><b>The trap:</b> the three "right-sounding" answers are all TRUE statements, so they feel correct. The answer you want is the odd one out — the false statement or the thing that does NOT belong.</li>
+    <li><b>Beat it:</b> mentally label each option TRUE or FALSE. Pick the FALSE one. Or ask "which 3 go together?" — the loner is your answer.</li>
+    <li><b>Re-state it positively:</b> turn "Which is NOT a sign of hypoxia?" into "3 of these ARE signs — find the impostor."</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>⭐ "BEST / MOST appropriate / PRIORITY" questions</h3>
+  <ul class="clean">
+    <li><b>The trap:</b> several options are genuinely correct things you could do. Only one is BEST. If you grab the first "right" answer you see, you lose.</li>
+    <li><b>Beat it:</b> run them through <b>ABC → Maslow → acute/unstable → assess vs. act</b>. "Best" almost always = safest, addresses the biggest threat, or comes first in priority.</li>
+    <li>"Best indicator/assessment" questions = which one is most reliable/specific (e.g., daily weight for fluid status, I&O for fluid deficit).</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>1️⃣ "ONLY / ALWAYS / NEVER" questions</h3>
+  <ul class="clean">
+    <li><b>The trap:</b> absolute words are usually FALSE in nursing because there are exceptions — BUT your professor uses real absolutes too (e.g., "NS is the ONLY fluid hung with blood," "NEVER IV-push potassium"). So don't auto-eliminate; know the true absolutes.</li>
+    <li><b>Beat it:</b> ask "can I think of even ONE exception?" If yes → the absolute statement is false. If it's a hard rule you've memorized → it's true.</li>
+  </ul>
+  <div class="hy">⭐ <b>True absolutes for THIS unit:</b> 0.9% NS is the ONLY fluid compatible with blood • NEVER IV-push potassium • blood must START within 30 min of pickup • finish a unit within 4 hrs • tape a dislodged chest tube on 3 sides (never 4) • TB is ALWAYS airborne precautions.</div>
+</div>
+
+<div id="quiz-tricks"></div>
+`;
+
+renderQuiz('quiz-tricks',[
+  {q:'Which of the following is NOT a sign of fluid volume deficit?',type:'single',
+   opts:['A. Poor skin turgor','B. Tachycardia','C. Bounding pulse with crackles','D. Concentrated urine'],correct:2,
+   rat:'Trap: A, B, and D are all TRUE signs of deficit, so they feel right. The impostor is C — a bounding pulse with crackles is fluid volume EXCESS. When you see "NOT," hunt the one that does not belong.'},
+
+  {q:'All of the following IV fluids are isotonic EXCEPT:',type:'single',
+   opts:['A. 0.9% Normal Saline','B. Lactated Ringer\'s','C. 0.45% Normal Saline','D. D5W (in the bag)'],correct:2,
+   rat:'"EXCEPT" = find the odd one out. NS, LR, and in-bag D5W are isotonic; 0.45% NS is HYPOtonic. Three belong together — the loner is your answer.'},
+
+  {q:'The ONLY IV fluid that can be hung with a blood transfusion is:',type:'single',
+   opts:['A. Lactated Ringer\'s','B. 0.9% Normal Saline','C. D5W','D. 0.45% Normal Saline'],correct:1,
+   rat:'This is a TRUE absolute — don\'t eliminate just because it says "only." Dextrose hemolyzes RBCs and LR\'s calcium promotes clotting. NS is genuinely the only compatible fluid.'},
+
+  {q:'Which statement about potassium administration is correct?',type:'single',
+   opts:['A. Potassium may be given by rapid IV push in an emergency','B. Potassium is NEVER given by IV push','C. Oral potassium should be given on an empty stomach','D. Potassium-sparing diuretics are safe in hyperkalemia'],correct:1,
+   rat:'"Never" is a true absolute here: IV-push potassium can cause fatal arrhythmias. The trap is that absolutes are often false — but this one is a hard safety rule. A, C, and D are all dangerous/false.'},
+
+  {q:'A nurse is caring for a patient with hyperkalemia. Which action is the BEST FIRST priority?',type:'single',
+   opts:['A. Restrict dietary potassium','B. Administer IV calcium gluconate','C. Teach the patient about low-potassium foods','D. Give insulin with dextrose'],correct:1,
+   rat:'Several answers are correct things to do — but "best first" = address the biggest threat. Calcium gluconate protects the heart NOW (it doesn\'t lower K, but it stabilizes the myocardium). Insulin+dextrose comes next; teaching/diet are low priority.'},
+
+  {q:'Which is the BEST indicator of a patient\'s fluid status?',type:'single',
+   opts:['A. Skin turgor','B. Daily weight','C. Thirst','D. Blood pressure'],correct:1,
+   rat:'"Best indicator" = most reliable/specific. Daily weight is the gold standard (1 kg ≈ 1 L). The others are useful but less precise — classic "they\'re all assessments, pick the strongest" trap.'},
+
+  {q:'Which of the following is NOT part of the VAP bundle?',type:'single',
+   opts:['A. Elevate the head of the bed 30–45°','B. Keep the patient flat to promote rest','C. Daily oral care with chlorhexidine','D. Daily sedation interruption / readiness-to-wean'],correct:1,
+   rat:'Three are real VAP-bundle elements. The impostor is B — keeping the patient flat INCREASES aspiration risk and is the opposite of the bundle. "NOT" questions hide one false action among true ones.'},
+
+  {q:'All of the following are EARLY signs of hypoxia EXCEPT:',type:'single',
+   opts:['A. Restlessness','B. Anxiety','C. Tachycardia','D. Cyanosis'],correct:3,
+   rat:'Trap: cyanosis "looks like" hypoxia so it feels right. But cyanosis is a LATE sign — the early ones are restlessness, anxiety, and tachycardia. The EXCEPT is asking for the one that doesn\'t fit "early."'},
+
+  {q:'Which finding in a chest-tube patient is the ONLY one that signals an emergency requiring you to notify the provider?',type:'single',
+   opts:['A. Gentle tidaling in the water seal','B. Continuous bubbling in the water-seal chamber','C. Continuous bubbling in the suction chamber on wall suction','D. 50 mL of serosanguineous drainage over a shift'],correct:1,
+   rat:'Tidaling is normal, suction-chamber bubbling on wall suction is expected, and modest drainage is fine. Continuous WATER-SEAL bubbling = air leak / possible tension pneumothorax — the one true emergency here.'},
+
+  {q:'The TB skin test (Mantoux) is read by measuring which of the following — and which is the WRONG thing to measure?',type:'single',
+   opts:['A. Measure induration; redness is the wrong thing to measure','B. Measure redness; induration is the wrong thing to measure','C. Measure warmth','D. Measure the wheal size at injection'],correct:0,
+   rat:'You measure INDURATION (the raised firm area), not redness — measuring redness is the classic trap. This is a "what\'s right vs. what\'s wrong" combo he likes.'},
+
+  {q:'Which action should the nurse take FIRST before starting a blood transfusion?',type:'single',
+   opts:['A. Prime the tubing with normal saline','B. Verify informed consent and the type & cross-match','C. Take baseline vital signs','D. Get the blood from the blood bank'],correct:1,
+   rat:'All four happen — but "first" matters. Confirm consent and type & cross BEFORE retrieving blood (you don\'t pull blood you\'re not cleared to give). Order traps reward knowing the sequence, not just the steps.'},
+
+  {q:'Which is NOT an appropriate action for a dislodged chest tube?',type:'single',
+   opts:['A. Cover the site with petroleum gauze taped on 3 sides','B. Tape an occlusive dressing on all 4 sides','C. Notify the provider','D. Monitor for signs of tension pneumothorax'],correct:1,
+   rat:'Taping all 4 sides traps air and can cause a tension pneumothorax — that\'s the wrong action the "NOT" is fishing for. Three sides lets air escape. The other options are all correct.'},
+
+  {q:'Which statement about oxygen in COPD is the BEST guidance?',type:'single',
+   opts:['A. Always give 100% oxygen to maximize saturation','B. Target an SpO₂ of 88–92%','C. Oxygen is never given to COPD patients','D. Keep SpO₂ at 100% at all times'],correct:1,
+   rat:'Absolute-word traps: "always 100%," "never," and "100% at all times" are all false. The BEST guidance is the controlled target of 88–92% to avoid blunting the hypoxic drive.'},
+
+  {q:'A patient has all of these orders. Which one should the nurse QUESTION (i.e., which is NOT appropriate)?',type:'single',
+   opts:['A. For a fluid-overloaded HF patient: infuse 1 L NS over 1 hour','B. For hyperkalemia: administer calcium gluconate','C. For hypovolemia: give isotonic IV fluids','D. For TB: place on airborne precautions'],correct:0,
+   rat:'A rapid saline bolus in a fluid-overloaded heart-failure patient would worsen the overload — that\'s the inappropriate order to question. The other three are all correct. "Which to question" = find the wrong one.'},
+
+  {q:'In a severe asthma attack, which assessment finding is the MOST concerning?',type:'single',
+   opts:['A. Audible wheezing on expiration','B. A sudden "silent chest" with no wheezing','C. Respiratory rate of 24','D. Use of a rescue inhaler'],correct:1,
+   rat:'Trap: wheezing "sounds worse," so people pick A. But a silent chest = no air movement = impending respiratory failure, the MOST concerning. Loud wheezing at least means air is moving.'},
+
+  {q:'Which is the ONLY confirmatory test for active TB?',type:'single',
+   opts:['A. Mantoux skin test','B. Chest x-ray','C. Sputum culture (acid-fast bacilli)','D. QuantiFERON Gold blood test'],correct:2,
+   rat:'Skin test and IGRA show exposure; x-ray is suggestive. Sputum culture is the only one that CONFIRMS active disease. "Only/confirmatory" wording points to the definitive test.'},
+
+  {q:'All of the following are signs of hypocalcemia EXCEPT:',type:'single',
+   opts:['A. Positive Chvostek sign','B. Positive Trousseau sign','C. Constipation and kidney stones','D. Tingling around the mouth'],correct:2,
+   rat:'Chvostek, Trousseau, and perioral tingling are hypoCALCEMIA (excitable). "Stones, bones, groans" (constipation, stones) is HYPERcalcemia — the EXCEPT impostor.'},
+
+  {q:'Which is the BEST nursing response when a transfusion reaction is suspected?',type:'single',
+   opts:['A. Slow the transfusion and keep watching','B. Stop the blood, keep NS running, and notify the provider','C. Give acetaminophen and continue','D. Document and reassess in 30 minutes'],correct:1,
+   rat:'Slowing it down (A) is the tempting "partial" answer, but the BEST/safest action is to STOP the blood entirely while maintaining IV access with NS, then notify. Don\'t keep infusing a possible reaction.'},
+
+  {q:'Which patient should the nurse assess FIRST?',type:'single',
+   opts:['A. A pneumonia patient with a temp of 100.6°F','B. A patient who is suddenly confused and restless with new dyspnea','C. A COPD patient with an SpO₂ of 90%','D. A patient asking about discharge'],correct:1,
+   rat:'Three are stable/expected; one is acute, unstable, unexpected. New confusion + restlessness + dyspnea = possible hypoxia/sepsis = see first. "First" questions reward acute-over-chronic thinking.'},
+
+  {q:'Which statement about blood transfusion timing is correct?',type:'single',
+   opts:['A. Blood can sit at the bedside for up to 2 hours before starting','B. A unit must be started within 30 minutes of leaving the blood bank','C. A unit may infuse over 6 hours','D. You may store blood in the unit refrigerator'],correct:1,
+   rat:'The only correct statement: start within 30 minutes of pickup. A unit finishes within 4 hours (not 6), blood never sits warming at the bedside, and it\'s never stored in a regular unit fridge.'},
+
+  {q:'Which is NOT a true statement about ARDS?',type:'single',
+   opts:['A. The hallmark is hypoxemia refractory to oxygen','B. High-flow oxygen alone usually corrects the hypoxemia','C. Chest x-ray shows bilateral infiltrates','D. PEEP is used to keep alveoli open'],correct:1,
+   rat:'The whole point of ARDS is that oxygen does NOT fix it — so B is the false statement the "NOT" wants. A, C, and D are all true.'},
+
+  {q:'Which is the MOST reliable indicator that a patient with fluid volume DEFICIT is improving?',type:'single',
+   opts:['A. Urine output rising toward 30+ mL/hr','B. The patient reports feeling less thirsty','C. Skin looks slightly less dry','D. Heart rate is unchanged'],correct:0,
+   rat:'"Most reliable" = the objective, measurable one. Improving urine output reflects restored perfusion. Thirst and skin appearance are softer/subjective; an unchanged HR shows no improvement.'},
+
+  {q:'Which of the following is NOT an appropriate intervention for a COPD patient?',type:'single',
+   opts:['A. Pursed-lip breathing','B. Tripod positioning','C. Routine high-flow 100% oxygen','D. Energy-conservation techniques'],correct:2,
+   rat:'Routine 100% oxygen can suppress the hypoxic drive in COPD — the inappropriate action. Pursed-lip breathing, tripod position, and energy conservation are all correct.'},
+
+  {q:'A patient with metabolic alkalosis from vomiting is breathing slowly. Which statement BEST explains this?',type:'single',
+   opts:['A. The kidneys are dumping bicarb','B. The lungs are slowing to RETAIN CO₂ and lower the pH','C. The patient is having a respiratory arrest','D. This is an abnormal, dangerous response that must be stopped'],correct:1,
+   rat:'Slow breathing here is compensation — retaining CO₂ (acid) to pull the alkalotic pH back down. The "BEST explains" framing rewards understanding the mechanism, not memorizing a fact.'},
+
+  {q:'Which is the ONLY scenario below where you would EXPECT continuous bubbling and consider it normal?',type:'single',
+   opts:['A. Continuous bubbling in the water-seal chamber','B. Continuous bubbling in the suction-control chamber connected to wall suction','C. Continuous bubbling right after the tube is dislodged','D. Continuous bubbling with worsening dyspnea'],correct:1,
+   rat:'Continuous bubbling is expected ONLY in the suction-control chamber when on wall suction. In the water seal it means a leak. Combining "only" + "expect normal" narrows you to the suction chamber.'},
+
+  {q:'All of the following require AIRBORNE precautions EXCEPT:',type:'single',
+   opts:['A. Tuberculosis','B. A patient with bacterial pneumonia on droplet precautions','C. Measles','D. Varicella (chickenpox)'],correct:1,
+   rat:'TB, measles, and varicella are airborne ("My Chicken Hez TB"). Bacterial pneumonia is generally droplet, not airborne — the EXCEPT. Watch for the one that uses a different precaution type.'},
+
+  {q:'Which action by a new nurse during a transfusion would require the charge nurse to INTERVENE (i.e., which is WRONG)?',type:'single',
+   opts:['A. Staying with the patient for the first 15 minutes','B. Priming the line with D5W','C. Verifying the patient with a second nurse','D. Taking baseline vitals before starting'],correct:1,
+   rat:'"Requires you to intervene" = spot the unsafe/wrong action. Priming with D5W will hemolyze the cells — only NS is used. The other three are all correct practice.'},
+
+  {q:'Which is the BEST first action for a patient who becomes dyspneic with new crackles during an IV infusion?',type:'single',
+   opts:['A. Lay the patient flat','B. Slow or stop the infusion and raise the head of the bed','C. Increase the IV rate to flush','D. Give the next scheduled antibiotic'],correct:1,
+   rat:'New crackles + dyspnea = fluid overload. BEST first action: reduce the fluid going in and sit them up to ease breathing. Lying flat or increasing the rate makes it worse.'},
+
+  {q:'Which is NOT a function regulated by the respiratory system?',type:'single',
+   opts:['A. Oxygen transport','B. Gas exchange','C. Acid–base balance (CO₂ regulation)','D. Bicarbonate regulation'],correct:3,
+   rat:'The lungs handle O₂, gas exchange, and CO₂ (acid). Bicarbonate is regulated by the KIDNEYS — the impostor in a "NOT" question that lists three lung jobs and one kidney job.'},
+
+  {q:'Of the following, which is the LEAST likely to indicate that a patient is deteriorating?',type:'single',
+   opts:['A. New restlessness and confusion','B. A rising/"normalizing" CO₂ in a tiring asthmatic','C. A sudden silent chest','D. An SpO₂ of 90% in a COPD patient'],correct:3,
+   rat:'"LEAST likely" flips the search — three are red flags, one is acceptable. 88–92% is the GOAL in COPD, so 90% is fine. Negative-direction words like LEAST work just like NOT/EXCEPT.'}
+],'Spot-the-Trap Practice');
+</script>
+
+
+<script>
+/* ============ NURSING PROCESS (ADPIE) ============ */
+document.getElementById('sec-adpie').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🔄</span> Nursing Process — ADPIE</h2>
+<p class="intro-line">Your professor said you'll see more questions on the IMPLEMENTATION of ADPIE in care. These test whether you can tell which STEP you're in and pick the action that belongs to that step. Same content you know — just framed by the nursing process.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🔄 The 5 steps — what each one actually IS</h3>
+  <table class="lab">
+    <tr><th>Step</th><th>What you're doing</th><th>Key verbs / examples</th></tr>
+    <tr><td><b>A — Assessment</b></td><td>COLLECT data (subjective + objective)</td><td>auscultate, inspect, take vitals, check labs, ask, observe, monitor</td></tr>
+    <tr><td><b>D — Diagnosis</b></td><td>ANALYZE data → name the problem</td><td>"impaired gas exchange," "fluid volume deficit," identify the priority problem</td></tr>
+    <tr><td><b>P — Planning</b></td><td>Set GOALS / expected outcomes (measurable, time-bound)</td><td>"patient will maintain SpO₂ ≥92% by end of shift," prioritize, set targets</td></tr>
+    <tr><td><b>I — Implementation</b></td><td>DO the interventions (the action)</td><td>administer, position, suction, educate, encourage, give O₂, push fluids</td></tr>
+    <tr><td><b>E — Evaluation</b></td><td>CHECK if it worked → met / not met</td><td>reassess, compare to the goal, "did the SpO₂ reach 92%?", revise plan</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"ADPIE = A Delicious Pie Is Eaten" • Assess → Diagnose → Plan → Implement → Evaluate</div></div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>⭐ High-yield rules he'll test</h3>
+  <ul class="clean">
+    <li><b>ASSESS before you ACT.</b> When a "first action" question lists an assessment and an intervention, you usually assess first — UNLESS it's a true emergency where the action is obvious (then do it).</li>
+    <li><b>Implementation = the DOING.</b> Administering meds, positioning, suctioning, teaching, giving O₂, starting fluids, applying the 3-sided dressing. If the option is an <i>action you perform</i>, it's implementation.</li>
+    <li><b>Evaluation = did it work?</b> Reassessing after an intervention (recheck the SpO₂ after O₂, recheck the K⁺ after treatment) is evaluation, not assessment.</li>
+    <li><b>Planning = goals, not actions.</b> A measurable, time-bound outcome ("will ambulate 50 ft by day 2") is planning. The thing you do to get there is implementation.</li>
+    <li><b>Diagnosis = the problem statement</b>, chosen by analyzing your assessment data — and it should be prioritized (ABCs).</li>
+    <li><b>Order matters:</b> you can't plan or implement for a problem you haven't assessed and identified. If steps are out of order in the options, that's the trap.</li>
+  </ul>
+  <div class="hy">⭐ Quick test: read the option and ask "am I COLLECTING data (A), NAMING the problem (D), SETTING a goal (P), DOING something (I), or CHECKING the result (E)?"</div>
+</div>
+
+<div id="quiz-adpie"></div>
+`;
+
+renderQuiz('quiz-adpie',[
+  {q:'A nurse auscultates crackles in a patient receiving IV fluids. Which step of the nursing process is this?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Evaluation'],correct:0,
+   rat:'Auscultating (collecting objective data) is ASSESSMENT. Naming "fluid overload" would be diagnosis; slowing the IV would be implementation; rechecking the lungs afterward would be evaluation.'},
+
+  {q:'After identifying fluid overload, the nurse slows the infusion and raises the head of the bed. These actions represent which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:2,
+   rat:'Performing the interventions (slowing the IV, repositioning) is IMPLEMENTATION — the "doing" step. This is the step your professor is emphasizing.'},
+
+  {q:'A nurse writes: "Patient will maintain SpO₂ ≥ 92% throughout the shift." This is an example of which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:1,
+   rat:'A measurable, time-bound expected outcome is PLANNING (goal-setting). The intervention to achieve it (apply O₂) would be implementation.'},
+
+  {q:'One hour after applying oxygen, the nurse rechecks the SpO₂ to see if it reached the goal. This is which step?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Evaluation'],correct:3,
+   rat:'Rechecking against the goal after an intervention is EVALUATION (did it work?). The first check before acting was assessment; the recheck to judge effectiveness is evaluation.'},
+
+  {q:'A patient is dyspneic with an SpO₂ of 85%. Which action should the nurse take FIRST?',type:'single',
+   opts:['A. Document the oxygen saturation','B. Apply oxygen and reposition the patient','C. Notify the provider','D. Review the chart for the O₂ order history'],correct:1,
+   rat:'This is a true emergency, so you ACT (implementation) rather than gather more data first. An SpO₂ of 85% with dyspnea needs immediate oxygen and repositioning — then notify/document.'},
+
+  {q:'A patient reports new shortness of breath. There is no emergency apparent yet. What should the nurse do FIRST?',type:'single',
+   opts:['A. Administer a PRN bronchodilator','B. Assess the patient (lung sounds, vitals, SpO₂)','C. Call respiratory therapy','D. Raise the head of the bed and leave the room'],correct:1,
+   rat:'When it is not an obvious emergency, ASSESS before acting. You gather data (lung sounds, vitals, SpO₂) before choosing an intervention. "Assess before act" is the most-tested ADPIE rule.'},
+
+  {q:'The nurse determines that a patient has "Impaired gas exchange related to retained secretions." This statement is which step?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Planning','D. Implementation'],correct:1,
+   rat:'Naming the problem after analyzing the data is DIAGNOSIS. It comes from assessment data and drives the plan and interventions.'},
+
+  {q:'Place these in the correct ADPIE order: the nurse should do which FIRST when starting care for a new patient?',type:'single',
+   opts:['A. Set goals for the patient','B. Perform a head-to-toe assessment','C. Implement interventions','D. Evaluate outcomes'],correct:1,
+   rat:'Assessment is always first — you cannot diagnose, plan, implement, or evaluate without data. Out-of-order options are a classic trap.'},
+
+  {q:'Which of the following is an IMPLEMENTATION action for a patient with pneumonia? (Select all that apply)',type:'multi',
+   opts:['A. Administer the prescribed antibiotic','B. Encourage 2–3 L of fluid per day','C. Auscultate breath sounds to gather data','D. Reposition and assist with incentive spirometry','E. Set a goal of "clear breath sounds by discharge"'],correct:[0,1,3],
+   rat:'Implementation = actions you perform: giving the antibiotic, encouraging fluids, repositioning/IS coaching. Auscultating is assessment; setting a goal is planning.'},
+
+  {q:'A nurse reassesses a patient\'s potassium level after treating hyperkalemia to see if it dropped. This is which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:3,
+   rat:'Checking a result against the expected outcome after an intervention is EVALUATION. The trap is that it "looks like" assessment — but its purpose is judging effectiveness.'},
+
+  {q:'During a blood transfusion the patient develops chills and back pain. The nurse stops the blood and keeps NS running. Which step does stopping the blood represent?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Planning'],correct:2,
+   rat:'Stopping the blood is an IMPLEMENTATION action (a nursing intervention) — and the correct emergency one. Recognizing the chills/back pain as a reaction was the assessment that triggered it.'},
+
+  {q:'Which statement is an appropriately written PLANNING outcome?',type:'single',
+   opts:['A. "Administer albuterol as ordered"','B. "Patient has crackles in the lung bases"','C. "Patient will ambulate 50 feet without dyspnea by day 2"','D. "Auscultate lung sounds every 4 hours"'],correct:2,
+   rat:'A good outcome is patient-centered, measurable, and time-bound — option C. A is an intervention (implementation), B is assessment data, and D is also an intervention/monitoring action.'},
+
+  {q:'A nurse notes a patient\'s urine output rose from 15 mL/hr to 40 mL/hr after fluid resuscitation. Documenting that the fluid-deficit goal was MET is which step?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Evaluation'],correct:3,
+   rat:'Comparing the result to the goal and judging it "met" is EVALUATION. This closes the loop — if the goal were not met, the nurse would revise the plan.'},
+
+  {q:'For a patient with a chest tube that becomes dislodged, applying petroleum gauze taped on 3 sides is which step of the nursing process?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:2,
+   rat:'Performing the emergency dressing is IMPLEMENTATION. Noticing the tube was out was assessment; watching for tension pneumothorax afterward would be evaluation.'},
+
+  {q:'Which action belongs to the ASSESSMENT step for a patient with suspected fluid volume deficit?',type:'single',
+   opts:['A. Administer isotonic IV fluids','B. Check skin turgor, mucous membranes, and urine specific gravity','C. Set a goal for adequate hydration','D. Document that the goal was met'],correct:1,
+   rat:'Collecting data — skin turgor, mucous membranes, specific gravity — is ASSESSMENT. The others are implementation, planning, and evaluation respectively.'},
+
+  {q:'A nurse is caring for a ventilated patient. Which IMPLEMENTATION actions help prevent VAP? (Select all that apply)',type:'multi',
+   opts:['A. Elevate the head of the bed 30–45°','B. Perform oral care with chlorhexidine','C. Document the ventilator settings','D. Provide daily sedation interruption per protocol','E. Note the diagnosis of "risk for infection"'],correct:[0,1,3],
+   rat:'The interventions you DO (HOB up, chlorhexidine care, sedation vacation) are implementation. Documenting settings is closer to assessment/recording; writing the diagnosis is the D step.'},
+
+  {q:'The nurse asks the patient to rate their dyspnea and records it. Which step is this?',type:'single',
+   opts:['A. Assessment (subjective data)','B. Planning','C. Implementation','D. Evaluation'],correct:0,
+   rat:'Collecting the patient\'s reported experience is ASSESSMENT — specifically subjective data. Assessment includes BOTH what you observe (objective) and what the patient tells you (subjective).'},
+
+  {q:'A COPD patient\'s SpO₂ is 90%. The nurse\'s plan targets 88–92%. The nurse documents the target is being met and continues monitoring. This is which step?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Evaluation'],correct:3,
+   rat:'Comparing the current value (90%) against the goal (88–92%) and judging it met is EVALUATION. Note: don\'t "fix" a 90% in COPD — it\'s within the target.'},
+
+  {q:'Which option is the BEST example of the IMPLEMENTATION step for a patient with thick respiratory secretions?',type:'single',
+   opts:['A. "Ineffective airway clearance related to thick secretions"','B. Encourage fluids, perform chest physiotherapy, and assist with coughing','C. "Patient will expectorate secretions by end of shift"','D. Auscultate for adventitious sounds'],correct:1,
+   rat:'The hands-on actions (fluids, CPT, coughing help) are IMPLEMENTATION. A is the diagnosis, C is the planning outcome, and D is assessment.'},
+
+  {q:'A nurse teaches a newly diagnosed asthma patient how to use a peak flow meter. Patient teaching is part of which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:2,
+   rat:'Patient education is an IMPLEMENTATION action — it\'s an intervention you carry out. Checking whether the patient can correctly demonstrate it afterward would be evaluation.'},
+
+  {q:'Which sequence correctly reflects the nursing process for a patient with new hypoxia?',type:'single',
+   opts:['A. Apply O₂ → assess lung sounds → set a goal → evaluate','B. Assess (vitals, lung sounds) → identify the problem → set a goal → apply O₂ → reassess SpO₂','C. Set a goal → apply O₂ → assess → diagnose','D. Diagnose → evaluate → assess → implement'],correct:1,
+   rat:'Correct ADPIE flow: Assess → Diagnose → Plan → Implement → Evaluate. The other sequences scramble the order, which is the trap in process-order questions.'},
+
+  {q:'A patient with hypocalcemia has a positive Trousseau sign. Instituting seizure precautions and monitoring the airway are which step?',type:'single',
+   opts:['A. Assessment','B. Diagnosis','C. Implementation','D. Planning'],correct:2,
+   rat:'Putting safety measures in place (seizure precautions, airway monitoring setup) is IMPLEMENTATION. Eliciting the Trousseau sign was the assessment that identified the risk.'},
+
+  {q:'Which of these is an EVALUATION statement?',type:'single',
+   opts:['A. "Patient is short of breath with crackles"','B. "Administer furosemide as prescribed"','C. "After diuretic therapy, lung sounds are clear and weight decreased 2 kg — goal met"','D. "Fluid volume excess related to heart failure"'],correct:2,
+   rat:'Option C compares the outcome to the goal after an intervention — that\'s EVALUATION. A is assessment data, B is implementation, D is the nursing diagnosis.'},
+
+  {q:'A nurse suspects a patient is deteriorating but the situation is not yet an emergency. Per the nursing process, what should the nurse do FIRST?',type:'single',
+   opts:['A. Notify the rapid response team','B. Complete a focused assessment of the patient','C. Administer PRN medications','D. Begin documentation'],correct:1,
+   rat:'When it isn\'t a clear emergency, gather data first — a focused ASSESSMENT guides what to do next. Acting or escalating before assessing skips a step (unless the patient is in obvious crisis).'},
+
+  {q:'The nurse plans care for a patient with pneumonia and lists "improved airway clearance" as a goal. Prioritizing this goal is part of which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:1,
+   rat:'Setting and prioritizing goals/outcomes is PLANNING. The interventions chosen to reach the goal (suction, CPT, fluids) are implementation.'},
+
+  {q:'During implementation, a nurse gives a bronchodilator BEFORE the inhaled corticosteroid and teaches the patient to rinse afterward. Which best describes these actions?',type:'single',
+   opts:['A. They are assessment activities','B. They are correctly performed implementation actions','C. They are planning outcomes','D. They are evaluation steps'],correct:1,
+   rat:'Administering meds in the correct order and teaching are IMPLEMENTATION — and these are done correctly (bronchodilator first opens airways; rinsing prevents thrush).'},
+
+  {q:'After teaching, the nurse asks the patient to demonstrate using the incentive spirometer correctly. This "teach-back" is which step?',type:'single',
+   opts:['A. Assessment','B. Planning','C. Implementation','D. Evaluation'],correct:3,
+   rat:'Checking whether teaching was effective (can the patient do it right?) is EVALUATION. The teaching itself was implementation; the return-demonstration evaluates the outcome.'},
+
+  {q:'Which nursing action during ADPIE can be DELEGATED to assistive personnel, leaving the nurse to handle the steps that require judgment?',type:'single',
+   opts:['A. Performing the admission assessment','B. Formulating the nursing diagnosis','C. Recording intake and output and reporting the values','D. Evaluating whether outcomes were met'],correct:2,
+   rat:'Assessment, diagnosis, and evaluation require nursing judgment and cannot be delegated. Routine data-collection tasks like measuring/recording I&O can be delegated to AP.'}
+],'ADPIE in Action — Identify the Step');
+</script>
 
 <script>
 /* ============ RAPID DRILL ============ */
