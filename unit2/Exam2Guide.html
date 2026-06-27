@@ -292,6 +292,7 @@ const SECTIONS=[
   {id:'clinical',label:'🧠 Clinical Judgment',emoji:'🧠'},
   {id:'tricks',label:'🎯 Trick Questions',emoji:'🎯'},
   {id:'adpie',label:'🔄 Nursing Process',emoji:'🔄'},
+  {id:'decoder',label:'🩺 Disorder Decoder',emoji:'🩺'},
   {id:'drill',label:'⚡ Rapid Drill',emoji:'⚡'},
   {id:'games',label:'🎮 Games',emoji:'🎮'},
   {id:'exam',label:'📝 Exam (119Q)',emoji:'📝'},
@@ -384,6 +385,12 @@ document.getElementById('sec-home').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🏠</span> Welcome to Your Study Lab</h2>
 <p class="intro-line">Everything from your Chapter 10, 17 & 19 slides, the hidden speaker notes, both lecture docs, and your professor's actual test blueprint — turned into something you can actually study with ADHD brain.</p>
 
+<div class="card" style="border-color:var(--purple);background:linear-gradient(135deg,rgba(168,85,247,.08),transparent)">
+  <h3>💬 Straight from Prof. Casteel</h3>
+  <p>"Focus on content and concepts highlighted... For example, if I was looking over Asthma, I would want to know: <b>what causes this, treatment, and how it manifests on a patient</b>. Knowing this makes it easier to answer any question." He also said this is a <b>forward-moving class</b> — grades build as you take more exams, and he <b>does not expect to fail anyone</b> who studies with purpose. 💜</p>
+  <p>So this guide is built around his formula. Head to the <b>🩺 Disorder Decoder</b> for every disorder broken into <b>Cause → Manifests → Treatment</b> — his exact answer-anything method.</p>
+</div>
+
 <div class="card">
   <h3>🗺️ How to use this (1-week plan)</h3>
   <table class="lab">
@@ -392,7 +399,7 @@ document.getElementById('sec-home').innerHTML=`
     <tr><td><b>Day 2</b></td><td>💉 IV Fluids + 🫁 ABGs</td><td>Use the ABG Simulator until it's automatic</td></tr>
     <tr><td><b>Day 3</b></td><td>🔍 Resp Assessment + 🚨 Acute Resp</td><td>Atelectasis, ARF, ARDS quizzes</td></tr>
     <tr><td><b>Day 4</b></td><td>🦠 Pneumonia + 🩺 Airway/Tubes</td><td>VAP bundle, ET/trach care</td></tr>
-    <tr><td><b>Day 5</b></td><td>🧯 Chest Tubes + 🩸 Transfusion + 🔬 TB + 🌬️ COPD</td><td>The "easy points" your prof loves</td></tr>
+    <tr><td><b>Day 5</b></td><td>🧯 Chest Tubes + 🩸 Transfusion + 🔬 TB + 🌬️ COPD</td><td>The "easy points" your prof loves — then hit the 🩺 Disorder Decoder to lock in Cause→Manifests→Treatment</td></tr>
     <tr><td><b>Day 6</b></td><td>🧠 Clinical + 🎯 Trick Qs + 🔄 Nursing Process</td><td>He flagged BOTH critical-thinking traps AND more ADPIE/implementation questions. Drill "which step am I in" + "what do I do first."</td></tr>
     <tr><td><b>Day 7</b></td><td>📝 119-Question Exam</td><td>Sit it like the real thing. Review every miss.</td></tr>
   </table>
@@ -1966,6 +1973,177 @@ renderQuiz('quiz-adpie',[
    opts:['A. Performing the admission assessment','B. Formulating the nursing diagnosis','C. Recording intake and output and reporting the values','D. Evaluating whether outcomes were met'],correct:2,
    rat:'Assessment, diagnosis, and evaluation require nursing judgment and cannot be delegated. Routine data-collection tasks like measuring/recording I&O can be delegated to AP.'}
 ],'ADPIE in Action — Identify the Step');
+</script>
+
+
+<script>
+/* ============ DISORDER DECODER (Prof Casteel's framework) ============ */
+document.getElementById('sec-decoder').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🩺</span> Disorder Decoder</h2>
+<p class="intro-line">Straight from your professor: for any disorder, know <b>(1) what CAUSES it, (2) how it MANIFESTS on the patient, and (3) the TREATMENT</b>. Master those three and you can answer almost any question he throws at it. Every disorder below is broken down that exact way.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🗝️ The 3-question key (use it on every disorder)</h3>
+  <ul class="clean">
+    <li><b>1. Cause / pathophysiology</b> — what's physically going wrong? (This explains everything else.)</li>
+    <li><b>2. Manifestations</b> — what will you SEE, HEAR, and what will the patient FEEL/REPORT? (signs + symptoms)</li>
+    <li><b>3. Treatment</b> — meds, nursing interventions, priorities, and patient teaching.</li>
+  </ul>
+  <div class="mnem"><div class="tag">🧠 Mnemonic</div><div class="big">"Cause → Clues → Cure"</div><div class="exp">Why it happens → how it shows up → what we do about it.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🌬️ ASTHMA <span class="pill">his example</span></h3>
+  <p><b>Cause:</b> reversible airway inflammation + bronchoconstriction + mucus, triggered by allergens, exercise, cold air, infection, stress. Airways are hyperreactive and narrow.</p>
+  <p><b>Manifests:</b> wheezing (expiratory), chest tightness, cough, dyspnea, prolonged expiration, use of accessory muscles, anxiety. <b>⚠️ Silent chest = emergency</b> (no air moving → impending respiratory failure). Early ABG: respiratory alkalosis (blowing off CO₂); a rising/"normal" CO₂ in a tiring patient = failing.</p>
+  <p><b>Treatment:</b> <b>SABA (albuterol)</b> rescue first → inhaled corticosteroids (controller, rinse mouth after) → LABA, leukotriene blockers. O₂, high-Fowler's, stay calm. Status asthmaticus = emergency (continuous nebs, steroids, possible intubation). Teach: bronchodilator BEFORE steroid, use a spacer, peak-flow zones, avoid triggers.</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🌫️ COPD (emphysema / chronic bronchitis)</h3>
+  <p><b>Cause:</b> chronic, irreversible airflow limitation — usually long-term smoking. Air trapping, alveolar destruction (emphysema) and/or chronic mucus + inflammation (bronchitis).</p>
+  <p><b>Manifests:</b> chronic productive cough, dyspnea on exertion, prolonged expiration, <b>barrel chest</b>, pursed-lip breathing, tripod posture, fatigue. Chronic CO₂ retainer → ABG often compensated respiratory acidosis. "Pink puffer" (emphysema) vs "blue bloater" (bronchitis).</p>
+  <p><b>Treatment:</b> <b>O₂ target 88–92%</b> (don't over-oxygenate — hypoxic drive), bronchodilators, inhaled steroids, pulmonary rehab, smoking cessation, pneumonia/flu vaccines. Pursed-lip breathing, energy conservation, small frequent high-calorie meals.</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🦠 PNEUMONIA</h3>
+  <p><b>Cause:</b> infection (bacterial/viral/fungal/aspiration) → inflammation + fluid/exudate fill the alveoli, impairing gas exchange. Types: CAP, HAP (≥48 hrs after admit), VAP, aspiration (favors the RIGHT lung).</p>
+  <p><b>Manifests:</b> fever, chills, productive cough (rust-colored = pneumococcal; green/yellow), pleuritic chest pain, dyspnea, tachypnea, <b>crackles</b>, ↓ breath sounds, dullness to percussion. Older adults → confusion may be the first sign. Septic shock = weak/thready/fast pulse + ↓BP (report immediately).</p>
+  <p><b>Treatment:</b> antibiotics (after cultures), O₂, fluids 2–3 L/day, incentive spirometry, coughing/deep breathing, reposition, rest. VAP bundle to prevent (HOB 30–45°, chlorhexidine, sedation vacation, prophylaxis).</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🔬 TUBERCULOSIS (TB)</h3>
+  <p><b>Cause:</b> <i>Mycobacterium tuberculosis</i>, spread by airborne droplet nuclei. Can be latent (no symptoms, not infectious) or active.</p>
+  <p><b>Manifests:</b> productive cough &gt;3 weeks, <b>hemoptysis</b>, night sweats, low-grade fever, weight loss, fatigue, anorexia. Mantoux = induration at 48–72 hrs (exposure); sputum culture (AFB) confirms ACTIVE disease.</p>
+  <p><b>Treatment:</b> <b>Airborne precautions</b> (negative-pressure room, N95). <b>RIPE</b> ×6–12 months: Rifampin (orange fluids), Isoniazid (+B6 for neuropathy), Pyrazinamide, Ethambutol (optic neuritis — vision checks). Teach full adherence; infectious until 3 negative sputum cultures.</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💨 ARDS (acute respiratory distress syndrome)</h3>
+  <p><b>Cause:</b> severe lung injury (sepsis, aspiration, trauma, pancreatitis) → inflammation, capillary leak, fluid floods alveoli, <b>surfactant washed out</b> → alveolar collapse + shunting.</p>
+  <p><b>Manifests:</b> <b>refractory hypoxemia</b> (low O₂ that does NOT improve with oxygen), severe dyspnea, tachypnea, bilateral "white-out" infiltrates on CXR, ↓ lung compliance.</p>
+  <p><b>Treatment:</b> mechanical ventilation with <b>PEEP</b>, treat the underlying cause, <b>prone positioning ~q12h</b>, nutrition (35–45 kcal/kg/day), sedation/support. High mortality.</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🫁 ATELECTASIS</h3>
+  <p><b>Cause:</b> alveolar collapse — often post-op from shallow breathing/pain, secretions, or immobility.</p>
+  <p><b>Manifests:</b> ↓ or absent breath sounds over the area, dyspnea, ↓ SpO₂, possible low-grade fever, tachypnea.</p>
+  <p><b>Treatment:</b> <b>incentive spirometry</b> (inhale slowly, hold ~3 sec), coughing/deep breathing, early ambulation, reposition, pain control so they CAN breathe deeply. Mostly preventable.</p>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🎈 PNEUMOTHORAX / CHEST TRAUMA</h3>
+  <p><b>Cause:</b> air (pneumothorax) or blood (hemothorax) in the pleural space → loss of negative pressure → lung collapses. <b>Tension pneumothorax</b> = air trapped under pressure, pushing the mediastinum (life-threatening).</p>
+  <p><b>Manifests:</b> sudden sharp pleuritic pain, dyspnea, ↓/absent breath sounds on the affected side, tachycardia. Tension: <b>tracheal deviation</b> (away from affected side), severe distress, hypotension, JVD.</p>
+  <p><b>Treatment:</b> <b>chest tube</b> to re-expand the lung. Water-seal care: continuous bubbling in water seal = leak; tidaling = normal; keep system below chest; if dislodged → petroleum gauze taped on <b>3 sides</b>; emergency supplies at bedside.</p>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>💧 Same framework for Fluids/Electrolytes & ABGs</h3>
+  <ul class="clean">
+    <li><b>Fluid Volume Deficit</b> — Cause: loss (vomiting, diarrhea, hemorrhage, poor intake). Manifests: ↑HR, ↓BP, poor turgor, dry membranes, urine &lt;25 mL/hr, ↑ specific gravity. Treat: isotonic fluids, monitor I&O/daily weight.</li>
+    <li><b>Fluid Volume Excess</b> — Cause: retention (HF, renal failure, too much IV). Manifests: edema, JVD, crackles, ↑weight, bounding pulse. Treat: diuretics, Na/fluid restriction, daily weights, HOB up.</li>
+    <li><b>Hyperkalemia</b> — Cause: renal failure, K-sparing diuretics, acidosis. Manifests: peaked T waves, weakness, arrhythmias. Treat: calcium gluconate (protect heart), insulin+D50, monitor ECG.</li>
+    <li><b>Respiratory Acidosis</b> — Cause: hypoventilation (COPD, OD, resp failure → CO₂ retained). Manifests: ↓pH, ↑CO₂, drowsy/confused. Treat: improve ventilation, controlled O₂.</li>
+    <li><b>Metabolic Acidosis</b> — Cause: DKA, diarrhea, renal failure, lactic acid. Manifests: ↓pH, ↓HCO₃, Kussmaul breathing. Treat: fix the cause; bicarb if severe.</li>
+  </ul>
+</div>
+
+<div id="quiz-decoder"></div>
+`;
+
+renderQuiz('quiz-decoder',[
+  {q:'CAUSE — What is the underlying problem in asthma?',type:'single',
+   opts:['A. Irreversible alveolar destruction','B. Reversible airway inflammation and bronchoconstriction','C. Fluid filling the alveoli from infection','D. Air trapped in the pleural space'],correct:1,
+   rat:'Asthma = REVERSIBLE inflammation + bronchoconstriction + mucus in hyperreactive airways. (Irreversible destruction = emphysema; alveolar fluid = pneumonia/ARDS; pleural air = pneumothorax.)'},
+
+  {q:'MANIFESTS — During a severe asthma attack, which finding is the MOST alarming?',type:'single',
+   opts:['A. Loud expiratory wheezing','B. A sudden silent chest','C. Prolonged expiration','D. Coughing'],correct:1,
+   rat:'A silent chest means almost no air is moving — impending respiratory failure. Loud wheezing at least means air movement. Knowing how it MANIFESTS tells you which sign is the emergency.'},
+
+  {q:'TREATMENT — A patient is mid-asthma attack with audible wheezing and dyspnea. Which medication is the FIRST-line treatment?',type:'single',
+   opts:['A. Inhaled corticosteroid','B. Short-acting beta agonist (albuterol)','C. Leukotriene receptor blocker','D. Long-acting beta agonist'],correct:1,
+   rat:'A SABA (albuterol) is the rescue med — it bronchodilates fast. Inhaled steroids and LABAs are controllers, not rescue. Knowing the treatment lets you pick first-line vs maintenance.'},
+
+  {q:'CAUSE — What most commonly causes COPD?',type:'single',
+   opts:['A. A bacterial infection','B. Long-term cigarette smoking','C. An allergic reaction','D. A genetic clotting disorder'],correct:1,
+   rat:'COPD is chronic, largely irreversible airflow limitation usually from long-term smoking. Cause drives everything: air trapping → barrel chest → CO₂ retention.'},
+
+  {q:'MANIFESTS — Which physical finding is classic for chronic COPD?',type:'single',
+   opts:['A. Tracheal deviation','B. Barrel chest with prolonged expiration','C. Rust-colored sputum','D. Positive Trousseau sign'],correct:1,
+   rat:'Chronic air trapping enlarges the AP diameter → barrel chest, plus prolonged expiration and pursed-lip breathing. (Tracheal deviation = tension pneumo; rust sputum = pneumonia; Trousseau = hypocalcemia.)'},
+
+  {q:'TREATMENT — What is the appropriate oxygen goal for most COPD patients?',type:'single',
+   opts:['A. 100%','B. 95–100%','C. 88–92%','D. Below 85%'],correct:2,
+   rat:'Target 88–92% to oxygenate without blunting the hypoxic drive. This is a treatment fact that flows from the cause (chronic CO₂ retention).'},
+
+  {q:'CAUSE — What is physically happening to the alveoli in pneumonia?',type:'single',
+   opts:['A. They collapse from lack of surfactant','B. They fill with inflammatory fluid/exudate from infection','C. They over-inflate and trap air','D. They are compressed by pleural air'],correct:1,
+   rat:'Infection inflames the alveoli and fills them with fluid/exudate, blocking gas exchange. That cause explains the crackles, dullness, and hypoxia you see.'},
+
+  {q:'MANIFESTS — Which sputum color is classically associated with pneumococcal pneumonia?',type:'single',
+   opts:['A. Clear','B. Rust-colored','C. White and frothy','D. Black'],correct:1,
+   rat:'Rust-colored sputum is the classic clue for Streptococcus pneumoniae. (Frothy/pink = pulmonary edema.) Manifestations point you to the cause.'},
+
+  {q:'MANIFESTS — In an older adult, which may be the EARLIEST sign of pneumonia?',type:'single',
+   opts:['A. A high fever','B. New confusion','C. Clubbing of the fingers','D. Weight gain'],correct:1,
+   rat:'Older adults often show new confusion before classic fever/cough — a key manifestation to recognize and never dismiss.'},
+
+  {q:'TREATMENT — Which nursing interventions are appropriate for pneumonia? (Select all that apply)',type:'multi',
+   opts:['A. Encourage 2–3 L of fluid per day','B. Incentive spirometry and coughing/deep breathing','C. Administer antibiotics after cultures are obtained','D. Keep the patient flat and still','E. Reposition regularly'],correct:[0,1,2,4],
+   rat:'Fluids, lung expansion, antibiotics (after cultures), and repositioning all treat pneumonia. Keeping the patient flat worsens secretions and gas exchange.'},
+
+  {q:'CAUSE — How is tuberculosis transmitted?',type:'single',
+   opts:['A. Bloodborne contact','B. Airborne droplet nuclei','C. Contaminated food','D. Skin-to-skin contact'],correct:1,
+   rat:'TB is airborne — which directly dictates the treatment/precaution (negative-pressure room, N95). Cause → intervention.'},
+
+  {q:'MANIFESTS — Which set of symptoms suggests active TB?',type:'single',
+   opts:['A. Sudden chest pain and tracheal deviation','B. Productive cough >3 weeks, hemoptysis, night sweats, weight loss','C. Barrel chest and pursed-lip breathing','D. Peaked T waves and muscle weakness'],correct:1,
+   rat:'Chronic cough, hemoptysis, night sweats, and weight loss are the hallmark TB manifestations. The other sets point to pneumothorax, COPD, and hyperkalemia.'},
+
+  {q:'TREATMENT — A patient on rifampin should be taught that the drug commonly:',type:'single',
+   opts:['A. Causes hearing loss','B. Turns body fluids orange','C. Causes a barrel chest','D. Raises potassium'],correct:1,
+   rat:'Rifampin harmlessly turns urine/sweat/tears orange (and stains soft contacts). Knowing treatment side effects answers a whole class of questions.'},
+
+  {q:'CAUSE — What makes ARDS different from ordinary hypoxia?',type:'single',
+   opts:['A. The hypoxemia improves quickly with oxygen','B. The hypoxemia is refractory — it does NOT improve with oxygen','C. It is caused by airway narrowing','D. It only affects one lung'],correct:1,
+   rat:'ARDS hallmark = refractory hypoxemia from flooded alveoli + surfactant washout. That cause is WHY oxygen alone fails and PEEP/prone positioning are needed.'},
+
+  {q:'TREATMENT — Which intervention is specific to improving oxygenation in ARDS?',type:'single',
+   opts:['A. Keeping the patient supine at all times','B. Prone positioning about every 12 hours','C. High-flow oxygen alone','D. Fluid boluses'],correct:1,
+   rat:'Prone positioning ~q12h improves oxygenation in ARDS. Oxygen alone won\'t fix refractory hypoxemia — that ties back to the cause.'},
+
+  {q:'CAUSE — What causes atelectasis in a post-op patient?',type:'single',
+   opts:['A. Alveolar collapse from shallow breathing, pain, or secretions','B. Air in the pleural space','C. Infection filling the alveoli','D. Bronchospasm'],correct:0,
+   rat:'Post-op shallow breathing/pain/immobility collapses alveoli = atelectasis. Cause points directly to the fix (deep breathing, IS, ambulation).'},
+
+  {q:'TREATMENT — Which is the priority nursing intervention to prevent and treat atelectasis?',type:'single',
+   opts:['A. Strict bed rest','B. Incentive spirometry, coughing, deep breathing, and early ambulation','C. Fluid restriction','D. Keeping the patient flat'],correct:1,
+   rat:'Lung-expansion measures (IS with a 3-second hold, coughing/deep breathing, ambulation) reopen alveoli. Pain control matters so the patient CAN breathe deeply.'},
+
+  {q:'MANIFESTS — Which findings indicate a TENSION pneumothorax? (Select all that apply)',type:'multi',
+   opts:['A. Tracheal deviation away from the affected side','B. Absent breath sounds on the affected side','C. Severe respiratory distress and hypotension','D. Rust-colored sputum','E. Jugular vein distention'],correct:[0,1,2,4],
+   rat:'Tension pneumothorax: tracheal deviation, absent breath sounds, distress/hypotension, and JVD from compressed great vessels. Rust sputum belongs to pneumonia.'},
+
+  {q:'TREATMENT — A chest tube patient suddenly has continuous bubbling in the water-seal chamber. What does this mean and what is the concern?',type:'single',
+   opts:['A. Normal function — no concern','B. An air leak that can progress to tension pneumothorax','C. The lung has fully re-expanded','D. The suction is too low'],correct:1,
+   rat:'Continuous water-seal bubbling = air leak; with worsening status, suspect a developing tension pneumothorax. (Tidaling, by contrast, is normal.)'},
+
+  {q:'PUTTING IT TOGETHER — A patient with COPD is admitted with increased dyspnea. Using cause→manifest→treatment, which ABG and O₂ plan fit?',type:'single',
+   opts:['A. Respiratory alkalosis; give 100% O₂','B. Compensated respiratory acidosis; controlled O₂ to keep SpO₂ 88–92%','C. Metabolic acidosis; give bicarb','D. Metabolic alkalosis; restrict fluids'],correct:1,
+   rat:'COPD cause = chronic CO₂ retention → compensated respiratory acidosis. Treatment = controlled O₂ (88–92%), not 100%. The framework links the three together.'},
+
+  {q:'CAUSE — Fluid volume deficit is BEST described as resulting from:',type:'single',
+   opts:['A. Fluid retention from heart failure','B. Loss of fluid (vomiting, diarrhea, hemorrhage) or poor intake','C. Too much IV fluid','D. Excess sodium intake'],correct:1,
+   rat:'Deficit = loss or inadequate intake. That cause explains the manifestations (↑HR, ↓BP, concentrated urine) and the treatment (isotonic fluids).'},
+
+  {q:'MANIFESTS → TREATMENT — A patient with hyperkalemia shows peaked T waves. What is given FIRST and why?',type:'single',
+   opts:['A. Insulin with dextrose, to shift K into cells','B. Calcium gluconate, to protect/stabilize the heart','C. A potassium supplement','D. A beta blocker'],correct:1,
+   rat:'Peaked T waves = cardiac threat. Calcium gluconate stabilizes the myocardium FIRST (it doesn\'t lower K). Insulin+dextrose then shifts K into cells. Manifestation drives the priority treatment.'}
+],'Decode It — Cause, Manifests, Treatment');
 </script>
 
 <script>
