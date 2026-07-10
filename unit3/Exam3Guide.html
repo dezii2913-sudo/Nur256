@@ -679,7 +679,15 @@ renderQuiz('quiz-diabetes',[
 
   {q:'Which of the following are direct physiologic effects of insulin, beyond simply moving glucose into cells? (Select all that apply)',type:'multi',
    opts:['A. Promotes storage of excess glucose as fat (lipogenesis)','B. Inhibits the breakdown of fat (lipolysis)','C. Promotes movement of potassium into cells','D. Stimulates the release of glucagon from alpha cells','E. Directly produces ketone bodies as a byproduct'],correct:[0,1,2],
-   rat:'The traps: insulin does NOT stimulate glucagon release (they act in opposition to each other) and does NOT produce ketones — ketones are produced specifically when insulin is ABSENT or ineffective and lipolysis is unblocked. The three correct actions (fat storage, blocking lipolysis, driving K⁺ into cells) explain both DKA\'s ketone production and the hypokalemia risk of insulin therapy.'}
+   rat:'The traps: insulin does NOT stimulate glucagon release (they act in opposition to each other) and does NOT produce ketones — ketones are produced specifically when insulin is ABSENT or ineffective and lipolysis is unblocked. The three correct actions (fat storage, blocking lipolysis, driving K⁺ into cells) explain both DKA\'s ketone production and the hypokalemia risk of insulin therapy.'},
+
+  {q:'A client with Type 2 diabetes has been managed on metformin for 6 years. Recent labs show an A1C of 8.9%, up from 7.1% a year ago, despite reported medication adherence. Which explanation for this trend is MOST accurate?',type:'single',
+   opts:['A. Metformin has stopped being absorbed by the GI tract after long-term use','B. Beta-cell function typically continues to decline over time in Type 2 diabetes, so a single oral agent may eventually become insufficient regardless of adherence','C. The client\'s A1C values are unreliable and should be disregarded in favor of daily fingersticks only','D. This pattern indicates the client has actually developed Type 1 diabetes'],correct:1,
+   rat:'The trap: A invents a nonexistent absorption failure, C dismisses a validated, standard diagnostic tool, and D misdiagnoses a progression pattern that is completely normal in TYPE 2 diabetes. Type 2 diabetes is progressive — beta-cell function keeps declining over years even with perfect adherence, which is exactly why additional or different medications are often needed over time, not a sign anything was done wrong.'},
+
+  {q:'A nurse is teaching a client newly started on a GLP-1 receptor agonist (e.g., semaglutide) for Type 2 diabetes. Which statement by the client indicates a correct understanding of this medication class?',type:'single',
+   opts:['A. "This medication works the same way as insulin and will replace my need for it entirely."','B. "This medication may help me feel full sooner and could help with some weight loss, in addition to lowering my blood sugar."','C. "I should expect my blood sugar to drop dangerously low even if I skip a meal."','D. "This is a fast-acting rescue medication I should use if I feel a hypoglycemic episode starting."'],correct:1,
+   rat:'The trap: A conflates a GLP-1 agonist with insulin itself, which is inaccurate — they work through a different, incretin-based mechanism. C overstates hypoglycemia risk (GLP-1 agonists carry a LOW risk of hypoglycemia on their own, unlike sulfonylureas or insulin). D fundamentally misunderstands the medication as a rescue treatment when it is a scheduled, ongoing therapy. GLP-1 agonists slow gastric emptying and increase satiety (weight loss benefit) while improving glucose control.'}
 ],'Diabetes Core Check');
 </script>
 <script>
@@ -763,7 +771,15 @@ renderQuiz('quiz-dka',[
 
   {q:'A nurse questions why the care team is intentionally slowing the rate of glucose correction in a patient being treated for HHS, rather than correcting it as fast as possible. What is the BEST rationale?',type:'single',
    opts:['A. Slower correction simply reduces the total cost of insulin and IV fluids used during treatment','B. The brain has adapted to the prolonged hyperosmolar state, and correcting glucose/osmolality too quickly can cause a dangerous fluid shift into brain cells, resulting in cerebral edema','C. Slower correction is only a comfort measure with no effect on patient safety','D. Rapid correction is actually preferred whenever the patient is hemodynamically stable enough to tolerate it'],correct:1,
-   rat:'The trap: A and C both dismiss this as a non-clinical or minor consideration, and D states the opposite of safe practice. The real mechanism: the brain adjusts to a hyperosmolar environment during prolonged severe hyperglycemia, so correcting the osmolality too fast causes water to shift rapidly into brain cells — this is exactly why dextrose is added and glucose is lowered gradually rather than as fast as possible.'}
+   rat:'The trap: A and C both dismiss this as a non-clinical or minor consideration, and D states the opposite of safe practice. The real mechanism: the brain adjusts to a hyperosmolar environment during prolonged severe hyperglycemia, so correcting the osmolality too fast causes water to shift rapidly into brain cells — this is exactly why dextrose is added and glucose is lowered gradually rather than as fast as possible.'},
+
+  {q:'A client in DKA has an arterial blood gas showing pH 7.18, PaCO2 22 mmHg, and HCO3 11 mEq/L. Which interpretation is correct?',type:'single',
+   opts:['A. Respiratory acidosis with metabolic compensation','B. Metabolic acidosis with respiratory compensation (Kussmaul breathing blowing off CO2)','C. Metabolic alkalosis with respiratory compensation','D. A normal acid-base balance for a patient in DKA'],correct:1,
+   rat:'The trap: A reverses the primary problem and the compensating system. The low pH and low HCO3 together identify a METABOLIC acidosis (from ketoacids) as the primary problem; the low PaCO2 shows the lungs are compensating by blowing off CO2 through Kussmaul respirations — this is respiratory compensation FOR a metabolic acidosis, not a respiratory disorder itself.'},
+
+  {q:'A client with DKA has been on an insulin drip for several hours. The provider orders a decrease in the infusion rate once the anion gap has closed and bicarbonate has normalized, even though the glucose reached goal range earlier. What is the rationale for continuing insulin until this later point?',type:'single',
+   opts:['A. Insulin must be continued until the ketoacidosis itself has resolved, not just until the glucose number looks normal, since stopping too early can allow ketone production to restart','B. There is no clinical reason for this order; the drip should have been stopped once glucose reached goal range','C. The anion gap and bicarbonate are unrelated to insulin therapy and are being monitored for an unrelated reason','D. This order is only relevant if the client also has kidney disease'],correct:0,
+   rat:'The trap: B assumes glucose normalization alone signals resolution, missing that DKA is fundamentally an ACIDOSIS problem, not just a glucose problem. C and D both dismiss a real and important physiologic connection. Insulin is what shuts off ketone production — the glucose number can look fine long before the acidosis has actually resolved, which is why dextrose is added to keep the drip running until the anion gap/bicarbonate confirm the acidosis itself is fixed.'}
 ],'DKA vs HHS Check');
 </script>
 <script>
@@ -830,7 +846,15 @@ renderQuiz('quiz-hypo',[
 
   {q:'A patient with long-standing diabetes and known autonomic neuropathy is found with a glucose of 48 mg/dL but reports feeling completely normal, with no shakiness or sweating. What does this presentation MOST likely indicate?',type:'single',
    opts:['A. A falsely low glucose reading that should be repeated before treating','B. Hypoglycemia unawareness — autonomic neuropathy has blunted the early adrenergic warning signs, so the patient can progress straight toward neuroglycopenic symptoms without warning','C. That this glucose level is not clinically significant for this particular patient','D. Early DKA, since the absence of typical hypoglycemia symptoms suggests a different mechanism entirely'],correct:1,
-   rat:'The trap: C dismisses a genuinely low and dangerous glucose level just because symptoms are absent, and D redirects to an unrelated condition. In patients with autonomic neuropathy, the early adrenergic warning system can be blunted or lost entirely — this patient still needs immediate treatment and closer, more frequent monitoring going forward, precisely because they can\'t rely on feeling symptoms.'}
+   rat:'The trap: C dismisses a genuinely low and dangerous glucose level just because symptoms are absent, and D redirects to an unrelated condition. In patients with autonomic neuropathy, the early adrenergic warning system can be blunted or lost entirely — this patient still needs immediate treatment and closer, more frequent monitoring going forward, precisely because they can\'t rely on feeling symptoms.'},
+
+  {q:'A client receiving NPH insulin at 0700 develops diaphoresis, tremor, and confusion at 1500. What is the MOST likely explanation for the TIMING of this event?',type:'single',
+   opts:['A. This is unrelated to the morning insulin dose since too much time has passed','B. NPH insulin typically peaks 4-12 hours after administration, placing this event within its expected peak action window','C. NPH insulin has no peak and provides flat, even coverage throughout the day','D. This can only be explained by a dietary indiscretion, not the insulin itself'],correct:1,
+   rat:'The trap: A assumes enough time has passed for the insulin to be irrelevant, but NPH is intermediate-acting with a peak of roughly 4-12 hours — 1500 (8 hours after a 0700 dose) falls squarely within that window. C incorrectly describes NPH as peakless (that describes long-acting analogs like glargine), and D ignores the much more likely medication-timing explanation in favor of an unsupported assumption.'},
+
+  {q:'A nurse is teaching a client about hypoglycemia risk related to exercise. Which statement by the client indicates a need for further teaching?',type:'single',
+   opts:['A. "I should check my blood sugar before and after exercising, especially if it\'s a new or more intense activity."','B. "Exercise can lower my blood sugar for several hours afterward, not just during the activity itself."','C. "I\'ll carry a fast-acting carbohydrate source with me whenever I exercise."','D. "As long as I feel fine during exercise, I don\'t need to worry about my blood sugar dropping afterward."'],correct:3,
+   rat:'The trap: this question asks which statement needs correction, and D is the one that reflects a dangerous misunderstanding — exercise can lower glucose for hours AFTER the activity ends (increased insulin sensitivity and glycogen replenishment), so feeling fine DURING exercise doesn\'t rule out a delayed drop. A, B, and C all reflect correct, safety-focused understanding.'}
 ],'Hypoglycemia Check');
 </script>
 <script>
@@ -900,7 +924,15 @@ renderQuiz('quiz-complications',[
 
   {q:'A long-standing diabetic patient is later found to have had a myocardial infarction with minimal chest pain reported at the time. Which underlying mechanism BEST explains this presentation?',type:'single',
    opts:['A. Diabetic patients have a naturally higher pain tolerance unrelated to any nerve damage','B. Autonomic neuropathy can blunt or eliminate the typical chest-pain warning signal of an MI, producing a "silent" presentation','C. This patient\'s heart was not significantly affected by the infarction, which is why pain was minimal','D. This presentation suggests the diagnosis of MI is incorrect and another cause should be investigated'],correct:1,
-   rat:'The trap: A invents an unrelated psychological explanation, and C and D both dismiss a serious, real cardiac event based on symptom severity alone. Autonomic neuropathy specifically can blunt the pain-signaling pathway during an MI — this is exactly why diabetics need vigilant cardiac monitoring even when the classic chest-pain complaint is minimal or absent.'}
+   rat:'The trap: A invents an unrelated psychological explanation, and C and D both dismiss a serious, real cardiac event based on symptom severity alone. Autonomic neuropathy specifically can blunt the pain-signaling pathway during an MI — this is exactly why diabetics need vigilant cardiac monitoring even when the classic chest-pain complaint is minimal or absent.'},
+
+  {q:'A client with diabetic autonomic neuropathy reports lightheadedness and dizziness specifically when standing up from a seated position, with blood pressure dropping from 128/78 to 98/60 upon standing. What is the underlying mechanism?',type:'single',
+   opts:['A. Autonomic neuropathy impairs the normal reflex vasoconstriction that maintains blood pressure with position changes, resulting in orthostatic hypotension','B. This is unrelated to diabetes and is more likely dehydration alone','C. This indicates the client is developing DKA','D. This is a normal, expected finding in all older adults regardless of diabetes status'],correct:0,
+   rat:'The trap: B offers a plausible-sounding but incomplete alternative explanation, C redirects to an unrelated acute complication, and D dismisses a genuine autonomic complication as universal aging rather than a diabetes-specific mechanism. Autonomic neuropathy impairs the nervous system\'s ability to trigger compensatory vasoconstriction when standing, causing orthostatic hypotension — a distinct, diabetes-related complication requiring specific safety precautions (rising slowly, fall precautions).'},
+
+  {q:'Which combination of findings in a client with long-standing diabetes is MOST consistent with early diabetic nephropathy?',type:'single',
+   opts:['A. Elevated fasting glucose and mild peripheral edema only','B. Microalbuminuria on urine testing with a normal serum creatinine','C. Elevated serum creatinine with normal urine protein','D. Polyuria and polydipsia alone, without any lab abnormalities'],correct:1,
+   rat:'The trap: A, C, and D all describe findings that could be seen in diabetes generally but miss the SPECIFIC early marker of kidney involvement. Microalbuminuria — small amounts of protein leaking into the urine before creatinine even rises — is the earliest detectable sign of diabetic nephropathy, which is why annual urine microalbumin screening is standard of care, often before serum creatinine changes at all.'}
 ],'Complications Check');
 </script>
 <script>
@@ -1068,13 +1100,61 @@ renderQuiz('quiz-skin',[
 
   {q:'Which areas of the body have the THICKEST skin, and which have the THINNEST?',type:'single',
    opts:['A. Thickest: scalp and back; Thinnest: palms and soles','B. Thickest: palms of the hands and soles of the feet; Thinnest: eyelids and genital/perineal area','C. Thickest: eyelids and lips; Thinnest: palms and soles','D. Skin thickness is uniform across the body and does not vary by location'],correct:1,
-   rat:'The trap: A and C both invert the correct pairing. The palms and soles are the thickest skin on the body, while the eyelids and genital/perineal region are the thinnest — a detail specifically flagged as testable, even though it can seem like a minor fact.'}
+   rat:'The trap: A and C both invert the correct pairing. The palms and soles are the thickest skin on the body, while the eyelids and genital/perineal region are the thinnest — a detail specifically flagged as testable, even though it can seem like a minor fact.'},
+
+  {q:'A wound care nurse documents a sacral pressure injury as full-thickness tissue loss with visible subcutaneous fat, but no exposed bone, tendon, or muscle. Slough is present but does not obscure the wound base. How should this be staged?',type:'single',
+   opts:['A. Stage 2, since slough is present in the wound bed','B. Stage 3, since it is full-thickness with visible fat but no deeper structures exposed','C. Stage 4, since any full-thickness wound with slough is automatically the most severe stage','D. Unstageable, since any slough present means the depth cannot be determined'],correct:1,
+   rat:'The trap: A misreads partial slough as a shallower Stage 2 finding, C assumes all full-thickness wounds are Stage 4, and D over-applies the "unstageable" rule — that classification only applies when slough/eschar OBSCURES the wound base so depth truly cannot be assessed, not when some slough is simply present but the base is still visible. Full-thickness loss with visible fat and no exposed bone/tendon/muscle is Stage 3.'},
+
+  {q:'A client with a Braden Scale score of 14 is being cared for on a medical floor. Which combination of interventions is MOST appropriate based on this score?',type:'single',
+   opts:['A. No specific pressure-injury prevention measures are needed since the client is not high-risk','B. Scheduled repositioning, a pressure-redistribution surface, and ongoing skin assessment, since a score of 14 falls in the at-risk range','C. Immediate referral for surgical debridement','D. Discontinuing all repositioning to avoid disrupting the client\'s sleep'],correct:1,
+   rat:'The trap: A dismisses a genuinely at-risk score, C jumps to an intervention appropriate for an existing wound rather than prevention, and D removes the single most effective preventive measure. A Braden score of 14 falls within the moderate-risk range (≤18 is considered at-risk overall) — this calls for active preventive interventions, not a "wait and see" approach.'}
 ],'Skin & Wounds Check');
 </script>
 <script>
 document.getElementById('sec-eye').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">👁️</span> Eye & Vision</h2>
-<p class="intro-line">Glaucoma and cataracts are the big two. Know the mechanism: glaucoma = pressure damages the nerve (peripheral loss); cataract = cloudy lens (blurry, glare).</p>
+<p class="intro-line">Glaucoma and cataracts are the big two. Know the mechanism: glaucoma = pressure damages the nerve (peripheral loss); cataract = cloudy lens (blurry, glare). But first — the foundational eye basics he explicitly said to know cold.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>👁️ What the lens actually does (3 jobs)</h3>
+  <ul class="clean">
+    <li><b>UV filter</b> — blocks damaging ultraviolet light from reaching the retina.</li>
+    <li><b>Accommodation</b> — the lens changes SHAPE (gets rounder for near objects, flatter for distance) to keep the image in focus.</li>
+    <li><b>Refraction</b> — the lens bends incoming light so it focuses precisely on the retina.</li>
+  </ul>
+  <div class="hy">⭐ <b>Why this matters:</b> as we age, the lens gradually thickens and stiffens, which directly limits its ability to accommodate — that's the mechanism behind presbyopia (below). Everything downstream starts here.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🔍 Refractive errors — where does the light actually focus?</h3>
+  <table class="lab">
+    <tr><th>Term</th><th>What's happening</th></tr>
+    <tr><td><b>Emmetropia</b></td><td>Normal — light focuses directly ON the retina without correction. This is 20/20.</td></tr>
+    <tr><td><b>Myopia</b></td><td>Nearsighted — light focuses IN FRONT of the retina (eyeball too long / cornea too curved). Close objects clear, distance blurry.</td></tr>
+    <tr><td><b>Hyperopia</b></td><td>Farsighted — light focuses BEHIND the retina (eyeball too short). Distance clear, close objects blurry.</td></tr>
+    <tr><td><b>Astigmatism</b></td><td>Irregular curvature of the cornea/lens — causes blurred or distorted vision at ANY distance, near or far.</td></tr>
+    <tr><td><b>Presbyopia</b></td><td>Age-related loss of accommodation (usually >40) — the lens has stiffened and can no longer focus up close. This is why reading glasses become necessary with age even in people who never needed correction before.</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Mnemonic</div><div class="big">"Myopia = can't see the MOUNTAIN (far). Hyperopia = can't see what's HANDHELD (near)."</div></div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>👀 Pupil response &amp; pupil size — the terms he wants you to distinguish</h3>
+  <ul class="clean">
+    <li><b>Direct response:</b> shine light in ONE eye → THAT SAME eye's pupil constricts.</li>
+    <li><b>Consensual response:</b> shine light in ONE eye → the OTHER eye's pupil ALSO constricts, even though no light was shone into it directly (the two sides are neurologically linked).</li>
+    <li><b>Miosis</b> = pupil CONSTRICTION (gets smaller). Caused by opioids, pilocarpine, bright light, parasympathetic response.</li>
+    <li><b>Mydriasis</b> = pupil DILATION (gets bigger). Caused by anticholinergics, dim light, sympathetic ("fight or flight") response, some abnormal neuro findings.</li>
+  </ul>
+  <div class="hy">⭐ <b>Don't mix these two pairs up</b> — direct/consensual describes HOW you're testing (which eye reacts), while miosis/mydriasis describes WHICH DIRECTION the pupil is changing. A question can test either pairing separately.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>📏 Visual acuity — how to actually read the fraction</h3>
+  <p class="why-chain">The Snellen fraction is <b>[distance the patient stands from the chart] / [distance a person with NORMAL vision could read that same line from]</b>. The patient always stands 20 feet away — it's the BOTTOM number that changes and tells you how good or bad their vision is.</p>
+  <div class="hy">⭐ <b>Worked example:</b> a person with <b>20/40</b> vision can see from 20 feet what a person with normal (20/20) vision could see from <b>40 feet</b> away. In other words, they have to be CLOSER to see what someone with normal vision can see from farther back — so a LARGER bottom number always means WORSE vision, not better.</div>
+</div>
 
 <div class="card">
   <h3>👓 Glaucoma — pressure kills the optic nerve</h3>
@@ -1095,7 +1175,8 @@ document.getElementById('sec-eye').innerHTML=`
 <div class="card">
   <h3>🌫️ Cataracts — cloudy lens</h3>
   <ul class="clean">
-    <li><b>Mechanism:</b> the lens becomes opaque/cloudy (aging is the #1 cause) → light can't pass through clearly.</li>
+    <li><b>Mechanism:</b> the lens becomes opaque/cloudy → light can't pass through clearly.</li>
+    <li><b>Key causes to know:</b> <b>aging (#1 cause)</b>, <b>eye injury/trauma</b>, <b>diabetes</b> (glucose alters lens proteins), and <b>beta-blocker use</b>.</li>
     <li><b>Symptoms:</b> painless, gradual <b>blurred/hazy vision, glare, halos around lights, difficulty at night</b>, faded colors.</li>
     <li><b>Treatment:</b> surgical lens removal + intraocular lens implant (only real fix).</li>
     <li><b>Post-op teaching:</b> avoid bending, lifting, straining, coughing (raises IOP); wear eye shield especially at night; report sudden pain or vision changes (could signal complication).</li>
@@ -1133,7 +1214,39 @@ renderQuiz('quiz-eye',[
 
   {q:'Two patients report chronic, painless vision changes. Patient A says straight lines on a page now look wavy, with a blurry spot in the center of their vision. Patient B says they\'ve been missing objects to the side while their central reading vision remains sharp. Which statement correctly matches each patient to their likely condition?',type:'single',
    opts:['A. Patient A has glaucoma (central loss); Patient B has macular degeneration (peripheral loss)','B. Patient A has macular degeneration (central vision loss, wavy lines from macular involvement); Patient B has glaucoma (peripheral vision loss from optic nerve damage)','C. Both patients have the same condition, since both describe chronic painless vision changes','D. Patient A has a cataract; Patient B has a retinal detachment'],correct:1,
-   rat:'The trap: A reverses the correct pairing (a common memorization error), and C ignores the clearly opposite patterns described. Central distortion/blank spot = macular degeneration (damage to the retina\'s central structure); peripheral loss with preserved central vision = glaucoma (optic nerve compressed from the outside in) — matching each symptom pattern to its specific mechanism is the key skill.'}
+   rat:'The trap: A reverses the correct pairing (a common memorization error), and C ignores the clearly opposite patterns described. Central distortion/blank spot = macular degeneration (damage to the retina\'s central structure); peripheral loss with preserved central vision = glaucoma (optic nerve compressed from the outside in) — matching each symptom pattern to its specific mechanism is the key skill.'},
+
+  {q:'A patient can read the newspaper without any trouble but says road signs and faraway objects have looked blurry for years. Which refractive error does this describe, and what is the actual mechanism?',type:'single',
+   opts:['A. Hyperopia — light focuses behind the retina because the eyeball is too short','B. Myopia — light focuses in front of the retina because the eyeball is too long or the cornea is too curved','C. Astigmatism — an irregular corneal curvature causing blur at every distance','D. Presbyopia — age-related stiffening of the lens limiting accommodation for near vision'],correct:1,
+   rat:'The trap: A describes the opposite refractive pattern (hyperopia = clear distance, blurry near — the reverse of this patient), C describes blur at ALL distances rather than just far, and D describes a NEAR-vision problem, not a distance one. Clear near vision with blurry distance vision, from an eyeball that\'s too long or a cornea that\'s too curved, is myopia — light focuses short of the retina instead of on it.'},
+
+  {q:'A 45-year-old with no prior vision problems says they suddenly need to hold their phone at arm\'s length to read text clearly, though distance vision is unaffected. What is the BEST explanation?',type:'single',
+   opts:['A. This is early cataract formation and should be treated as an urgent referral','B. This is presbyopia — age-related stiffening of the lens that limits its ability to accommodate for near objects','C. This is myopia developing for the first time in adulthood','D. This indicates early open-angle glaucoma affecting central vision'],correct:1,
+   rat:'The trap: A escalates a normal age-related change into an urgent diagnosis, C misapplies a distance-vision problem to a near-vision complaint, and D describes a peripheral, not near-vision, condition. Losing near-focus ability specifically around age 40+, with distance vision intact, is the classic presentation of presbyopia — the lens has stiffened and can no longer accommodate for close objects.'},
+
+  {q:'A nurse shines a penlight into a patient\'s right eye only. Both the right AND left pupils constrict. What does the constriction of the LEFT pupil specifically demonstrate?',type:'single',
+   opts:['A. A direct pupillary response in the left eye','B. A consensual pupillary response, since the left pupil reacted without being directly exposed to the light','C. Mydriasis of the left eye','D. An abnormal finding requiring immediate provider notification'],correct:1,
+   rat:'The trap: A misapplies "direct" to the wrong eye (direct response describes the SAME eye the light was shone into — that would be the right pupil\'s reaction). C confuses mydriasis (dilation) with what is actually happening (constriction). D treats a completely normal, expected neurological finding as abnormal. The unlit eye constricting in response to light shone in the other eye is the definition of a consensual response — and it is NORMAL.'},
+
+  {q:'Which of the following is the correct definition of mydriasis?',type:'single',
+   opts:['A. Pupil constriction, often from opioids or bright light','B. Pupil dilation, often from anticholinergic medications, dim light, or a sympathetic response','C. The pupil reacting in the opposite eye from where light was shone','D. A fixed, non-reactive pupil unrelated to light exposure'],correct:1,
+   rat:'The trap: A describes miosis, the opposite term. C describes the consensual response, a completely different concept (direction of change vs. which eye is tested). D describes a fixed pupil, which is its own distinct abnormal finding. Mydriasis specifically means pupil DILATION — from anticholinergics, dim light, or sympathetic ("fight or flight") activation.'},
+
+  {q:'A patient\'s visual acuity is documented as 20/50 in the right eye. What does this finding actually mean?',type:'single',
+   opts:['A. The patient can see at 50 feet what a person with normal vision sees at 20 feet — better than average vision','B. The patient can see at 20 feet what a person with normal vision can see at 50 feet — worse than normal vision','C. The patient has a 20% chance of having normal vision in that eye','D. The patient\'s vision will improve to 20/50 within 50 days without intervention'],correct:1,
+   rat:'The trap: A reverses which number represents the patient vs. the normal-vision comparison, C invents a percentage interpretation that isn\'t how the fraction works at all, and D fabricates a timeline with no basis. The top number is always the fixed 20-foot testing distance; the bottom number is how far away someone with NORMAL vision could read that same line — a bigger bottom number always means WORSE acuity, since the patient has to be closer than a normal-sighted person would need to be.'},
+
+  {q:'Which of the following are recognized causes of cataracts? (Select all that apply)',type:'multi',
+   opts:['A. Aging','B. Eye injury/trauma','C. Diabetes mellitus','D. Beta-blocker use','E. Retinal detachment'],correct:[0,1,2,3],
+   rat:'The trap: retinal detachment (E) is its own separate, unrelated eye emergency — it doesn\'t cause cataracts. Aging (the most common cause), eye trauma, diabetes (glucose alters lens proteins), and beta-blocker use are all recognized causes of cataract formation.'},
+
+  {q:'A client is 1 day post-op following trabeculectomy surgery for open-angle glaucoma. Which finding should the nurse report to the surgeon IMMEDIATELY?',type:'single',
+   opts:['A. Mild eye discomfort rated 2/10 that improves with prescribed acetaminophen','B. Sudden, severe eye pain accompanied by nausea and a noticeable decrease in vision','C. Slight redness at the surgical site with minimal serous drainage','D. Mild itching around the eye shield'],correct:1,
+   rat:'The trap: A, C, and D all describe expected, minor post-operative findings that don\'t require urgent escalation. Sudden severe pain with nausea and a vision change after eye surgery can indicate a serious complication such as increased IOP, hemorrhage, or infection — this combination requires immediate provider notification, unlike the mild, expected findings in the other options.'},
+
+  {q:'A client with a known history of migraines reports seeing "zigzag lines" and shimmering lights in one eye for the past 20 minutes, without eye pain, followed by a mild headache. How should the nurse interpret this presentation?',type:'single',
+   opts:['A. This is almost certainly a retinal detachment and requires emergency ophthalmologic referral','B. This is consistent with a migraine aura, though new or changing visual symptoms still warrant follow-up to rule out an ocular cause','C. This confirms acute angle-closure glaucoma and requires emergency IOP-lowering treatment','D. This is a normal finding requiring no further assessment given the client\'s migraine history'],correct:1,
+   rat:'The trap: A and C both jump to a different eye emergency based on surface-level similarity (visual disturbance), without matching the FULL classic presentation of either condition (retinal detachment: flashes/floaters/curtain, painless, no headache pattern; angle-closure: severe pain, halos, firm globe). D dismisses the finding entirely. Zigzag lines/shimmering with a subsequent headache is a classic migraine aura pattern — reasonable given the history, but any new or evolving visual change still deserves assessment to be safe.'}
 ],'Eye & Vision Check');
 </script>
 <script>
@@ -1205,7 +1318,15 @@ renderQuiz('quiz-ear',[
 
   {q:'A nurse is communicating with a patient who has significant hearing loss. Which of the following approaches are appropriate? (Select all that apply)',type:'multi',
    opts:['A. Face the patient directly so they can see your lips and facial expressions','B. Raise your voice significantly to ensure the words are loud enough to hear','C. Reduce background noise (turn off the TV, close the door) before starting the conversation','D. Speak at a normal-to-slightly-slower pace with clear enunciation','E. Use written notes or gestures to reinforce key information as needed'],correct:[0,2,3,4],
-   rat:'The trap: shouting (B) seems like the obvious solution to hearing loss, but it actually distorts speech sounds and can make comprehension harder, not easier — this is a frequently tested misconception. Facing the patient, reducing background noise, speaking clearly at a measured pace, and supplementing with writing/gestures are all evidence-based communication strategies.'}
+   rat:'The trap: shouting (B) seems like the obvious solution to hearing loss, but it actually distorts speech sounds and can make comprehension harder, not easier — this is a frequently tested misconception. Facing the patient, reducing background noise, speaking clearly at a measured pace, and supplementing with writing/gestures are all evidence-based communication strategies.'},
+
+  {q:'A client is 3 days post-op following a stapedectomy for otosclerosis. Which client statement indicates a need for further teaching?',type:'single',
+   opts:['A. "I\'ll avoid blowing my nose forcefully and will sneeze with my mouth open if needed."','B. "I plan to go swimming this weekend since I\'m feeling much better."','C. "I\'ll avoid air travel until my surgeon clears me to fly."','D. "I\'ll report any sudden severe vertigo or hearing changes right away."'],correct:1,
+   rat:'The trap: this question asks which statement is INCORRECT, and B is the one reflecting a misunderstanding — swimming (and getting water in the ear) is restricted for weeks after ear surgery due to infection and healing risk. A, C, and D all reflect correct post-stapedectomy precautions (avoiding pressure changes from nose-blowing or air travel, and monitoring for complications).'},
+
+  {q:'A client taking gentamicin IV for a serious infection reports new-onset tinnitus and difficulty understanding conversations in a noisy room. What is the nurse\'s PRIORITY action?',type:'single',
+   opts:['A. Reassure the client this is an expected, temporary side effect that will resolve once the antibiotic course is finished','B. Notify the provider promptly, since these findings suggest ototoxicity and continued use risks permanent sensorineural hearing loss','C. Increase the infusion rate to complete the antibiotic course more quickly','D. Document the finding with no further action needed since tinnitus alone is not clinically significant'],correct:1,
+   rat:'The trap: A wrongly reassures the client that permanent damage is "temporary," C would worsen drug exposure, and D dismisses a genuinely significant early warning sign. Aminoglycosides like gentamicin are classic ototoxic agents — new tinnitus or hearing changes must be reported promptly since the resulting hair-cell damage is preventable if caught early but permanent once it progresses.'}
 ],'Ear & Hearing Check');
 </script>
 <script>
@@ -1267,7 +1388,7 @@ document.getElementById('sec-decoder').innerHTML=`
 </div>
 <div class="card" style="border-color:var(--teal)">
   <h3>🌫️ Cataracts</h3>
-  <p><b>Cause:</b> progressive clouding/opacification of the normally clear crystalline lens — from aging (most common), UV exposure, diabetes (glucose alters lens proteins), steroid use, or trauma. Light can no longer pass through and focus cleanly on the retina.</p>
+  <p><b>Cause:</b> progressive clouding/opacification of the normally clear crystalline lens — from <b>aging (most common)</b>, UV exposure, <b>diabetes</b> (glucose alters lens proteins), steroid use, <b>beta-blocker use</b>, or <b>eye trauma/injury</b>. Light can no longer pass through and focus cleanly on the retina.</p>
   <p><b>Manifests:</b> <b>painless</b>, progressive blurry/hazy vision, increased glare and halos around lights (worse at night with a dilated pupil letting in more scattered light), difficulty with night driving, and colors appearing faded/yellowed. <b>No sudden pain, no redness</b> — a purely gradual, mechanical lens problem.</p>
   <p><b>Treatment:</b> the <b>ONLY definitive treatment is surgical removal of the cloudy lens with intraocular lens implant</b> (typically outpatient). Post-op teaching: <b>avoid bending, heavy lifting, and straining</b> (raises IOP and risks disrupting the healing incision), don't rub the eye, use prescribed antibiotic/steroid drops, wear the protective shield at night, and <b>report sudden pain, vision loss, or increased redness immediately</b> (signs of infection or hemorrhage).</p>
 </div>
@@ -1360,7 +1481,15 @@ renderQuiz('quiz-decoder',[
 
   {q:'A patient asks the nurse to explain why their vision loss from macular degeneration is different from a family member\'s vision loss from glaucoma. Which explanation is correct?',type:'single',
    opts:['A. Both diseases cause identical vision loss patterns because they both involve the retina','B. Macular degeneration destroys central vision first because the macula is the retina\'s central detail-vision structure, while glaucoma destroys peripheral vision first from optic nerve compression at the edges','C. Macular degeneration is caused by high eye pressure, the same mechanism as glaucoma, just affecting a different area','D. Glaucoma causes painless central vision loss, while macular degeneration causes sudden painful peripheral loss'],correct:1,
-   rat:'The trap pairing: both are chronic, painless, and progressive, which tempts a "they\'re basically the same" answer (A) or swapped mechanisms (C, D). The actual distinguishing mechanism is WHERE the damage starts — center-out for macular degeneration (macula = central retina) versus edges-in for glaucoma (optic nerve compression).'}
+   rat:'The trap pairing: both are chronic, painless, and progressive, which tempts a "they\'re basically the same" answer (A) or swapped mechanisms (C, D). The actual distinguishing mechanism is WHERE the damage starts — center-out for macular degeneration (macula = central retina) versus edges-in for glaucoma (optic nerve compression).'},
+
+  {q:'A client with Type 2 diabetes for 10 years presents with a resting heart rate of 110 bpm that does not vary with position change or the Valsalva maneuver, along with early satiety and bloating after meals. What underlying process explains BOTH findings together?',type:'single',
+   opts:['A. Coincidental, unrelated cardiac and GI conditions requiring separate unrelated workups','B. Diabetic autonomic neuropathy, which can affect both cardiac rate variability (a persistently fixed heart rate) and GI motility (gastroparesis, causing early satiety/bloating)','C. Acute DKA, since tachycardia and GI symptoms are both classic DKA findings','D. A normal, expected finding with no diabetes-related significance'],correct:1,
+   rat:'The trap: A treats two related findings as coincidental separate problems, C misapplies an acute-crisis label to a chronic presentation, and D dismisses genuinely significant findings. Autonomic neuropathy is a single underlying process that can affect MULTIPLE organ systems — a fixed heart rate that doesn\'t respond normally to position/vagal maneuvers, and gastroparesis causing early satiety/bloating, are both downstream effects of the same autonomic nerve damage.'},
+
+  {q:'A client with diabetic peripheral neuropathy and a history of a prior healed foot ulcer asks why their provider recommends custom orthotic shoe inserts even though they currently have no open wounds. What is the BEST explanation?',type:'single',
+   opts:['A. Orthotics are purely a comfort measure with no relationship to future wound risk','B. Redistributing pressure away from prior ulcer sites and bony prominences reduces the risk of a new, unfelt injury recurring in a high-risk area','C. Orthotics are only necessary if a new wound has already developed','D. This recommendation is unrelated to the client\'s diabetes and is a general foot-comfort suggestion'],correct:1,
+   rat:'The trap: A, C, and D all dismiss the preventive, mechanism-based reasoning behind the recommendation. Since neuropathy means an early injury may go completely unfelt, and a previously ulcerated site is at especially high risk for recurrence, redistributing pressure proactively — BEFORE any new wound develops — is the actual goal, not comfort or a reaction to an existing problem.'}
 ],'Decode It — Cause, Manifests, Treatment & Clinical Reasoning');
 </script>
 <script>
@@ -1633,7 +1762,18 @@ const FLASH_DECK=[
   {front:'Name common ototoxic drug classes.',back:'Aminoglycosides, loop diuretics (furosemide), high-dose aspirin/salicylates, some chemotherapy agents.'},
   {front:'What is the classic triad of Ménière\'s disease?',back:'Episodic vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
   {front:'What diet/medication is the cornerstone of Ménière\'s treatment?',back:'Low-sodium diet plus diuretics, to reduce inner-ear fluid pressure.'},
-  {front:'What is the nursing priority during an acute Ménière\'s attack?',back:'Fall safety — have the patient lie still in a quiet, dark room.'}
+  {front:'What is the nursing priority during an acute Ménière\'s attack?',back:'Fall safety — have the patient lie still in a quiet, dark room.'},
+  {front:'What are the 3 functions of the eye\'s lens?',back:'UV filter, accommodation (changing shape to focus), and refraction (bending light onto the retina).'},
+  {front:'What is myopia and what causes it?',back:'Nearsightedness — light focuses IN FRONT of the retina (eyeball too long or cornea too curved). Near is clear, distance is blurry.'},
+  {front:'What is hyperopia and what causes it?',back:'Farsightedness — light focuses BEHIND the retina (eyeball too short). Distance is clear, near objects are blurry.'},
+  {front:'What is astigmatism?',back:'Irregular curvature of the cornea/lens causing blurred or distorted vision at ANY distance.'},
+  {front:'What is presbyopia and who does it affect?',back:'Age-related loss of accommodation (usually >40) from a stiffening lens — makes it hard to focus up close.'},
+  {front:'What is emmetropia?',back:'Normal vision — light focuses directly on the retina without correction. This is 20/20.'},
+  {front:'What is the difference between a direct and a consensual pupillary response?',back:'Direct = the SAME eye that got the light constricts. Consensual = the OTHER eye (not directly lit) also constricts.'},
+  {front:'What is miosis?',back:'Pupil CONSTRICTION — caused by opioids, pilocarpine, bright light, or parasympathetic response.'},
+  {front:'What is mydriasis?',back:'Pupil DILATION — caused by anticholinergics, dim light, or sympathetic ("fight or flight") response.'},
+  {front:'What does a visual acuity of 20/40 actually mean?',back:'The patient sees at 20 feet what a person with normal vision sees at 40 feet — their vision is WORSE than normal (bigger bottom number = worse vision).'},
+  {front:'Name 4 recognized causes of cataracts.',back:'Aging (most common), eye injury/trauma, diabetes mellitus, and beta-blocker use.'}
 ];
 let flashMastered=new Set();
 (function restoreFlash(){ try{ const r=localStorage.getItem('nur256u3_flashmastered'); if(r) JSON.parse(r).forEach(i=>flashMastered.add(i)); }catch(e){} })();
