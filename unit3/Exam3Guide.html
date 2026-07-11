@@ -237,13 +237,13 @@ function updateProg(){
 const SECTIONS=[
   {id:'home',label:'🏠 Start'},
   {id:'why',label:'🧠 Why Engine'},
-  {id:'diabetes',label:'🩸 Diabetes'},
-  {id:'dka',label:'🚨 DKA vs HHS'},
-  {id:'hypo',label:'📉 Hypoglycemia'},
-  {id:'complications',label:'🔗 DM Complications'},
-  {id:'skin',label:'🧴 Skin/Wounds'},
-  {id:'eye',label:'👁️ Eye'},
-  {id:'ear',label:'👂 Ear'},
+  {id:'diabetes',label:'🩸 Diabetes (Mon 7/13)'},
+  {id:'dka',label:'🚨 DKA vs HHS (Mon 7/13)'},
+  {id:'hypo',label:'📉 Hypoglycemia (Mon 7/13)'},
+  {id:'complications',label:'🔗 DM Complications (Mon 7/13)'},
+  {id:'skin',label:'🧴 Skin/Wounds (Mon 7/13)'},
+  {id:'eye',label:'👁️ Eye (Wed 7/15)'},
+  {id:'ear',label:'👂 Ear (not on exam yet)'},
   {id:'decoder',label:'🩺 Disorder Decoder'},
   {id:'tricks',label:'🎯 Trick Questions'},
   {id:'challenge',label:'🎓 Med-Surg Challenge'},
@@ -349,6 +349,16 @@ document.getElementById('sec-home').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🏠</span> Unit 3 Study Lab</h2>
 <p class="intro-line">Diabetes • Integumentary/Wounds • Eye & Vision • Ear & Hearing — built the way you passed Unit 2: mechanism-first, Casteel's cause→manifests→treatment, and his trick-question style.</p>
 
+<div class="card" style="border-color:var(--red);background:var(--red-soft)">
+  <h3>📅 Exam schedule — from Casteel's own announcement</h3>
+  <table class="lab">
+    <tr><th>Date</th><th>Covers</th><th>Weight</th></tr>
+    <tr><td><b>Mon, July 13</b></td><td>🩸 Diabetes + 🧴 Skin</td><td>Big exam</td></tr>
+    <tr><td><b>Wed, July 15</b></td><td>👁️ Vision/Eye only</td><td>Small test</td></tr>
+  </table>
+  <div class="hy">⭐ <b>👂 Ear & Hearing is NOT on either announced exam right now.</b> It's still in the guide since it's genuinely useful nursing content and could show up later, but don't spend your limited time there before Monday or Wednesday — put it last.</div>
+</div>
+
 <div class="card" style="border-color:var(--purple);background:var(--purple-soft)">
   <h3>💬 Remember what Casteel told you</h3>
   <p>The way to pass his tests is to know the <b>WHY behind the disease and the disease process</b> — mechanism, not memorization. Facts are brittle; his trick wording snaps them. Understanding is trap-proof.</p>
@@ -356,13 +366,13 @@ document.getElementById('sec-home').innerHTML=`
 </div>
 
 <div class="card">
-  <h3>🗺️ Suggested order</h3>
+  <h3>🗺️ Suggested order — matched to your actual exam dates</h3>
   <table class="lab">
-    <tr><th>Focus</th><th>Sections</th></tr>
-    <tr><td><b>Big rock</b></td><td>🩸 Diabetes → 🚨 DKA vs HHS → 📉 Hypoglycemia → 🔗 Complications (this is the heaviest topic)</td></tr>
-    <tr><td><b>Skin</b></td><td>🧴 Skin/Wounds (pressure injuries = classic NCLEX)</td></tr>
-    <tr><td><b>Senses</b></td><td>👁️ Eye (glaucoma/cataracts) → 👂 Ear (Ménière's)</td></tr>
-    <tr><td><b>Lock it in</b></td><td>🧠 Why Engine → 🩺 Decoder → 🎯 Trick Questions → ⚡ Drill → 📝 Exam</td></tr>
+    <tr><th>Priority</th><th>Sections</th><th>Why</th></tr>
+    <tr><td><b>1. Mon 7/13 exam</b></td><td>🩸 Diabetes → 🚨 DKA vs HHS → 📉 Hypoglycemia → 🔗 Complications → 🧴 Skin/Wounds</td><td>This IS the big exam — everything here counts Monday.</td></tr>
+    <tr><td><b>2. Wed 7/15 test</b></td><td>👁️ Eye</td><td>The small test right after — vision info only.</td></tr>
+    <tr><td><b>3. Lock it in</b></td><td>🧠 Why Engine → 🩺 Decoder → 🎯 Trick Questions → 🎓 Med-Surg Challenge → 🗄️ Vault → 🎮 Flash Game → ⚡ Drill → 📝 Exam</td><td>Cross-topic review/practice — use these to cement Diabetes + Skin first, then Eye.</td></tr>
+    <tr><td><b>4. Lower priority for now</b></td><td>👂 Ear</td><td>Not on either announced exam yet — skip until it's actually assigned.</td></tr>
   </table>
   <div class="tipbar">💡 <b>How to study for HIS tests:</b> don't read to recognize — read until you can say the <b>"because"</b> out loud without looking. That's the difference between "I know this" and passing.</div>
 </div>
@@ -1253,6 +1263,11 @@ renderQuiz('quiz-eye',[
 document.getElementById('sec-ear').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">👂</span> Ear & Hearing</h2>
 <p class="intro-line">Ménière's disease is the star here. Also know conductive vs sensorineural hearing loss and basic ear safety.</p>
+
+<div class="card" style="border-color:var(--amber);background:var(--amber-soft)">
+  <h3>⏸️ Lower priority right now</h3>
+  <p>Casteel's announcement covers <b>Diabetes + Skin on Mon 7/13</b> and <b>Vision on Wed 7/15</b> — Ear isn't mentioned on either. This section is still here in case it gets assigned later, but there's no need to spend time on it before either upcoming exam. Focus on 🩸 Diabetes, 🧴 Skin, and 👁️ Eye first.</p>
+</div>
 
 <div class="card" style="border-color:var(--teal)">
   <h3>🌀 Ménière's Disease — the triad</h3>
