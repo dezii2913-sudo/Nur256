@@ -150,6 +150,21 @@ table.lab td{padding:8px;border-bottom:1px solid var(--card-border);min-width:80
 .vault-tag{display:inline-block;background:var(--purple-soft);color:var(--purple);font-size:.72rem;font-weight:800;border-radius:20px;padding:2px 10px;margin-bottom:8px}
 .vault-solved{background:var(--green-soft);border:2px solid var(--green);color:var(--green);border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.85rem;font-weight:700;text-align:center}
 
+/* match game */
+.match-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-weight:800;font-size:.88rem;margin:10px 0;color:var(--ink)}
+.match-wrap{position:relative}
+.match-svg{display:block;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.match-columns{display:flex;gap:10px;position:relative;z-index:2}
+.match-col{flex:1 1 0;display:flex;flex-direction:column;gap:9px;min-width:0}
+.match-item{width:100%;box-sizing:border-box;background:var(--card);border:2px solid var(--card-border);border-radius:12px;padding:11px 8px;font-size:.74rem;font-weight:700;cursor:pointer;text-align:left;transition:border-color .15s,background .15s,transform .1s;line-height:1.3;word-break:break-word;overflow-wrap:anywhere;white-space:normal}
+.match-item:active{transform:scale(.98)}
+.match-item.selected{border-color:var(--purple);background:var(--purple-soft)}
+.match-item.matched{border-color:var(--green);background:var(--green-soft);color:var(--green);cursor:default;opacity:.75}
+.match-item.shake{border-color:var(--red);background:var(--red-soft);animation:matchshake .35s}
+@keyframes matchshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+body.mobile-mode .match-item{font-size:.95rem}
+body.mobile-mode .match-stats{font-size:1rem}
+
 /* drill */
 .drill-top{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;margin-bottom:6px}
 .drill-bar{height:8px;background:var(--card-border);border-radius:10px;overflow:hidden;margin-bottom:12px}
@@ -183,6 +198,7 @@ table.lab td{padding:8px;border-bottom:1px solid var(--card-border);min-width:80
   <div class="toggles">
     <button class="tbtn" id="themeBtn" onclick="toggleTheme()">🌙 Night</button>
     <button class="tbtn" id="mobileBtn" onclick="toggleMobile()">🔍 Big Text</button>
+    <button class="tbtn" id="shuffleBtn" onclick="toggleShuffle()">🔀 Shuffle: ON</button>
   </div>
 </div>
 
@@ -195,7 +211,13 @@ table.lab td{padding:8px;border-bottom:1px solid var(--card-border);min-width:80
 <div class="nav" id="nav"></div>
 <div class="content" id="content"></div>
 <script>
-/* ===== THEME + BIG TEXT (persisted) ===== */
+/* ===== THEME + BIG TEXT + SHUFFLE (persisted) ===== */
+let shuffleAnswers=true;
+function toggleShuffle(){
+  shuffleAnswers=!shuffleAnswers;
+  const b=document.getElementById('shuffleBtn'); if(b)b.textContent='🔀 Shuffle: '+(shuffleAnswers?'ON':'OFF');
+  try{ localStorage.setItem('nur256u3_shuffle', shuffleAnswers?'1':'0'); }catch(e){}
+}
 function toggleTheme(){
   const b=document.body;
   const night = b.getAttribute('data-theme')!=='night';
@@ -216,6 +238,8 @@ function toggleMobile(){
       var t1=document.getElementById('themeBtn'); if(t1)t1.textContent='☀️ Day'; }
     if(localStorage.getItem('nur256u3_bigtext')==='1'){ document.body.classList.add('mobile-mode');
       var m1=document.getElementById('mobileBtn'); if(m1)m1.textContent='🔍 Normal Text'; }
+    const sh=localStorage.getItem('nur256u3_shuffle');
+    if(sh==='0'){ shuffleAnswers=false; var s1=document.getElementById('shuffleBtn'); if(s1)s1.textContent='🔀 Shuffle: OFF'; }
   }catch(e){}
 })();
 
@@ -223,7 +247,7 @@ function toggleMobile(){
 let answeredQs=new Set(); let totalTrackable=0;
 (function restoreProgress(){ try{ const r=localStorage.getItem('nur256u3_progress'); if(r){ JSON.parse(r).forEach(id=>answeredQs.add(id)); } }catch(e){} })();
 function saveProgress(){ try{ localStorage.setItem('nur256u3_progress', JSON.stringify([...answeredQs])); }catch(e){} }
-function resetAllProgress(){ if(!confirm('Reset all saved progress (quiz progress + saved exam + vault + flash game)? This cannot be undone.'))return; answeredQs=new Set(); try{ localStorage.removeItem('nur256u3_progress'); }catch(e){} updateProg(); try{ localStorage.removeItem('nur256u3_exam'); }catch(e){} examState={};examIdx=0;examChecked={};examSubmitted=false;examMode='study';quizSet=[]; if(typeof setExamMode==='function'){ try{ setExamMode('study'); localStorage.removeItem('nur256u3_exam'); }catch(e){} } try{ wrongVault=[]; localStorage.removeItem('nur256u3_vault'); const b=document.getElementById('vaultCount'); if(b)b.textContent='0'; if(typeof renderVaultSection==='function') renderVaultSection(); }catch(e){} try{ flashMastered=new Set(); localStorage.removeItem('nur256u3_flashmastered'); if(typeof buildFlashQueue==='function'){ buildFlashQueue(); drawFlashCard(); } }catch(e){} alert('Progress reset. Fresh start! 💜'); }
+function resetAllProgress(){ if(!confirm('Reset all saved progress (quiz progress + saved exam + vault + flash game + match games)? This cannot be undone.'))return; answeredQs=new Set(); try{ localStorage.removeItem('nur256u3_progress'); }catch(e){} updateProg(); try{ localStorage.removeItem('nur256u3_exam'); }catch(e){} examState={};examIdx=0;examChecked={};examSubmitted=false;examMode='study';quizSet=[]; if(typeof setExamMode==='function'){ try{ setExamMode('study'); localStorage.removeItem('nur256u3_exam'); }catch(e){} } try{ wrongVault=[]; localStorage.removeItem('nur256u3_vault'); const b=document.getElementById('vaultCount'); if(b)b.textContent='0'; if(typeof renderVaultSection==='function') renderVaultSection(); }catch(e){} try{ flashMastered=new Set(); localStorage.removeItem('nur256u3_flashmastered'); if(typeof buildFlashQueue==='function'){ buildFlashQueue(); drawFlashCard(); } }catch(e){} try{ matchProgress={}; localStorage.removeItem('nur256u3_matchprogress'); localStorage.removeItem('nur256u3_matchbest_insulin'); localStorage.removeItem('nur256u3_matchbest_eye'); }catch(e){} alert('Progress reset. Fresh start! 💜'); }
 function bumpProgress(id){ if(!answeredQs.has(id)){answeredQs.add(id);saveProgress();updateProg();} }
 function updateProg(){
   const pct=totalTrackable?Math.round(answeredQs.size/totalTrackable*100):0;
@@ -238,13 +262,17 @@ const SECTIONS=[
   {id:'home',label:'🏠 Start'},
   {id:'why',label:'🧠 Why Engine'},
   {id:'diabetes',label:'🩸 Diabetes (Mon 7/13)'},
+  {id:'insulin',label:'💉 Insulin Lab (Mon 7/13)'},
+  {id:'insulinmatch',label:'🔗 Insulin Match Game (Mon 7/13)'},
   {id:'dka',label:'🚨 DKA vs HHS (Mon 7/13)'},
   {id:'hypo',label:'📉 Hypoglycemia (Mon 7/13)'},
   {id:'complications',label:'🔗 DM Complications (Mon 7/13)'},
   {id:'skin',label:'🧴 Skin/Wounds (Mon 7/13)'},
   {id:'eye',label:'👁️ Eye (Wed 7/15)'},
+  {id:'eyematch',label:'🔗 Eye Match Game (Wed 7/15)'},
   {id:'ear',label:'👂 Ear (not on exam yet)'},
   {id:'decoder',label:'🩺 Disorder Decoder'},
+  {id:'studymode',label:'🧩 Study Mode'},
   {id:'tricks',label:'🎯 Trick Questions'},
   {id:'challenge',label:'🎓 Med-Surg Challenge'},
   {id:'vault',label:'🗄️ Wrong Answer Vault'},
@@ -269,6 +297,9 @@ function showSection(id){
   document.getElementById('nav-'+id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='vault' && typeof renderVaultSection==='function') renderVaultSection();
+  const isMatchGame = (id==='insulinmatch'||id==='eyematch');
+  if(typeof matchTimerInt!=='undefined' && matchTimerInt && !isMatchGame){ clearInterval(matchTimerInt); matchTimerInt=null; }
+  if(isMatchGame && typeof startMatchGame==='function') startMatchGame(id);
 }
 
 /* ===== QUIZ ENGINE (single + SATA) ===== */
@@ -289,12 +320,34 @@ function removeFromVault(id){
   const badge=document.getElementById('vaultCount'); if(badge) badge.textContent=wrongVault.length;
 }
 
+function stripLabel(text){ return text.replace(/^[A-Za-z]\.\s*/,''); }
+function relabel(optsArr){
+  const L=['A','B','C','D','E','F'];
+  return optsArr.map((o,i)=>L[i]+'. '+stripLabel(o));
+}
+function prepareQuestion(qOrig){
+  let opts=qOrig.opts.slice();
+  let correct=qOrig.type==='multi'?qOrig.correct.slice():qOrig.correct;
+  if(shuffleAnswers){
+    const order=shuffle(opts.map((_,i)=>i));
+    const newOpts=order.map(i=>opts[i]);
+    if(qOrig.type==='multi'){
+      const correctSet=new Set(correct);
+      correct=order.map((origIdx,newIdx)=>correctSet.has(origIdx)?newIdx:null).filter(x=>x!==null);
+    } else {
+      correct=order.indexOf(correct);
+    }
+    opts=newOpts;
+  }
+  return {...qOrig, opts:relabel(opts), correct};
+}
 function renderQuiz(containerId, questions, title, source){
   const host=document.getElementById(containerId);
   if(!host)return;
   const wrap=document.createElement('div');
   if(title){ const h=document.createElement('h3'); h.textContent='📝 '+title; h.style.color='var(--pink)'; wrap.appendChild(h); }
-  questions.forEach((q,qi)=>{
+  questions.forEach((qOrig,qi)=>{
+    const q=prepareQuestion(qOrig);
     totalTrackable++;
     const qid=containerId+'-'+qi;
     const card=document.createElement('div'); card.className='quiz-card';
@@ -626,33 +679,23 @@ document.getElementById('sec-diabetes').innerHTML=`
   <div class="hy">⭐ <b>A1C</b> = the "report card" — it reflects average glucose over ~3 months, so it can't be faked by eating well the day before. Goal for most diabetics: <b>&lt;7%</b>.</div>
 </div>
 
-<div class="card">
-  <h3>💉 Insulin — the essentials</h3>
-  <table class="lab">
-    <tr><th>Type</th><th>Example</th><th>Onset / Peak</th></tr>
-    <tr><td><b>Rapid</b></td><td>lispro, aspart</td><td>~15 min / ~1 hr — give WITH food</td></tr>
-    <tr><td><b>Short</b></td><td>regular</td><td>~30–60 min / 2–3 hr — the ONLY IV insulin</td></tr>
-    <tr><td><b>Intermediate</b></td><td>NPH</td><td>~2 hr / 4–12 hr (cloudy)</td></tr>
-    <tr><td><b>Long</b></td><td>glargine, detemir</td><td>steady, ~no peak — never mix, never IV</td></tr>
-  </table>
-  <ul class="clean">
-    <li><b>Peak = when hypoglycemia risk is highest.</b> Know when a patient's insulin peaks so you know when to watch for lows.</li>
-    <li><b>Mixing NPH + regular:</b> draw up <b>clear before cloudy</b> (regular first, then NPH) — "RN" (Regular before NPH).</li>
-    <li><b>Rotate sites</b> to prevent lipohypertrophy. Abdomen absorbs fastest.</li>
-    <li>Only <b>regular insulin</b> can be given IV (in DKA).</li>
-  </ul>
-  <div class="mnem"><div class="tag">Mnemonic</div><div class="big">"Clear before cloudy" • draw Regular before NPH</div></div>
+<div class="card" style="border-color:var(--purple)">
+  <h3>💉 Insulin onset/peak/duration</h3>
+  <p>Moved to its own dedicated section since it's this dense and this testable — see the <b>💉 Insulin Lab</b> tab for the full comparison table, mixing rules, and a drilling quiz built specifically for onset/peak/duration.</p>
 </div>
 
 <div class="card">
-  <h3>💊 Oral agents — the big one</h3>
+  <h3>💊 Oral agents & Glucagon — the ones he's tested you on</h3>
   <ul class="clean">
-    <li><b>Metformin</b> (biguanide) = first-line for Type 2. Lowers glucose production by the liver, doesn't cause hypoglycemia alone. <b>Hold before contrast dye/surgery</b> (risk of lactic acidosis / kidney stress). GI upset common.</li>
-    <li><b>Sulfonylureas</b> (glipizide, glyburide) — squeeze more insulin out → CAN cause hypoglycemia.</li>
-    <li><b>SGLT-2 inhibitors</b> ("-flozin") — dump glucose in the urine; watch for UTIs/yeast.</li>
-    <li><b>GLP-1 agonists</b> ("-tide") — slow gastric emptying, aid weight loss.</li>
+    <li><b>Metformin</b> (biguanide, first-line for Type 2) — decreases hepatic glucose production, improves insulin sensitivity, does NOT stimulate insulin release (low hypoglycemia risk alone). <b>Hold 48 hrs before/after IV contrast</b> and check eGFR before starting; contraindicated if eGFR &lt;30. Watch for lactic acidosis (rare but serious): unexplained muscle pain, malaise, unusual fatigue.</li>
+    <li><b>Glimepiride</b> (2nd-gen sulfonylurea) — stimulates insulin release by closing ATP-sensitive K⁺ channels on beta cells. <b>Glucose-INDEPENDENT</b> — works even when glucose is already low, which is exactly why it can cause hypoglycemia. Give with the first meal of the day; skip the dose if the meal is skipped.</li>
+    <li><b>Glyburide</b> (2nd-gen sulfonylurea) — same mechanism as glimepiride, but a <b>longer duration and higher hypoglycemia risk</b>, especially in older adults. <b>On the Beers Criteria list — avoid in elderly patients</b> and use extreme caution with renal impairment (prolonged, severe hypoglycemia risk).</li>
+    <li><b>SGLT-2 inhibitors</b> ("-flozin") — cause glucose to be excreted in the urine; watch for UTIs/yeast infections from the glucose-rich urine.</li>
+    <li><b>GLP-1 agonists</b> ("-tide," e.g. semaglutide) — incretin-based mechanism, slows gastric emptying and increases satiety (weight-loss benefit); low hypoglycemia risk alone, and it is a scheduled therapy, not a rescue medication.</li>
+    <li><b>Glucagon</b> — the antidote for severe hypoglycemia when a patient can't safely take anything by mouth. Stimulates the liver to break down stored glycogen (glycogenolysis) and make new glucose (gluconeogenesis) — <b>requires adequate liver glycogen stores to work</b> (may be ineffective in starvation, chronic alcohol use, or adrenal insufficiency). Position an unconscious patient on their SIDE after giving it (vomiting/aspiration risk during recovery), and give oral carbohydrates as soon as the patient is awake enough to prevent the glucose from dropping again.</li>
   </ul>
   <div class="hy">⭐ <b>Metformin + contrast dye = HOLD.</b> High-yield: hold metformin before/after IV contrast to protect the kidneys and prevent lactic acidosis.</div>
+  <div class="hy">⭐ <b>Sulfonylurea safety pattern:</b> both glimepiride and glyburide work whether or not the patient has actually eaten — that's why "never skip a meal on this medication" is core teaching, and why glyburide specifically gets avoided in the elderly and renally impaired.</div>
 </div>
 
 <div id="quiz-diabetes"></div>
@@ -660,45 +703,325 @@ document.getElementById('sec-diabetes').innerHTML=`
 
 renderQuiz('quiz-diabetes',[
   {q:'A patient with Type 2 diabetes controlled on metformin is scheduled for a CT scan with IV contrast dye tomorrow morning. Which action is MOST appropriate?',type:'single',
-   opts:['A. Give the metformin dose as scheduled, since it has no interaction with contrast dye','B. Hold the metformin before and after the contrast per protocol, due to the combined risk of lactic acidosis and acute kidney injury','C. Double the metformin dose the day before to protect the kidneys during the procedure','D. Switch the patient to a sulfonylurea for the day of the procedure instead'],correct:1,
-   rat:'The trap: A dismisses a real interaction, and C/D both invent unnecessary workarounds. Metformin plus contrast dye can precipitate lactic acidosis, especially if renal function is transiently reduced — the standard protocol is to hold it around the procedure and confirm renal function is stable before resuming.'},
+   opts:['A. Administer the metformin dose as scheduled and monitor intake and output afterward','B. Hold the metformin dose before and after the procedure until renal function is confirmed stable','C. Give the metformin dose with an extra glass of water to protect the kidneys','D. Administer half the usual metformin dose the morning of the procedure'],correct:1,
+   rat:'A, C, and D all sound like reasonable-enough compromises if you don\'t know the actual protocol, but only B matches it. Metformin plus contrast dye raises the risk of lactic acidosis and acute kidney injury — the standard is to hold it around the procedure and confirm renal function before resuming, not to give a partial dose or "protect" the kidneys with water.'},
 
-  {q:'A patient in DKA is started on an IV insulin drip. Which insulin is the nurse correct to expect running in that drip, and WHY is it the only option?',type:'single',
-   opts:['A. NPH, because its intermediate duration provides steady glucose control during the crisis','B. Regular insulin, because it is the only insulin formulation approved and studied for IV administration','C. Glargine, because its peakless profile prevents dangerous drops in glucose','D. Lispro, because its rapid onset clears ketones fastest'],correct:1,
-   rat:'The trap: each wrong option assigns a plausible-sounding clinical reason to the wrong insulin. Only regular (short-acting) insulin has the formulation and evidence base for IV use — NPH, glargine, and lispro are never given IV regardless of how convenient their profile might sound in this scenario.'},
+  {q:'A patient in DKA is started on an IV insulin drip. Which insulin does the nurse expect to be running?',type:'single',
+   opts:['A. NPH insulin','B. Regular insulin','C. Insulin glargine','D. Insulin lispro'],correct:1,
+   rat:'All four are real insulins a nurse might reasonably picture running here. Only regular (short-acting) insulin is approved and studied for IV administration — NPH, glargine, and lispro are never given IV, regardless of how their onset/duration profile might otherwise seem to fit the situation.'},
 
-  {q:'A nurse is preparing to mix regular and NPH insulin in one syringe for a patient. Which technique is correct, and why does the ORDER matter?',type:'single',
-   opts:['A. Draw up NPH first so the regular insulin doesn\'t become cloudy before injection','B. Draw up regular (clear) first, then NPH (cloudy), to avoid contaminating the regular insulin vial with the longer-acting NPH','C. The order does not matter as long as both are drawn into the same syringe before injecting','D. Draw up whichever insulin has the larger dose first to ensure accurate measurement'],correct:1,
-   rat:'The trap: C sounds reasonable if you don\'t know the underlying reason, and A reverses the correct sequence. The real reason: if regular insulin\'s vial gets contaminated with NPH particles, its onset/duration profile could be altered for future doses — "clear before cloudy" protects the regular vial\'s purity, not just convenience.'},
+  {q:'A nurse is preparing to mix regular and NPH insulin in one syringe. Which sequence is correct?',type:'single',
+   opts:['A. Draw up the NPH first, then the regular insulin','B. Draw up the regular insulin first, then the NPH','C. Draw up whichever insulin has the larger ordered dose first','D. Inject air into the regular insulin vial first, then draw up the NPH'],correct:1,
+   rat:'Each sequence sounds like it could be a reasonable technique if you\'re just going by "does the order matter." The actual rule is clear before cloudy — regular insulin is drawn up first so the regular vial never risks contamination from NPH particles, which could alter its profile on future doses.'},
 
   {q:'A patient asks why their A1C of 8.2% matters more to their provider than today\'s fingerstick glucose of 110 mg/dL. What is the BEST explanation?',type:'single',
-   opts:['A. A1C measures kidney function, which is a better long-term indicator than a single glucose reading','B. A1C reflects average blood glucose control over the past ~3 months, so a single normal fingerstick doesn\'t reflect the overall pattern of control','C. The fingerstick reading is only accurate if taken while fasting, so it should be disregarded entirely','D. A1C and fingerstick glucose measure the exact same thing, just at different times of day'],correct:1,
-   rat:'The trap: A misattributes what A1C measures, and D dismisses a real and important distinction. A1C reflects glucose bound to hemoglobin over the red blood cell\'s ~3-month lifespan — it can\'t be "gamed" by one good day, which is exactly why it\'s a better long-term control marker than an isolated fingerstick.'},
+   opts:['A. The A1C reflects kidney function over time, while the fingerstick only shows current filtration','B. The A1C reflects average glucose control over the past 2-3 months, while the fingerstick is a single point-in-time value','C. The fingerstick is only accurate when the patient has fasted for at least 12 hours beforehand','D. The two values measure the same thing, so the difference reflects a testing error'],correct:1,
+   rat:'A misattributes what A1C actually measures, C attaches a fasting requirement that doesn\'t apply here, and D assumes an error rather than two genuinely different measurements. A1C reflects glucose bound to hemoglobin over the red blood cell\'s ~2-3 month lifespan, so it captures the overall pattern in a way one fingerstick never can.'},
 
   {q:'Which findings would the nurse expect to find together in a newly diagnosed, untreated diabetic patient? (Select all that apply)',type:'multi',
    opts:['A. Polyuria','B. Polydipsia','C. Polyphagia with unexplained weight loss','D. Polycythemia','E. Bradycardia'],correct:[0,1,2],
-   rat:'Polycythemia (excess red blood cells) and bradycardia are not features of hyperglycemia and are the traps here. The true triad — polyuria, polydipsia, polyphagia — all trace back to one mechanism: glucose stuck in the blood while cells are starved, with polyphagia notably paired with weight loss in Type 1 as the body burns fat/muscle instead.'},
+   rat:'Polycythemia and bradycardia are both real clinical findings a nurse could encounter, just not from hyperglycemia — that\'s what makes them believable distractors here. The true triad — polyuria, polydipsia, polyphagia — all trace back to glucose stuck in the blood while cells are starved, with polyphagia paired with weight loss in Type 1 as the body burns fat/muscle instead.'},
 
   {q:'A patient\'s labs show waist circumference 42 inches, BP 134/86, fasting glucose 108 mg/dL, HDL 38 mg/dL, and triglycerides 165 mg/dL. What does this pattern MOST likely represent?',type:'single',
-   opts:['A. A diagnosed complication of long-standing Type 2 diabetes','B. Metabolic syndrome — a risk cluster that raises future risk for Type 2 diabetes and cardiovascular disease, but is not itself a diagnosis of diabetes','C. Acute DKA, based on the elevated glucose and blood pressure together','D. Normal age-related findings requiring no intervention'],correct:1,
-   rat:'The trap: A treats this as a diabetes complication (it isn\'t — the glucose here is prediabetic range, not diagnostic), and C misapplies an acute-crisis label to chronic risk-factor data. This patient meets 4 of the 5 metabolic syndrome criteria (waist, BP, HDL, triglycerides) — a reversible risk cluster, not a diagnosis or a complication.'},
+   opts:['A. A diagnosed complication of long-standing Type 2 diabetes','B. Metabolic syndrome — a risk cluster for future Type 2 diabetes and cardiovascular disease','C. Acute diabetic ketoacidosis','D. Well-controlled Type 2 diabetes on current therapy'],correct:1,
+   rat:'A misclassifies this as a complication rather than a risk cluster, C misapplies an acute-crisis label to stable outpatient values, and D assumes an existing diabetes diagnosis that these numbers don\'t actually confirm (the glucose here is prediabetic range). This patient meets 4 of the 5 metabolic syndrome criteria — a reversible risk pattern, distinct from all three of those.'},
 
   {q:'A 45-year-old is diagnosed with diabetes, initially managed successfully with metformin alone, but has positive glutamic acid decarboxylase (GAD) antibodies. Within 18 months, oral agents fail and insulin is required. This progression is MOST consistent with:',type:'single',
-   opts:['A. Typical Type 2 diabetes, since oral agents eventually fail in most long-term Type 2 patients','B. LADA (Latent Autoimmune Diabetes in Adults) — antibody-positive autoimmune destruction with a slower course than classic Type 1','C. Gestational diabetes that failed to resolve after delivery','D. A laboratory error, since Type 2 diabetes patients do not have positive autoimmune antibodies'],correct:1,
-   rat:'The trap: A is tempting because typical Type 2 diabetes does progress over decades, but the KEY detail is the antibody positivity plus the unusually rapid failure of oral agents (18 months, not years) — that combination is the signature of LADA, not classic Type 2 or a lab error.'},
+   opts:['A. Typical Type 2 diabetes','B. LADA (Latent Autoimmune Diabetes in Adults)','C. Gestational diabetes that persisted after delivery','D. A false-positive antibody result'],correct:1,
+   rat:'A is genuinely tempting since Type 2 diabetes does progress over time, and D offers an easy out from an inconvenient lab result. The detail that actually decides this is the antibody positivity combined with the unusually fast failure of oral agents (18 months, not years) — that combination is the signature of LADA.'},
 
   {q:'Which of the following are direct physiologic effects of insulin, beyond simply moving glucose into cells? (Select all that apply)',type:'multi',
    opts:['A. Promotes storage of excess glucose as fat (lipogenesis)','B. Inhibits the breakdown of fat (lipolysis)','C. Promotes movement of potassium into cells','D. Stimulates the release of glucagon from alpha cells','E. Directly produces ketone bodies as a byproduct'],correct:[0,1,2],
-   rat:'The traps: insulin does NOT stimulate glucagon release (they act in opposition to each other) and does NOT produce ketones — ketones are produced specifically when insulin is ABSENT or ineffective and lipolysis is unblocked. The three correct actions (fat storage, blocking lipolysis, driving K⁺ into cells) explain both DKA\'s ketone production and the hypokalemia risk of insulin therapy.'},
+   rat:'D and E both sound like they could plausibly belong on an insulin-function list. Insulin actually opposes glucagon release (they work against each other), and ketones form specifically when insulin is ABSENT — insulin\'s real additional roles are storing glucose as fat, blocking fat breakdown, and driving potassium into cells.'},
 
   {q:'A client with Type 2 diabetes has been managed on metformin for 6 years. Recent labs show an A1C of 8.9%, up from 7.1% a year ago, despite reported medication adherence. Which explanation for this trend is MOST accurate?',type:'single',
-   opts:['A. Metformin has stopped being absorbed by the GI tract after long-term use','B. Beta-cell function typically continues to decline over time in Type 2 diabetes, so a single oral agent may eventually become insufficient regardless of adherence','C. The client\'s A1C values are unreliable and should be disregarded in favor of daily fingersticks only','D. This pattern indicates the client has actually developed Type 1 diabetes'],correct:1,
-   rat:'The trap: A invents a nonexistent absorption failure, C dismisses a validated, standard diagnostic tool, and D misdiagnoses a progression pattern that is completely normal in TYPE 2 diabetes. Type 2 diabetes is progressive — beta-cell function keeps declining over years even with perfect adherence, which is exactly why additional or different medications are often needed over time, not a sign anything was done wrong.'},
+   opts:['A. Metformin absorption typically declines after several years of continuous use','B. Beta-cell function typically continues to decline over time in Type 2 diabetes, so a single oral agent may eventually become insufficient','C. A1C results become less reliable the longer a patient has been diagnosed','D. This pattern indicates the client has developed Type 1 diabetes'],correct:1,
+   rat:'A invents a pharmacokinetic effect that isn\'t established, C questions a validated test without basis, and D reclassifies the diabetes type based on a lab trend that doesn\'t actually indicate that. Type 2 diabetes is progressive — beta-cell function keeps declining over years even with perfect adherence, which is why additional therapy often becomes necessary over time.'},
 
   {q:'A nurse is teaching a client newly started on a GLP-1 receptor agonist (e.g., semaglutide) for Type 2 diabetes. Which statement by the client indicates a correct understanding of this medication class?',type:'single',
-   opts:['A. "This medication works the same way as insulin and will replace my need for it entirely."','B. "This medication may help me feel full sooner and could help with some weight loss, in addition to lowering my blood sugar."','C. "I should expect my blood sugar to drop dangerously low even if I skip a meal."','D. "This is a fast-acting rescue medication I should use if I feel a hypoglycemic episode starting."'],correct:1,
-   rat:'The trap: A conflates a GLP-1 agonist with insulin itself, which is inaccurate — they work through a different, incretin-based mechanism. C overstates hypoglycemia risk (GLP-1 agonists carry a LOW risk of hypoglycemia on their own, unlike sulfonylureas or insulin). D fundamentally misunderstands the medication as a rescue treatment when it is a scheduled, ongoing therapy. GLP-1 agonists slow gastric emptying and increase satiety (weight loss benefit) while improving glucose control.'}
+   opts:['A. "This medication works the same way as insulin."','B. "This medication may help me feel full sooner and could support some weight loss, along with lowering my blood sugar."','C. "I should expect my blood sugar to drop significantly if I skip a meal."','D. "I should use this medication if I feel a hypoglycemic episode starting."'],correct:1,
+   rat:'A, C, and D all describe things that are true of OTHER diabetes medications (insulin\'s mechanism, sulfonylurea-level hypoglycemia risk, and a rescue-style dosing pattern), which is what makes them believable here. GLP-1 agonists work through a different, incretin-based mechanism, carry a low hypoglycemia risk on their own, and are a scheduled ongoing therapy — not a rescue medication.'},
+
+  {q:'What A1C level is used as a diagnostic threshold for diabetes?',type:'single',
+   opts:['A. ≥5.0%','B. ≥6.5%','C. ≥9.0%','D. ≥12.0%'],correct:1,
+   rat:'This one is exactly what it looks like — no trick here. ≥6.5% is the diagnostic A1C threshold for diabetes, one of the core numbers worth having cold before you start layering on the harder reasoning questions.'},
+
+  {q:'A 60-year-old with Type 2 diabetes, stage 3 CKD (eGFR 38), and a recent HbA1c of 9.1% is being evaluated for medication changes. The provider is considering adding a sulfonylurea. Which additional finding would MOST strongly support choosing glipizide over glyburide specifically?',type:'single',
+   opts:['A. The patient\'s preference for once-daily dosing','B. The patient\'s reduced renal clearance, which raises the risk of prolonged hypoglycemia with a longer-acting sulfonylurea','C. The patient\'s A1C being above 9%','D. The patient\'s age alone, independent of any other factor'],correct:1,
+   rat:'A and C are both true details in this vignette but neither is the deciding factor for choosing BETWEEN the two sulfonylureas specifically. D isolates age without connecting it to the actual mechanism. The reduced eGFR is what matters most here — glyburide\'s longer duration and renal clearance make it riskier in reduced renal function, which is exactly why glipizide is preferred in this patient.'}
 ],'Diabetes Core Check');
+</script>
+<script>
+document.getElementById('sec-insulin').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">💉</span> Insulin Lab</h2>
+<p class="intro-line">Onset, peak, and duration for every insulin — the single most-tested detail in this unit, since it's WHY hypoglycemia timing makes sense. Built from your own ALT drug cards.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>⏱️ The master comparison table</h3>
+  <table class="lab">
+    <tr><th>Insulin</th><th>Onset</th><th>Peak</th><th>Duration</th><th>Appearance</th></tr>
+    <tr><td><b>Aspart / Lispro</b> (rapid-acting)</td><td>10-20 min</td><td>1-3 hr</td><td>3-5 hr</td><td>Clear</td></tr>
+    <tr><td><b>Regular</b> (short-acting)</td><td>30-60 min</td><td>2-4 hr</td><td>5-8 hr</td><td>Clear</td></tr>
+    <tr><td><b>NPH</b> (intermediate-acting)</td><td>1-2 hr</td><td>4-12 hr</td><td>14-24 hr</td><td>Cloudy</td></tr>
+    <tr><td><b>Glargine</b> (long-acting)</td><td>~1-2 hr</td><td><b>No peak</b></td><td>~24 hr</td><td>Clear</td></tr>
+    <tr><td><b>Detemir</b> (long-acting)</td><td>~1-2 hr</td><td><b>No peak</b></td><td>12-24 hr (may need BID)</td><td>Clear</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Mnemonic</div><div class="big">"Rapid in 15, Regular in 30, NPH takes a while, Glargine goes all day and never peaks."</div></div>
+  <div class="hy">⭐ <b>The WHY behind hypoglycemia timing:</b> whatever time the PEAK falls at is when a patient is at highest hypoglycemia risk — that's not a coincidence to memorize separately, it's the direct meaning of "peak action." NPH given at breakfast peaks mid-morning; given at bedtime, it peaks around 2-3 AM (classic Somogyi-effect timing).</div>
+</div>
+
+<div class="card">
+  <h3>💉 Rapid-Acting: Aspart / Lispro</h3>
+  <ul class="clean">
+    <li><b>Give 0-15 minutes before the meal</b> (or with the meal) — have the tray in front of the patient FIRST.</li>
+    <li>Mimics the body's natural first-phase insulin response to eating — the most "physiologic" mealtime coverage.</li>
+    <li>Hypoglycemia risk is highest at peak (1-3 hr) — usually mid-meal-to-post-meal.</li>
+    <li>Used in basal-bolus regimens (paired with a long-acting insulin) and in insulin pumps.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>💉 Short-Acting: Regular (Humulin/Novolin)</h3>
+  <ul class="clean">
+    <li><b>Give 30 minutes before the meal</b> — critical timing, set a timer.</li>
+    <li><b>The ONLY insulin approved for IV use</b> — DKA drips, hyperkalemia treatment (with dextrose), perioperative/ICU glucose control.</li>
+    <li>In DKA: monitor potassium closely — IV insulin drives K⁺ into cells and can cause dangerous hypokalemia.</li>
+    <li>Clear solution — can be mixed with NPH (draw regular FIRST — "clear before cloudy").</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>💉 Intermediate-Acting: NPH</h3>
+  <ul class="clean">
+    <li><b>Cloudy</b> — gently ROLL to resuspend, <b>never shake</b> (shaking degrades the suspension).</li>
+    <li>HAS a true peak (unlike the long-acting analogs) — this is exactly why it carries a higher hypoglycemia risk at that peak window (4-12 hr).</li>
+    <li>Typically dosed BID (before breakfast and at bedtime).</li>
+    <li>Watch for <b>Somogyi effect</b>: nocturnal hypoglycemia triggering rebound morning hyperglycemia — a classic NPH-at-bedtime scenario.</li>
+    <li>Can mix with regular insulin: <b>draw regular (clear) first, then NPH (cloudy)</b>.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>💉 Long-Acting: Glargine / Detemir</h3>
+  <ul class="clean">
+    <li><b>Peakless</b> — steady background ("basal") coverage, which is exactly why hypoglycemia risk is lower and flatter across the day compared to NPH.</li>
+    <li><b>NEVER mix with any other insulin</b> — especially glargine, which will precipitate if combined in the same syringe.</li>
+    <li>Glargine: once daily, same time each day. Detemir: once or twice daily.</li>
+    <li>Clear solution, given SQ only — never IV.</li>
+  </ul>
+</div>
+
+<div id="quiz-insulin"></div>
+`;
+
+renderQuiz('quiz-insulin',[
+  {q:'A patient receives NPH insulin at 0730 with breakfast. At approximately what time should the nurse watch MOST closely for hypoglycemia?',type:'single',
+   opts:['A. 0800-0830','B. 1130-1930 (late morning through evening)','C. 0330-0530 the next morning','D. Immediately at the time of injection'],correct:1,
+   rat:'A describes the onset window, not the peak, and C describes a peak window that would fit a BEDTIME dose, not a morning one. NPH peaks 4-12 hours after injection — given at 0730, that peak window falls in the late morning through evening, which is when hypoglycemia risk is highest.'},
+
+  {q:'A patient asks why their glargine insulin doesn\'t seem to have a specific time when they feel shaky, unlike their old NPH regimen. What is the BEST explanation?',type:'single',
+   opts:['A. Glargine is a much lower dose than NPH, so it doesn\'t cause noticeable effects','B. Glargine has no pronounced peak, providing steady background coverage rather than a concentrated action window','C. Glargine only works during the day and stops working at night','D. Glargine is not actually absorbed from the injection site'],correct:1,
+   rat:'A invents a dosing explanation that isn\'t the actual mechanism, and C and D both describe the insulin as not really working, which contradicts it being an effective basal insulin. Glargine\'s defining feature is a flat, peakless profile — there\'s no concentrated window of action the way NPH has a true peak.'},
+
+  {q:'A nurse needs to mix regular insulin and NPH in the same syringe for a patient. Which technique is correct?',type:'single',
+   opts:['A. Draw up the NPH first, then the regular insulin','B. Draw up the regular insulin first, then the NPH','C. It does not matter which is drawn up first','D. Inject air into the regular vial equal to the total combined dose'],correct:1,
+   rat:'C sounds plausible if you don\'t know the underlying reason, and D describes an incomplete step without the core sequencing rule. "Clear before cloudy" — regular insulin is drawn up first so its vial is never at risk of contamination from the NPH suspension.'},
+
+  {q:'A patient asks why their rapid-acting insulin (aspart) needs to be given so close to mealtime, unlike their old regular insulin routine. What is the BEST explanation?',type:'single',
+   opts:['A. Aspart is a much stronger insulin and works regardless of timing','B. Aspart has a much faster onset (10-20 minutes) than regular insulin (30-60 minutes), so timing it right before the meal matches its faster action to the meal\'s glucose rise','C. Aspart only works if taken during a full meal, unlike regular insulin','D. Aspart requires additional time to dissolve before it can be injected'],correct:1,
+   rat:'A treats the difference as a matter of strength rather than timing, and C and D both invent requirements that aren\'t accurate. The real reason is onset speed — aspart\'s much faster onset means it needs to be given closer to the meal so its action lines up with the incoming glucose, unlike regular insulin\'s slower 30-60 minute onset.'},
+
+  {q:'Which insulin is the ONLY one appropriate for IV administration, and in which scenario would the nurse expect to use it that way?',type:'single',
+   opts:['A. NPH, for basal coverage during surgery','B. Regular insulin, for treating DKA or severe hyperkalemia','C. Glargine, for rapid glucose correction in an emergency','D. Aspart, for continuous infusion via insulin pump'],correct:1,
+   rat:'A, C, and D each assign IV or pump use to an insulin that isn\'t actually used that way — NPH and glargine are never given IV, and aspart\'s pump use is subcutaneous, not IV. Regular insulin is the only insulin approved for IV use, most commonly seen in DKA treatment and hyperkalemia management.'},
+
+  {q:'A patient\'s NPH insulin is given at bedtime. The nurse should recognize which finding as a possible sign of the Somogyi effect?',type:'single',
+   opts:['A. Stable glucose readings throughout the night with no morning changes','B. A high morning glucose reading following an unrecognized period of nocturnal hypoglycemia','C. A gradually rising glucose level throughout the entire night without any drop','D. Hypoglycemia occurring immediately at the time of the bedtime injection'],correct:1,
+   rat:'C describes a pattern (the Dawn phenomenon) that looks similar on the surface but has a different mechanism — a steady overnight rise with no preceding low. D misplaces the timing entirely, since NPH\'s peak (and the Somogyi risk window) falls hours after a bedtime dose, not immediately. The Somogyi effect specifically involves an unrecognized nighttime low that triggers a rebound high by morning.'},
+
+  {q:'Which insulin is described as "cloudy" and must be gently rolled (never shaken) before administration?',type:'single',
+   opts:['A. Regular','B. Aspart','C. NPH','D. Glargine'],correct:2,
+   rat:'Straightforward one — NPH is the cloudy, intermediate-acting insulin that needs to be gently rolled to resuspend before drawing it up. Regular, aspart, and glargine are all clear.'},
+
+  {q:'A patient takes NPH insulin at 0700 and aspart insulin with each meal (0730, 1230, 1800). At 1030, the patient becomes diaphoretic and shaky. Which insulin\'s action window is MOST consistent with this timing, and why?',type:'single',
+   opts:['A. The 0700 NPH dose, since 1030 falls within its expected peak window given a longer onset','B. The 0730 aspart dose, since 1030 falls within its 1-3 hour peak window following that rapid-acting injection','C. Neither insulin, since 1030 is too early for any insulin peak to occur','D. Both insulins equally, since their peak windows are identical'],correct:1,
+   rat:'This one takes real comparison, not just recall: NPH given at 0700 wouldn\'t peak until later (4-12 hr places its window from roughly 1100-1900, right at the edge but not yet at 1030), while the 0730 aspart dose has an onset of 10-20 min and peak of 1-3 hr — placing 1030 (about 3 hours later) squarely in ITS peak window. The faster-acting mealtime insulin is the better fit for this specific timing.'}
+],'Insulin Onset/Peak/Duration Drill');
+</script>
+<script>
+/* ===== MATCH GAME ENGINE (Quizlet-style, reusable across decks) ===== */
+const MATCH_GAMES = {
+  insulinmatch: {
+    emoji:'🔗', title:'Insulin Match Game', bestKey:'nur256u3_matchbest_insulin',
+    intro:'Tap a term on the left, then its match on the right — a line connects them. 6 fresh pairs each round. Beat your best time.',
+    pairs:[
+      {a:'Aspart / Lispro',b:'Onset 10-20 min — give right before the meal'},
+      {a:'Regular insulin',b:'The ONLY insulin approved for IV use'},
+      {a:'NPH',b:'Cloudy — gently roll, never shake'},
+      {a:'Glargine',b:'No peak — steady ~24 hr coverage, never mix'},
+      {a:'Detemir',b:'Long-acting, may need dosing twice a day'},
+      {a:'NPH peak window',b:'4-12 hours after the dose'},
+      {a:'Aspart/Lispro duration',b:'3-5 hours total'},
+      {a:'Regular insulin duration',b:'5-8 hours total'},
+      {a:'Mixing insulins rule',b:'"Clear before cloudy" — draw regular first'},
+      {a:'Metformin',b:'Hold 24-48 hr before/after IV contrast dye'},
+      {a:'Glyburide',b:'Avoid in elderly patients — on the Beers list'},
+      {a:'Glimepiride',b:'Stimulates insulin release, glucose-independent'},
+      {a:'Glucagon',b:'Needs liver glycogen stores to work'},
+      {a:'DKA',b:'Type 1 — ketones + acidosis + Kussmaul breathing'},
+      {a:'HHS',b:'Type 2 — glucose often >600, NO ketones'},
+      {a:'Somogyi effect',b:'Nighttime low causes a rebound high by morning'},
+      {a:'Rule of 15',b:'15 g fast carbs, recheck glucose in 15 minutes'},
+      {a:'Glucagon route (unconscious)',b:'IM or subcutaneous injection'}
+    ]
+  },
+  eyematch: {
+    emoji:'👁️', title:'Eye & Vision Match Game', bestKey:'nur256u3_matchbest_eye',
+    intro:'Straight from your teacher\'s vision notes — tap a term on the left, then its match on the right to connect them with a line.',
+    pairs:[
+      {a:'Emmetropia',b:'Perfect 20/20 vision — light focuses directly on the retina'},
+      {a:'Myopia',b:'Nearsighted — clear up close, blurry far away'},
+      {a:'Hyperopia',b:'Farsighted — clear far away, blurry up close'},
+      {a:'Astigmatism',b:'Irregular corneal curvature — blurred at ANY distance'},
+      {a:'Presbyopia',b:'Age-related (usually 40+) loss of near focus from a stiffening lens'},
+      {a:'Lens\'s 3 jobs',b:'UV filter, accommodation, and refraction'},
+      {a:'Direct pupil response',b:'The SAME eye that got the light constricts'},
+      {a:'Consensual pupil response',b:'The OTHER eye also constricts'},
+      {a:'Mydriasis',b:'Pupil DILATION'},
+      {a:'Miosis',b:'Pupil CONSTRICTION'},
+      {a:'Glaucoma',b:'Gradual, painless peripheral vision loss — meds for life'},
+      {a:'Cataract causes',b:'Eye injury, diabetes, and beta-blocker use'},
+      {a:'Visual acuity 20/40',b:'Sees at 20 ft what a normal (20/20) eye sees at 40 ft — WORSE than normal'},
+      {a:'Macular degeneration',b:'Central vision loss, peripheral vision spared'},
+      {a:'Retinal detachment',b:'Flashes → floaters → curtain — surgical emergency'},
+      {a:'Acute angle-closure glaucoma',b:'Sudden severe eye pain, halos, nausea — true emergency'}
+    ]
+  }
+};
+const ROUND_SIZE=6;
+let currentMatchGame=null, matchRoundPairs=[], matchLeftOrder=[], matchRightOrder=[], matchSelectedLeft=null, matchMatchedCount=0, matchStartTime=0, matchTimerInt=null, matchBestTime=null, matchProgress={};
+(function restoreMatchProgress(){ try{ const r=localStorage.getItem('nur256u3_matchprogress'); if(r) matchProgress=JSON.parse(r); }catch(e){ matchProgress={}; } })();
+function saveMatchProgress(){ try{ localStorage.setItem('nur256u3_matchprogress', JSON.stringify(matchProgress)); }catch(e){} }
+function startMatchGame(gameId){
+  currentMatchGame = MATCH_GAMES[gameId];
+  currentMatchGame.sectionId = gameId;
+  try{ const r=localStorage.getItem(currentMatchGame.bestKey); matchBestTime = r?parseFloat(r):null; }catch(e){ matchBestTime=null; }
+  const totalPairs=currentMatchGame.pairs.length;
+  const totalRounds=Math.ceil(totalPairs/ROUND_SIZE);
+  let prog=matchProgress[gameId];
+  if(!prog || !prog.cycleOrder || prog.roundIdx>=totalRounds){
+    prog={ cycleOrder: shuffle(currentMatchGame.pairs.map((_,i)=>i)), roundIdx:0 };
+  }
+  matchProgress[gameId]=prog; saveMatchProgress();
+  const startIdx=prog.roundIdx*ROUND_SIZE;
+  const idxSlice=prog.cycleOrder.slice(startIdx, startIdx+ROUND_SIZE);
+  matchRoundPairs = idxSlice.map(i=>currentMatchGame.pairs[i]);
+  matchLeftOrder = shuffle(matchRoundPairs.map((p,i)=>i));
+  matchRightOrder = shuffle(matchRoundPairs.map((p,i)=>i));
+  matchSelectedLeft=null; matchMatchedCount=0; matchStartTime=Date.now();
+  drawMatchGame(totalRounds);
+  if(matchTimerInt) clearInterval(matchTimerInt);
+  matchTimerInt=setInterval(updateMatchTimer,200);
+}
+function updateMatchTimer(){
+  const el=document.getElementById('matchTimer');
+  if(!el){ clearInterval(matchTimerInt); return; }
+  el.textContent='⏱️ '+((Date.now()-matchStartTime)/1000).toFixed(1)+'s';
+}
+function drawMatchGame(totalRounds){
+  const host=document.getElementById('sec-'+currentMatchGame.sectionId);
+  const bestTxt = matchBestTime ? matchBestTime.toFixed(1)+'s' : '—';
+  const prog=matchProgress[currentMatchGame.sectionId];
+  host.innerHTML=`
+  <h2 class="sec-title"><span class="sec-emoji">${currentMatchGame.emoji}</span> ${currentMatchGame.title}</h2>
+  <p class="intro-line">${currentMatchGame.intro}</p>
+  <div class="match-stats">
+    <span>📍 Round ${prog.roundIdx+1} of ${totalRounds}</span>
+    <span id="matchTimer">⏱️ 0.0s</span>
+    <span>✅ <span id="matchCount">0</span> / ${matchRoundPairs.length}</span>
+    <span>🏆 Best round: ${bestTxt}</span>
+  </div>
+  <p class="intro-line" style="text-align:center;margin-top:0">Tap a term on the left, then tap its match on the right — a line connects them.</p>
+  <div class="match-wrap" id="matchWrap">
+    <svg class="match-svg" id="matchSvg"></svg>
+    <div class="match-columns">
+      <div class="match-col" id="matchColLeft"></div>
+      <div class="match-col" id="matchColRight"></div>
+    </div>
+  </div>
+  <div class="center" style="margin-top:12px"><button class="btn" style="background:var(--purple)" onclick="startMatchGame('${currentMatchGame.sectionId}')">🔀 Replay This Round</button></div>
+  <div id="matchWin"></div>
+  `;
+  const colL=document.getElementById('matchColLeft'), colR=document.getElementById('matchColRight');
+  matchLeftOrder.forEach(pairIdx=>{
+    const btn=document.createElement('button'); btn.className='match-item'; btn.textContent=matchRoundPairs[pairIdx].a;
+    btn.dataset.pair=pairIdx; btn.dataset.side='left';
+    btn.onclick=()=>matchPickLeft(pairIdx, btn);
+    colL.appendChild(btn);
+  });
+  matchRightOrder.forEach(pairIdx=>{
+    const btn=document.createElement('button'); btn.className='match-item'; btn.textContent=matchRoundPairs[pairIdx].b;
+    btn.dataset.pair=pairIdx; btn.dataset.side='right';
+    btn.onclick=()=>matchPickRight(pairIdx, btn);
+    colR.appendChild(btn);
+  });
+}
+function matchPickLeft(pairIdx, el){
+  if(el.classList.contains('matched'))return;
+  document.querySelectorAll('#matchColLeft .match-item').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  matchSelectedLeft={pairIdx, el};
+}
+function matchPickRight(pairIdx, el){
+  if(el.classList.contains('matched')||!matchSelectedLeft)return;
+  const leftEl=matchSelectedLeft.el;
+  if(matchSelectedLeft.pairIdx===pairIdx){
+    leftEl.classList.remove('selected'); leftEl.classList.add('matched');
+    el.classList.add('matched');
+    drawMatchLine(leftEl, el);
+    matchMatchedCount++;
+    document.getElementById('matchCount').textContent=matchMatchedCount;
+    matchSelectedLeft=null;
+    if(matchMatchedCount===matchRoundPairs.length){ matchFinish(); }
+  } else {
+    leftEl.classList.add('shake'); el.classList.add('shake');
+    setTimeout(()=>{
+      leftEl.classList.remove('selected','shake'); el.classList.remove('shake');
+    },500);
+    matchSelectedLeft=null;
+  }
+}
+function drawMatchLine(leftEl, rightEl){
+  const svg=document.getElementById('matchSvg'), wrap=document.getElementById('matchWrap');
+  if(!svg||!wrap)return;
+  const wrapRect=wrap.getBoundingClientRect();
+  const lr=leftEl.getBoundingClientRect(), rr=rightEl.getBoundingClientRect();
+  const x1=lr.right-wrapRect.left, y1=lr.top-wrapRect.top+lr.height/2;
+  const x2=rr.left-wrapRect.left, y2=rr.top-wrapRect.top+rr.height/2;
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',x1); line.setAttribute('y1',y1); line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+  line.style.stroke='var(--green)'; line.style.strokeWidth='3'; line.style.strokeLinecap='round';
+  svg.appendChild(line);
+}
+function matchFinish(){
+  clearInterval(matchTimerInt);
+  const elapsed=(Date.now()-matchStartTime)/1000;
+  let isNewBest=false;
+  if(!matchBestTime || elapsed<matchBestTime){ matchBestTime=elapsed; isNewBest=true; try{ localStorage.setItem(currentMatchGame.bestKey, elapsed.toFixed(2)); }catch(e){} }
+  const prog=matchProgress[currentMatchGame.sectionId];
+  const totalRounds=Math.ceil(currentMatchGame.pairs.length/ROUND_SIZE);
+  prog.roundIdx++;
+  saveMatchProgress();
+  const cycleDone = prog.roundIdx>=totalRounds;
+  document.getElementById('matchWin').innerHTML=`<div class="quiz-score">🎉 Matched all ${matchRoundPairs.length} pairs in ${elapsed.toFixed(1)}s!${isNewBest?' <br>🏆 New best round time!':''}
+    <br><br>${cycleDone
+      ? "✅ That's every pair in this deck! Nice — full cycle complete."
+      : `Round ${prog.roundIdx} of ${totalRounds} done.`}
+    <br><button class="btn" style="background:var(--green);margin-top:10px" onclick="startMatchGame('${currentMatchGame.sectionId}')">${cycleDone? '🔄 Start a New Cycle (reshuffled)' : '➡️ Next Round'}</button>
+  </div>`;
+}
+document.getElementById('sec-insulinmatch').innerHTML=`<p class="intro-line">Loading match game...</p>`;
+document.getElementById('sec-eyematch').innerHTML=`<p class="intro-line">Loading match game...</p>`;
 </script>
 <script>
 document.getElementById('sec-dka').innerHTML=`
@@ -760,36 +1083,44 @@ document.getElementById('sec-dka').innerHTML=`
 
 renderQuiz('quiz-dka',[
   {q:'A patient arrives in the ED with glucose 640 mg/dL, serum osmolality 335 mOsm/kg, arterial pH 7.34, negative serum ketones, and profound lethargy. The family reports 3 days of poor oral intake due to a GI illness. Which condition does this presentation represent?',type:'single',
-   opts:['A. DKA, based on the severity of the hyperglycemia alone','B. HHS — the near-normal pH and absent ketones despite extreme hyperglycemia are the defining features, not the glucose number itself','C. Mild hypoglycemia with a false elevated glucose reading','D. A normal stress response to dehydration requiring no specific intervention'],correct:1,
-   rat:'The trap: A assumes glucose severity alone determines the diagnosis, but the deciding factors are pH and ketones — both are normal/absent here, ruling out DKA regardless of how high the glucose is. This is the hallmark HHS pattern: enough residual insulin to prevent ketosis, but not enough to control glucose.'},
+   opts:['A. Diabetic ketoacidosis','B. Hyperosmolar hyperglycemic syndrome','C. Hypoglycemic crisis with a false elevated glucose reading','D. Expected dehydration requiring only oral rehydration'],correct:1,
+   rat:'The glucose alone (640) could tempt you toward "the worse-sounding option," but the deciding data here is the pH and ketones — both normal/absent, which rules out DKA no matter how high the glucose climbs. This is the hallmark HHS pattern: enough residual insulin to prevent ketosis, but not enough to control glucose.'},
 
   {q:'A patient with DKA has the following orders: IV 0.9% NS, an IV regular insulin drip, and potassium replacement once levels are confirmed. The initial serum potassium result is 5.5 mEq/L. What should the nurse do FIRST?',type:'single',
-   opts:['A. Withhold all treatment and request a repeat potassium level before proceeding, since 5.5 is elevated','B. Begin the IV insulin drip immediately, since lowering the glucose takes priority over fluid status','C. Begin the IV fluids first to address the profound dehydration, understanding that potassium will likely need to be added once insulin starts and the level begins to fall','D. Administer the ordered potassium replacement now, since the level of 5.5 confirms the patient needs supplementation'],correct:2,
-   rat:'The trap: D is tempting because 5.5 looks elevated and "needing supplementation" seems logical, but that number reflects acidosis pushing K⁺ OUT of cells — total body K⁺ is actually depleted. Giving potassium now, before insulin even starts, risks dangerous hyperkalemia. Fluids come first; insulin follows; potassium is added once the level starts dropping as expected.'},
+   opts:['A. Request a repeat potassium level before initiating any treatment','B. Begin the insulin drip immediately','C. Begin the IV fluids','D. Administer the ordered potassium replacement now'],correct:2,
+   rat:'D is the most tempting option — 5.5 looks high enough to "need" supplementation. But that number reflects acidosis pushing K⁺ OUT of cells; total body K⁺ is actually depleted, and giving potassium now (on top of a still-elevated reading) risks dangerous hyperkalemia. Fluids come first; insulin follows; potassium is added once the level starts dropping as expected.'},
 
   {q:'A nurse is comparing two diabetic patients, both with glucose readings above 500 mg/dL. Which single finding BEST distinguishes a DKA presentation from an HHS presentation?',type:'single',
-   opts:['A. The degree of hyperglycemia, since DKA always produces a higher glucose than HHS','B. The presence of severe dehydration, since this only occurs in DKA','C. Kussmaul respirations and a fruity breath odor from ketoacidosis, which are absent in HHS','D. The patient\'s reported thirst level, since HHS patients are typically not thirsty'],correct:2,
-   rat:'The trap: A reverses the actual relationship (HHS often has the HIGHER glucose of the two), B assigns dehydration exclusively to DKA when both conditions cause it, and D invents a symptom difference that doesn\'t exist. The true distinguishing feature is the acid: only DKA produces ketoacidosis with Kussmaul breathing and fruity breath.'},
+   opts:['A. The specific glucose number reached','B. The presence of severe dehydration','C. Kussmaul respirations and a fruity breath odor','D. The patient\'s reported level of thirst'],correct:2,
+   rat:'A and B are both real findings in this scenario, which is what makes them tempting — but glucose level and dehydration occur in BOTH conditions, so neither one distinguishes them. Only DKA produces ketoacidosis, which is what causes Kussmaul breathing and fruity breath — that\'s the true differentiator.'},
 
   {q:'A Type 1 diabetic calls the clinic and reports vomiting for the past 8 hours, unable to eat, and states "I stopped taking my insulin since I\'m not eating anything." Which response from the nurse is BEST?',type:'single',
-   opts:['A. "That\'s the correct approach — insulin should be held whenever oral intake is reduced."','B. "You should resume your insulin, check your glucose and ketones frequently, and come in if you can\'t keep fluids down — illness raises glucose independent of eating."','C. "Take only half your usual dose until you\'re able to eat normally again."','D. "Stop checking your blood glucose until the vomiting resolves, to avoid unnecessary finger sticks."'],correct:1,
-   rat:'The trap: A validates a dangerous but common misconception, and C offers an unsupported "compromise" dose with no clinical basis. The physiology doesn\'t care whether the patient is eating — illness triggers cortisol/stress hormones that raise glucose regardless, which is exactly why stopping insulin during illness is the #1 preventable cause of DKA.'},
+   opts:['A. "It\'s fine to hold your insulin until you\'re able to eat normally again."','B. "You should resume your insulin, check your glucose and ketones frequently, and come in if you can\'t keep fluids down."','C. "Take half your usual dose until your appetite returns."','D. "You can space out your glucose checks less frequently since you aren\'t eating anyway."'],correct:1,
+   rat:'A validates a genuinely common misconception, and C offers a "middle ground" dose that sounds reasonable but has no clinical basis. Illness raises glucose through cortisol/stress hormones regardless of food intake — which is exactly why stopping insulin during illness is the #1 preventable cause of DKA, and why monitoring should increase, not decrease.'},
 
   {q:'A patient being treated for DKA has a glucose that has fallen from 580 to 260 mg/dL after several hours on the insulin drip. Which change to the treatment plan should the nurse anticipate?',type:'single',
-   opts:['A. Discontinuing the insulin drip immediately, since the glucose is approaching a safer range','B. Adding dextrose to the IV fluids so the insulin drip can continue clearing ketones without causing hypoglycemia','C. Switching from regular insulin to a long-acting insulin to finish lowering the glucose gradually','D. Holding all further fluids since rehydration is presumably complete at this glucose level'],correct:1,
-   rat:'The trap: A sounds logical (glucose is improving, so stop the drip) but stopping insulin too early lets ketone production restart before the acidosis has resolved. The correct move is adding dextrose once glucose nears 200-250, allowing the insulin drip to keep running (clearing ketones) without dropping the glucose too low.'},
+   opts:['A. Discontinuing the insulin drip','B. Adding dextrose to the IV fluids','C. Switching to a long-acting insulin','D. Discontinuing further IV fluids'],correct:1,
+   rat:'A is the most tempting option since the glucose is genuinely improving — but stopping insulin too early lets ketone production restart before the acidosis has actually resolved. The correct move once glucose nears 200-250 is adding dextrose so the drip can keep running (still clearing ketones) without dropping the glucose too low.'},
 
   {q:'A nurse questions why the care team is intentionally slowing the rate of glucose correction in a patient being treated for HHS, rather than correcting it as fast as possible. What is the BEST rationale?',type:'single',
-   opts:['A. Slower correction simply reduces the total cost of insulin and IV fluids used during treatment','B. The brain has adapted to the prolonged hyperosmolar state, and correcting glucose/osmolality too quickly can cause a dangerous fluid shift into brain cells, resulting in cerebral edema','C. Slower correction is only a comfort measure with no effect on patient safety','D. Rapid correction is actually preferred whenever the patient is hemodynamically stable enough to tolerate it'],correct:1,
-   rat:'The trap: A and C both dismiss this as a non-clinical or minor consideration, and D states the opposite of safe practice. The real mechanism: the brain adjusts to a hyperosmolar environment during prolonged severe hyperglycemia, so correcting the osmolality too fast causes water to shift rapidly into brain cells — this is exactly why dextrose is added and glucose is lowered gradually rather than as fast as possible.'},
+   opts:['A. Slower correction reduces the total cost of treatment','B. Correcting glucose/osmolality too quickly can cause a dangerous fluid shift into brain cells, resulting in cerebral edema','C. Slower correction is primarily a comfort measure for the patient','D. Rapid correction is preferred whenever the patient is hemodynamically stable'],correct:1,
+   rat:'A and C both describe plausible secondary benefits but miss the actual safety mechanism. The brain adapts to a hyperosmolar environment during prolonged severe hyperglycemia, so correcting the osmolality too fast pulls water rapidly into brain cells — this is why glucose is lowered gradually rather than as fast as possible, regardless of hemodynamic stability.'},
 
   {q:'A client in DKA has an arterial blood gas showing pH 7.18, PaCO2 22 mmHg, and HCO3 11 mEq/L. Which interpretation is correct?',type:'single',
-   opts:['A. Respiratory acidosis with metabolic compensation','B. Metabolic acidosis with respiratory compensation (Kussmaul breathing blowing off CO2)','C. Metabolic alkalosis with respiratory compensation','D. A normal acid-base balance for a patient in DKA'],correct:1,
-   rat:'The trap: A reverses the primary problem and the compensating system. The low pH and low HCO3 together identify a METABOLIC acidosis (from ketoacids) as the primary problem; the low PaCO2 shows the lungs are compensating by blowing off CO2 through Kussmaul respirations — this is respiratory compensation FOR a metabolic acidosis, not a respiratory disorder itself.'},
+   opts:['A. Respiratory acidosis with metabolic compensation','B. Metabolic acidosis with respiratory compensation','C. Metabolic alkalosis with respiratory compensation','D. A normal, expected acid-base balance for DKA'],correct:1,
+   rat:'A reverses which system is the primary problem and which is compensating. The low pH and low HCO3 together identify a METABOLIC acidosis (from ketoacids) as the primary problem; the low PaCO2 shows the lungs compensating by blowing off CO2 through Kussmaul respirations — respiratory compensation FOR a metabolic problem, not a respiratory disorder itself.'},
 
-  {q:'A client with DKA has been on an insulin drip for several hours. The provider orders a decrease in the infusion rate once the anion gap has closed and bicarbonate has normalized, even though the glucose reached goal range earlier. What is the rationale for continuing insulin until this later point?',type:'single',
-   opts:['A. Insulin must be continued until the ketoacidosis itself has resolved, not just until the glucose number looks normal, since stopping too early can allow ketone production to restart','B. There is no clinical reason for this order; the drip should have been stopped once glucose reached goal range','C. The anion gap and bicarbonate are unrelated to insulin therapy and are being monitored for an unrelated reason','D. This order is only relevant if the client also has kidney disease'],correct:0,
-   rat:'The trap: B assumes glucose normalization alone signals resolution, missing that DKA is fundamentally an ACIDOSIS problem, not just a glucose problem. C and D both dismiss a real and important physiologic connection. Insulin is what shuts off ketone production — the glucose number can look fine long before the acidosis has actually resolved, which is why dextrose is added to keep the drip running until the anion gap/bicarbonate confirm the acidosis itself is fixed.'}
+  {q:'A client with DKA has been on an insulin drip for several hours. The provider orders a decrease in the infusion rate only once the anion gap has closed and bicarbonate has normalized, even though the glucose reached goal range earlier. What is the rationale for continuing insulin until this later point?',type:'single',
+   opts:['A. Insulin must be continued until the ketoacidosis itself has resolved, not just until the glucose number looks normal','B. There is no clinical rationale for this order','C. The anion gap and bicarbonate are being monitored for a reason unrelated to insulin therapy','D. This order only applies if the client also has kidney disease'],correct:0,
+   rat:'B, C, and D all dismiss a real and important physiologic connection between insulin and acid-base status. DKA is fundamentally an ACIDOSIS problem, not just a glucose problem — insulin is what shuts off ketone production, and the glucose number can normalize long before the acidosis has actually resolved.'},
+
+  {q:'DKA occurs almost exclusively in which type of diabetes?',type:'single',
+   opts:['A. Type 1','B. Type 2','C. Gestational','D. LADA'],correct:0,
+   rat:'A direct one — DKA is classically a Type 1 complication, since it requires near-total insulin deficiency to unblock fat breakdown and produce ketones.'},
+
+  {q:'A client with Type 1 diabetes is admitted with glucose 580 mg/dL, pH 7.19, and serum potassium 5.8 mEq/L. An ECG shows peaked T waves. Fluids and an insulin drip are started. Twenty minutes later, the cardiac monitor shows a new widening QRS with the potassium still pending. What should the nurse do?',type:'single',
+   opts:['A. Wait for the repeat potassium level before taking any action, since the insulin drip should already be correcting it','B. Notify the provider immediately, since ECG changes suggest potassium-related cardiac effects that may need direct treatment independent of the insulin\'s effect','C. Increase the insulin infusion rate to lower the potassium faster','D. Discontinue the insulin drip, since it may be worsening the potassium level'],correct:1,
+   rat:'A assumes the insulin drip alone is enough to manage an evolving cardiac change in real time, which is too passive given a new ECG finding. C misunderstands the timeline — insulin\'s potassium-lowering effect isn\'t instant, and speeding it up doesn\'t address a current cardiac emergency. D reverses the actual mechanism (insulin lowers potassium, it doesn\'t raise it). A widening QRS is a more urgent cardiac finding than peaked T waves alone and needs immediate provider notification for possible direct treatment (such as calcium) rather than waiting on the insulin/fluids already in progress.'}
 ],'DKA vs HHS Check');
 </script>
 <script>
@@ -839,32 +1170,40 @@ document.getElementById('sec-hypo').innerHTML=`
 
 renderQuiz('quiz-hypo',[
   {q:'A conscious, alert patient reports feeling shaky and sweaty; fingerstick glucose is 58 mg/dL. The patient is able to swallow safely. What is the nurse\'s FIRST action?',type:'single',
-   opts:['A. Administer 15 g of fast-acting carbohydrate, such as 4 oz of juice or glucose tablets','B. Administer glucagon intramuscularly to raise the glucose more reliably','C. Provide a full meal with protein and fat to prevent another drop later','D. Recheck the glucose again in one hour before taking any action'],correct:0,
-   rat:'The trap: B assumes glucagon is always the "stronger" choice, but it\'s reserved for patients who can\'t safely swallow — using it here is an unnecessary injection when oral treatment works. C delays absorption (fat/protein slow gastric emptying), and D leaves a symptomatic, dropping patient untreated for far too long.'},
+   opts:['A. Administer 15 g of fast-acting carbohydrate, such as 4 oz of juice or glucose tablets','B. Administer glucagon intramuscularly','C. Provide a full meal including protein and fat','D. Recheck the glucose in one hour before intervening'],correct:0,
+   rat:'B feels like the "stronger" choice, but glucagon is reserved for patients who can\'t safely swallow — an unnecessary injection when oral treatment works fine here. C\'s fat/protein content actually slows carbohydrate absorption when speed is what matters, and D leaves a symptomatic, dropping patient untreated far too long.'},
 
   {q:'An unconscious diabetic patient is found with a fingerstick glucose of 40 mg/dL. No IV access is currently in place. Which intervention is correct?',type:'single',
-   opts:['A. Place glucose gel between the cheek and gum, since this route does not require swallowing','B. Administer glucagon IM or subcutaneously, since the patient cannot safely protect their airway to receive anything by mouth','C. Give a small amount of juice slowly by mouth to avoid a large fluid bolus','D. Wait for the patient to regain consciousness before administering any treatment'],correct:1,
-   rat:'The trap: A sounds like a clever workaround, but an unconscious patient cannot reliably protect their airway regardless of exactly where something is placed in the mouth — aspiration risk remains. Without IV access, glucagon is correct; D50 would only apply if IV access were already established.'},
+   opts:['A. Place glucose gel between the cheek and gum','B. Administer glucagon IM or subcutaneously','C. Give a small amount of juice slowly by mouth','D. Wait for the patient to regain consciousness before treating'],correct:1,
+   rat:'A sounds like a clever workaround since it avoids swallowing, but an unconscious patient can\'t reliably protect their airway regardless of exactly where something is placed in the mouth — aspiration risk remains either way. Without IV access, glucagon is the correct route.'},
 
   {q:'A patient reports feeling shaky, sweaty, and anxious. The nurse also notes the patient is confused and slurring words. Based on this combination of findings, what does the nurse recognize?',type:'single',
-   opts:['A. Early hyperglycemia, since confusion is a classic sign of high blood sugar','B. Hypoglycemia that has progressed from the adrenergic stage into the neuroglycopenic stage, meaning the brain is now involved','C. A stroke unrelated to the patient\'s glucose level, requiring an immediate neuro consult only','D. DKA, since confusion and sweating together suggest ketoacidosis'],correct:1,
-   rat:'The trap: C and D both pull the presentation toward an unrelated or different diagnosis. The pattern described — adrenergic signs (shaky, sweaty, anxious) PLUS neuro signs (confusion, slurred speech) — is hypoglycemia progressing in severity, not a separate problem; glucose should be checked immediately before assuming anything else.'},
+   opts:['A. Early hyperglycemia','B. Hypoglycemia that has progressed into the neuroglycopenic stage','C. A stroke unrelated to glucose level','D. Diabetic ketoacidosis'],correct:1,
+   rat:'C and D both redirect this presentation toward a different diagnosis, which is tempting since confusion can appear in several conditions. But the pattern described — adrenergic signs (shaky, sweaty, anxious) PLUS neuro signs (confusion, slurred speech) — is hypoglycemia progressing in severity; glucose should be checked immediately before assuming anything else.'},
 
   {q:'A patient was treated for hypoglycemia with 15 g of fast-acting carbohydrate. Fifteen minutes later, the glucose is 62 mg/dL and the patient still feels mildly shaky. What should the nurse do NEXT?',type:'single',
-   opts:['A. Administer glucagon immediately, since the first treatment clearly failed','B. Repeat another 15 g of fast-acting carbohydrate and recheck glucose again in 15 minutes','C. Give nothing further and simply continue to reassess every hour','D. Administer a dose of insulin to prevent a rebound high from the earlier treatment'],correct:1,
-   rat:'The trap: A escalates to an injectable treatment when the patient is still conscious and able to swallow — glucagon isn\'t needed here. D is dangerous and backwards (giving insulin to a still-hypoglycemic patient). Since 62 is still below the 70 mg/dL threshold, the correct action is simply repeating the Rule of 15, not escalating or abandoning treatment.'},
+   opts:['A. Administer glucagon','B. Repeat another 15 g of fast-acting carbohydrate and recheck in 15 minutes','C. Reassess again in one hour without further treatment','D. Administer a dose of insulin'],correct:1,
+   rat:'A escalates to an injectable treatment even though the patient is still conscious and able to swallow — glucagon isn\'t needed here. D is backwards and dangerous. Since 62 is still below the 70 mg/dL threshold, simply repeating the Rule of 15 is correct rather than escalating or waiting.'},
 
   {q:'A patient with long-standing diabetes and known autonomic neuropathy is found with a glucose of 48 mg/dL but reports feeling completely normal, with no shakiness or sweating. What does this presentation MOST likely indicate?',type:'single',
-   opts:['A. A falsely low glucose reading that should be repeated before treating','B. Hypoglycemia unawareness — autonomic neuropathy has blunted the early adrenergic warning signs, so the patient can progress straight toward neuroglycopenic symptoms without warning','C. That this glucose level is not clinically significant for this particular patient','D. Early DKA, since the absence of typical hypoglycemia symptoms suggests a different mechanism entirely'],correct:1,
-   rat:'The trap: C dismisses a genuinely low and dangerous glucose level just because symptoms are absent, and D redirects to an unrelated condition. In patients with autonomic neuropathy, the early adrenergic warning system can be blunted or lost entirely — this patient still needs immediate treatment and closer, more frequent monitoring going forward, precisely because they can\'t rely on feeling symptoms.'},
+   opts:['A. A falsely low glucose reading that should be repeated before treating','B. Hypoglycemia unawareness from autonomic neuropathy blunting the early warning signs','C. That this glucose level is not clinically significant for this patient','D. Early DKA'],correct:1,
+   rat:'C is tempting because the patient genuinely feels fine, but a glucose of 48 is dangerous regardless of symptoms. In autonomic neuropathy, the early adrenergic warning system can be blunted or lost — this patient still needs immediate treatment precisely because they can\'t rely on feeling symptoms.'},
 
   {q:'A client receiving NPH insulin at 0700 develops diaphoresis, tremor, and confusion at 1500. What is the MOST likely explanation for the TIMING of this event?',type:'single',
-   opts:['A. This is unrelated to the morning insulin dose since too much time has passed','B. NPH insulin typically peaks 4-12 hours after administration, placing this event within its expected peak action window','C. NPH insulin has no peak and provides flat, even coverage throughout the day','D. This can only be explained by a dietary indiscretion, not the insulin itself'],correct:1,
-   rat:'The trap: A assumes enough time has passed for the insulin to be irrelevant, but NPH is intermediate-acting with a peak of roughly 4-12 hours — 1500 (8 hours after a 0700 dose) falls squarely within that window. C incorrectly describes NPH as peakless (that describes long-acting analogs like glargine), and D ignores the much more likely medication-timing explanation in favor of an unsupported assumption.'},
+   opts:['A. This is unrelated to the morning insulin dose since too much time has passed','B. NPH insulin typically peaks 4-12 hours after administration','C. NPH insulin provides flat, even coverage with no peak','D. This can only be explained by a dietary indiscretion'],correct:1,
+   rat:'A assumes enough time has passed to rule out the insulin, but NPH is intermediate-acting with a peak of roughly 4-12 hours — 1500 (8 hours after a 0700 dose) falls squarely within that window. C describes a peakless profile that actually belongs to long-acting analogs like glargine, not NPH.'},
 
   {q:'A nurse is teaching a client about hypoglycemia risk related to exercise. Which statement by the client indicates a need for further teaching?',type:'single',
-   opts:['A. "I should check my blood sugar before and after exercising, especially if it\'s a new or more intense activity."','B. "Exercise can lower my blood sugar for several hours afterward, not just during the activity itself."','C. "I\'ll carry a fast-acting carbohydrate source with me whenever I exercise."','D. "As long as I feel fine during exercise, I don\'t need to worry about my blood sugar dropping afterward."'],correct:3,
-   rat:'The trap: this question asks which statement needs correction, and D is the one that reflects a dangerous misunderstanding — exercise can lower glucose for hours AFTER the activity ends (increased insulin sensitivity and glycogen replenishment), so feeling fine DURING exercise doesn\'t rule out a delayed drop. A, B, and C all reflect correct, safety-focused understanding.'}
+   opts:['A. "I should check my blood sugar before and after exercising, especially if it\'s a new or more intense activity."','B. "Exercise can lower my blood sugar for several hours afterward, not just during the activity itself."','C. "I\'ll carry a fast-acting carbohydrate source with me whenever I exercise."','D. "As long as I feel fine during exercise, I don\'t need to worry about a drop afterward."'],correct:3,
+   rat:'A, B, and C all reflect correct, safety-focused understanding, which is what makes D easy to overlook. D reflects a genuinely dangerous misunderstanding — exercise can lower glucose for hours AFTER the activity ends, so feeling fine DURING exercise doesn\'t rule out a delayed drop.'},
+
+  {q:'What blood glucose level defines hypoglycemia?',type:'single',
+   opts:['A. Below 100 mg/dL','B. Below 70 mg/dL','C. Below 50 mg/dL','D. Below 40 mg/dL'],correct:1,
+   rat:'No trick here — hypoglycemia is defined as a blood glucose below 70 mg/dL, the baseline number everything else in this section builds on.'},
+
+  {q:'A patient with Type 1 diabetes and known hypoglycemia unawareness is found unresponsive with a glucose of 32 mg/dL. A family member states glucagon was given 12 minutes ago with no improvement, and IV access has just been established. What should the nurse do NEXT?',type:'single',
+   opts:['A. Administer a second dose of glucagon and wait an additional 15 minutes before further action','B. Administer IV dextrose (D50) now that IV access is available, since glucagon has not been effective within the expected timeframe','C. Withhold further treatment until oral intake is possible, to avoid overcorrecting the glucose','D. Recheck the glucose in 30 minutes before taking any further action'],correct:1,
+   rat:'A delays further care by repeating a treatment that has already had adequate time to work without success. C and D both leave a still-unresponsive, severely hypoglycemic patient untreated for too long. Since glucagon hasn\'t worked within its expected 5-20 minute window and IV access is now available, moving to IV dextrose is the appropriate next step rather than repeating glucagon or waiting further.'}
 ],'Hypoglycemia Check');
 </script>
 <script>
@@ -889,6 +1228,35 @@ document.getElementById('sec-complications').innerHTML=`
     <li><b>Nephropathy</b> — damaged kidney vessels → protein leaks into urine (albuminuria) → kidney failure. Diabetes is the #1 cause of ESRD. Screen with urine albumin + eGFR. <b>ACE inhibitors/ARBs</b> protect the kidneys; avoid nephrotoxic drugs and contrast dye.</li>
   </ul>
   <div class="hy">⭐ Micro = <b>eyes + kidneys</b> (tiny vessels). Macro = <b>heart, brain, legs</b> (big vessels). Both driven by the same chronic hyperglycemia.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>💊 Renal-impairment drug alerts — what to question</h3>
+  <p class="why-chain"><b>The mechanism behind ALL of these:</b> failing kidneys can't clear/filter drugs normally, so anything that is (1) cleared by the kidneys, (2) directly toxic to kidney tissue, or (3) risks a dangerous electrolyte shift becomes a bigger problem in renal disease. Ask "does this drug rely on the kidneys, hurt the kidneys, or raise potassium?"</p>
+  <ul class="clean">
+    <li><b>NSAIDs</b> (ibuprofen, ketorolac, naproxen) — nephrotoxic; reduce blood flow to the kidneys. <b>Question/avoid</b> in CKD, especially with other nephrotoxic drugs.</li>
+    <li><b>Aminoglycosides</b> (gentamicin, tobramycin) — directly nephrotoxic AND ototoxic; requires trough level monitoring in renal impairment.</li>
+    <li><b>IV contrast dye</b> — nephrotoxic on its own; combined with metformin raises lactic acidosis risk too.</li>
+    <li><b>Metformin</b> — reduced renal clearance → lactic acidosis risk; held around contrast and in significant renal impairment (low eGFR).</li>
+    <li><b>Sulfonylureas</b>, especially <b>glyburide</b> — cleared by the kidneys; renal impairment → drug accumulates → prolonged, dangerous hypoglycemia. Glipizide is the safer choice if a sulfonylurea is still needed.</li>
+    <li><b>Insulin</b> — the kidneys help clear/break down insulin. In renal failure, insulin sticks around LONGER than expected → higher hypoglycemia risk even at a "normal" dose. Doses are often reduced, not increased.</li>
+    <li><b>Potassium-sparing diuretics</b> (spironolactone) — risk of dangerous hyperkalemia in renal impairment, especially combined with an ACE inhibitor/ARB.</li>
+    <li><b>Magnesium- or aluminum-containing antacids</b> — normally excreted renally; accumulate and can cause toxicity in renal failure.</li>
+    <li><b>Meperidine (Demerol)</b> — its toxic metabolite accumulates in renal failure and can cause seizures; generally avoided in this population.</li>
+    <li><b>Digoxin</b> — renally cleared; needs a lower dose and closer monitoring for toxicity.</li>
+    <li><b>Vancomycin</b> — nephrotoxic; requires trough level monitoring, dosed by renal function.</li>
+  </ul>
+  <div class="hy">⭐ <b>The ACE inhibitor/ARB nuance he'll test:</b> these are the PROTECTIVE drugs for chronic diabetic nephropathy (they lower pressure inside the glomerulus and slow progression) — but they're not automatically safe in every renal scenario. <b>Question/hold</b> if: the patient develops acute kidney injury, potassium becomes significantly elevated, there's known bilateral renal artery stenosis, or creatinine rises more than about 30% after starting (a small initial rise is expected and not itself a reason to stop).</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💊 Eye medication alerts — what to question</h3>
+  <ul class="clean">
+    <li><b>Anticholinergic/mydriatic drops</b> (atropine, cyclopentolate) — dilate the pupil. <b>Contraindicated/use extreme caution</b> in a patient with (or at risk for) <b>angle-closure glaucoma</b> — dilating the pupil can push the iris into the drainage angle and trigger an acute attack.</li>
+    <li><b>Beta-blocker drops</b> (timolol) — can be absorbed systemically. <b>Question/use caution</b> in patients with asthma/COPD (bronchospasm risk) or bradycardia/heart block (can worsen it), even though it's just an eye drop.</li>
+    <li><b>Steroid eye drops</b> (long-term use) — can raise IOP (glaucoma risk) and contribute to cataract formation — ties directly back to why steroid use is a recognized cataract cause.</li>
+    <li><b>Prostaglandin analogs</b> (latanoprost) — generally safe/first-line for glaucoma, but can permanently darken iris color and lengthen/darken eyelashes — a cosmetic effect worth mentioning in patient teaching, not a safety contraindication.</li>
+  </ul>
 </div>
 
 <div class="card">
@@ -917,32 +1285,52 @@ document.getElementById('sec-complications').innerHTML=`
 
 renderQuiz('quiz-complications',[
   {q:'A patient with a 12-year history of diabetes and peripheral neuropathy has intact skin and reports no foot pain. The nurse still emphasizes daily foot inspection with a mirror. What is the BEST rationale for this teaching?',type:'single',
-   opts:['A. Daily inspection primarily helps the patient maintain proper foot hygiene','B. Because neuropathy has removed the ability to feel an injury, only a visual inspection will catch a wound before it silently progresses toward infection or ulceration','C. It allows the patient to monitor their shoe size as their feet change over time','D. It is required documentation for insurance purposes regardless of the patient\'s sensory status'],correct:1,
-   rat:'The trap: A, C, and D all offer plausible-sounding but incorrect justifications that miss the actual physiologic reason. The mechanism is specific: loss of protective sensation means pain — the body\'s natural warning system — is gone, so vision has to substitute for the lost feeling to catch injuries early.'},
+   opts:['A. Daily inspection helps the patient maintain proper foot hygiene','B. Loss of protective sensation means a visual check is needed to catch an injury the patient can\'t feel','C. It allows the patient to monitor their shoe size as their feet change over time','D. It is required documentation regardless of the patient\'s sensory status'],correct:1,
+   rat:'A and C both sound like reasonable, if secondary, benefits of foot inspection — which is exactly why they\'re tempting distractors. But the actual physiologic reason is specific: pain, the body\'s natural warning system, is gone due to neuropathy, so vision has to substitute for the lost feeling to catch injuries early.'},
 
   {q:'A nurse is teaching foot care to a patient with diabetic peripheral neuropathy. Which statements by the patient indicate a need for further teaching? (Select all that apply)',type:'multi',
    opts:['A. "I\'ll check between my toes every day, using a mirror for the bottom of my feet."','B. "I\'ll warm my feet with a heating pad before bed since they often feel cold."','C. "I\'ll wear shoes both indoors and outdoors, checking inside them first for objects."','D. "I\'ll see a podiatrist if I develop a callus instead of trimming it myself."','E. "I\'ll walk barefoot around the house since my floors are always clean."'],correct:[1,4],
-   rat:'The traps: B and E both sound like reasonable comfort/convenience habits, but both are contraindicated — a heating pad risks an unfelt burn, and barefoot walking risks an unfelt injury, regardless of how clean the floor is. A, C, and D reflect correct teaching and do NOT need correction.'},
+   rat:'B and E both describe reasonable-sounding comfort/convenience habits, which is what makes them tempting to overlook. Both are actually contraindicated — a heating pad risks an unfelt burn, and barefoot walking risks an unfelt injury, regardless of how clean the floor is.'},
 
   {q:'A patient asks why their eye doctor and their kidney specialist both blame the "same tiny blood vessels" for their diabetes complications. Which explanation is correct?',type:'single',
-   opts:['A. This is a coincidence; retinopathy and nephropathy actually have unrelated underlying causes','B. Retinopathy and nephropathy are both microvascular complications — chronic hyperglycemia damages the small vessels of the retina and kidney glomeruli through the same underlying mechanism','C. Retinopathy is microvascular while nephropathy is macrovascular, so the two specialists are describing different processes','D. The kidney specialist is describing a complication of hypertension, unrelated to the patient\'s diabetes'],correct:1,
-   rat:'The trap: C sounds plausible if you\'re not sure of the classification (it swaps microvascular/macrovascular), and D detaches nephropathy from diabetes entirely. Both retinopathy and nephropathy are classic MICROvascular complications — small-vessel damage from chronic hyperglycemia is the single shared mechanism, unlike macrovascular disease (heart, brain, legs).'},
+   opts:['A. Retinopathy and nephropathy have unrelated underlying causes','B. Retinopathy and nephropathy are both microvascular complications from the same underlying mechanism','C. Retinopathy is microvascular while nephropathy is macrovascular','D. The kidney specialist is describing a complication of hypertension, unrelated to diabetes'],correct:1,
+   rat:'C sounds plausible if you\'re not sure of the classification — it swaps which complication belongs to which category. Both retinopathy and nephropathy are actually classic MICROvascular complications — small-vessel damage from chronic hyperglycemia is the single shared mechanism behind both.'},
 
-  {q:'A diabetic patient with early nephropathy (microalbuminuria) is started on a new medication. Which class is MOST appropriate, and why?',type:'single',
-   opts:['A. NSAIDs, because they reduce inflammation in the glomeruli and slow protein leakage','B. ACE inhibitors or ARBs, because they reduce intraglomerular pressure and slow the progression of nephropathy','C. Beta-blockers, because they are the first-line agents specifically for diabetic kidney protection','D. Loop diuretics, because removing excess fluid directly protects the glomeruli from further damage'],correct:1,
-   rat:'The trap: A is dangerous — NSAIDs are actually NEPHROTOXIC and should be avoided in this population, not used for "anti-inflammatory" kidney protection. C and D assign kidney-protective properties to drug classes that don\'t have that specific mechanism. ACE inhibitors/ARBs specifically lower pressure inside the glomerulus, which is the targeted, evidence-based intervention.'},
+  {q:'A diabetic patient with early nephropathy (microalbuminuria) is started on a new medication. Which class is MOST appropriate?',type:'single',
+   opts:['A. NSAIDs','B. ACE inhibitors or ARBs','C. Beta-blockers','D. Loop diuretics'],correct:1,
+   rat:'A is a genuinely dangerous choice here — NSAIDs are actually nephrotoxic and should be avoided in this population, which makes it worth double-checking rather than assuming any "anti-inflammatory" is safe. C and D are real drug classes but don\'t have the specific kidney-protective mechanism this situation calls for. ACE inhibitors/ARBs lower pressure inside the glomerulus, which is the targeted, evidence-based intervention.'},
 
   {q:'A long-standing diabetic patient is later found to have had a myocardial infarction with minimal chest pain reported at the time. Which underlying mechanism BEST explains this presentation?',type:'single',
-   opts:['A. Diabetic patients have a naturally higher pain tolerance unrelated to any nerve damage','B. Autonomic neuropathy can blunt or eliminate the typical chest-pain warning signal of an MI, producing a "silent" presentation','C. This patient\'s heart was not significantly affected by the infarction, which is why pain was minimal','D. This presentation suggests the diagnosis of MI is incorrect and another cause should be investigated'],correct:1,
-   rat:'The trap: A invents an unrelated psychological explanation, and C and D both dismiss a serious, real cardiac event based on symptom severity alone. Autonomic neuropathy specifically can blunt the pain-signaling pathway during an MI — this is exactly why diabetics need vigilant cardiac monitoring even when the classic chest-pain complaint is minimal or absent.'},
+   opts:['A. Diabetic patients tend to have a naturally higher pain tolerance','B. Autonomic neuropathy can blunt or eliminate the typical chest-pain warning signal of an MI','C. This patient\'s heart was not significantly affected by the infarction','D. This presentation suggests the MI diagnosis should be reconsidered'],correct:1,
+   rat:'C and D both use the mild symptom severity to argue the event wasn\'t serious or didn\'t really happen — a natural but incorrect inference. Autonomic neuropathy specifically can blunt the pain-signaling pathway during an MI, which is exactly why diabetics need vigilant cardiac monitoring even when the classic chest-pain complaint is minimal or absent.'},
 
   {q:'A client with diabetic autonomic neuropathy reports lightheadedness and dizziness specifically when standing up from a seated position, with blood pressure dropping from 128/78 to 98/60 upon standing. What is the underlying mechanism?',type:'single',
-   opts:['A. Autonomic neuropathy impairs the normal reflex vasoconstriction that maintains blood pressure with position changes, resulting in orthostatic hypotension','B. This is unrelated to diabetes and is more likely dehydration alone','C. This indicates the client is developing DKA','D. This is a normal, expected finding in all older adults regardless of diabetes status'],correct:0,
-   rat:'The trap: B offers a plausible-sounding but incomplete alternative explanation, C redirects to an unrelated acute complication, and D dismisses a genuine autonomic complication as universal aging rather than a diabetes-specific mechanism. Autonomic neuropathy impairs the nervous system\'s ability to trigger compensatory vasoconstriction when standing, causing orthostatic hypotension — a distinct, diabetes-related complication requiring specific safety precautions (rising slowly, fall precautions).'},
+   opts:['A. Impaired reflex vasoconstriction from autonomic neuropathy, resulting in orthostatic hypotension','B. Dehydration alone, unrelated to the diabetes diagnosis','C. An early sign of developing DKA','D. A normal, expected finding in all older adults'],correct:0,
+   rat:'B offers a plausible alternative explanation on its own, and D generalizes a genuine complication as universal aging rather than a diabetes-specific mechanism. Autonomic neuropathy impairs the nervous system\'s ability to trigger compensatory vasoconstriction when standing — a distinct, diabetes-related complication requiring its own safety precautions (rising slowly, fall precautions).'},
 
   {q:'Which combination of findings in a client with long-standing diabetes is MOST consistent with early diabetic nephropathy?',type:'single',
-   opts:['A. Elevated fasting glucose and mild peripheral edema only','B. Microalbuminuria on urine testing with a normal serum creatinine','C. Elevated serum creatinine with normal urine protein','D. Polyuria and polydipsia alone, without any lab abnormalities'],correct:1,
-   rat:'The trap: A, C, and D all describe findings that could be seen in diabetes generally but miss the SPECIFIC early marker of kidney involvement. Microalbuminuria — small amounts of protein leaking into the urine before creatinine even rises — is the earliest detectable sign of diabetic nephropathy, which is why annual urine microalbumin screening is standard of care, often before serum creatinine changes at all.'}
+   opts:['A. Elevated fasting glucose with mild peripheral edema','B. Microalbuminuria with a normal serum creatinine','C. Elevated serum creatinine with normal urine protein','D. Polyuria and polydipsia without any lab abnormalities'],correct:1,
+   rat:'A, C, and D all describe findings that could plausibly appear somewhere in a diabetic patient\'s chart, which is what makes them tempting. Microalbuminuria — small amounts of protein leaking into the urine before creatinine even rises — is specifically the earliest detectable marker of nephropathy, often preceding any creatinine change at all.'},
+
+  {q:'A client with diabetic nephropathy and an eGFR of 25 mL/min is newly prescribed glyburide for glucose control. What is the nurse\'s BEST action?',type:'single',
+   opts:['A. Administer the medication as ordered without further action','B. Question the order, since glyburide is renally cleared and can accumulate, causing prolonged hypoglycemia in significant renal impairment','C. Administer the medication but double the ordered dose to compensate for reduced absorption','D. Hold the medication indefinitely and notify the pharmacy to discontinue all diabetes medications'],correct:1,
+   rat:'A treats the order as routine, which is reasonable UNLESS you know the renal-clearance issue with this specific drug. C invents a compensation strategy with no basis, and D overcorrects by stopping all diabetes treatment rather than questioning the one problematic order. Glyburide specifically accumulates in renal impairment; glipizide is the safer sulfonylurea choice if one is still needed.'},
+
+  {q:'A client with CKD is ordered ibuprofen for musculoskeletal pain. What is the nurse\'s BEST action?',type:'single',
+   opts:['A. Administer the medication as ordered since it is available over-the-counter','B. Question the order, since NSAIDs are nephrotoxic and can further reduce renal blood flow','C. Administer the medication with a full glass of water to protect the kidneys','D. Give the medication only at bedtime to minimize its effect on the kidneys'],correct:1,
+   rat:'A reasons from availability rather than safety, which is an easy trap since ibuprofen is so commonly used without a prescription. C and D both invent workarounds that don\'t address the actual mechanism. NSAIDs reduce renal blood flow and are nephrotoxic — this order should be questioned in a patient with CKD regardless of timing or hydration.'},
+
+  {q:'A patient with a history of angle-closure glaucoma is about to receive dilating drops (a mydriatic/anticholinergic agent) before a routine eye exam. What is the nurse\'s BEST action?',type:'single',
+   opts:['A. Administer the drops as ordered, since dilating drops are routine for eye exams','B. Question the order, since dilating the pupil can push the iris into the drainage angle and trigger an acute angle-closure attack','C. Administer the drops but patch the eye immediately afterward to prevent complications','D. Administer only half the ordered dose to reduce the risk'],correct:1,
+   rat:'A treats this as routine, which is true for most patients — but a history of angle-closure glaucoma is the specific exception, since dilating the pupil can precipitate the exact mechanism (angle blockage) that causes an acute attack. C and D both invent workarounds rather than actually questioning the order.'},
+
+  {q:'Diabetic retinopathy and nephropathy are both classified as which type of complication?',type:'single',
+   opts:['A. Macrovascular','B. Microvascular','C. Neuropathic','D. Autoimmune'],correct:1,
+   rat:'Straight recall — retinopathy and nephropathy are both microvascular complications, damage to small vessels from chronic hyperglycemia.'},
+
+  {q:'A client with a 15-year history of Type 2 diabetes has the following findings at a routine visit: BP 148/92, urine microalbumin elevated, eGFR 52, and a new complaint of feeling full quickly after small meals with occasional bloating. Which single underlying process connects ALL of these findings?',type:'single',
+   opts:['A. Four separate, unrelated age-related changes that happen to occur together','B. Diabetic microvascular and autonomic nerve damage — affecting the kidneys (nephropathy) and GI motility (gastroparesis) through the same chronic hyperglycemia mechanism','C. An acute infectious process affecting multiple organ systems simultaneously','D. Medication side effects unrelated to the underlying diabetes'],correct:1,
+   rat:'A treats these as coincidental, separate findings, which is tempting given how different they seem (kidney labs vs. GI symptoms). C and D both look for a cause outside the diabetes itself. All of these findings — elevated BP, microalbuminuria, reduced eGFR, and early satiety/bloating — trace back to the SAME long-term hyperglycemia damaging small vessels (nephropathy) and autonomic nerves (gastroparesis) simultaneously; recognizing one underlying process instead of four separate problems is the actual clinical reasoning skill being tested.'}
 ],'Complications Check');
 </script>
 <script>
@@ -1061,64 +1449,72 @@ document.getElementById('sec-skin').innerHTML=`
 
 renderQuiz('quiz-skin',[
   {q:'A nurse assesses a patient\'s sacral area and finds intact skin with redness that does NOT blanch when pressed, and no open areas. How should this be staged?',type:'single',
-   opts:['A. Stage 1, since the skin is intact but shows non-blanchable erythema','B. Stage 2, since any redness indicates the epidermis has already been compromised','C. Deep tissue injury, since any discoloration suggests damage below the surface','D. This does not require staging since the skin remains intact'],correct:0,
-   rat:'The trap: B over-assumes that redness alone means the skin has broken, and C jumps to a more severe classification than the findings support. Stage 1 is specifically defined as intact skin with non-blanchable erythema — once the skin actually opens, only then does staging progress to Stage 2 or higher.'},
+   opts:['A. Stage 1','B. Stage 2','C. Deep tissue injury','D. This does not require staging'],correct:0,
+   rat:'B over-assumes that redness alone means the skin has broken, and C jumps to a more severe classification than the findings actually support. Stage 1 is specifically defined as intact skin with non-blanchable erythema — only once the skin actually opens does staging progress further.'},
 
   {q:'A wound assessment reveals the base is completely covered with thick, dry black eschar, making it impossible to see how deep the wound extends. How should the nurse document this injury\'s stage?',type:'single',
-   opts:['A. Stage 3, since eschar typically indicates full-thickness loss with visible fat','B. Stage 4, since eschar always indicates the deepest possible tissue damage','C. Unstageable, since the true depth cannot be determined until the eschar is removed','D. Deep tissue injury, since eschar and DTI both involve discolored, intact-appearing tissue'],correct:2,
-   rat:'The trap: A and B both assume a specific depth based on the presence of eschar alone, and D confuses eschar-covered wounds with deep tissue injury (which involves intact, not open, skin). The defining feature of "unstageable" is precisely that the depth CANNOT be assessed until the obscuring dead tissue is debrided.'},
+   opts:['A. Stage 3','B. Stage 4','C. Unstageable','D. Deep tissue injury'],correct:2,
+   rat:'A and B both assign a specific depth based on the presence of eschar alone, which is tempting since eschar often does mean significant damage. But the defining feature of "unstageable" is precisely that the depth CANNOT be assessed until the obscuring dead tissue is removed — D also doesn\'t fit, since DTI describes intact, not open, skin.'},
 
   {q:'An immobile patient is at high risk for pressure injury. Which nursing intervention has the STRONGEST evidence for preventing injury development?',type:'single',
-   opts:['A. Applying moisturizing lotion to bony prominences twice daily','B. Repositioning the patient at least every 2 hours to relieve sustained pressure','C. Elevating the head of the bed to 60-90 degrees for most of the day','D. Massaging bony prominences during every position change'],correct:1,
-   rat:'The trap: A and D both sound like reasonable skin-care habits but don\'t address the root cause (sustained pressure), and C actually increases shear force on the sacrum at that elevated angle. Since unrelieved pressure is the cause, scheduled repositioning that physically relieves it is the intervention with the strongest evidence.'},
+   opts:['A. Applying moisturizing lotion to bony prominences twice daily','B. Repositioning the patient at least every 2 hours','C. Elevating the head of the bed to 60-90 degrees for most of the day','D. Massaging bony prominences during every position change'],correct:1,
+   rat:'A and D both sound like reasonable skin-care habits, and C sounds like a comfortable, elevated position — but none of them address the root cause (sustained pressure), and C actually increases shear force on the sacrum at that angle. Scheduled repositioning that physically relieves pressure is the intervention with the strongest evidence.'},
 
   {q:'A nurse finds a reddened, intact area over a bedridden patient\'s sacrum during a routine skin check. Which action is appropriate?',type:'single',
-   opts:['A. Massage the area firmly for several minutes to stimulate blood flow','B. Reposition the patient to relieve pressure on the area and continue monitoring; do not massage','C. Apply a warm compress to the area to promote healing','D. Document the finding but take no further action since the skin remains intact'],correct:1,
-   rat:'The trap: A and C both apply a "stimulate healing" logic that is actually harmful — the tissue is already compromised, and massage or heat can worsen fragile, damaged capillaries. D under-reacts to a genuine early warning sign. The correct response addresses the actual cause (unrelieved pressure) without further traumatizing the tissue.'},
+   opts:['A. Massage the area firmly for several minutes','B. Reposition the patient to relieve pressure on the area','C. Apply a warm compress to the area','D. Document the finding with no further action since the skin remains intact'],correct:1,
+   rat:'A and C both apply a "stimulate healing" logic that sounds reasonable but is actually harmful — the tissue is already compromised, and massage or heat can worsen fragile, damaged capillaries. D under-reacts to a genuine early warning sign that still needs an active response.'},
 
   {q:'Which of the following patients are at INCREASED risk for pressure injury development? (Select all that apply)',type:'multi',
    opts:['A. A patient with urinary incontinence requiring frequent linen changes','B. A patient with a serum albumin of 2.4 g/dL','C. A patient repositioned every 2 hours per a strict turning schedule','D. A patient with diminished sensation following a spinal cord injury','E. A bedbound patient with a BMI in the underweight range'],correct:[0,1,3,4],
-   rat:'The trap: C describes exactly the PROTECTIVE intervention (scheduled repositioning), not a risk factor — including it tests whether you can distinguish a prevention measure from a risk factor. Incontinence/moisture, poor nutrition (low albumin), impaired sensation, and being underweight (less padding over bony prominences) are all genuine risk factors.'},
+   rat:'C describes exactly the PROTECTIVE intervention (scheduled repositioning) rather than a risk factor, which is easy to mix up if you\'re scanning for anything related to positioning. Incontinence/moisture, poor nutrition (low albumin), impaired sensation, and being underweight are the genuine risk factors here.'},
 
   {q:'A patient spends most of the day in a wheelchair due to lower-extremity paralysis. What is the appropriate repositioning frequency to prevent pressure injury while seated?',type:'single',
-   opts:['A. Every 2 hours, the same interval used for bedbound patients','B. Every 15 minutes, since sitting concentrates pressure over a smaller area (the ischial tuberosities) than lying down','C. Once every shift is sufficient if a pressure-redistribution cushion is used','D. Only when the patient reports discomfort or numbness'],correct:1,
-   rat:'The trap: A applies the bed-patient interval to a seated patient, and C assumes a cushion alone is sufficient without active repositioning. Because sitting concentrates the entire body weight over the small area of the ischial tuberosities, the evidence-based interval is much more frequent than for a patient lying in bed.'},
+   opts:['A. Every 2 hours','B. Every 15 minutes','C. Once every shift if a pressure-redistribution cushion is used','D. Only when the patient reports discomfort or numbness'],correct:1,
+   rat:'A applies the standard bed-patient interval, which seems reasonable but doesn\'t account for how sitting concentrates pressure differently. C assumes a cushion alone is sufficient without active repositioning. Because sitting concentrates the entire body weight over the small area of the ischial tuberosities, the evidence-based interval is much more frequent than for a patient lying in bed.'},
 
   {q:'A patient positioned side-lying (lateral) for an extended period is at HIGHEST risk for pressure injury at which locations?',type:'single',
-   opts:['A. Sacrum and heels, since these are the classic universal pressure points regardless of position','B. Hip (greater trochanter) and iliac crest, since these bony prominences bear the body\'s weight in this specific position','C. Breasts and genitalia, since soft tissue is more vulnerable than bone in any position','D. Occiput and shoulder blades, since the head and upper back always bear the most weight'],correct:1,
-   rat:'The trap: A generalizes the supine pressure points to every position, and C and D describe pressure points from prone and supine positioning, respectively. Positioning determines WHICH bony prominences bear weight — side-lying specifically loads the hip and iliac crest (plus ear, ribs, and ankle), not the sacrum/heels of supine.'},
+   opts:['A. Sacrum and heels','B. Hip (greater trochanter) and iliac crest','C. Breasts and genitalia','D. Occiput and shoulder blades'],correct:1,
+   rat:'A generalizes the supine pressure points to every position, and C and D describe the pressure points from prone and supine positioning, respectively — all three are real pressure points, just for different positions. Side-lying specifically loads the hip and iliac crest (plus ear, ribs, and ankle).'},
 
   {q:'A patient already has an established Stage 2 pressure ulcer on the sacrum. What is the PRIMARY goal of ongoing care for this existing wound?',type:'single',
-   opts:['A. Keep the area consistently moist with heavy ointment application regardless of position changes','B. Offload all pressure from the wound to restore blood flow and allow the tissue to heal','C. Maintain the patient in a single, consistent position to avoid disturbing the healing tissue','D. Apply firm compression dressings to stabilize the wound edges'],correct:1,
-   rat:'The trap: C sounds intuitively protective ("don\'t disturb it") but is backwards — an unmoved patient continues to apply the same pressure that caused the wound. Once an ulcer exists, the priority shifts to fully offloading that specific area so circulation can return and healing can occur; repositioning continues, just arranged to avoid direct pressure on the wound itself.'},
+   opts:['A. Keep the area consistently moist with heavy ointment application regardless of position changes','B. Offload all pressure from the wound to restore blood flow','C. Maintain the patient in a single, consistent position to avoid disturbing the healing tissue','D. Apply firm compression dressings to stabilize the wound edges'],correct:1,
+   rat:'C sounds intuitively protective ("don\'t disturb it") but is actually backwards — an unmoved patient continues to apply the same pressure that caused the wound in the first place. Once an ulcer exists, the priority is fully offloading that specific area so circulation can return and healing can occur.'},
 
   {q:'A nurse assesses intact skin over a patient\'s heel and finds it is purple/maroon in color and feels boggy/mushy compared to surrounding tissue. Which is the correct interpretation?',type:'single',
-   opts:['A. This is a Stage 1 pressure injury, since the skin remains intact','B. This is a deep tissue injury — significant damage is occurring in the tissue beneath an intact surface','C. This is normal bruising from an unrelated minor trauma and requires no further monitoring','D. This finding cannot represent a pressure injury since there is no open wound present'],correct:1,
-   rat:'The trap: A misclassifies this as the mildest stage based on intact skin alone, without recognizing the specific purple/maroon, boggy quality that distinguishes deep tissue injury from ordinary Stage 1 erythema. DTI represents SIGNIFICANT underlying damage despite an intact-looking surface — it is not a minor or reassuring finding.'},
+   opts:['A. Stage 1 pressure injury','B. Deep tissue injury','C. Normal bruising from an unrelated minor trauma','D. This cannot represent a pressure injury since there is no open wound'],correct:1,
+   rat:'A classifies this as the mildest stage based on intact skin alone, which misses the specific purple/maroon, boggy quality that distinguishes deep tissue injury from ordinary Stage 1 erythema. DTI represents SIGNIFICANT underlying damage despite an intact-looking surface, not a minor or reassuring finding.'},
 
   {q:'A hospitalized patient is noted to have new bruising on both forearms. Which question is MOST important for the nurse to ask FIRST?',type:'single',
    opts:['A. "Have you been sleeping well lately?"','B. "Can you tell me how you got these bruises, and are you currently taking any medications like blood thinners or steroids?"','C. "Would you like me to apply lotion to the area?"','D. "Do you want the lights dimmed in your room?"'],correct:1,
-   rat:'The trap: A, C, and D are all reasonable-sounding comfort questions that avoid the actual clinical priority. Asking about mechanism of injury and medication use (anticoagulants, aspirin, steroids all increase bruising) is the assessment question that actually informs whether this bruising is expected or concerning.'},
+   rat:'A, C, and D are all reasonable-sounding comfort questions a nurse might genuinely ask, which is what makes them tempting here. Asking about mechanism of injury and medication use is the assessment question that actually informs whether this bruising is expected or concerning.'},
 
   {q:'A nurse notices bruising in unusual locations on an elderly, dependent patient that does not match the explanation given by a caregiver. What is the MOST appropriate nursing action?',type:'single',
-   opts:['A. Document the finding exactly as explained and take no further action, since the caregiver provided a reason','B. Further assess the pattern and circumstances of the bruising and report the inconsistent finding per facility policy, since this pattern can be a sign of possible abuse or neglect','C. Apply ice to the bruised areas and recheck in 24 hours before deciding whether to act','D. Ask the patient to keep the affected areas covered to prevent embarrassment during future visits'],correct:1,
-   rat:'The trap: A accepts an explanation at face value without exercising clinical judgment, and C and D both sidestep the actual concern. Bruising that is widespread, in atypical/protected locations, or inconsistent with the given explanation is a recognized pattern that warrants further assessment and appropriate reporting — this is a patient-safety responsibility, not an assumption to dismiss.'},
+   opts:['A. Document the finding exactly as explained by the caregiver','B. Further assess the pattern and report the inconsistent finding per facility policy','C. Apply ice to the bruised areas and recheck in 24 hours','D. Ask the patient to keep the affected areas covered during future visits'],correct:1,
+   rat:'A accepts an explanation at face value, which feels respectful but skips necessary clinical judgment. C and D both sidestep the actual concern with a plausible-sounding alternative action. Bruising that is inconsistent with the given explanation is a recognized pattern warranting further assessment and reporting.'},
 
   {q:'A nurse is caring for a bedbound patient and keeps the head of the bed elevated to 75 degrees for most of the day for comfort. What is the MOST likely consequence of this positioning?',type:'single',
-   opts:['A. Improved pressure redistribution across the back and hips','B. Increased shear force on the sacrum as the body slides downward against the sheets while the underlying bone continues to move','C. No significant effect on skin integrity as long as the patient is repositioned every 2 hours','D. Decreased risk of aspiration, which outweighs any other positioning concern'],correct:1,
-   rat:'The trap: C assumes repositioning alone cancels out the risk from a high bed angle, and D focuses on a real but separate benefit (aspiration precaution) while ignoring the skin consequence being asked about. Angles greater than the recommended 45° cause the body to slide, creating shear as skin drags against linens while the sacrum keeps moving — this is why head-of-bed angle is a specific, testable prevention point.'},
+   opts:['A. Improved pressure redistribution across the back and hips','B. Increased shear force on the sacrum as the body slides downward against the sheets','C. No significant effect on skin integrity as long as the patient is repositioned every 2 hours','D. Decreased risk of aspiration, which outweighs any other positioning concern'],correct:1,
+   rat:'C assumes repositioning alone cancels out the risk from a high bed angle, and D describes a real, separate benefit that doesn\'t address the skin consequence being asked about. Angles greater than the recommended 45° cause the body to slide, creating shear as skin drags against linens while the sacrum keeps moving.'},
 
   {q:'Which areas of the body have the THICKEST skin, and which have the THINNEST?',type:'single',
-   opts:['A. Thickest: scalp and back; Thinnest: palms and soles','B. Thickest: palms of the hands and soles of the feet; Thinnest: eyelids and genital/perineal area','C. Thickest: eyelids and lips; Thinnest: palms and soles','D. Skin thickness is uniform across the body and does not vary by location'],correct:1,
-   rat:'The trap: A and C both invert the correct pairing. The palms and soles are the thickest skin on the body, while the eyelids and genital/perineal region are the thinnest — a detail specifically flagged as testable, even though it can seem like a minor fact.'},
+   opts:['A. Thickest: scalp and back; Thinnest: palms and soles','B. Thickest: palms of the hands and soles of the feet; Thinnest: eyelids and genital/perineal area','C. Thickest: eyelids and lips; Thinnest: palms and soles','D. Skin thickness is uniform across the body'],correct:1,
+   rat:'A and C both invert the correct pairing in different ways, which makes this an easy one to second-guess. The palms and soles are actually the thickest skin on the body, while the eyelids and genital/perineal region are the thinnest.'},
 
   {q:'A wound care nurse documents a sacral pressure injury as full-thickness tissue loss with visible subcutaneous fat, but no exposed bone, tendon, or muscle. Slough is present but does not obscure the wound base. How should this be staged?',type:'single',
-   opts:['A. Stage 2, since slough is present in the wound bed','B. Stage 3, since it is full-thickness with visible fat but no deeper structures exposed','C. Stage 4, since any full-thickness wound with slough is automatically the most severe stage','D. Unstageable, since any slough present means the depth cannot be determined'],correct:1,
-   rat:'The trap: A misreads partial slough as a shallower Stage 2 finding, C assumes all full-thickness wounds are Stage 4, and D over-applies the "unstageable" rule — that classification only applies when slough/eschar OBSCURES the wound base so depth truly cannot be assessed, not when some slough is simply present but the base is still visible. Full-thickness loss with visible fat and no exposed bone/tendon/muscle is Stage 3.'},
+   opts:['A. Stage 2','B. Stage 3','C. Stage 4','D. Unstageable'],correct:1,
+   rat:'A misreads the presence of any slough as automatically shallower, and C assumes all full-thickness wounds with slough are automatically the most severe stage. D over-applies the "unstageable" rule, which only fits when slough/eschar OBSCURES the wound base — here the base is still visible, so this is Stage 3.'},
 
   {q:'A client with a Braden Scale score of 14 is being cared for on a medical floor. Which combination of interventions is MOST appropriate based on this score?',type:'single',
-   opts:['A. No specific pressure-injury prevention measures are needed since the client is not high-risk','B. Scheduled repositioning, a pressure-redistribution surface, and ongoing skin assessment, since a score of 14 falls in the at-risk range','C. Immediate referral for surgical debridement','D. Discontinuing all repositioning to avoid disrupting the client\'s sleep'],correct:1,
-   rat:'The trap: A dismisses a genuinely at-risk score, C jumps to an intervention appropriate for an existing wound rather than prevention, and D removes the single most effective preventive measure. A Braden score of 14 falls within the moderate-risk range (≤18 is considered at-risk overall) — this calls for active preventive interventions, not a "wait and see" approach.'}
+   opts:['A. No specific pressure-injury prevention measures are needed','B. Scheduled repositioning, a pressure-redistribution surface, and ongoing skin assessment','C. Immediate referral for surgical debridement','D. Discontinuing all repositioning to avoid disrupting the client\'s sleep'],correct:1,
+   rat:'A treats 14 as if it were a reassuring, low-risk number, and C jumps to an intervention appropriate for an existing wound rather than prevention. A Braden score of 14 actually falls within the moderate-risk range (≤18 is considered at-risk overall) — this calls for active preventive interventions, not a "wait and see" approach.'},
+
+  {q:'How often should a bedbound patient be repositioned to help prevent pressure injuries?',type:'single',
+   opts:['A. Every 30 minutes','B. Every 2 hours','C. Every 8 hours','D. Once per day'],correct:1,
+   rat:'A plain recall question — reposition bedbound patients at least every 2 hours. (Chair-bound patients need more frequent repositioning, about every 15 minutes, since sitting concentrates pressure over a smaller area.)'},
+
+  {q:'A patient with diabetes, a Braden score of 13, and a history of a prior healed heel ulcer is recovering from surgery. Post-op, the care team orders a sequential compression device (SCD) on both lower legs, to remain in place continuously except for short removal periods for skin checks. On day 2, the nurse notes the heel area under the SCD boot is intact but appears slightly duskier than the surrounding skin. What is the MOST appropriate action?',type:'single',
+   opts:['A. Continue the current plan unchanged, since the skin remains intact and SCDs are a standard, expected post-op device','B. Remove the SCD device from that leg entirely for the remainder of the admission','C. Inspect the area more closely and closely reassess it at each skin check, since discoloration under a device in a high-risk patient warrants closer monitoring for early pressure/device-related injury','D. Apply a heating pad to the area to improve circulation before the next check'],correct:2,
+   rat:'A treats the device itself as automatically safe just because it\'s standard equipment, which overlooks that ANY device can cause pressure injury in a high-risk patient (low Braden score, diabetes, prior heel ulcer). B overcorrects by removing a medically necessary device entirely rather than addressing the actual concern. D repeats a genuinely harmful action from earlier in this guide — a heating pad on compromised skin risks a burn. The correct response is heightened surveillance of a discoloration that, in this specific high-risk patient, could be early tissue damage, without discarding necessary care or applying a harmful "fix."'}
 ],'Skin & Wounds Check');
 </script>
 <script>
@@ -1207,56 +1603,64 @@ document.getElementById('sec-eye').innerHTML=`
 
 renderQuiz('quiz-eye',[
   {q:'A patient with open-angle glaucoma has 20/20 vision on a standard eye chart but reports bumping into objects on either side of them. What does this presentation MOST likely represent?',type:'single',
-   opts:['A. Early macular degeneration, since visual disturbances are common in both conditions','B. Progressive peripheral (tunnel) vision loss from optic nerve damage, which can occur despite preserved central acuity','C. A normal age-related change requiring no further evaluation','D. Early cataract formation affecting the patient\'s depth perception'],correct:1,
-   rat:'The trap: A misapplies a macular-degeneration pattern (central loss) to this scenario, and C dismisses a genuine warning sign. Open-angle glaucoma classically preserves central acuity (a normal eye chart result) while gradually destroying peripheral vision — bumping into objects on the sides while reading fine print normally is a hallmark presentation, not something to overlook.'},
+   opts:['A. Early macular degeneration','B. Progressive peripheral vision loss from optic nerve damage','C. A normal age-related change requiring no further evaluation','D. Early cataract formation affecting depth perception'],correct:1,
+   rat:'A is tempting since both conditions involve chronic vision changes, but macular degeneration causes CENTRAL loss, the opposite pattern from what\'s described. C dismisses a genuine warning sign. Open-angle glaucoma classically preserves central acuity (a normal eye chart result) while gradually destroying peripheral vision — this exact combination is a hallmark presentation.'},
 
   {q:'A patient suddenly develops severe unilateral eye pain, blurred vision, halos around lights, nausea, and vomiting. On exam, the eye is red and firm to palpation. What is the PRIORITY nursing action?',type:'single',
-   opts:['A. Reassure the patient this is a typical cataract symptom and schedule outpatient follow-up','B. Recognize this as a possible acute angle-closure glaucoma emergency and notify the provider immediately for urgent IOP-lowering treatment','C. Administer an antiemetic for the nausea and reassess in several hours','D. Apply a warm compress and dim the lighting to reduce the halos'],correct:1,
-   rat:'The trap: A minimizes an emergency as routine, and C and D both treat individual symptoms (nausea, light sensitivity) while missing the underlying crisis. This combination — sudden severe pain, halos, nausea, and a firm globe — is the classic presentation of acute angle-closure glaucoma, which threatens permanent vision loss within hours without emergency treatment.'},
+   opts:['A. Reassure the patient this is a typical cataract symptom and schedule outpatient follow-up','B. Notify the provider immediately for urgent IOP-lowering treatment','C. Administer an antiemetic for the nausea and reassess in several hours','D. Apply a warm compress and dim the lighting to reduce the halos'],correct:1,
+   rat:'C and D both address a real symptom in the picture (nausea, light sensitivity), which makes them believable first steps — but treating individual symptoms misses the underlying crisis. This combination — sudden severe pain, halos, nausea, and a firm globe — is the classic presentation of acute angle-closure glaucoma, threatening permanent vision loss within hours without emergency treatment.'},
 
   {q:'A patient describes gradually worsening night-driving difficulty, glare around headlights, and colors that seem "washed out," but denies any pain. Which findings support a diagnosis of cataracts rather than glaucoma? (Select all that apply)',type:'multi',
    opts:['A. Painless, gradual onset of symptoms over months to years','B. Glare and halos that are worse in low light/at night','C. Sudden onset of severe eye pain and nausea','D. Fading or yellowing of colors','E. Progressive loss of peripheral vision with preserved central acuity'],correct:[0,1,3],
-   rat:'The traps: C describes acute angle-closure glaucoma, and E describes chronic open-angle glaucoma — both real conditions, but neither is a cataract feature. Cataracts are defined by painless, gradual lens clouding causing glare, night-vision difficulty, and color fading, without pain or the specific peripheral-vision pattern of glaucoma.'},
+   rat:'C and E both describe real, testable eye conditions (angle-closure glaucoma and open-angle glaucoma, respectively) — which is exactly what makes them tempting to include here. Neither is a cataract feature though; cataracts are defined by painless, gradual lens clouding causing glare, night-vision difficulty, and color fading.'},
 
   {q:'A patient is being discharged one day after cataract surgery. Which statement by the patient indicates a need for further teaching?',type:'single',
    opts:['A. "I\'ll wear my protective shield at night for the next week."','B. "I\'ll avoid bending over or lifting anything heavy for a while."','C. "I plan to do some light gardening tomorrow since I feel fine."','D. "I\'ll call the office right away if I get sudden eye pain or vision changes."'],correct:2,
-   rat:'The trap: this statement (C) sounds reasonable if the patient "feels fine," but bending over for gardening raises intraocular pressure and risks disrupting the healing surgical site — exactly the activity that should be avoided regardless of how the patient currently feels. The other three statements reflect correct post-op teaching.'},
+   rat:'This statement (C) sounds reasonable coming from a patient who genuinely feels fine, which is exactly why it needs correcting — bending over for gardening raises intraocular pressure and risks disrupting the healing surgical site regardless of how the patient currently feels.'},
 
   {q:'Two patients report chronic, painless vision changes. Patient A says straight lines on a page now look wavy, with a blurry spot in the center of their vision. Patient B says they\'ve been missing objects to the side while their central reading vision remains sharp. Which statement correctly matches each patient to their likely condition?',type:'single',
-   opts:['A. Patient A has glaucoma (central loss); Patient B has macular degeneration (peripheral loss)','B. Patient A has macular degeneration (central vision loss, wavy lines from macular involvement); Patient B has glaucoma (peripheral vision loss from optic nerve damage)','C. Both patients have the same condition, since both describe chronic painless vision changes','D. Patient A has a cataract; Patient B has a retinal detachment'],correct:1,
-   rat:'The trap: A reverses the correct pairing (a common memorization error), and C ignores the clearly opposite patterns described. Central distortion/blank spot = macular degeneration (damage to the retina\'s central structure); peripheral loss with preserved central vision = glaucoma (optic nerve compressed from the outside in) — matching each symptom pattern to its specific mechanism is the key skill.'},
+   opts:['A. Patient A has glaucoma; Patient B has macular degeneration','B. Patient A has macular degeneration; Patient B has glaucoma','C. Both patients have the same condition','D. Patient A has a cataract; Patient B has a retinal detachment'],correct:1,
+   rat:'A reverses the correct pairing — a very common mix-up since both conditions are chronic and painless. Central distortion/blank spot points to macular degeneration (damage to the retina\'s central structure); peripheral loss with preserved central vision points to glaucoma (optic nerve compressed from the outside in).'},
 
-  {q:'A patient can read the newspaper without any trouble but says road signs and faraway objects have looked blurry for years. Which refractive error does this describe, and what is the actual mechanism?',type:'single',
-   opts:['A. Hyperopia — light focuses behind the retina because the eyeball is too short','B. Myopia — light focuses in front of the retina because the eyeball is too long or the cornea is too curved','C. Astigmatism — an irregular corneal curvature causing blur at every distance','D. Presbyopia — age-related stiffening of the lens limiting accommodation for near vision'],correct:1,
-   rat:'The trap: A describes the opposite refractive pattern (hyperopia = clear distance, blurry near — the reverse of this patient), C describes blur at ALL distances rather than just far, and D describes a NEAR-vision problem, not a distance one. Clear near vision with blurry distance vision, from an eyeball that\'s too long or a cornea that\'s too curved, is myopia — light focuses short of the retina instead of on it.'},
+  {q:'A patient can read the newspaper without any trouble but says road signs and faraway objects have looked blurry for years. Which refractive error does this describe?',type:'single',
+   opts:['A. Hyperopia','B. Myopia','C. Astigmatism','D. Presbyopia'],correct:1,
+   rat:'A describes the opposite refractive pattern (clear distance, blurry near — the reverse of this patient). C describes blur at every distance, not just far, and D describes a near-vision problem. Clear near vision with blurry distance vision is myopia — light focuses short of the retina instead of on it.'},
 
   {q:'A 45-year-old with no prior vision problems says they suddenly need to hold their phone at arm\'s length to read text clearly, though distance vision is unaffected. What is the BEST explanation?',type:'single',
-   opts:['A. This is early cataract formation and should be treated as an urgent referral','B. This is presbyopia — age-related stiffening of the lens that limits its ability to accommodate for near objects','C. This is myopia developing for the first time in adulthood','D. This indicates early open-angle glaucoma affecting central vision'],correct:1,
-   rat:'The trap: A escalates a normal age-related change into an urgent diagnosis, C misapplies a distance-vision problem to a near-vision complaint, and D describes a peripheral, not near-vision, condition. Losing near-focus ability specifically around age 40+, with distance vision intact, is the classic presentation of presbyopia — the lens has stiffened and can no longer accommodate for close objects.'},
+   opts:['A. Early cataract formation','B. Presbyopia','C. Myopia developing for the first time in adulthood','D. Early open-angle glaucoma'],correct:1,
+   rat:'A treats a very common age-related change as an urgent finding, which feels cautious but overstates the concern. C misapplies a distance-vision problem to a near-vision complaint, and D describes a peripheral, not near-vision, condition. Losing near-focus ability around age 40+ with intact distance vision is the classic presentation of presbyopia.'},
 
   {q:'A nurse shines a penlight into a patient\'s right eye only. Both the right AND left pupils constrict. What does the constriction of the LEFT pupil specifically demonstrate?',type:'single',
-   opts:['A. A direct pupillary response in the left eye','B. A consensual pupillary response, since the left pupil reacted without being directly exposed to the light','C. Mydriasis of the left eye','D. An abnormal finding requiring immediate provider notification'],correct:1,
-   rat:'The trap: A misapplies "direct" to the wrong eye (direct response describes the SAME eye the light was shone into — that would be the right pupil\'s reaction). C confuses mydriasis (dilation) with what is actually happening (constriction). D treats a completely normal, expected neurological finding as abnormal. The unlit eye constricting in response to light shone in the other eye is the definition of a consensual response — and it is NORMAL.'},
+   opts:['A. A direct pupillary response in the left eye','B. A consensual pupillary response','C. Mydriasis of the left eye','D. An abnormal finding requiring immediate provider notification'],correct:1,
+   rat:'A applies the term "direct" to the eye that reacted, which sounds intuitive but is actually the wrong eye — direct response describes the SAME eye the light was shone into. C confuses mydriasis (dilation) with what\'s actually happening (constriction). The unlit eye constricting is the definition of a consensual response, and it\'s a completely normal, expected finding.'},
 
   {q:'Which of the following is the correct definition of mydriasis?',type:'single',
    opts:['A. Pupil constriction, often from opioids or bright light','B. Pupil dilation, often from anticholinergic medications, dim light, or a sympathetic response','C. The pupil reacting in the opposite eye from where light was shone','D. A fixed, non-reactive pupil unrelated to light exposure'],correct:1,
-   rat:'The trap: A describes miosis, the opposite term. C describes the consensual response, a completely different concept (direction of change vs. which eye is tested). D describes a fixed pupil, which is its own distinct abnormal finding. Mydriasis specifically means pupil DILATION — from anticholinergics, dim light, or sympathetic ("fight or flight") activation.'},
+   rat:'A describes miosis, the opposite term — an easy mix-up given how similar the words sound. C describes a completely different concept (the consensual response) rather than a direction of pupil change. Mydriasis specifically means pupil DILATION.'},
 
   {q:'A patient\'s visual acuity is documented as 20/50 in the right eye. What does this finding actually mean?',type:'single',
-   opts:['A. The patient can see at 50 feet what a person with normal vision sees at 20 feet — better than average vision','B. The patient can see at 20 feet what a person with normal vision can see at 50 feet — worse than normal vision','C. The patient has a 20% chance of having normal vision in that eye','D. The patient\'s vision will improve to 20/50 within 50 days without intervention'],correct:1,
-   rat:'The trap: A reverses which number represents the patient vs. the normal-vision comparison, C invents a percentage interpretation that isn\'t how the fraction works at all, and D fabricates a timeline with no basis. The top number is always the fixed 20-foot testing distance; the bottom number is how far away someone with NORMAL vision could read that same line — a bigger bottom number always means WORSE acuity, since the patient has to be closer than a normal-sighted person would need to be.'},
+   opts:['A. The patient can see at 50 feet what a person with normal vision sees at 20 feet','B. The patient can see at 20 feet what a person with normal vision can see at 50 feet','C. The patient has a 20% chance of having normal vision in that eye','D. The patient\'s vision will improve to 20/50 within 50 days'],correct:1,
+   rat:'A reverses which number represents the patient versus the normal-vision comparison — an easy mistake if you\'re reading the fraction the "obvious" way. The top number is always the fixed 20-foot testing distance; the bottom number is how far away someone with NORMAL vision could read that same line, so a bigger bottom number always means WORSE acuity.'},
 
   {q:'Which of the following are recognized causes of cataracts? (Select all that apply)',type:'multi',
    opts:['A. Aging','B. Eye injury/trauma','C. Diabetes mellitus','D. Beta-blocker use','E. Retinal detachment'],correct:[0,1,2,3],
-   rat:'The trap: retinal detachment (E) is its own separate, unrelated eye emergency — it doesn\'t cause cataracts. Aging (the most common cause), eye trauma, diabetes (glucose alters lens proteins), and beta-blocker use are all recognized causes of cataract formation.'},
+   rat:'Retinal detachment (E) is a genuine eye emergency, which is exactly why it\'s tempting to lump it in here — but it\'s a separate, unrelated condition that doesn\'t cause cataracts. Aging, eye trauma, diabetes, and beta-blocker use are the recognized causes.'},
 
   {q:'A client is 1 day post-op following trabeculectomy surgery for open-angle glaucoma. Which finding should the nurse report to the surgeon IMMEDIATELY?',type:'single',
    opts:['A. Mild eye discomfort rated 2/10 that improves with prescribed acetaminophen','B. Sudden, severe eye pain accompanied by nausea and a noticeable decrease in vision','C. Slight redness at the surgical site with minimal serous drainage','D. Mild itching around the eye shield'],correct:1,
-   rat:'The trap: A, C, and D all describe expected, minor post-operative findings that don\'t require urgent escalation. Sudden severe pain with nausea and a vision change after eye surgery can indicate a serious complication such as increased IOP, hemorrhage, or infection — this combination requires immediate provider notification, unlike the mild, expected findings in the other options.'},
+   rat:'A, C, and D all describe findings a nurse might reasonably expect after any eye surgery, which is what makes them easy to lump together as "normal." Sudden severe pain with nausea and a vision change is a distinctly different pattern that can indicate a serious complication like increased IOP, hemorrhage, or infection.'},
 
   {q:'A client with a known history of migraines reports seeing "zigzag lines" and shimmering lights in one eye for the past 20 minutes, without eye pain, followed by a mild headache. How should the nurse interpret this presentation?',type:'single',
-   opts:['A. This is almost certainly a retinal detachment and requires emergency ophthalmologic referral','B. This is consistent with a migraine aura, though new or changing visual symptoms still warrant follow-up to rule out an ocular cause','C. This confirms acute angle-closure glaucoma and requires emergency IOP-lowering treatment','D. This is a normal finding requiring no further assessment given the client\'s migraine history'],correct:1,
-   rat:'The trap: A and C both jump to a different eye emergency based on surface-level similarity (visual disturbance), without matching the FULL classic presentation of either condition (retinal detachment: flashes/floaters/curtain, painless, no headache pattern; angle-closure: severe pain, halos, firm globe). D dismisses the finding entirely. Zigzag lines/shimmering with a subsequent headache is a classic migraine aura pattern — reasonable given the history, but any new or evolving visual change still deserves assessment to be safe.'}
+   opts:['A. This is almost certainly a retinal detachment requiring emergency referral','B. This is consistent with a migraine aura, though new visual symptoms still warrant follow-up','C. This confirms acute angle-closure glaucoma requiring emergency treatment','D. This is a normal finding requiring no further assessment given the migraine history'],correct:1,
+   rat:'A and C both jump to a different eye emergency based on the surface-level similarity of "visual disturbance," without matching the FULL classic presentation of either condition (retinal detachment: flashes/floaters/curtain, no headache pattern; angle-closure: severe pain, halos, firm globe — neither is present here). Zigzag lines/shimmering followed by a headache is a classic migraine aura pattern, though any new visual change still deserves follow-up.'},
+
+  {q:'What is the normal intraocular pressure (IOP) range?',type:'single',
+   opts:['A. 0-5 mmHg','B. 10-21 mmHg','C. 30-45 mmHg','D. 50-70 mmHg'],correct:1,
+   rat:'A direct one to have cold — normal IOP is 10-21 mmHg. Glaucoma involves sustained elevation above this range.'},
+
+  {q:'A client with diabetes and known open-angle glaucoma is scheduled for a colonoscopy requiring an anticholinergic medication for bowel prep sedation, and separately reports occasional over-the-counter antihistamine use for seasonal allergies. Which combination of factors should raise the MOST concern for this client\'s eye condition specifically?',type:'single',
+   opts:['A. The colonoscopy itself, which has no direct relationship to eye pressure','B. Both the anticholinergic sedation and the antihistamine, since anticholinergic effects can dilate the pupil and are a specific concern in glaucoma, particularly if the diagnosis were actually angle-closure rather than open-angle','C. Only the antihistamine, since sedation medications never affect pupil size','D. Neither medication, since this client\'s open-angle glaucoma makes pupil dilation irrelevant'],correct:1,
+   rat:'A dismisses a real class-effect concern, and C arbitrarily excludes one of the two anticholinergic-effect medications in the vignette. D assumes open-angle glaucoma removes all concern, but the deciding nuance is worth knowing: anticholinergic-related pupil dilation is a MUCH bigger concern in angle-closure glaucoma specifically (where dilation can trigger an attack) than in open-angle — so accurate diagnosis confirmation matters before assuming either medication is automatically safe or automatically dangerous for this client.'}
 ],'Eye & Vision Check');
 </script>
 <script>
@@ -1508,6 +1912,72 @@ renderQuiz('quiz-decoder',[
 ],'Decode It — Cause, Manifests, Treatment & Clinical Reasoning');
 </script>
 <script>
+document.getElementById('sec-studymode').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🧩</span> Study Mode: Breaking Down a Question</h2>
+<p class="intro-line">Before you can pick the right answer, you have to know what's actually being asked. Most wrong answers on his exams come from answering the WRONG question, not from not knowing the content. This is the 5-step process to slow down and read correctly.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🪜 The 5 steps, every time</h3>
+  <ol style="padding-left:20px;line-height:1.9">
+    <li><b>Read the STEM alone first</b> — cover the answer choices with your hand/finger. What TYPE of question is this: assessment, priority, teaching, intervention, or evaluation? Answer it in your own words before you ever look at A/B/C/D.</li>
+    <li><b>Circle the keyword.</b> FIRST, BEST, PRIORITY, MOST, INITIAL, EXCEPT, NOT, ONLY. These words change what "correct" even means — a "first" question and a "best long-term" question can have different right answers from the exact same scenario.</li>
+    <li><b>Identify the framework the question is testing.</b> Is this an ABC (airway/breathing/circulation) question? A Maslow's hierarchy question (physiologic safety beats psychosocial)? A nursing-process question (assessment before intervention, intervention before evaluation)? Naming the framework tells you HOW to rank the options.</li>
+    <li><b>Eliminate anything absolute or unsafe FIRST.</b> Options with "always," "never," "only if," or that skip a safety step are usually wrong before you even compare them to the "good" options.</li>
+    <li><b>Compare what's left against your OWN answer from step 1</b> — not against each other. Pick the option that matches what you already decided the question was asking, not the option that just "sounds most detailed."</li>
+  </ol>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🔍 Worked example #1 — a straightforward-looking question that isn't</h3>
+  <p><b>Stem:</b> "A nurse is caring for a patient with DKA who has an order for an insulin drip, IV fluids, and potassium replacement once levels are known. The initial potassium is 5.5 mEq/L. What should the nurse do FIRST?"</p>
+  <p><b>Step 1 — what type of question is this?</b> This is a PRIORITY/sequencing question — it's asking what happens first among several correct-sounding orders, not "which of these is ever appropriate."</p>
+  <p><b>Step 2 — keyword:</b> "FIRST." That means more than one option might eventually be correct — the question is about the correct ORDER, not about eliminating three "wrong" treatments.</p>
+  <p><b>Step 3 — framework:</b> this is a sequencing/prioritization question built on the DKA mechanism — fluids before insulin, because the patient is profoundly dehydrated first.</p>
+  <p><b>Step 4 — eliminate the absolute/unsafe option:</b> giving potassium replacement immediately, just because 5.5 "looks high," ignores that acidosis is artificially inflating that number — an unsafe assumption to act on first.</p>
+  <p><b>Step 5 — match to your own answer:</b> you already know from the mechanism that fluids come first in DKA. The option that says "begin IV fluids" matches that — not the option that sounds like it's "doing the most" by treating the potassium right away.</p>
+  <div class="hy">⭐ Notice: knowing the DKA mechanism (fluids → insulin → potassium) made step 5 almost automatic. That's the whole point of the Why Engine — mechanism does the sorting for you.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🔍 Worked example #2 — a keyword that flips the entire answer</h3>
+  <p><b>Stem:</b> "Which of the following is NOT an appropriate discharge goal for a patient recovering from a first DKA episode caused by missed insulin doses during a stomach virus?"</p>
+  <p><b>Step 1 — what type of question is this?</b> This is a PLANNING/goal-setting question from the nursing process — but phrased backwards from how these questions usually read.</p>
+  <p><b>Step 2 — keyword:</b> "NOT." This is the single most important word in the whole stem. Skip it, and you'll instinctively pick the BEST goal instead of the ONE THAT DOESN'T BELONG — which is the exact opposite of what's being asked.</p>
+  <p><b>Step 3 — framework:</b> realistic vs. unsafe discharge goals — a good goal should target the actual root cause of this admission (the missed insulin doses).</p>
+  <p><b>Step 4 — eliminate the absolute/unsafe option:</b> a goal like "stop checking blood glucose once the illness resolves" is the unsafe one — glucose monitoring is permanent, not tied to one illness episode.</p>
+  <p><b>Step 5 — match to your own answer:</b> because the keyword is NOT, the "wrong-sounding" goal is actually the CORRECT answer to select. This is where most points get lost — not from lack of knowledge, but from answering as if the keyword wasn't there.</p>
+  <div class="hy">⭐ Whenever you see NOT or EXCEPT, physically say "which one is the ODD ONE OUT" in your head before reading the options — it resets your brain to look for the wrong-fitting choice instead of the best-sounding one.</div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>⚠️ The most common ways students misread a question</h3>
+  <ul class="clean">
+    <li><b>Missing the keyword</b> (NOT/EXCEPT/FIRST) and answering the opposite question.</li>
+    <li><b>Picking the longest, most detailed-sounding option</b> instead of the one that actually fits the stem — length is not a reliability signal.</li>
+    <li><b>Answering with outside knowledge instead of the stem's own data</b> — if the stem gives you a pH of 7.34, use THAT number, don't assume "DKA" just because ketones were mentioned earlier in the unit.</li>
+    <li><b>Confusing "what's abnormal" with "what's most urgent."</b> A stem can list three abnormal findings and one truly urgent one — the urgent one wins, not the "most abnormal-looking" one.</li>
+    <li><b>Forgetting what TYPE of question it is.</b> An assessment question wants data-gathering; an intervention question wants action; mixing these up leads to picking "monitor" when the question wanted "act," or vice versa.</li>
+  </ul>
+</div>
+
+<div id="quiz-studymode"></div>
+`;
+
+renderQuiz('quiz-studymode',[
+  {q:'PRACTICE — "A nurse is caring for four patients. Which patient should the nurse assess FIRST?" What TYPE of question is this, and what does the keyword tell you?',type:'single',
+   opts:['A. An evaluation question; the keyword tells you to check if a prior intervention worked','B. A priority question; the keyword tells you multiple patients may need attention, but one needs it before the others','C. A teaching question; the keyword tells you to focus on patient education needs','D. This keyword has no real effect on how the question should be answered'],correct:1,
+   rat:'This is a classic priority/triage stem. "FIRST" doesn\'t mean the other three patients are fine — it means you\'re ranking urgency among several legitimate needs, which is exactly why skimming past this word leads people to just pick "the sickest-sounding" patient without actually comparing all four.'},
+
+  {q:'PRACTICE — "All of the following are expected findings in DKA EXCEPT:" Before reading the options, what should you tell yourself about how to approach this question?',type:'single',
+   opts:['A. Look for the BEST expected finding among the four options','B. Look for the one finding that does NOT belong with the others — the odd one out','C. Assume all four options are correct and pick the most severe one','D. This phrasing means the question has no single correct answer'],correct:1,
+   rat:'The EXCEPT keyword flips the entire task: instead of finding the best/most correct option, you\'re hunting for the ONE that doesn\'t fit the pattern the other three share. Missing this word is one of the single most common ways students lose easy points on well-known content.'},
+
+  {q:'PRACTICE — A question describes a patient with glucose 640, pH 7.34, and no ketones, then asks "which condition does this represent?" A classmate assumes DKA because the glucose is so high. What did they do wrong?',type:'single',
+   opts:['A. Nothing — DKA is the correct pattern-match for very high glucose','B. They answered from a general assumption about glucose severity instead of using the SPECIFIC pH and ketone data actually given in the stem','C. They should have assumed HHS instead, since HHS always has lower glucose than DKA','D. The question is unanswerable without additional labs'],correct:1,
+   rat:'This mirrors a very common mistake: reacting to the most dramatic-sounding number (640) instead of using the data that actually differentiates the two conditions. The stem GIVES you the deciding information — normal pH, no ketones — which points to HHS regardless of how high the glucose climbs.'}
+],'Practice: Spot the Question Type');
+</script>
+<script>
 document.getElementById('sec-tricks').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🎯</span> Trick Questions</h2>
 <p class="intro-line">Casteel loves NOT / EXCEPT / BEST / FIRST / ONLY. Circle the key word before you read the answers. With mechanism knowledge, the trap answer looks wrong.</p>
@@ -1635,7 +2105,19 @@ renderQuiz('quiz-challenge',[
 
   {q:'A client recovering from DKA has a repeat potassium of 3.0 mEq/L six hours after starting the insulin drip, down from an initial 5.3 mEq/L. What does the nurse recognize about this trend?',type:'single',
    opts:['A. This is an unexpected and dangerous lab error that should be immediately repeated before any action is taken','B. This is the expected effect of insulin therapy driving potassium back into cells, and it requires close monitoring with likely potassium replacement','C. This indicates the insulin drip should be discontinued immediately due to overcorrection','D. This indicates the patient is developing a new, unrelated renal problem'],correct:1,
-   rat:'The trap: A dismisses a real and anticipated trend as an error, C jumps to stopping a needed treatment, and D invents an unrelated diagnosis. Insulin therapy is EXPECTED to drive serum potassium down as it shifts back into cells — this drop from 5.3 to 3.0 is the anticipated trend that requires close monitoring and replacement, not alarm or treatment cessation.'}
+   rat:'The trap: A dismisses a real and anticipated trend as an error, C jumps to stopping a needed treatment, and D invents an unrelated diagnosis. Insulin therapy is EXPECTED to drive serum potassium down as it shifts back into cells — this drop from 5.3 to 3.0 is the anticipated trend that requires close monitoring and replacement, not alarm or treatment cessation.'},
+
+  {q:'A 68-year-old with Type 2 diabetes (on glyburide and lisinopril), stage 3 CKD (eGFR 42), and a Braden score of 15 is admitted for a scheduled cardiac catheterization requiring IV contrast. Pre-procedure labs show potassium 5.2 mEq/L. Which combination of actions should the nurse anticipate or question?',type:'single',
+   opts:['A. Continue all home medications unchanged and proceed with the procedure as scheduled','B. Question continuing the glyburide given the renal function, anticipate holding the lisinopril given the potassium level, and confirm a plan for post-procedure renal monitoring given the contrast exposure','C. Discontinue all diabetes and blood pressure medications permanently in preparation for the procedure','D. Proceed as scheduled, since none of these findings are related to each other'],correct:1,
+   rat:'A treats every home medication as automatically safe to continue despite three separate red flags in this vignette. C overcorrects with a permanent discontinuation instead of a procedure-specific hold. D misses that all three findings — reduced renal clearance, an ACE/ARB-related hyperkalemia risk, and contrast exposure — connect through the same kidney-function thread. The correct synthesis questions glyburide (renal clearance risk), anticipates holding lisinopril (potassium already elevated), and flags the contrast\'s added renal burden — three related concerns from one underlying issue, not three coincidences.'},
+
+  {q:'A client with Type 1 diabetes and a Braden score of 16 is recovering from a DKA admission. On day 2, the nurse notes the client has been NPO since midnight for a procedure, the sliding-scale insulin order is still active, and the client\'s heel appears intact but slightly duskier than surrounding skin under a pressure-relief boot. Which of the following reflects the BEST synthesis of priorities for this shift?',type:'single',
+   opts:['A. Hold all insulin since the client is NPO, and address the heel finding at the end of the shift once the procedure is complete','B. Clarify the insulin order given the NPO status (basal needs still exist even without meals), and reassess the heel finding now given the client\'s combined diabetes/pressure-injury risk factors','C. Administer the full scheduled insulin dose as if the client were eating normally, and remove the pressure-relief boot until after the procedure','D. Defer both issues until the primary provider is available, since neither is an emergency'],correct:1,
+   rat:'A treats "NPO" as synonymous with "no insulin needed," which ignores that basal insulin needs continue independent of eating — a common and dangerous assumption. C makes the opposite error by ignoring the NPO status entirely, and also removes a protective device without justification. D defers two findings that both warrant action within the shift, not at end-of-shift or by a provider not yet available. The correct synthesis: clarify/adjust the insulin plan for NPO status without stopping it outright, AND address the early skin finding promptly given this client\'s combined risk factors (diabetes impairs perfusion/healing, Braden 16 is at-risk) — two related, same-shift priorities, not one deferred to later and one handled incorrectly.'},
+
+  {q:'A client with diabetes, hypertension, and a recent diagnosis of early diabetic retinopathy is being evaluated for a new medication regimen. The provider is considering a beta-blocker for blood pressure control. Which additional client history detail would be MOST important for the nurse to clarify before this medication is started?',type:'single',
+   opts:['A. Whether the client has a personal or family history of cataracts, since beta-blockers are a recognized cataract risk factor and this adds relevant information to the client\'s overall eye-health picture','B. Whether the client prefers tablets or liquid formulations','C. Whether the client has ever had a seasonal allergy','D. Whether the client\'s last eye exam was more than 5 years ago, since retinopathy findings expire after that time'],correct:0,
+   rat:'B and C are both reasonable-sounding routine intake questions but have no particular relevance to this specific clinical decision. D invents a rule about retinopathy findings "expiring" that isn\'t how monitoring for a progressive condition works. Since beta-blocker use is a recognized cataract risk factor, and this client already has documented early retinopathy (indicating active diabetic eye disease), clarifying cataract history adds relevant context to the overall risk-benefit picture for this specific medication choice — connecting a systemic medication decision back to this client\'s existing eye findings is the actual clinical reasoning skill being tested.'}
 ],'Med-Surg 1 Level Challenge');
 </script>
 
@@ -1668,8 +2150,9 @@ function renderVaultSection(){
     </div>`;
   });
   host.innerHTML=html;
-  wrongVault.forEach(entry=>{
-    const safeId=entry.id.replace(/[^a-zA-Z0-9-]/g,'');
+  wrongVault.forEach(rawEntry=>{
+    const entry=prepareQuestion(rawEntry);
+    const safeId=rawEntry.id.replace(/[^a-zA-Z0-9-]/g,'');
     const optsHost=document.getElementById('vopts-'+safeId);
     const ratHost=document.getElementById('vrat-'+safeId);
     if(entry.type==='multi'){
@@ -1692,7 +2175,7 @@ function renderVaultSection(){
         if(allRight){
           const solved=document.createElement('div'); solved.className='vault-solved'; solved.textContent='✅ Correct! Removing from vault...';
           optsHost.parentElement.appendChild(solved);
-          setTimeout(()=>{ removeFromVault(entry.id); const el=document.getElementById('vaultcard-'+safeId); if(el)el.remove(); if(wrongVault.length===0)renderVaultSection(); },900);
+          setTimeout(()=>{ removeFromVault(rawEntry.id); const el=document.getElementById('vaultcard-'+safeId); if(el)el.remove(); if(wrongVault.length===0)renderVaultSection(); },900);
         }
       };
       optsHost.appendChild(sub);
@@ -1721,99 +2204,119 @@ function renderVaultSection(){
 <script>
 /* ===== FLASH STUDY GAME ===== */
 const FLASH_DECK=[
-  {front:'What causes Type 1 diabetes?',back:'Autoimmune destruction of pancreatic beta cells → little to no insulin production.'},
-  {front:'What causes Type 2 diabetes?',back:'Insulin resistance in cells, plus a gradual decline in beta-cell insulin production over time.'},
-  {front:'Diagnostic A1C for diabetes?',back:'≥6.5%'},
-  {front:'Diagnostic fasting glucose for diabetes?',back:'≥126 mg/dL'},
-  {front:'Diagnostic random glucose (with symptoms) for diabetes?',back:'≥200 mg/dL'},
-  {front:'Prediabetes A1C range?',back:'5.7–6.4%'},
-  {front:'Prediabetes fasting glucose range?',back:'100–125 mg/dL'},
-  {front:'What are the classic "3 P\'s" of diabetes?',back:'Polyuria, polydipsia, polyphagia.'},
-  {front:'First-line oral medication for Type 2 diabetes?',back:'Metformin.'},
-  {front:'Why is metformin held around IV contrast dye?',back:'Combined risk of lactic acidosis and acute kidney injury.'},
-  {front:'DKA occurs almost exclusively in which type of diabetes?',back:'Type 1 — near-total insulin deficiency.'},
-  {front:'HHS occurs almost exclusively in which type of diabetes?',back:'Type 2 — insulin is present but cells are resistant to it.'},
-  {front:'Typical glucose level in DKA?',back:'Usually >250 mg/dL.'},
-  {front:'Typical glucose level in HHS?',back:'Often >600 mg/dL, sometimes >1000.'},
-  {front:'Blood pH in DKA?',back:'<7.3 — metabolic acidosis.'},
-  {front:'Blood pH in HHS?',back:'Near-normal (>7.3) — no significant acidosis.'},
-  {front:'Why does DKA produce ketones but HHS does not?',back:'It takes very little insulin to block fat breakdown but a lot to move glucose into resistant cells — HHS patients still have enough insulin to block ketone production even though glucose stays high.'},
-  {front:'What are Kussmaul respirations, and why do they happen?',back:'Deep, rapid breathing — the body blows off CO₂ to compensate for the metabolic acidosis of DKA.'},
-  {front:'What is the treatment order for DKA/HHS?',back:'1) IV fluids first, 2) IV regular insulin, 3) monitor/replace potassium, 4) add dextrose once glucose nears 200-250.'},
-  {front:'Why give fluids before insulin in DKA/HHS?',back:'The patient is severely dehydrated — insulin first can worsen hypotension and cause dangerous fluid shifts.'},
-  {front:'What happens to serum potassium in DKA once insulin therapy starts?',back:'It drops — insulin drives K⁺ back into cells, so a seemingly normal/high initial K⁺ can crash quickly.'},
-  {front:'Which insulin is the only one given IV?',back:'Regular (short-acting) insulin.'},
-  {front:'What glucose level defines hypoglycemia?',back:'Below 70 mg/dL.'},
-  {front:'Treatment for a CONSCIOUS hypoglycemic patient?',back:'Rule of 15 — 15g fast-acting carbohydrate, recheck glucose in 15 minutes, repeat if still low.'},
-  {front:'Treatment for an UNCONSCIOUS hypoglycemic patient with no IV access?',back:'Glucagon IM or subcutaneously.'},
-  {front:'Why never give oral treatment to an unconscious patient?',back:'Aspiration risk — they cannot safely protect their airway or swallow.'},
-  {front:'Adrenergic (early) signs of hypoglycemia?',back:'Shaky, sweaty, tachycardic, hungry, anxious.'},
-  {front:'Neuroglycopenic (late) signs of hypoglycemia?',back:'Confusion, slurred speech, seizures, loss of consciousness.'},
-  {front:'What is "hypoglycemia unawareness" and what causes it?',back:'Autonomic neuropathy blunts the early adrenergic warning signs, so the patient jumps straight to neuro symptoms.'},
-  {front:'How many criteria are needed to diagnose metabolic syndrome?',back:'3 or more (out of 5): central obesity, high BP, high triglycerides, low HDL, elevated fasting glucose.'},
-  {front:'Metabolic syndrome waist circumference cutoffs?',back:'>40 inches in men, >35 inches in women.'},
-  {front:'What is LADA?',back:'"Type 1.5" — slow-onset autoimmune beta-cell destruction that presents in adulthood, often mistaken for Type 2 at first.'},
-  {front:'When is gestational diabetes typically screened for?',back:'24–28 weeks of pregnancy.'},
-  {front:'What is the "three-hit combo" behind diabetic foot ulcers?',back:'Neuropathy (can\'t feel injury) + peripheral vascular disease (can\'t heal) + hyperglycemia (feeds infection).'},
-  {front:'Describe a Stage 1 pressure injury.',back:'Intact skin with non-blanchable redness.'},
-  {front:'Describe a Stage 2 pressure injury.',back:'Partial-thickness loss — shallow open wound or blister.'},
-  {front:'Describe a Stage 3 pressure injury.',back:'Full-thickness loss with visible fat; no bone/tendon/muscle exposed.'},
-  {front:'Describe a Stage 4 pressure injury.',back:'Full-thickness loss with exposed bone, tendon, or muscle.'},
-  {front:'What makes a pressure injury "unstageable"?',back:'The base is covered by slough/eschar, so the true depth can\'t be determined until it\'s removed.'},
-  {front:'What does a deep tissue injury (DTI) look like?',back:'Intact skin that is purple/maroon and boggy — significant damage is happening underneath.'},
-  {front:'Braden Scale score cutoff for high risk?',back:'≤18.'},
-  {front:'How often should you reposition a patient in bed vs. in a chair?',back:'Every 2 hours in bed; every 15 minutes in a chair/wheelchair.'},
-  {front:'Why should you NEVER massage a reddened area over a bony prominence?',back:'The tissue is already damaged — massage can rupture fragile capillaries and worsen the injury.'},
-  {front:'What vision loss pattern does open-angle glaucoma cause?',back:'Gradual, painless peripheral (tunnel) vision loss.'},
-  {front:'What does acute angle-closure glaucoma look like?',back:'Sudden severe eye pain, halos, nausea, a firm/hard globe — a true emergency.'},
-  {front:'Normal intraocular pressure (IOP) range?',back:'10–21 mmHg.'},
-  {front:'What causes cataracts?',back:'Progressive clouding/opacification of the normally clear lens.'},
-  {front:'Classic cataract symptoms?',back:'Painless blurry/hazy vision, glare and halos, worse at night, faded colors.'},
-  {front:'What vision loss pattern does macular degeneration cause?',back:'Central vision loss with peripheral vision preserved — the opposite pattern from glaucoma.'},
-  {front:'What is the classic symptom sequence of retinal detachment?',back:'Flashes of light → floaters → a curtain or shadow over part of the vision.'},
-  {front:'Why is retinal detachment a surgical emergency?',back:'Detached retina loses its blood supply and will die — vision loss becomes permanent the longer it\'s delayed.'},
-  {front:'What causes conductive hearing loss?',back:'A physical blockage in the outer/middle ear — wax, fluid, infection, perforated eardrum — often reversible.'},
-  {front:'What causes sensorineural hearing loss?',back:'Damage to the cochlea\'s hair cells or auditory nerve — usually permanent.'},
-  {front:'Name common ototoxic drug classes.',back:'Aminoglycosides, loop diuretics (furosemide), high-dose aspirin/salicylates, some chemotherapy agents.'},
-  {front:'What is the classic triad of Ménière\'s disease?',back:'Episodic vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
-  {front:'What diet/medication is the cornerstone of Ménière\'s treatment?',back:'Low-sodium diet plus diuretics, to reduce inner-ear fluid pressure.'},
-  {front:'What is the nursing priority during an acute Ménière\'s attack?',back:'Fall safety — have the patient lie still in a quiet, dark room.'},
-  {front:'What are the 3 functions of the eye\'s lens?',back:'UV filter, accommodation (changing shape to focus), and refraction (bending light onto the retina).'},
-  {front:'What is myopia and what causes it?',back:'Nearsightedness — light focuses IN FRONT of the retina (eyeball too long or cornea too curved). Near is clear, distance is blurry.'},
-  {front:'What is hyperopia and what causes it?',back:'Farsightedness — light focuses BEHIND the retina (eyeball too short). Distance is clear, near objects are blurry.'},
-  {front:'What is astigmatism?',back:'Irregular curvature of the cornea/lens causing blurred or distorted vision at ANY distance.'},
-  {front:'What is presbyopia and who does it affect?',back:'Age-related loss of accommodation (usually >40) from a stiffening lens — makes it hard to focus up close.'},
-  {front:'What is emmetropia?',back:'Normal vision — light focuses directly on the retina without correction. This is 20/20.'},
-  {front:'What is the difference between a direct and a consensual pupillary response?',back:'Direct = the SAME eye that got the light constricts. Consensual = the OTHER eye (not directly lit) also constricts.'},
-  {front:'What is miosis?',back:'Pupil CONSTRICTION — caused by opioids, pilocarpine, bright light, or parasympathetic response.'},
-  {front:'What is mydriasis?',back:'Pupil DILATION — caused by anticholinergics, dim light, or sympathetic ("fight or flight") response.'},
-  {front:'What does a visual acuity of 20/40 actually mean?',back:'The patient sees at 20 feet what a person with normal vision sees at 40 feet — their vision is WORSE than normal (bigger bottom number = worse vision).'},
-  {front:'Name 4 recognized causes of cataracts.',back:'Aging (most common), eye injury/trauma, diabetes mellitus, and beta-blocker use.'}
+  {topic:'monday',front:'What causes Type 1 diabetes?',back:'Autoimmune destruction of pancreatic beta cells → little to no insulin production.'},
+  {topic:'monday',front:'What causes Type 2 diabetes?',back:'Insulin resistance in cells, plus a gradual decline in beta-cell insulin production over time.'},
+  {topic:'monday',front:'Diagnostic A1C for diabetes?',back:'≥6.5%'},
+  {topic:'monday',front:'Diagnostic fasting glucose for diabetes?',back:'≥126 mg/dL'},
+  {topic:'monday',front:'Diagnostic random glucose (with symptoms) for diabetes?',back:'≥200 mg/dL'},
+  {topic:'monday',front:'Prediabetes A1C range?',back:'5.7–6.4%'},
+  {topic:'monday',front:'Prediabetes fasting glucose range?',back:'100–125 mg/dL'},
+  {topic:'monday',front:'What are the classic "3 P\'s" of diabetes?',back:'Polyuria, polydipsia, polyphagia.'},
+  {topic:'monday',front:'First-line oral medication for Type 2 diabetes?',back:'Metformin.'},
+  {topic:'monday',front:'Why is metformin held around IV contrast dye?',back:'Combined risk of lactic acidosis and acute kidney injury.'},
+  {topic:'monday',front:'DKA occurs almost exclusively in which type of diabetes?',back:'Type 1 — near-total insulin deficiency.'},
+  {topic:'monday',front:'HHS occurs almost exclusively in which type of diabetes?',back:'Type 2 — insulin is present but cells are resistant to it.'},
+  {topic:'monday',front:'Typical glucose level in DKA?',back:'Usually >250 mg/dL.'},
+  {topic:'monday',front:'Typical glucose level in HHS?',back:'Often >600 mg/dL, sometimes >1000.'},
+  {topic:'monday',front:'Blood pH in DKA?',back:'<7.3 — metabolic acidosis.'},
+  {topic:'monday',front:'Blood pH in HHS?',back:'Near-normal (>7.3) — no significant acidosis.'},
+  {topic:'monday',front:'Why does DKA produce ketones but HHS does not?',back:'It takes very little insulin to block fat breakdown but a lot to move glucose into resistant cells — HHS patients still have enough insulin to block ketone production even though glucose stays high.'},
+  {topic:'monday',front:'What are Kussmaul respirations, and why do they happen?',back:'Deep, rapid breathing — the body blows off CO₂ to compensate for the metabolic acidosis of DKA.'},
+  {topic:'monday',front:'What is the treatment order for DKA/HHS?',back:'1) IV fluids first, 2) IV regular insulin, 3) monitor/replace potassium, 4) add dextrose once glucose nears 200-250.'},
+  {topic:'monday',front:'Why give fluids before insulin in DKA/HHS?',back:'The patient is severely dehydrated — insulin first can worsen hypotension and cause dangerous fluid shifts.'},
+  {topic:'monday',front:'What happens to serum potassium in DKA once insulin therapy starts?',back:'It drops — insulin drives K⁺ back into cells, so a seemingly normal/high initial K⁺ can crash quickly.'},
+  {topic:'monday',front:'Which insulin is the only one given IV?',back:'Regular (short-acting) insulin.'},
+  {topic:'monday',front:'What glucose level defines hypoglycemia?',back:'Below 70 mg/dL.'},
+  {topic:'monday',front:'Treatment for a CONSCIOUS hypoglycemic patient?',back:'Rule of 15 — 15g fast-acting carbohydrate, recheck glucose in 15 minutes, repeat if still low.'},
+  {topic:'monday',front:'Treatment for an UNCONSCIOUS hypoglycemic patient with no IV access?',back:'Glucagon IM or subcutaneously.'},
+  {topic:'monday',front:'Why never give oral treatment to an unconscious patient?',back:'Aspiration risk — they cannot safely protect their airway or swallow.'},
+  {topic:'monday',front:'Adrenergic (early) signs of hypoglycemia?',back:'Shaky, sweaty, tachycardic, hungry, anxious.'},
+  {topic:'monday',front:'Neuroglycopenic (late) signs of hypoglycemia?',back:'Confusion, slurred speech, seizures, loss of consciousness.'},
+  {topic:'monday',front:'What is "hypoglycemia unawareness" and what causes it?',back:'Autonomic neuropathy blunts the early adrenergic warning signs, so the patient jumps straight to neuro symptoms.'},
+  {topic:'monday',front:'How many criteria are needed to diagnose metabolic syndrome?',back:'3 or more (out of 5): central obesity, high BP, high triglycerides, low HDL, elevated fasting glucose.'},
+  {topic:'monday',front:'Metabolic syndrome waist circumference cutoffs?',back:'>40 inches in men, >35 inches in women.'},
+  {topic:'monday',front:'What is LADA?',back:'"Type 1.5" — slow-onset autoimmune beta-cell destruction that presents in adulthood, often mistaken for Type 2 at first.'},
+  {topic:'monday',front:'When is gestational diabetes typically screened for?',back:'24–28 weeks of pregnancy.'},
+  {topic:'monday',front:'What is the "three-hit combo" behind diabetic foot ulcers?',back:'Neuropathy (can\'t feel injury) + peripheral vascular disease (can\'t heal) + hyperglycemia (feeds infection).'},
+  {topic:'monday',front:'Describe a Stage 1 pressure injury.',back:'Intact skin with non-blanchable redness.'},
+  {topic:'monday',front:'Describe a Stage 2 pressure injury.',back:'Partial-thickness loss — shallow open wound or blister.'},
+  {topic:'monday',front:'Describe a Stage 3 pressure injury.',back:'Full-thickness loss with visible fat; no bone/tendon/muscle exposed.'},
+  {topic:'monday',front:'Describe a Stage 4 pressure injury.',back:'Full-thickness loss with exposed bone, tendon, or muscle.'},
+  {topic:'monday',front:'What makes a pressure injury "unstageable"?',back:'The base is covered by slough/eschar, so the true depth can\'t be determined until it\'s removed.'},
+  {topic:'monday',front:'What does a deep tissue injury (DTI) look like?',back:'Intact skin that is purple/maroon and boggy — significant damage is happening underneath.'},
+  {topic:'monday',front:'Braden Scale score cutoff for high risk?',back:'≤18.'},
+  {topic:'monday',front:'How often should you reposition a patient in bed vs. in a chair?',back:'Every 2 hours in bed; every 15 minutes in a chair/wheelchair.'},
+  {topic:'monday',front:'Why should you NEVER massage a reddened area over a bony prominence?',back:'The tissue is already damaged — massage can rupture fragile capillaries and worsen the injury.'},
+  {topic:'eye',front:'What vision loss pattern does open-angle glaucoma cause?',back:'Gradual, painless peripheral (tunnel) vision loss.'},
+  {topic:'eye',front:'What does acute angle-closure glaucoma look like?',back:'Sudden severe eye pain, halos, nausea, a firm/hard globe — a true emergency.'},
+  {topic:'eye',front:'Normal intraocular pressure (IOP) range?',back:'10–21 mmHg.'},
+  {topic:'eye',front:'What causes cataracts?',back:'Progressive clouding/opacification of the normally clear lens.'},
+  {topic:'eye',front:'Classic cataract symptoms?',back:'Painless blurry/hazy vision, glare and halos, worse at night, faded colors.'},
+  {topic:'eye',front:'What vision loss pattern does macular degeneration cause?',back:'Central vision loss with peripheral vision preserved — the opposite pattern from glaucoma.'},
+  {topic:'eye',front:'What is the classic symptom sequence of retinal detachment?',back:'Flashes of light → floaters → a curtain or shadow over part of the vision.'},
+  {topic:'eye',front:'Why is retinal detachment a surgical emergency?',back:'Detached retina loses its blood supply and will die — vision loss becomes permanent the longer it\'s delayed.'},
+  {topic:'ear',front:'What causes conductive hearing loss?',back:'A physical blockage in the outer/middle ear — wax, fluid, infection, perforated eardrum — often reversible.'},
+  {topic:'ear',front:'What causes sensorineural hearing loss?',back:'Damage to the cochlea\'s hair cells or auditory nerve — usually permanent.'},
+  {topic:'ear',front:'Name common ototoxic drug classes.',back:'Aminoglycosides, loop diuretics (furosemide), high-dose aspirin/salicylates, some chemotherapy agents.'},
+  {topic:'ear',front:'What is the classic triad of Ménière\'s disease?',back:'Episodic vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
+  {topic:'ear',front:'What diet/medication is the cornerstone of Ménière\'s treatment?',back:'Low-sodium diet plus diuretics, to reduce inner-ear fluid pressure.'},
+  {topic:'ear',front:'What is the nursing priority during an acute Ménière\'s attack?',back:'Fall safety — have the patient lie still in a quiet, dark room.'},
+  {topic:'eye',front:'What are the 3 functions of the eye\'s lens?',back:'UV filter, accommodation (changing shape to focus), and refraction (bending light onto the retina).'},
+  {topic:'eye',front:'What is myopia and what causes it?',back:'Nearsightedness — light focuses IN FRONT of the retina (eyeball too long or cornea too curved). Near is clear, distance is blurry.'},
+  {topic:'eye',front:'What is hyperopia and what causes it?',back:'Farsightedness — light focuses BEHIND the retina (eyeball too short). Distance is clear, near objects are blurry.'},
+  {topic:'eye',front:'What is astigmatism?',back:'Irregular curvature of the cornea/lens causing blurred or distorted vision at ANY distance.'},
+  {topic:'eye',front:'What is presbyopia and who does it affect?',back:'Age-related loss of accommodation (usually >40) from a stiffening lens — makes it hard to focus up close.'},
+  {topic:'eye',front:'What is emmetropia?',back:'Normal vision — light focuses directly on the retina without correction. This is 20/20.'},
+  {topic:'eye',front:'What is the difference between a direct and a consensual pupillary response?',back:'Direct = the SAME eye that got the light constricts. Consensual = the OTHER eye (not directly lit) also constricts.'},
+  {topic:'eye',front:'What is miosis?',back:'Pupil CONSTRICTION — caused by opioids, pilocarpine, bright light, or parasympathetic response.'},
+  {topic:'eye',front:'What is mydriasis?',back:'Pupil DILATION — caused by anticholinergics, dim light, or sympathetic ("fight or flight") response.'},
+  {topic:'eye',front:'What does a visual acuity of 20/40 actually mean?',back:'The patient sees at 20 feet what a person with normal vision sees at 40 feet — their vision is WORSE than normal (bigger bottom number = worse vision).'},
+  {topic:'eye',front:'Name 4 recognized causes of cataracts.',back:'Aging (most common), eye injury/trauma, diabetes mellitus, and beta-blocker use.'},
+  {topic:'monday',front:'Why are NSAIDs contraindicated/questioned in kidney disease?',back:'They are nephrotoxic and reduce blood flow to the kidneys.'},
+  {topic:'monday',front:'Which sulfonylurea should be avoided in renal impairment, and why?',back:'Glyburide — it\'s renally cleared and accumulates, causing prolonged, dangerous hypoglycemia. Glipizide is the safer alternative.'},
+  {topic:'monday',front:'Why does insulin dosing often need to be REDUCED in renal failure?',back:'The kidneys help clear/break down insulin — in renal failure it sticks around longer, raising hypoglycemia risk even at a "normal" dose.'},
+  {topic:'monday',front:'Why must potassium-sparing diuretics (like spironolactone) be used cautiously in renal impairment?',back:'Risk of dangerous hyperkalemia, especially when combined with an ACE inhibitor/ARB.'},
+  {topic:'monday',front:'When should ACE inhibitors/ARBs be questioned or held, even though they protect diabetic kidneys long-term?',back:'In acute kidney injury, significant hyperkalemia, bilateral renal artery stenosis, or if creatinine rises more than ~30% after starting.'},
+  {topic:'monday',front:'Why is meperidine (Demerol) generally avoided in renal failure?',back:'Its toxic metabolite accumulates and can cause seizures.'},
+  {topic:'monday',front:'Name 3 drugs that are directly nephrotoxic and need monitoring in renal impairment.',back:'Aminoglycosides (gentamicin), vancomycin, and IV contrast dye (NSAIDs also count).'},
+  {topic:'eye',front:'Why are anticholinergic/mydriatic eye drops (like atropine) risky in a patient with angle-closure glaucoma?',back:'They dilate the pupil, which can push the iris into the drainage angle and trigger an acute angle-closure attack.'},
+  {topic:'eye',front:'Why must beta-blocker eye drops (timolol) be used cautiously in asthma/COPD or bradycardia?',back:'They can be absorbed systemically and cause bronchospasm or worsen bradycardia/heart block, even though they\'re "just" an eye drop.'}
 ];
 let flashMastered=new Set();
 (function restoreFlash(){ try{ const r=localStorage.getItem('nur256u3_flashmastered'); if(r) JSON.parse(r).forEach(i=>flashMastered.add(i)); }catch(e){} })();
 function saveFlashMastered(){ try{ localStorage.setItem('nur256u3_flashmastered', JSON.stringify([...flashMastered])); }catch(e){} }
-let flashQueue=[], flashShowingBack=false, flashOnlyUnmastered=true;
+let flashQueue=[], flashShowingBack=false, flashOnlyUnmastered=true, flashTopic='all';
 function buildFlashQueue(){
-  let pool=FLASH_DECK.map((c,i)=>({front:c.front,back:c.back,id:i}));
+  let pool=FLASH_DECK.map((c,i)=>({front:c.front,back:c.back,id:i,topic:c.topic}));
+  if(flashTopic!=='all') pool=pool.filter(c=>c.topic===flashTopic);
   if(flashOnlyUnmastered) pool=pool.filter(c=>!flashMastered.has(c.id));
   flashQueue=shuffle(pool);
 }
 function updateFlashFilterBtn(){
   const b=document.getElementById('flashFilterBtn'); if(!b)return;
   b.textContent = flashOnlyUnmastered ? '📚 Studying: Unmastered Only' : '📚 Studying: Full Deck (incl. mastered)';
+  const t=document.getElementById('flashTopicBtn'); if(t)t.textContent=flashTopicLabel();
+}
+function flashTopicLabel(){
+  return flashTopic==='monday' ? '🎯 Monday Exam Only' : flashTopic==='eye' ? '🎯 Wednesday (Eye) Only' : '🎯 All Topics';
+}
+function cycleFlashTopic(){
+  flashTopic = flashTopic==='all' ? 'monday' : flashTopic==='monday' ? 'eye' : 'all';
+  buildFlashQueue(); drawFlashCard(); updateFlashFilterBtn();
 }
 function toggleFlashFilter(){ flashOnlyUnmastered=!flashOnlyUnmastered; buildFlashQueue(); drawFlashCard(); updateFlashFilterBtn(); }
 function resetFlashMastery(){ if(!confirm('Reset all Flash Game mastery progress? This cannot be undone.'))return; flashMastered=new Set(); saveFlashMastered(); buildFlashQueue(); drawFlashCard(); }
 function drawFlashCard(){
   const prog=document.getElementById('flashProgress'), host=document.getElementById('flashCardHost');
   if(!prog||!host)return;
-  const totalMastered=flashMastered.size, total=FLASH_DECK.length;
+  const scopeIds = flashTopic==='all' ? FLASH_DECK.map((_,i)=>i) : FLASH_DECK.map((c,i)=>({c,i})).filter(x=>x.c.topic===flashTopic).map(x=>x.i);
+  const total=scopeIds.length;
+  const totalMastered=scopeIds.filter(i=>flashMastered.has(i)).length;
   if(flashQueue.length===0){
     prog.textContent=`${totalMastered} / ${total} mastered`;
     host.innerHTML=`<div class="flash-card" style="cursor:default;flex-direction:column;gap:8px">
       <div style="font-size:2rem">🎉</div>
-      <div>${flashOnlyUnmastered ? "You've mastered every card in the deck! Toggle to Full Deck to keep drilling, or come back later." : "Round complete!"}</div>
+      <div>${flashOnlyUnmastered ? "You've mastered every card in this scope! Toggle to Full Deck to keep drilling, or come back later." : "Round complete!"}</div>
     </div>`;
     return;
   }
@@ -1846,7 +2349,7 @@ function answerFlash(gotIt){
 }
 document.getElementById('sec-flash').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🎮</span> Flash Study Game</h2>
-<p class="intro-line">Quick-fire cram mode for memorizing the high-yield facts fast — great for a 10-minute review right before lecture, clinicals, or the exam.</p>
+<p class="intro-line">Quick-fire cram mode for memorizing the high-yield facts fast — great for a 10-minute review right before lecture, clinicals, or the exam. Tap "🎯 All Topics" to cycle to <b>Monday Exam Only</b> for a fast pre-exam pass through just Diabetes + Skin content.</p>
 <div class="card" style="border-color:var(--purple)">
   <h3>🕹️ How to play</h3>
   <ul class="clean">
@@ -1858,6 +2361,7 @@ document.getElementById('sec-flash').innerHTML=`
 <div class="flash-progress" id="flashProgress"></div>
 <div id="flashCardHost"></div>
 <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+  <button class="btn" style="background:var(--purple)" id="flashTopicBtn" onclick="cycleFlashTopic()"></button>
   <button class="btn" style="background:var(--teal)" id="flashFilterBtn" onclick="toggleFlashFilter()"></button>
   <button class="btn" style="background:var(--red)" onclick="resetFlashMastery()">↺ Reset Flash Progress</button>
 </div>
@@ -1933,7 +2437,13 @@ function startDrill(){
 function renderDrillQ(){
   const host=document.getElementById('drillBody');
   if(drillIdx>=drillList.length){ return drillFinish(); }
-  const q=drillList[drillIdx];
+  const qRaw=drillList[drillIdx];
+  let q=qRaw;
+  if(shuffleAnswers){
+    const order=shuffle(qRaw.o.map((_,i)=>i));
+    q={...qRaw, o:order.map(i=>qRaw.o[i]), c:order.indexOf(qRaw.c)};
+  }
+  drillList[drillIdx]=q;
   drillAnswered=false;
   let opts=q.o.map((o,i)=>`<button class="opt" onclick="answerDrill(${i})">${o}</button>`).join('');
   host.innerHTML=`
@@ -2083,8 +2593,25 @@ const EXAM=[
 <script>
 /* ===== EXAM ENGINE (Study Mode + Test Mode 50-scramble + persistence) ===== */
 let examState={}, examIdx=0, examSubmitted=false, examMode='study', examChecked={};
-let quizSet=[];
-function saveExam(){ try{ localStorage.setItem('nur256u3_exam', JSON.stringify({mode:examMode,set:quizSet,state:examState,checked:examChecked,idx:examIdx,submitted:examSubmitted})); }catch(e){} }
+let quizSet=[], examShuffleMap={};
+function getExamQ(qi){
+  const base=EXAM[qi];
+  if(!examShuffleMap[qi]){
+    const order=shuffleAnswers?shuffle(base.o.map((_,i)=>i)):base.o.map((_,i)=>i);
+    examShuffleMap[qi]=order;
+  }
+  const order=examShuffleMap[qi];
+  const opts=relabel(order.map(i=>base.o[i]));
+  let correct;
+  if(base.t==='multi'){
+    const cset=new Set(base.c);
+    correct=order.map((origIdx,newIdx)=>cset.has(origIdx)?newIdx:null).filter(x=>x!==null);
+  } else {
+    correct=order.indexOf(base.c);
+  }
+  return {q:base.q, r:base.r, t:base.t, o:opts, c:correct};
+}
+function saveExam(){ try{ localStorage.setItem('nur256u3_exam', JSON.stringify({mode:examMode,set:quizSet,state:examState,checked:examChecked,idx:examIdx,submitted:examSubmitted,shuffle:examShuffleMap})); }catch(e){} }
 function loadExam(){ try{ const r=localStorage.getItem('nur256u3_exam'); return r?JSON.parse(r):null; }catch(e){ return null; } }
 function clearExamSave(){ try{ localStorage.removeItem('nur256u3_exam'); }catch(e){} }
 function shuffleArr(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);}
@@ -2108,7 +2635,7 @@ function renderExam(){
     <div id="examResult"></div>`;
   const saved=loadExam();
   if(saved && saved.set && saved.set.length){
-    examMode=saved.mode||'study'; quizSet=saved.set; examState=saved.state||{}; examChecked=saved.checked||{}; examIdx=saved.idx||0; examSubmitted=saved.submitted||false;
+    examMode=saved.mode||'study'; quizSet=saved.set; examState=saved.state||{}; examChecked=saved.checked||{}; examIdx=saved.idx||0; examSubmitted=saved.submitted||false; examShuffleMap=saved.shuffle||{};
     applyModeUI(examMode); drawExamQ();
   } else { setExamMode(examMode); }
 }
@@ -2129,13 +2656,13 @@ function applyModeUI(m){
   }
 }
 function setExamMode(m){
-  examMode=m; examChecked={}; examState={}; examIdx=0; examSubmitted=false;
+  examMode=m; examChecked={}; examState={}; examIdx=0; examSubmitted=false; examShuffleMap={};
   document.getElementById('examResult').innerHTML='';
   buildQuizSet(m); applyModeUI(m); saveExam(); drawExamQ();
 }
 function drawExamQ(){
   if(!quizSet.length)buildQuizSet(examMode);
-  const qi=quizSet[examIdx]; const q=EXAM[qi];
+  const qi=quizSet[examIdx]; const q=getExamQ(qi);
   const body=document.getElementById('examBody');
   const typeLabel=q.t==='multi'?'Select All That Apply':'Multiple Choice';
   const checked = examMode==='study' && examChecked[qi];
@@ -2146,7 +2673,7 @@ function drawExamQ(){
     const isSel = q.t==='multi' ? (cur&&cur.includes(i)) : (cur===i);
     if(isSel)cls+=' sel-multi';
     if(checked){ const isCorrectOpt = q.t==='multi'?q.c.includes(i):q.c===i; if(isCorrectOpt)cls+=' correct'; else if(isSel)cls+=' wrong'; }
-    html+=`<button class="${cls}" ${checked?'disabled':''} onclick="examPick(${i})">${letter}. ${opt}</button>`;
+    html+=`<button class="${cls}" ${checked?'disabled':''} onclick="examPick(${i})">${opt}</button>`;
   });
   html+=`</div>`;
   if(examMode==='study'){
@@ -2164,7 +2691,7 @@ function drawDots(){
   quizSet.forEach((qi,pos)=>{
     const dot=document.createElement('div'); dot.className='dot';
     const answered = examState[qi]!==undefined && !(Array.isArray(examState[qi])&&examState[qi].length===0);
-    if(examMode==='study'){ if(examChecked[qi]){ const ok=EXAM[qi].t==='multi'?arrEq(examState[qi],EXAM[qi].c):examState[qi]===EXAM[qi].c; dot.classList.add(ok?'dot-correct':'dot-wrong'); } }
+    if(examMode==='study'){ if(examChecked[qi]){ const eq=getExamQ(qi); const ok=eq.t==='multi'?arrEq(examState[qi],eq.c):examState[qi]===eq.c; dot.classList.add(ok?'dot-correct':'dot-wrong'); } }
     else { if(answered)dot.classList.add('answered'); }
     if(pos===examIdx)dot.classList.add('current');
     dot.onclick=()=>{examIdx=pos;drawExamQ();saveExam();};
@@ -2172,7 +2699,7 @@ function drawDots(){
   });
 }
 function examPick(i){
-  const qi=quizSet[examIdx]; const q=EXAM[qi];
+  const qi=quizSet[examIdx]; const q=getExamQ(qi);
   if(examMode==='study' && examChecked[qi]) return;
   if(q.t==='multi'){
     if(!examState[qi])examState[qi]=[]; const arr=examState[qi]; const idx=arr.indexOf(i);
@@ -2190,13 +2717,13 @@ function examPrev(){ if(examIdx>0){examIdx--;drawExamQ();saveExam();window.scrol
 function arrEq(a,b){if(!a||!b)return false;a=[...a].sort();b=[...b].sort();return a.length===b.length&&a.every((v,i)=>v===b[i]);}
 function submitExam(){
   let correct=0;
-  quizSet.forEach(qi=>{ const q=EXAM[qi]; const ans=examState[qi]; if(q.t==='multi'){if(arrEq(ans,q.c))correct++;}else{if(ans===q.c)correct++;} });
+  quizSet.forEach(qi=>{ const q=getExamQ(qi); const ans=examState[qi]; if(q.t==='multi'){if(arrEq(ans,q.c))correct++;}else{if(ans===q.c)correct++;} });
   const total=quizSet.length; const pct=Math.round(correct/total*100);
   examSubmitted=true; saveExam();
   let msg = pct>=85?'🌟 Outstanding — exam-ready!':pct>=75?'✅ Passing! Polish the misses.':pct>=60?'💪 Getting there — review and retake.':'📚 Keep grinding — revisit the sections.';
   let html=`<div class="quiz-score">You scored ${correct} / ${total} (${pct}%)<br>${msg}</div><h3 style="color:var(--pink)">📖 Full Review</h3>`;
   quizSet.forEach((qi,pos)=>{
-    const q=EXAM[qi]; const ans=examState[qi]; let isCorrect = q.t==='multi'?arrEq(ans,q.c):ans===q.c;
+    const q=getExamQ(qi); const ans=examState[qi]; let isCorrect = q.t==='multi'?arrEq(ans,q.c):ans===q.c;
     const yourTxt = ans===undefined||(Array.isArray(ans)&&ans.length===0)?'(no answer)':(q.t==='multi'?ans.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+ans));
     const correctTxt = q.t==='multi'?q.c.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+q.c);
     html+=`<div class="exam-q" style="border-color:${isCorrect?'var(--green)':'var(--red)'}"><div class="qnum">Q${pos+1} ${isCorrect?'✅':'❌'}</div><div class="qtext" style="font-size:.92rem">${q.q}</div><div style="font-size:.85rem"><b>Your answer:</b> ${yourTxt} &nbsp;|&nbsp; <b>Correct:</b> ${correctTxt}</div><div class="rationale show" style="margin-top:8px"><b>Rationale:</b> ${q.r}</div></div>`;
@@ -2205,7 +2732,7 @@ function submitExam(){
   document.getElementById('examResult').innerHTML=html;
   const _er=document.getElementById('examResult'); if(_er.scrollIntoView)_er.scrollIntoView({behavior:'smooth'});
 }
-function resetExam(){ examState={}; examIdx=0; examSubmitted=false; examChecked={}; document.getElementById('examResult').innerHTML=''; buildQuizSet(examMode); saveExam(); drawExamQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+function resetExam(){ examState={}; examIdx=0; examSubmitted=false; examChecked={}; examShuffleMap={}; document.getElementById('examResult').innerHTML=''; buildQuizSet(examMode); saveExam(); drawExamQ(); window.scrollTo({top:0,behavior:'smooth'}); }
 renderExam();
 </script>
 
