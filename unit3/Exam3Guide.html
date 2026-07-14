@@ -884,17 +884,27 @@ const MATCH_GAMES = {
       {a:'Hyperopia',b:'Farsighted — clear far away, blurry up close'},
       {a:'Astigmatism',b:'Irregular corneal curvature — blurred at ANY distance'},
       {a:'Presbyopia',b:'Age-related (usually 40+) loss of near focus from a stiffening lens'},
-      {a:'Lens\'s 3 jobs',b:'UV filter, accommodation, and refraction'},
+      {a:'Accommodation',b:'The lens changing shape to keep an image in focus'},
+      {a:'Refraction',b:'The lens bending light so it focuses on the retina'},
+      {a:'One job of the lens',b:'Filtering out damaging UV light'},
       {a:'Direct pupil response',b:'The SAME eye that got the light constricts'},
       {a:'Consensual pupil response',b:'The OTHER eye also constricts'},
       {a:'Mydriasis',b:'Pupil DILATION'},
       {a:'Miosis',b:'Pupil CONSTRICTION'},
-      {a:'Glaucoma',b:'Gradual, painless peripheral vision loss — meds for life'},
+      {a:'Open-angle glaucoma',b:'Drainage angle is open but drains too slowly — gradual, painless'},
+      {a:'Angle-closure glaucoma',b:'The iris physically blocks the drainage angle — sudden, severe'},
+      {a:'Normal IOP range',b:'10-21 mmHg'},
+      {a:'Glaucoma treatment',b:'Meds for life to lower eye pressure — lost vision does not return'},
       {a:'Cataract causes',b:'Eye injury, diabetes, and beta-blocker use'},
+      {a:'Cataract treatment',b:'Surgical lens removal with an intraocular lens implant'},
       {a:'Visual acuity 20/40',b:'Sees at 20 ft what a normal (20/20) eye sees at 40 ft — WORSE than normal'},
       {a:'Macular degeneration',b:'Central vision loss, peripheral vision spared'},
-      {a:'Retinal detachment',b:'Flashes → floaters → curtain — surgical emergency'},
-      {a:'Acute angle-closure glaucoma',b:'Sudden severe eye pain, halos, nausea — true emergency'}
+      {a:'Amsler grid',b:'Used to self-monitor for the wavy-line sign of macular degeneration'},
+      {a:'Retinal detachment symptom order',b:'Flashes → floaters → curtain/shadow'},
+      {a:'Retinal detachment urgency',b:'Surgical emergency — delay risks permanent vision loss'},
+      {a:'Acute angle-closure glaucoma',b:'Sudden severe eye pain, halos, nausea — true emergency'},
+      {a:'Anticholinergic/mydriatic drops',b:'Risky in angle-closure glaucoma — can trigger an acute attack'},
+      {a:'Beta-blocker eye drops',b:'Can be absorbed systemically — caution in asthma/COPD or bradycardia'}
     ]
   }
 };
@@ -1120,7 +1130,11 @@ renderQuiz('quiz-dka',[
 
   {q:'A client with Type 1 diabetes is admitted with glucose 580 mg/dL, pH 7.19, and serum potassium 5.8 mEq/L. An ECG shows peaked T waves. Fluids and an insulin drip are started. Twenty minutes later, the cardiac monitor shows a new widening QRS with the potassium still pending. What should the nurse do?',type:'single',
    opts:['A. Wait for the repeat potassium level before taking any action, since the insulin drip should already be correcting it','B. Notify the provider immediately, since ECG changes suggest potassium-related cardiac effects that may need direct treatment independent of the insulin\'s effect','C. Increase the insulin infusion rate to lower the potassium faster','D. Discontinue the insulin drip, since it may be worsening the potassium level'],correct:1,
-   rat:'A assumes the insulin drip alone is enough to manage an evolving cardiac change in real time, which is too passive given a new ECG finding. C misunderstands the timeline — insulin\'s potassium-lowering effect isn\'t instant, and speeding it up doesn\'t address a current cardiac emergency. D reverses the actual mechanism (insulin lowers potassium, it doesn\'t raise it). A widening QRS is a more urgent cardiac finding than peaked T waves alone and needs immediate provider notification for possible direct treatment (such as calcium) rather than waiting on the insulin/fluids already in progress.'}
+   rat:'A assumes the insulin drip alone is enough to manage an evolving cardiac change in real time, which is too passive given a new ECG finding. C misunderstands the timeline — insulin\'s potassium-lowering effect isn\'t instant, and speeding it up doesn\'t address a current cardiac emergency. D reverses the actual mechanism (insulin lowers potassium, it doesn\'t raise it). A widening QRS is a more urgent cardiac finding than peaked T waves alone and needs immediate provider notification for possible direct treatment (such as calcium) rather than waiting on the insulin/fluids already in progress.'},
+
+  {q:'A client in DKA has Kussmaul respirations. What effect does this breathing pattern have on the client\'s PaCO2, and why?',type:'single',
+   opts:['A. PaCO2 rises, since faster breathing draws in more air and more CO2 with each breath','B. PaCO2 falls, since the deep rapid breathing blows off CO2 in an attempt to raise the pH back up','C. PaCO2 stays the same, since Kussmaul breathing only affects oxygen levels, not CO2','D. PaCO2 rises initially, then falls once ketones clear'],correct:1,
+   rat:'A reverses the actual effect — it\'s an easy trap because faster breathing intuitively sounds like it would bring in (and therefore raise) more of everything, but the whole POINT of Kussmaul breathing is to blow CO2 OUT faster than it\'s produced. C incorrectly separates CO2 from the process entirely. D invents a timeline that isn\'t how this compensation works. Since CO2 is itself an acid in the blood, exhaling more of it (lowering PaCO2) is the lungs\' way of trying to correct the pH — this is why a DKA patient\'s expected pattern is pH LOW, HCO3 LOW, AND PaCO2 LOW, all three moving together, not two down and one normal.'}
 ],'DKA vs HHS Check');
 </script>
 <script>
@@ -1203,7 +1217,11 @@ renderQuiz('quiz-hypo',[
 
   {q:'A patient with Type 1 diabetes and known hypoglycemia unawareness is found unresponsive with a glucose of 32 mg/dL. A family member states glucagon was given 12 minutes ago with no improvement, and IV access has just been established. What should the nurse do NEXT?',type:'single',
    opts:['A. Administer a second dose of glucagon and wait an additional 15 minutes before further action','B. Administer IV dextrose (D50) now that IV access is available, since glucagon has not been effective within the expected timeframe','C. Withhold further treatment until oral intake is possible, to avoid overcorrecting the glucose','D. Recheck the glucose in 30 minutes before taking any further action'],correct:1,
-   rat:'A delays further care by repeating a treatment that has already had adequate time to work without success. C and D both leave a still-unresponsive, severely hypoglycemic patient untreated for too long. Since glucagon hasn\'t worked within its expected 5-20 minute window and IV access is now available, moving to IV dextrose is the appropriate next step rather than repeating glucagon or waiting further.'}
+   rat:'A delays further care by repeating a treatment that has already had adequate time to work without success. C and D both leave a still-unresponsive, severely hypoglycemic patient untreated for too long. Since glucagon hasn\'t worked within its expected 5-20 minute window and IV access is now available, moving to IV dextrose is the appropriate next step rather than repeating glucagon or waiting further.'},
+
+  {q:'A patient with a blood glucose of 20 mg/dL has IV access in place and is unresponsive. Which IV solution should the nurse expect to administer?',type:'single',
+   opts:['A. 5% dextrose in 0.45% normal saline','B. 50% dextrose in water (D50)','C. 5% dextrose in water (D5W) as a maintenance infusion','D. 0.9% normal saline alone'],correct:1,
+   rat:'A and C both contain dextrose, which is exactly what makes them tempting — but they\'re maintenance-strength fluids meant for routine hydration, far too dilute to correct a glucose this low quickly. D has no dextrose at all. D50 is the concentrated (50%) dextrose bolus specifically used to rapidly correct severe hypoglycemia — same "family name" as the other options, completely different job and concentration.'}
 ],'Hypoglycemia Check');
 </script>
 <script>
@@ -1660,7 +1678,51 @@ renderQuiz('quiz-eye',[
 
   {q:'A client with diabetes and known open-angle glaucoma is scheduled for a colonoscopy requiring an anticholinergic medication for bowel prep sedation, and separately reports occasional over-the-counter antihistamine use for seasonal allergies. Which combination of factors should raise the MOST concern for this client\'s eye condition specifically?',type:'single',
    opts:['A. The colonoscopy itself, which has no direct relationship to eye pressure','B. Both the anticholinergic sedation and the antihistamine, since anticholinergic effects can dilate the pupil and are a specific concern in glaucoma, particularly if the diagnosis were actually angle-closure rather than open-angle','C. Only the antihistamine, since sedation medications never affect pupil size','D. Neither medication, since this client\'s open-angle glaucoma makes pupil dilation irrelevant'],correct:1,
-   rat:'A dismisses a real class-effect concern, and C arbitrarily excludes one of the two anticholinergic-effect medications in the vignette. D assumes open-angle glaucoma removes all concern, but the deciding nuance is worth knowing: anticholinergic-related pupil dilation is a MUCH bigger concern in angle-closure glaucoma specifically (where dilation can trigger an attack) than in open-angle — so accurate diagnosis confirmation matters before assuming either medication is automatically safe or automatically dangerous for this client.'}
+   rat:'A dismisses a real class-effect concern, and C arbitrarily excludes one of the two anticholinergic-effect medications in the vignette. D assumes open-angle glaucoma removes all concern, but the deciding nuance is worth knowing: anticholinergic-related pupil dilation is a MUCH bigger concern in angle-closure glaucoma specifically (where dilation can trigger an attack) than in open-angle — so accurate diagnosis confirmation matters before assuming either medication is automatically safe or automatically dangerous for this client.'},
+
+  {q:'Which definition correctly matches "emmetropia"?',type:'single',
+   opts:['A. Light focuses in front of the retina, causing blurry distance vision','B. Perfect vision — light focuses directly on the retina without correction','C. Light focuses behind the retina, causing blurry near vision','D. Irregular curvature causing blur at every distance'],correct:1,
+   rat:'A is myopia\'s definition, C is hyperopia\'s, and D is astigmatism\'s — all real definitions, just attached to the wrong term. Emmetropia is the "perfect" baseline: light lands directly on the retina with no correction needed.'},
+
+  {q:'Which term matches this definition: "Light focuses in front of the retina because the eyeball is too long or the cornea too curved"?',type:'single',
+   opts:['A. Hyperopia','B. Myopia','C. Astigmatism','D. Presbyopia'],correct:1,
+   rat:'This is the classic matching trap — four real terms, only one fits this exact mechanism. Hyperopia is the opposite (focuses behind), astigmatism is an irregular-curvature problem (not a focal-point-location problem), and presbyopia is an age-related accommodation problem, not a focal-length problem. This description is myopia specifically.'},
+
+  {q:'Which definition correctly matches "presbyopia"?',type:'single',
+   opts:['A. Farsightedness present since childhood','B. Age-related loss of accommodation, usually after 40, causing difficulty focusing up close','C. Blurred vision at all distances from an irregular cornea','D. Sudden loss of central vision in older adults'],correct:1,
+   rat:'A describes hyperopia (though presbyopia is often confused with it), C describes astigmatism, and D describes macular degeneration — all real conditions affecting similar age groups, which is exactly what makes this pairing tricky. Presbyopia specifically is the age-related STIFFENING of the lens itself limiting near focus.'},
+
+  {q:'Which term matches this definition: "The SAME eye that received the light constricts"?',type:'single',
+   opts:['A. Consensual response','B. Direct response','C. Mydriasis','D. Accommodation'],correct:1,
+   rat:'Consensual response describes the OTHER eye reacting, not the same one — an easy swap. Mydriasis and accommodation are real pupil/lens terms but describe something different entirely (dilation, and lens shape-changing). "Same eye reacts" is specifically the direct response.'},
+
+  {q:'Which term matches this definition: "Pupil dilation, often triggered by dim light, anticholinergic drugs, or a sympathetic response"?',type:'single',
+   opts:['A. Miosis','B. Mydriasis','C. Direct response','D. Presbyopia'],correct:1,
+   rat:'Miosis is the direct opposite (constriction) — the most common mix-up on this pair since the words sound so similar. Direct response is about WHICH eye reacts, not which direction the pupil moves. Mydriasis is dilation specifically.'},
+
+  {q:'Which definition correctly matches "open-angle glaucoma"?',type:'single',
+   opts:['A. The iris physically blocks the drainage angle, causing a sudden pressure spike','B. The drainage angle is anatomically open but drains too slowly, causing gradual pressure buildup','C. Sudden severe pain, halos, and nausea from a rapid IOP spike','D. A cloudy lens that scatters light and causes glare'],correct:1,
+   rat:'A and C both describe angle-closure glaucoma\'s mechanism and presentation — the most classic trap on this topic, since both are still technically "glaucoma." D describes cataracts, an entirely different eye structure. Open-angle glaucoma is specifically the SLOW, anatomically-open-but-inefficient drainage pattern.'},
+
+  {q:'Which definition correctly matches "acute angle-closure glaucoma"?',type:'single',
+   opts:['A. Gradual, painless peripheral vision loss discovered incidentally on a routine exam','B. Sudden severe eye pain, halos around lights, nausea, and a firm globe — a true emergency','C. Painless, progressive blurry vision with glare that is worse at night','D. A blank or wavy spot in the center of the visual field'],correct:1,
+   rat:'A describes open-angle glaucoma\'s presentation, C describes cataracts, and D describes macular degeneration — three real, testable conditions that all get compared against glaucoma. Angle-closure is the SUDDEN, PAINFUL, emergency version.'},
+
+  {q:'Which term matches this definition: "Central vision loss with peripheral vision preserved"?',type:'single',
+   opts:['A. Open-angle glaucoma','B. Macular degeneration','C. Angle-closure glaucoma','D. Presbyopia'],correct:1,
+   rat:'Both glaucoma types are the classic wrong-answer trap here, since glaucoma causes the OPPOSITE pattern (peripheral loss, central preserved). Presbyopia affects near-focus ability, not a specific visual field location. Central loss with peripheral sparing specifically describes macular degeneration.'},
+
+  {q:'Which term matches this definition: "Flashes of light and floaters followed by a curtain or shadow moving across part of the vision"?',type:'single',
+   opts:['A. Acute angle-closure glaucoma','B. Retinal detachment','C. Macular degeneration','D. Cataracts'],correct:1,
+   rat:'Angle-closure glaucoma is painful with halos (not flashes/floaters/curtain), macular degeneration is a gradual central blur (not a sudden curtain), and cataracts are gradual glare/haziness with no curtain at all. The flashes → floaters → curtain sequence specifically describes retinal detachment.'},
+
+  {q:'Which definition correctly matches "cataracts"?',type:'single',
+   opts:['A. Increased pressure inside the eye damaging the optic nerve','B. Progressive clouding of the normally clear lens, causing glare and gradual blurry vision','C. Central retinal tissue thinning causing a blank spot in the middle of vision','D. A tear in the retina separating it from its blood supply'],correct:1,
+   rat:'A describes glaucoma\'s mechanism, C describes macular degeneration, and D describes retinal detachment — again, four real conditions the exam wants you to correctly sort. Cataracts are specifically a LENS clouding problem, not a pressure, retina, or macula problem.'},
+
+  {q:'Which term matches this definition: "Sees at 20 feet what a person with normal vision sees at 40 feet"?',type:'single',
+   opts:['A. 20/20 vision','B. 20/40 visual acuity','C. Legally blind','D. Presbyopia'],correct:1,
+   rat:'20/20 is the normal baseline this description is being compared AGAINST, not the answer itself — an easy mix-up if you read too fast. "Legally blind" is a much more severe, specific classification not indicated by this description alone. This description is the definition of 20/40 visual acuity.'}
 ],'Eye & Vision Check');
 </script>
 <script>
@@ -2424,7 +2486,18 @@ const DRILL_POOL=[
   {q:'LADA is also known as?',o:['Type 3 diabetes','\"Type 1.5\" (slow autoimmune onset in adults)','Gestational diabetes','Prediabetes'],c:1,r:'LADA = slow-onset autoimmune beta-cell destruction in adults, often mistaken for Type 2 at first.'},
   {q:'Insulin helps move which electrolyte INTO cells?',o:['Sodium','Potassium','Calcium','Chloride'],c:1,r:'Insulin pushes K⁺ into cells — used to treat hyperkalemia, and why K⁺ falls on a DKA insulin drip.'},
   {q:'What stimulates insulin release?',o:['Fasting','Eating and cortisol/stress','High-fat intake only','Nothing'],c:1,r:'Eating AND stress/cortisol stimulate insulin release; fasting and high-fat intake inhibit it.'},
-  {q:'About how much sugar should be circulating in the entire blood volume at once?',o:['1 cup','About 1 teaspoon (~7 sugar cubes)','1 pound','None'],c:1,r:'Only ~1 tsp (~30g, ~7 cubes) should circulate at once — a tiny homeostatic target insulin works hard to maintain.'}
+  {q:'About how much sugar should be circulating in the entire blood volume at once?',o:['1 cup','About 1 teaspoon (~7 sugar cubes)','1 pound','None'],c:1,r:'Only ~1 tsp (~30g, ~7 cubes) should circulate at once — a tiny homeostatic target insulin works hard to maintain.'},
+  {q:'Clear near vision but blurry distance vision describes:',o:['Hyperopia','Myopia','Astigmatism','Presbyopia'],c:1,r:'Myopia = nearsighted — light focuses IN FRONT of the retina.'},
+  {q:'Clear distance vision but blurry near vision describes:',o:['Myopia','Hyperopia','Astigmatism','Emmetropia'],c:1,r:'Hyperopia = farsighted — light focuses BEHIND the retina.'},
+  {q:'Blurred or distorted vision at ANY distance describes:',o:['Myopia','Astigmatism','Presbyopia','Emmetropia'],c:1,r:'Astigmatism = irregular corneal/lens curvature causing blur at every distance, near or far.'},
+  {q:'Age-related loss of near focus after about 40 describes:',o:['Hyperopia','Presbyopia','Myopia','Astigmatism'],c:1,r:'Presbyopia = age-related lens stiffening limiting accommodation for near objects.'},
+  {q:'The SAME eye that received light constricting is called:',o:['Consensual response','Direct response','Mydriasis','Miosis'],c:1,r:'Direct response = the eye that got the light constricts.'},
+  {q:'The OTHER eye (not directly lit) constricting is called:',o:['Direct response','Consensual response','Mydriasis','Accommodation'],c:1,r:'Consensual response = the opposite eye also constricts.'},
+  {q:'Pupil DILATION is called:',o:['Miosis','Mydriasis','Direct response','Presbyopia'],c:1,r:'Mydriasis = dilation (anticholinergics, dim light, sympathetic response).'},
+  {q:'Pupil CONSTRICTION is called:',o:['Mydriasis','Miosis','Consensual response','Accommodation'],c:1,r:'Miosis = constriction (opioids, pilocarpine, bright light).'},
+  {q:'Which best describes open-angle glaucoma?',o:['Sudden severe pain and halos','Drainage angle open but drains too slowly, gradual pressure buildup','A cloudy lens','A torn retina'],c:1,r:'Open-angle = anatomically open angle, slow drainage, gradual painless IOP rise.'},
+  {q:'The classic symptom SEQUENCE for retinal detachment is:',o:['Pain → redness → swelling','Flashes → floaters → curtain/shadow','Halos → nausea → vomiting','Blurry vision → glare → haze'],c:1,r:'Retinal detachment: flashes of light, then floaters, then a curtain/shadow over part of the vision.'},
+  {q:'A wavy or blank spot in the CENTER of vision, periphery intact, describes:',o:['Open-angle glaucoma','Macular degeneration','Angle-closure glaucoma','Cataracts'],c:1,r:'Macular degeneration = central vision loss, periphery spared (opposite of glaucoma).'}
 ];
 
 let drillList=[], drillIdx=0, drillScore=0, drillStreak=0, drillBest=0, drillAnswered=false;
