@@ -165,6 +165,23 @@ table.lab td{padding:8px;border-bottom:1px solid var(--card-border);min-width:80
 body.mobile-mode .match-item{font-size:.95rem}
 body.mobile-mode .match-stats{font-size:1rem}
 
+/* exam: dropdown-match type */
+.dm-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border:2px solid var(--card-border);border-radius:12px;margin-bottom:8px;flex-wrap:wrap}
+.dm-term{font-weight:800;flex:1 1 140px;min-width:120px}
+.dm-select{flex:1 1 200px;padding:9px;border-radius:10px;border:2px solid var(--card-border);background:var(--bg2);color:var(--ink);font-size:.85rem}
+.dm-row.dm-correct{border-color:var(--green);background:var(--green-soft)}
+.dm-row.dm-wrong{border-color:var(--red);background:var(--red-soft)}
+
+/* exam: order/sequence type (NCLEX-style drag-and-drop, tap-to-sequence) */
+.order-pool{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.order-chip{background:var(--card);border:2px solid var(--card-border);border-radius:12px;padding:11px 12px;font-size:.85rem;font-weight:700;cursor:pointer;text-align:left}
+.order-chip:disabled{opacity:.35;cursor:default}
+.order-answer{display:flex;flex-direction:column;gap:6px;margin:10px 0;min-height:40px;padding:8px;border:2px dashed var(--card-border);border-radius:12px}
+.order-answer-item{display:flex;align-items:center;gap:8px;background:var(--purple-soft);border:2px solid var(--purple);border-radius:10px;padding:8px 10px;font-size:.82rem;font-weight:700}
+.order-answer-item .num{background:var(--purple);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.order-answer-item.order-correct{background:var(--green-soft);border-color:var(--green)}
+.order-answer-item.order-wrong{background:var(--red-soft);border-color:var(--red)}
+
 /* drill */
 .drill-top{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;margin-bottom:6px}
 .drill-bar{height:8px;background:var(--card-border);border-radius:10px;overflow:hidden;margin-bottom:12px}
@@ -2840,7 +2857,100 @@ const EXAM=[
 {topic:'general',q:'A pregnant patient develops diabetes only during pregnancy, with a larger-than-average baby. This is:',o:['Type 1 diabetes','Gestational diabetes','LADA','Prediabetes'],c:1,t:'single',r:'Gestational diabetes develops during pregnancy (more common with larger babies), usually resolves after delivery, but raises future Type 2 risk.'},
 {topic:'eye',q:'Which pupil finding describes miosis?',o:['Pupil dilation','Pupil constriction','No pupil reaction','Unequal pupils'],c:1,t:'single',r:'Miosis = pupil constriction (opioids, pilocarpine, bright light).'},
 {topic:'eye',q:'A patient with a family history of angle-closure glaucoma should avoid which class of medication without provider guidance?',o:['Beta-blockers','Anticholinergics/mydriatics','ACE inhibitors','Statins'],c:1,t:'single',r:'Anticholinergic/mydriatic drugs dilate the pupil, which can trigger an acute angle-closure attack.'},
-{topic:'eye',q:'What is the correct explanation for why cataract surgery patients are told to avoid bending and heavy lifting?',o:['It has no real effect on the eye','These activities raise intraocular pressure and can disrupt the healing surgical site','It only affects comfort, not healing','It is a precaution unrelated to eye pressure'],c:1,t:'single',r:'Bending, lifting, and straining raise IOP, which can disrupt the healing post-surgical eye.'}
+{topic:'eye',q:'What is the correct explanation for why cataract surgery patients are told to avoid bending and heavy lifting?',o:['It has no real effect on the eye','These activities raise intraocular pressure and can disrupt the healing surgical site','It only affects comfort, not healing','It is a precaution unrelated to eye pressure'],c:1,t:'single',r:'Bending, lifting, and straining raise IOP, which can disrupt the healing post-surgical eye.'},
+{topic:'eye',t:'match',q:'Match each eye condition to its defining feature.',
+ items:[
+   {term:'Glaucoma', def:'Gradual optic nerve damage from elevated intraocular pressure'},
+   {term:'Cataracts', def:'Progressive clouding of the lens causing glare and haziness'},
+   {term:'Macular degeneration', def:'Central vision loss with peripheral vision spared'},
+   {term:'Retinal detachment', def:'The retina separates from its blood supply — a surgical emergency'}
+ ],
+ r:'Each condition has a distinct mechanism: glaucoma = pressure damaging the nerve, cataracts = a clouded lens, macular degeneration = central retina damage, retinal detachment = the retina physically pulling away from its blood supply. Mixing up which mechanism belongs to which name is the classic trap on this content.'},
+{topic:'eye',t:'match',q:'Match each refractive error to its correct description.',
+ items:[
+   {term:'Myopia', def:'Nearsighted — light focuses in front of the retina'},
+   {term:'Hyperopia', def:'Farsighted — light focuses behind the retina'},
+   {term:'Astigmatism', def:'Irregular corneal curvature causing blur at any distance'},
+   {term:'Presbyopia', def:'Age-related loss of near focus from a stiffening lens'}
+ ],
+ r:'Myopia and hyperopia are opposite focal-point problems; astigmatism is a curvature problem affecting all distances; presbyopia is an age-related accommodation problem. All four are frequently swapped with each other on exams.'},
+{topic:'eye',t:'match',q:'Match each term to its correct definition.',
+ items:[
+   {term:'Mydriasis', def:'Pupil dilation'},
+   {term:'Miosis', def:'Pupil constriction'},
+   {term:'Direct pupillary response', def:'The same eye that received light constricts'},
+   {term:'Consensual pupillary response', def:'The opposite eye also constricts'}
+ ],
+ r:'Two separate pairs are being tested here: mydriasis/miosis describe the DIRECTION a pupil moves, while direct/consensual describe WHICH eye is reacting. Confusing these two different pairings is the most common error.'},
+{topic:'eye',t:'match',q:'Match each eye medication to its key nursing consideration.',
+ items:[
+   {term:'Anticholinergic/mydriatic drops', def:'Can trigger an acute attack in angle-closure glaucoma'},
+   {term:'Beta-blocker eye drops', def:'Can be absorbed systemically — caution in asthma/COPD or bradycardia'},
+   {term:'Prostaglandin analogs', def:'Can permanently darken iris color and lengthen eyelashes'},
+   {term:'Steroid eye drops', def:'Long-term use can raise IOP and contribute to cataract formation'}
+ ],
+ r:'Each drug class carries a distinct nursing consideration tied to its own mechanism — dilation risk, systemic absorption, a cosmetic side effect, and a long-term IOP/cataract risk, respectively.'},
+{topic:'eye',t:'match',q:'Match each disease process to its correct treatment approach.',
+ items:[
+   {term:'Open-angle glaucoma', def:'Lifelong topical drops to lower IOP; lost vision does not return'},
+   {term:'Acute angle-closure glaucoma', def:'Emergency IOP-lowering treatment followed by laser iridotomy'},
+   {term:'Cataracts', def:'Surgical lens removal with an intraocular lens implant'},
+   {term:'Wet macular degeneration', def:'Anti-VEGF intravitreal injections to slow abnormal vessel growth'}
+ ],
+ r:'Treatment approach follows directly from mechanism: chronic pressure control for open-angle, true emergency intervention for angle-closure, surgical replacement for a clouded lens, and injections targeting abnormal vessels for wet AMD.'},
+{topic:'eye',t:'match',q:'Match each clinical finding to the disease process it MOST indicates.',
+ items:[
+   {term:'Central blank spot, wavy lines, peripheral vision intact', def:'Macular degeneration'},
+   {term:'Gradual peripheral vision loss, painless, central vision preserved', def:'Open-angle glaucoma'},
+   {term:'Sudden flashes, floaters, then a curtain crossing the vision', def:'Retinal detachment'},
+   {term:'Painless glare and haze, worse driving at night', def:'Cataracts'}
+ ],
+ r:'Each of these presentations is the classic, textbook pattern for its condition — matching pattern to diagnosis (not just naming facts) is exactly what NCLEX-style questions test.'},
+{topic:'eye',t:'order',q:'A patient reports sudden flashes of light and new floaters in one eye, progressing over an hour to a shadow crossing part of the vision. Place the nurse\'s actions in the correct order.',
+ steps:[
+   'Recognize this symptom pattern as a possible retinal detachment',
+   'Obtain a focused history of onset and progression',
+   'Notify the ophthalmology provider urgently',
+   'Prepare the client for likely urgent surgical evaluation'
+ ],
+ r:'Recognition of the pattern has to come first — everything else (history-taking, notification, surgical prep) flows from correctly identifying what this presentation likely represents.'},
+{topic:'eye',t:'order',q:'Place the following steps of open-angle glaucoma\'s damage process in the correct order, from initial cause to final consequence.',
+ steps:[
+   'Aqueous humor drainage becomes impaired',
+   'Intraocular pressure gradually rises',
+   'Pressure compresses and damages optic nerve fibers',
+   'Peripheral vision is lost first, with central vision affected only later if untreated'
+ ],
+ r:'This is the cause-and-effect chain that explains WHY glaucoma looks the way it does: impaired drainage leads to pressure buildup, which damages the nerve from the outside in, which is why peripheral vision goes first.'},
+{topic:'eye',t:'order',q:'A client is diagnosed with acute angle-closure glaucoma. Place the following interventions in the correct priority order.',
+ steps:[
+   'Recognize the emergency presentation (sudden severe pain, halos, nausea, firm globe)',
+   'Notify the provider immediately for emergency IOP-lowering treatment',
+   'Administer ordered IOP-lowering medications',
+   'Prepare the client for laser iridotomy'
+ ],
+ r:'Just like any emergency, recognizing the pattern comes first, followed by escalating to the provider, then treating, then moving toward the definitive procedure.'},
+{topic:'eye',t:'order',q:'Place the classic cataract symptom progression in the order a patient would typically notice these changes.',
+ steps:[
+   'Mild glare and difficulty with night driving',
+   'Progressive blurring and haziness of vision',
+   'Colors appear faded or yellowed',
+   'Vision impairment becomes significant enough to affect daily activities'
+ ],
+ r:'Cataracts progress gradually — early glare/night-driving trouble is typically noticed first, with color changes and functional impairment developing later as the lens continues to cloud.'},
+{topic:'eye',q:'A client with diabetes and a new diagnosis of nonproliferative diabetic retinopathy asks if their vision loss can be reversed with better glucose control. What is the BEST response?',type:'single',o:['"Yes, tight glucose control will fully restore any vision already lost."','"Glucose control can help slow further progression, but damage already present typically cannot be reversed."','"Retinopathy has no relationship to blood glucose control."','"Vision loss from retinopathy is always temporary regardless of treatment."'],c:1,t:'single',r:'A promises a reversal that isn\'t realistic, C denies a well-established relationship, and D incorrectly assumes all retinopathy vision loss is temporary. Glucose control is protective against further progression, but existing microvascular damage is generally not reversible — an important, honest distinction for patient teaching.'},
+{topic:'eye',q:'A nurse is assessing a client 1 day after retinal detachment repair surgery with gas tamponade. Which finding requires the MOST immediate follow-up?',o:['Mild eye irritation','The client reports the gas bubble is “shrinking”, which was expected as part of healing','Sudden increase in eye pain with new nausea and vomiting','Blurry vision immediately after surgery'],c:2,t:'single',r:'Mild irritation, an expected gradually-resolving gas bubble, and immediate post-op blurriness are all anticipated findings. Sudden worsening pain with nausea/vomiting can indicate a dangerous rise in intraocular pressure and needs urgent evaluation, unlike the other expected findings.'},
+{topic:'eye',q:'Which teaching point is MOST important for a client newly started on timolol (a beta-blocker) eye drops for glaucoma?',o:['"This medication cannot cause any side effects outside the eye."','"Apply gentle pressure to the inner corner of the eye after instillation to reduce systemic absorption."','"You should stop the medication if your vision feels normal again."','"This medication should be taken orally, not as a drop."'],c:1,t:'single',r:'A denies a real systemic absorption risk. C encourages dangerous self-discontinuation of a lifelong glaucoma treatment. D misstates the route entirely. Applying pressure to the inner corner (nasolacrimal occlusion) after instilling the drop reduces how much medication drains into the nasal mucosa and gets absorbed systemically — genuinely useful teaching for a systemically-absorbable eye drop.'},
+{topic:'eye',q:'A client asks why their ophthalmologist recommends AREDS2 vitamins for their dry macular degeneration. What is the BEST explanation?',o:['"These vitamins will cure your macular degeneration completely."','"These vitamins may help slow the progression of dry macular degeneration in some patients, though they don\'t reverse existing damage."','"These vitamins are for cataracts, not macular degeneration."','"These vitamins replace the need for regular eye exams."'],c:1,t:'single',r:'A overstates the benefit as a cure, C misassigns the treatment to the wrong condition, and D dangerously suggests skipping monitoring. AREDS2 formulations are specifically studied for their potential to slow (not reverse or cure) dry AMD progression in certain patients — accurate, honest framing matters here.'},
+{topic:'eye',q:'A client with well-controlled open-angle glaucoma on timolol eye drops also has a history of asthma. Which finding should prompt the nurse to notify the provider?',o:['Occasional mild eye dryness','New-onset wheezing and shortness of breath','Stable IOP on routine follow-up','Mild redness at the eye drop instillation site'],c:1,t:'single',r:'Mild dryness, stable IOP, and mild local redness are all unremarkable, expected findings. New wheezing/shortness of breath in an asthmatic client on a beta-blocker eye drop is significant, since these drops can be systemically absorbed and potentially trigger bronchospasm — a genuine safety concern worth reporting.'},
+{topic:'eye',q:'Which combination of findings would the nurse recognize as MOST consistent with acute angle-closure glaucoma rather than a migraine with visual aura?',o:['Zigzag lines and shimmering lights lasting 20 minutes, followed by a mild headache','Sudden severe eye pain, colored halos around lights, nausea, and a firm globe on palpation','Gradual blurriness that has been present for several months','Brief flashes of light with no pain and no headache afterward'],c:1,t:'single',r:'A describes a classic migraine aura, C describes a chronic process (like cataracts), and D under-describes a presentation that could fit several benign causes. The combination of sudden severe pain, halos, nausea, AND a firm globe together is the specific pattern that distinguishes a true ophthalmic emergency from a migraine aura, which typically lacks eye pain and a hard globe.'},
+{topic:'eye',q:'Which statement by a client recovering from cataract surgery indicates a need for further teaching?',o:['"I\'ll wear my eye shield at night for about a week."','"I\'ll avoid swimming pools until my surgeon clears me."','"I can resume heavy weightlifting tomorrow since I feel fine."','"I\'ll call the office if I notice sudden pain or vision changes."'],c:2,t:'single',r:'This question asks which statement is INCORRECT. Resuming heavy weightlifting the day after eye surgery, regardless of how the client feels, risks raising IOP and disrupting the healing eye — the other three statements all reflect correct post-op teaching.'},
+{topic:'eye',q:'Which of the following are appropriate nursing actions for a client with newly diagnosed open-angle glaucoma? (Select all that apply)',type:'multi',o:['Reinforce that eye drops must be used consistently for life','Teach the client that lost peripheral vision is expected to return with treatment','Encourage regular follow-up IOP checks','Teach the client to report any new, gradual vision changes even while on treatment','Tell the client that surgery will be needed within the first year regardless of drop effectiveness'],c:[0,2,3],t:'multi',r:'Option 2 is a dangerous misconception — vision already lost from glaucoma does NOT return, drops only prevent further loss. Option 5 overstates the need for surgery, which isn\'t automatically required if drops are effectively controlling pressure. Lifelong drop adherence, regular IOP monitoring, and reporting new changes are all correct.'},
+{topic:'eye',q:'Which of the following are recognized risk factors for retinal detachment? (Select all that apply)',type:'multi',o:['Severe myopia (nearsightedness)','Previous eye surgery or trauma','Age-related vitreous shrinkage','Regular use of reading glasses','A family history of retinal detachment'],c:[0,1,2,4],t:'multi',r:'Reading glasses correction has no established link to retinal detachment risk — a plausible-sounding but incorrect distractor. Severe myopia, prior eye surgery/trauma, vitreous shrinkage with age, and family history are all recognized risk factors.'},
+{topic:'eye',q:'A client asks how a cataract is different from glaucoma, since both cause blurry vision. Which explanation is correct?',o:['"They are actually the same condition with two different names."','"A cataract is a cloudy lens problem causing painless blur and glare; glaucoma is a pressure problem damaging the optic nerve, usually causing painless peripheral vision loss."','"A cataract always causes sudden pain, while glaucoma never does."','"Glaucoma affects the lens, while cataracts affect the optic nerve."'],c:1,t:'single',r:'A denies a real and important distinction. C reverses which condition is typically painless (both are usually painless, though angle-closure glaucoma is the painful exception). D swaps which structure each condition actually affects. The accurate distinction is mechanism-based: lens clouding vs. nerve damage from pressure.'},
+{topic:'eye',q:'A client with diabetic retinopathy asks why their eye doctor mentioned it\'s a "microvascular" complication, the same category as their kidney disease. What is the BEST explanation?',o:['"They are unrelated; the term is just coincidental."','"Both conditions result from chronic high blood sugar damaging small blood vessels — in the eye\'s retina and the kidney\'s filtering units."','"Microvascular means only the eyes are affected, not the kidneys."','"This means your diabetes has definitely progressed to Type 1."'],c:1,t:'single',r:'A dismisses a real, clinically important shared mechanism. C misdefines the term entirely. D draws an unsupported conclusion about diabetes type. Retinopathy and nephropathy are both classic microvascular complications — the SAME small-vessel damage mechanism from chronic hyperglycemia, just affecting two different organs.'},
+{topic:'eye',q:'A client asks why their provider is checking both eyes even though only one eye has symptoms of macular degeneration. What is the BEST response?',o:['"There\'s no reason to check the unaffected eye."','"Macular degeneration commonly affects one eye first, but the other eye is at increased risk and needs monitoring too."','"Checking both eyes is only done for billing purposes."','"This means the diagnosis is likely incorrect."'],c:1,t:'single',r:'A, C, and D all dismiss a legitimate clinical practice. Macular degeneration frequently starts asymmetrically, and the unaffected eye carries a meaningfully increased risk of later involvement — ongoing monitoring of the "good" eye is standard, evidence-based practice, not a formality.'},
+{topic:'eye',q:'Which of the following statements accurately reflects a difference between conductive and sensorineural hearing loss, when compared to how glaucoma is diagnosed and monitored?',o:['Both hearing loss types and glaucoma are diagnosed exclusively through patient-reported symptoms alone','Glaucoma relies partly on objective pressure measurement (IOP), while hearing loss type is generally determined through audiometric testing and history rather than a single pressure-like number','Neither condition can be objectively measured in a clinical setting','Hearing loss and glaucoma share an identical objective diagnostic number used for both'],c:1,t:'single',r:'A and C both dismiss real objective testing methods that exist for these conditions. D invents a shared number that doesn\'t exist. Glaucoma has a specific objective measurement (IOP, with a defined normal range), while hearing loss type is characterized more through audiometric patterns and history — different diagnostic approaches for different sensory systems, which is a reasonable cross-topic distinction to understand.'}
 ];
 </script>
 <script>
@@ -2849,6 +2959,24 @@ let examState={}, examIdx=0, examSubmitted=false, examMode='study', examChecked=
 let quizSet=[], examShuffleMap={};
 function getExamQ(qi){
   const base=EXAM[qi];
+  if(base.t==='match'){
+    if(!examShuffleMap[qi]){
+      const order=shuffleAnswers?shuffle(base.items.map((_,i)=>i)):base.items.map((_,i)=>i);
+      examShuffleMap[qi]=order;
+    }
+    const defOrder=examShuffleMap[qi];
+    const defs=defOrder.map(i=>base.items[i].def);
+    return {q:base.q, r:base.r, t:'match', items:base.items, defs, defOrder};
+  }
+  if(base.t==='order'){
+    if(!examShuffleMap[qi]){
+      const order=shuffleAnswers?shuffle(base.steps.map((_,i)=>i)):base.steps.map((_,i)=>i);
+      examShuffleMap[qi]=order;
+    }
+    const order=examShuffleMap[qi];
+    const steps=order.map(i=>base.steps[i]);
+    return {q:base.q, r:base.r, t:'order', steps, displayOrder:order};
+  }
   if(!examShuffleMap[qi]){
     const order=shuffleAnswers?shuffle(base.o.map((_,i)=>i)):base.o.map((_,i)=>i);
     examShuffleMap[qi]=order;
@@ -2921,6 +3049,8 @@ function drawExamQ(){
   if(!quizSet.length)buildQuizSet(examMode);
   const qi=quizSet[examIdx]; const q=getExamQ(qi);
   const body=document.getElementById('examBody');
+  if(q.t==='match'){ drawExamMatchQ(qi,q,body); drawDots(); return; }
+  if(q.t==='order'){ drawExamOrderQ(qi,q,body); drawDots(); return; }
   const typeLabel=q.t==='multi'?'Select All That Apply':'Multiple Choice';
   const checked = examMode==='study' && examChecked[qi];
   let html=`<div class="exam-q"><div><span class="qnum">QUESTION ${examIdx+1} of ${quizSet.length}</span><span class="qtype">${typeLabel}</span></div><div class="qtext">${q.q}</div>`;
@@ -2943,12 +3073,110 @@ function drawExamQ(){
   }
   body.innerHTML=html; drawDots();
 }
+function drawExamMatchQ(qi,q,body){
+  const checked = examMode==='study' && examChecked[qi];
+  const cur = examState[qi] || [];
+  let html=`<div class="exam-q"><div><span class="qnum">QUESTION ${examIdx+1} of ${quizSet.length}</span><span class="qtype">Dropdown Match</span></div><div class="qtext">${q.q}</div>`;
+  q.items.forEach((item,itemIdx)=>{
+    const selectedPos = cur[itemIdx];
+    let rowCls='dm-row';
+    if(checked){
+      const isCorrect = selectedPos!==undefined && q.defOrder[selectedPos]===itemIdx;
+      rowCls += isCorrect ? ' dm-correct' : ' dm-wrong';
+    }
+    html+=`<div class="${rowCls}"><div class="dm-term">${item.term}</div><select class="dm-select" ${checked?'disabled':''} onchange="examMatchPick(${itemIdx}, this.value)">`;
+    html+=`<option value="" ${selectedPos===undefined?'selected':''}>— choose a definition —</option>`;
+    q.defs.forEach((d,pos)=>{ html+=`<option value="${pos}" ${selectedPos===pos?'selected':''}>${d}</option>`; });
+    html+=`</select></div>`;
+  });
+  html+=`</div>`;
+  if(examMode==='study'){
+    const allAnswered = q.items.every((_,i)=>cur[i]!==undefined);
+    if(!checked){ html+=`<div class="center"><button class="btn" onclick="checkExamMatch()" style="background:linear-gradient(90deg,var(--teal),var(--green))" ${allAnswered?'':'disabled'}>✓ Check Answers</button></div>`; }
+    if(checked){
+      const isCorrect = q.items.every((_,i)=>cur[i]!==undefined && q.defOrder[cur[i]]===i);
+      html+=`<div class="rationale show" style="border-color:${isCorrect?'var(--green)':'var(--red)'}">${isCorrect?'✅ <b>All correct!</b>':'❌ <b>Some matches were off</b> — check the highlighted rows above.'}<br><b>Rationale:</b> ${q.r}</div>`;
+    }
+  }
+  body.innerHTML=html;
+}
+function examMatchPick(itemIdx, val){
+  const qi=quizSet[examIdx];
+  if(examMode==='study' && examChecked[qi])return;
+  if(!examState[qi])examState[qi]=[];
+  examState[qi][itemIdx] = val===''? undefined : parseInt(val,10);
+  saveExam(); drawExamQ();
+}
+function checkExamMatch(){
+  const qi=quizSet[examIdx];
+  examChecked[qi]=true; bumpProgress('exam-'+qi); drawExamQ(); saveExam();
+}
+function drawExamOrderQ(qi,q,body){
+  const checked = examMode==='study' && examChecked[qi];
+  const cur = examState[qi] || [];
+  let html=`<div class="exam-q"><div><span class="qnum">QUESTION ${examIdx+1} of ${quizSet.length}</span><span class="qtype">Ordered Response (Drag &amp; Drop style)</span></div><div class="qtext">${q.q}</div>`;
+  html+=`<p style="font-size:.82rem;color:var(--muted);margin:4px 0 10px">Tap each step below in the correct order — it will move into your answer list.</p>`;
+  html+=`<div class="order-answer" id="orderAnswerList">`;
+  cur.forEach((origIdx,pos)=>{
+    let itemCls='order-answer-item';
+    if(checked){ itemCls += origIdx===pos ? ' order-correct' : ' order-wrong'; }
+    html+=`<div class="${itemCls}"><span class="num">${pos+1}</span><span>${q.steps[q.displayOrder.indexOf(origIdx)]}</span></div>`;
+  });
+  html+=`</div>`;
+  if(!checked){
+    html+=`<div class="order-pool">`;
+    q.steps.forEach((step,displayPos)=>{
+      const origIdx=q.displayOrder[displayPos];
+      const used = cur.includes(origIdx);
+      html+=`<button class="order-chip" ${used?'disabled':''} onclick="examOrderPick(${origIdx})">${step}</button>`;
+    });
+    html+=`</div>`;
+    html+=`<div class="center" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">`;
+    html+=`<button class="btn ghost" onclick="examOrderUndo()">↺ Undo Last</button>`;
+    if(examMode==='study' && cur.length===q.steps.length){ html+=`<button class="btn" onclick="checkExamOrder()" style="background:linear-gradient(90deg,var(--teal),var(--green))">✓ Check Order</button>`; }
+    html+=`</div>`;
+  }
+  html+=`</div>`;
+  if(examMode==='study' && checked){
+    const isCorrect = cur.length===q.steps.length && cur.every((v,i)=>v===i);
+    html+=`<div class="rationale show" style="border-color:${isCorrect?'var(--green)':'var(--red)'}">${isCorrect?'✅ <b>Correct order!</b>':'❌ <b>Not quite the right order</b> — see highlighted steps above.'}<br><b>Rationale:</b> ${q.r}</div>`;
+  }
+  body.innerHTML=html;
+}
+function examOrderPick(origIdx){
+  const qi=quizSet[examIdx];
+  if(examMode==='study' && examChecked[qi])return;
+  if(!examState[qi])examState[qi]=[];
+  if(!examState[qi].includes(origIdx)) examState[qi].push(origIdx);
+  saveExam(); drawExamQ();
+}
+function examOrderUndo(){
+  const qi=quizSet[examIdx];
+  if(examMode==='study' && examChecked[qi])return;
+  if(examState[qi] && examState[qi].length){ examState[qi].pop(); saveExam(); drawExamQ(); }
+}
+function checkExamOrder(){
+  const qi=quizSet[examIdx];
+  examChecked[qi]=true; bumpProgress('exam-'+qi); drawExamQ(); saveExam();
+}
+function isExamCorrect(q, ans){
+  if(q.t==='multi') return arrEq(ans,q.c);
+  if(q.t==='match') return q.items.every((_,i)=>ans && ans[i]!==undefined && q.defOrder[ans[i]]===i);
+  if(q.t==='order') return ans && ans.length===q.steps.length && ans.every((v,i)=>v===i);
+  return ans===q.c;
+}
+function isExamAnswered(qi){
+  const ans=examState[qi];
+  if(ans===undefined)return false;
+  if(Array.isArray(ans))return ans.length>0 && !ans.includes(undefined);
+  return true;
+}
 function drawDots(){
   const d=document.getElementById('examDots'); d.innerHTML='';
   quizSet.forEach((qi,pos)=>{
     const dot=document.createElement('div'); dot.className='dot';
-    const answered = examState[qi]!==undefined && !(Array.isArray(examState[qi])&&examState[qi].length===0);
-    if(examMode==='study'){ if(examChecked[qi]){ const eq=getExamQ(qi); const ok=eq.t==='multi'?arrEq(examState[qi],eq.c):examState[qi]===eq.c; dot.classList.add(ok?'dot-correct':'dot-wrong'); } }
+    const answered = isExamAnswered(qi);
+    if(examMode==='study'){ if(examChecked[qi]){ const eq=getExamQ(qi); dot.classList.add(isExamCorrect(eq,examState[qi])?'dot-correct':'dot-wrong'); } }
     else { if(answered)dot.classList.add('answered'); }
     if(pos===examIdx)dot.classList.add('current');
     dot.onclick=()=>{examIdx=pos;drawExamQ();saveExam();};
@@ -2972,18 +3200,28 @@ function checkExamQ(){
 function examNext(){ if(examIdx<quizSet.length-1){examIdx++;drawExamQ();saveExam();window.scrollTo({top:0,behavior:'smooth'});} }
 function examPrev(){ if(examIdx>0){examIdx--;drawExamQ();saveExam();window.scrollTo({top:0,behavior:'smooth'});} }
 function arrEq(a,b){if(!a||!b)return false;a=[...a].sort();b=[...b].sort();return a.length===b.length&&a.every((v,i)=>v===b[i]);}
+function examAnswerSummary(q, ans){
+  if(ans===undefined||(Array.isArray(ans)&&ans.length===0))return {your:'(no answer)', correct:'—'};
+  if(q.t==='multi') return {your:ans.map(x=>String.fromCharCode(65+x)).sort().join(', '), correct:q.c.map(x=>String.fromCharCode(65+x)).sort().join(', ')};
+  if(q.t==='match') return {your:q.items.map((it,i)=>it.term+'→'+(ans[i]!==undefined?q.defs[ans[i]]:'(blank)')).join('; '), correct:q.items.map(it=>it.term+'→'+it.def).join('; ')};
+  if(q.t==='order'){
+    const yourTxt = ans.map(origIdx=>q.steps[q.displayOrder.indexOf(origIdx)]).join(' → ');
+    const correctTxt = q.steps.map((_,i)=>q.steps[q.displayOrder.indexOf(i)]).join(' → ');
+    return {your:yourTxt, correct:correctTxt};
+  }
+  return {your:String.fromCharCode(65+ans), correct:String.fromCharCode(65+q.c)};
+}
 function submitExam(){
   let correct=0;
-  quizSet.forEach(qi=>{ const q=getExamQ(qi); const ans=examState[qi]; if(q.t==='multi'){if(arrEq(ans,q.c))correct++;}else{if(ans===q.c)correct++;} });
+  quizSet.forEach(qi=>{ const q=getExamQ(qi); if(isExamCorrect(q, examState[qi]))correct++; });
   const total=quizSet.length; const pct=Math.round(correct/total*100);
   examSubmitted=true; saveExam();
   let msg = pct>=85?'🌟 Outstanding — exam-ready!':pct>=75?'✅ Passing! Polish the misses.':pct>=60?'💪 Getting there — review and retake.':'📚 Keep grinding — revisit the sections.';
   let html=`<div class="quiz-score">You scored ${correct} / ${total} (${pct}%)<br>${msg}</div><h3 style="color:var(--pink)">📖 Full Review</h3>`;
   quizSet.forEach((qi,pos)=>{
-    const q=getExamQ(qi); const ans=examState[qi]; let isCorrect = q.t==='multi'?arrEq(ans,q.c):ans===q.c;
-    const yourTxt = ans===undefined||(Array.isArray(ans)&&ans.length===0)?'(no answer)':(q.t==='multi'?ans.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+ans));
-    const correctTxt = q.t==='multi'?q.c.map(x=>String.fromCharCode(65+x)).sort().join(', '):String.fromCharCode(65+q.c);
-    html+=`<div class="exam-q" style="border-color:${isCorrect?'var(--green)':'var(--red)'}"><div class="qnum">Q${pos+1} ${isCorrect?'✅':'❌'}</div><div class="qtext" style="font-size:.92rem">${q.q}</div><div style="font-size:.85rem"><b>Your answer:</b> ${yourTxt} &nbsp;|&nbsp; <b>Correct:</b> ${correctTxt}</div><div class="rationale show" style="margin-top:8px"><b>Rationale:</b> ${q.r}</div></div>`;
+    const q=getExamQ(qi); const ans=examState[qi]; const isCorrect=isExamCorrect(q,ans);
+    const sum=examAnswerSummary(q,ans);
+    html+=`<div class="exam-q" style="border-color:${isCorrect?'var(--green)':'var(--red)'}"><div class="qnum">Q${pos+1} ${isCorrect?'✅':'❌'}</div><div class="qtext" style="font-size:.92rem">${q.q}</div><div style="font-size:.85rem"><b>Your answer:</b> ${sum.your} &nbsp;|&nbsp; <b>Correct:</b> ${sum.correct}</div><div class="rationale show" style="margin-top:8px"><b>Rationale:</b> ${q.r}</div></div>`;
   });
   html+=`<div class="center"><button class="btn" onclick="resetExam()">🔄 New Test (fresh 50)</button></div>`;
   document.getElementById('examResult').innerHTML=html;
