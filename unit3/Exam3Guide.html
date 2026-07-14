@@ -341,15 +341,18 @@ function prepareQuestion(qOrig){
   }
   return {...qOrig, opts:relabel(opts), correct};
 }
-function renderQuiz(containerId, questions, title, source){
+let quizTotalCounted=new Set();
+function renderQuiz(containerId, questions, title, source, indexMap){
   const host=document.getElementById(containerId);
   if(!host)return;
+  host.innerHTML='';
   const wrap=document.createElement('div');
   if(title){ const h=document.createElement('h3'); h.textContent='📝 '+title; h.style.color='var(--pink)'; wrap.appendChild(h); }
-  questions.forEach((qOrig,qi)=>{
+  questions.forEach((qOrig,localIdx)=>{
+    const qi = indexMap ? indexMap[localIdx] : localIdx;
     const q=prepareQuestion(qOrig);
-    totalTrackable++;
     const qid=containerId+'-'+qi;
+    if(!quizTotalCounted.has(qid)){ quizTotalCounted.add(qid); totalTrackable++; }
     const card=document.createElement('div'); card.className='quiz-card';
     const qt=document.createElement('div'); qt.className='q-text'; qt.textContent=(qi+1)+'. '+q.q; card.appendChild(qt);
     const opts=document.createElement('div'); opts.className='opts'; card.appendChild(opts);
@@ -395,6 +398,39 @@ function renderQuiz(containerId, questions, title, source){
   host.appendChild(wrap);
 }
 function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);}
+
+/* ===== VISION-ONLY FILTER ENGINE ===== */
+let visionOnlyGlobal=false;
+let quizFilterState={};
+(function restoreVisionOnly(){ try{ if(localStorage.getItem('nur256u3_visiononly')==='1') visionOnlyGlobal=true; }catch(e){} })();
+function renderFilteredQuiz(containerId, allQuestions, title, source){
+  quizFilterState[containerId]={allQuestions,title,source};
+  applyQuizFilter(containerId);
+}
+function applyQuizFilter(containerId){
+  const state=quizFilterState[containerId];
+  if(!state)return;
+  const filtered=[], indices=[];
+  state.allQuestions.forEach((q,i)=>{
+    if(!visionOnlyGlobal || q.topic==='eye'){ filtered.push(q); indices.push(i); }
+  });
+  if(filtered.length===0){
+    const host=document.getElementById(containerId);
+    if(host) host.innerHTML='<div class="card" style="text-align:center;color:var(--muted)">No vision-only questions available in this set yet.</div>';
+    return;
+  }
+  renderQuiz(containerId, filtered, state.title, state.source, indices);
+}
+function toggleVisionOnly(){
+  visionOnlyGlobal=!visionOnlyGlobal;
+  try{ localStorage.setItem('nur256u3_visiononly', visionOnlyGlobal?'1':'0'); }catch(e){}
+  Object.keys(quizFilterState).forEach(applyQuizFilter);
+  updateVisionToggleButtons();
+  if(typeof examMode!=='undefined' && typeof buildQuizSet==='function'){ buildQuizSet(examMode); examIdx=0; saveExam(); drawExamQ(); }
+}
+function updateVisionToggleButtons(){
+  document.querySelectorAll('.vision-toggle-btn').forEach(b=>{ b.textContent = visionOnlyGlobal ? '🎯 Vision Only: ON' : '🎯 Vision Only: OFF (tap to focus on vision)'; });
+}
 </script>
 
 <script>
@@ -877,34 +913,44 @@ const MATCH_GAMES = {
   },
   eyematch: {
     emoji:'👁️', title:'Eye & Vision Match Game', bestKey:'nur256u3_matchbest_eye',
-    intro:'Straight from your teacher\'s vision notes — tap a term on the left, then its match on the right to connect them with a line.',
+    intro:'Straight from your teacher\'s vision notes — tap a term on the left, then its match on the right to connect them with a line. Gets harder every 2 rounds.',
     pairs:[
-      {a:'Emmetropia',b:'Perfect 20/20 vision — light focuses directly on the retina'},
-      {a:'Myopia',b:'Nearsighted — clear up close, blurry far away'},
-      {a:'Hyperopia',b:'Farsighted — clear far away, blurry up close'},
-      {a:'Astigmatism',b:'Irregular corneal curvature — blurred at ANY distance'},
-      {a:'Presbyopia',b:'Age-related (usually 40+) loss of near focus from a stiffening lens'},
-      {a:'Accommodation',b:'The lens changing shape to keep an image in focus'},
-      {a:'Refraction',b:'The lens bending light so it focuses on the retina'},
-      {a:'One job of the lens',b:'Filtering out damaging UV light'},
-      {a:'Direct pupil response',b:'The SAME eye that got the light constricts'},
-      {a:'Consensual pupil response',b:'The OTHER eye also constricts'},
-      {a:'Mydriasis',b:'Pupil DILATION'},
-      {a:'Miosis',b:'Pupil CONSTRICTION'},
-      {a:'Open-angle glaucoma',b:'Drainage angle is open but drains too slowly — gradual, painless'},
-      {a:'Angle-closure glaucoma',b:'The iris physically blocks the drainage angle — sudden, severe'},
-      {a:'Normal IOP range',b:'10-21 mmHg'},
-      {a:'Glaucoma treatment',b:'Meds for life to lower eye pressure — lost vision does not return'},
-      {a:'Cataract causes',b:'Eye injury, diabetes, and beta-blocker use'},
-      {a:'Cataract treatment',b:'Surgical lens removal with an intraocular lens implant'},
-      {a:'Visual acuity 20/40',b:'Sees at 20 ft what a normal (20/20) eye sees at 40 ft — WORSE than normal'},
-      {a:'Macular degeneration',b:'Central vision loss, peripheral vision spared'},
-      {a:'Amsler grid',b:'Used to self-monitor for the wavy-line sign of macular degeneration'},
-      {a:'Retinal detachment symptom order',b:'Flashes → floaters → curtain/shadow'},
-      {a:'Retinal detachment urgency',b:'Surgical emergency — delay risks permanent vision loss'},
-      {a:'Acute angle-closure glaucoma',b:'Sudden severe eye pain, halos, nausea — true emergency'},
-      {a:'Anticholinergic/mydriatic drops',b:'Risky in angle-closure glaucoma — can trigger an acute attack'},
-      {a:'Beta-blocker eye drops',b:'Can be absorbed systemically — caution in asthma/COPD or bradycardia'}
+      {tier:1,a:'Emmetropia',b:'Perfect 20/20 vision — light focuses directly on the retina'},
+      {tier:1,a:'Normal IOP range',b:'10-21 mmHg'},
+      {tier:1,a:'One job of the lens',b:'Filtering out damaging UV light'},
+      {tier:1,a:'Refraction',b:'The lens bending light so it focuses on the retina'},
+      {tier:1,a:'Accommodation',b:'The lens changing shape to keep an image in focus'},
+      {tier:1,a:'Glaucoma treatment',b:'Meds for life to lower eye pressure — lost vision does not return'},
+      {tier:1,a:'Cataract treatment',b:'Surgical lens removal with an intraocular lens implant'},
+      {tier:1,a:'Amsler grid',b:'Used to self-monitor for the wavy-line sign of macular degeneration'},
+      {tier:1,a:'Retinal detachment urgency',b:'Surgical emergency — delay risks permanent vision loss'},
+      {tier:1,a:'Beta-blocker eye drops',b:'Can be absorbed systemically — caution in asthma/COPD or bradycardia'},
+      {tier:1,a:'Macular degeneration',b:'Central vision loss, peripheral vision spared'},
+      {tier:1,a:'Visual acuity 20/40',b:'Sees at 20 ft what a normal (20/20) eye sees at 40 ft — WORSE than normal'},
+      {tier:2,a:'Myopia',b:'Nearsighted — clear up close, blurry far away'},
+      {tier:2,a:'Hyperopia',b:'Farsighted — clear far away, blurry up close'},
+      {tier:2,a:'Astigmatism',b:'Irregular corneal curvature — blurred at ANY distance'},
+      {tier:2,a:'Presbyopia',b:'Age-related (usually 40+) loss of near focus from a stiffening lens'},
+      {tier:2,a:'Direct pupil response',b:'The SAME eye that got the light constricts'},
+      {tier:2,a:'Consensual pupil response',b:'The OTHER eye also constricts'},
+      {tier:2,a:'Mydriasis',b:'Pupil DILATION'},
+      {tier:2,a:'Miosis',b:'Pupil CONSTRICTION'},
+      {tier:2,a:'Cataract causes',b:'Eye injury, diabetes, and beta-blocker use'},
+      {tier:2,a:'Retinal detachment symptom order',b:'Flashes → floaters → curtain/shadow'},
+      {tier:2,a:'Anticholinergic/mydriatic drops',b:'Risky in angle-closure glaucoma — can trigger an acute attack'},
+      {tier:2,a:'Open-angle glaucoma',b:'Drainage angle is open but drains too slowly — gradual, painless'},
+      {tier:3,a:'Why glaucoma vision loss doesn\'t return',b:'Optic nerve fibers, once damaged, don\'t regenerate'},
+      {tier:3,a:'Why cataracts cause worse glare at night',b:'A wider pupil in dim light lets more scattered light through the cloudy lens'},
+      {tier:3,a:'Why macular degeneration and glaucoma are opposite patterns',b:'One damages the retina\'s center; the other damages the optic nerve from the outside in'},
+      {tier:3,a:'Why retinal detachment is a true emergency',b:'Detached tissue loses its blood supply and will die if not reattached quickly'},
+      {tier:3,a:'Why dilating drops are riskiest in angle-closure glaucoma specifically',b:'Dilation can push the iris into an already-narrow drainage angle'},
+      {tier:3,a:'Angle-closure glaucoma mechanism',b:'The iris itself physically blocks the drainage angle'},
+      {tier:3,a:'Acute angle-closure glaucoma presentation',b:'Sudden severe pain, halos, nausea, and a firm globe'},
+      {tier:3,a:'Why presbyopia isn\'t the same as hyperopia',b:'Presbyopia is age-related lens stiffening; hyperopia is a focal-length problem present since youth'},
+      {tier:3,a:'Why beta-blocker eye drops matter systemically',b:'They can still be absorbed into the bloodstream despite being a topical drop'},
+      {tier:3,a:'What "20/40" actually compares',b:'The patient\'s required viewing distance vs. the distance a normal eye needs for that same line'},
+      {tier:3,a:'Direct vs. consensual — what\'s actually being tested',b:'WHICH eye reacts, not which direction the pupil moves'},
+      {tier:3,a:'Mydriasis vs. miosis — what\'s actually being tested',b:'The DIRECTION the pupil moves, not which eye is being tested'}
     ]
   }
 };
@@ -912,6 +958,24 @@ const ROUND_SIZE=6;
 let currentMatchGame=null, matchRoundPairs=[], matchLeftOrder=[], matchRightOrder=[], matchSelectedLeft=null, matchMatchedCount=0, matchStartTime=0, matchTimerInt=null, matchBestTime=null, matchProgress={};
 (function restoreMatchProgress(){ try{ const r=localStorage.getItem('nur256u3_matchprogress'); if(r) matchProgress=JSON.parse(r); }catch(e){ matchProgress={}; } })();
 function saveMatchProgress(){ try{ localStorage.setItem('nur256u3_matchprogress', JSON.stringify(matchProgress)); }catch(e){} }
+function buildCycleOrder(pairs){
+  const hasTiers = pairs.some(p=>typeof p.tier==='number');
+  if(!hasTiers) return shuffle(pairs.map((_,i)=>i));
+  const tiers=[...new Set(pairs.map(p=>p.tier))].sort((a,b)=>a-b);
+  let order=[];
+  tiers.forEach(t=>{
+    const idxs=pairs.map((p,i)=>({p,i})).filter(x=>x.p.tier===t).map(x=>x.i);
+    order=order.concat(shuffle(idxs));
+  });
+  return order;
+}
+function difficultyLabel(gameId, roundIdx){
+  const pairs=MATCH_GAMES[gameId].pairs;
+  if(!pairs.some(p=>typeof p.tier==='number')) return '';
+  const roundsPerTier = Math.ceil(pairs.length/ROUND_SIZE/3) || 1;
+  const tierIdx = Math.min(2, Math.floor(roundIdx/roundsPerTier));
+  return ['🟢 Easier','🟡 Medium','🔴 Hardest'][tierIdx];
+}
 function startMatchGame(gameId){
   currentMatchGame = MATCH_GAMES[gameId];
   currentMatchGame.sectionId = gameId;
@@ -919,8 +983,8 @@ function startMatchGame(gameId){
   const totalPairs=currentMatchGame.pairs.length;
   const totalRounds=Math.ceil(totalPairs/ROUND_SIZE);
   let prog=matchProgress[gameId];
-  if(!prog || !prog.cycleOrder || prog.roundIdx>=totalRounds){
-    prog={ cycleOrder: shuffle(currentMatchGame.pairs.map((_,i)=>i)), roundIdx:0 };
+  if(!prog || !prog.cycleOrder || prog.roundIdx>=totalRounds || prog.cycleOrder.length!==totalPairs){
+    prog={ cycleOrder: buildCycleOrder(currentMatchGame.pairs), roundIdx:0 };
   }
   matchProgress[gameId]=prog; saveMatchProgress();
   const startIdx=prog.roundIdx*ROUND_SIZE;
@@ -942,11 +1006,13 @@ function drawMatchGame(totalRounds){
   const host=document.getElementById('sec-'+currentMatchGame.sectionId);
   const bestTxt = matchBestTime ? matchBestTime.toFixed(1)+'s' : '—';
   const prog=matchProgress[currentMatchGame.sectionId];
+  const diff=difficultyLabel(currentMatchGame.sectionId, prog.roundIdx);
   host.innerHTML=`
   <h2 class="sec-title"><span class="sec-emoji">${currentMatchGame.emoji}</span> ${currentMatchGame.title}</h2>
   <p class="intro-line">${currentMatchGame.intro}</p>
   <div class="match-stats">
     <span>📍 Round ${prog.roundIdx+1} of ${totalRounds}</span>
+    ${diff?`<span>${diff}</span>`:''}
     <span id="matchTimer">⏱️ 0.0s</span>
     <span>✅ <span id="matchCount">0</span> / ${matchRoundPairs.length}</span>
     <span>🏆 Best round: ${bestTxt}</span>
@@ -2054,49 +2120,69 @@ document.getElementById('sec-tricks').innerHTML=`
   </ul>
 </div>
 
+<div class="card" style="border-color:var(--purple);text-align:center">
+  <button class="btn vision-toggle-btn" onclick="toggleVisionOnly()" style="background:var(--purple)">🎯 Vision Only: OFF (tap to focus on vision)</button>
+</div>
+
 <div id="quiz-tricks"></div>
 `;
 
-renderQuiz('quiz-tricks',[
-  {q:'All of the following are expected findings in DKA EXCEPT:',type:'single',
+renderFilteredQuiz('quiz-tricks',[
+  {topic:'general',q:'All of the following are expected findings in DKA EXCEPT:',type:'single',
    opts:['A. Kussmaul respirations from metabolic acidosis','B. Fruity/acetone breath odor from ketones','C. Positive serum and urine ketones','D. Blood pH within the normal range'],correct:3,
    rat:'EXCEPT = the odd one out. Kussmaul breathing, fruity breath, and positive ketones are all core DKA findings. A normal pH is the impostor — DKA is defined by metabolic ACIDosis, so pH must be LOW, not normal.'},
 
-  {q:'Which of the following is NOT an appropriate nursing action for a reddened, intact area over a bony prominence?',type:'single',
+  {topic:'general',q:'Which of the following is NOT an appropriate nursing action for a reddened, intact area over a bony prominence?',type:'single',
    opts:['A. Reposition the patient to relieve pressure on the area','B. Massage the area firmly to stimulate local blood flow','C. Keep the surrounding skin clean and dry','D. Document and continue monitoring the area closely'],correct:1,
    rat:'NOT = the incorrect action. Repositioning, keeping skin clean/dry, and monitoring are all appropriate. Massaging is contraindicated — the tissue is already compromised by pressure, and massage can rupture fragile capillaries and worsen the damage.'},
 
-  {q:'The ONLY insulin formulation approved for intravenous administration is:',type:'single',
+  {topic:'general',q:'The ONLY insulin formulation approved for intravenous administration is:',type:'single',
    opts:['A. NPH (intermediate-acting)','B. Glargine (long-acting)','C. Regular (short-acting)','D. Lispro (rapid-acting)'],correct:2,
    rat:'This is a true absolute — don\'t second-guess it just because the stem says "only." Regular insulin is the sole formulation given IV (used in DKA drips); NPH, glargine, and lispro are never administered intravenously.'},
 
-  {q:'A patient with Type 2 diabetes taking metformin is scheduled for a contrast CT scan tomorrow. Which nursing action is BEST?',type:'single',
+  {topic:'general',q:'A patient with Type 2 diabetes taking metformin is scheduled for a contrast CT scan tomorrow. Which nursing action is BEST?',type:'single',
    opts:['A. Administer an extra metformin dose tonight to preemptively protect the kidneys','B. Hold the metformin before and after the contrast per facility protocol','C. Replace the metformin with an equivalent insulin dose for the day of the scan','D. Cancel the scan until the patient is no longer taking metformin'],correct:1,
    rat:'BEST = the safest, evidence-based action. Metformin plus contrast dye raises lactic acidosis/kidney injury risk, so it\'s held around the procedure. Giving an extra dose (A) is dangerous, an insulin swap (C) is unnecessary, and cancelling the scan (D) is an overreaction.'},
 
-  {q:'A nurse is assigned four patients at the start of the shift. Which patient should the nurse assess FIRST?',type:'single',
+  {topic:'eye',q:'A nurse is assigned four patients at the start of the shift. Which patient should the nurse assess FIRST?',type:'single',
    opts:['A. A Type 2 diabetic with a fingerstick glucose of 180 mg/dL and no symptoms','B. A Type 1 diabetic who is confused, diaphoretic, and visibly shaking','C. A patient with a healing Stage 2 pressure injury scheduled for a dressing change','D. A glaucoma patient due for a routine dose of eye drops'],correct:1,
    rat:'FIRST = the acute, rapidly evolving threat. Confusion + diaphoresis + shaking in a diabetic is the classic hypoglycemia pattern — a brain emergency in progress. A glucose of 180 is mildly elevated but stable, and the other two patients have routine, non-urgent care needs.'},
 
-  {q:'All of the following increase a patient\'s risk for pressure injury EXCEPT:',type:'single',
+  {topic:'general',q:'All of the following increase a patient\'s risk for pressure injury EXCEPT:',type:'single',
    opts:['A. Immobility','B. Urinary or fecal incontinence','C. Being repositioned on a strict every-2-hour schedule','D. Serum albumin of 2.5 g/dL'],correct:2,
    rat:'EXCEPT = the one that doesn\'t belong. Immobility, incontinence (moisture), and low albumin (poor nutrition) all raise risk. Scheduled repositioning is the PROTECTIVE intervention that lowers risk — it\'s the impostor precisely because it sounds like it belongs on a "risk factor" list.'},
 
-  {q:'A conscious patient reports feeling shaky with a fingerstick glucose of 55 mg/dL. Which is the BEST first action?',type:'single',
+  {topic:'general',q:'A conscious patient reports feeling shaky with a fingerstick glucose of 55 mg/dL. Which is the BEST first action?',type:'single',
    opts:['A. Administer glucagon intramuscularly','B. Give 15 g of fast-acting carbohydrate and recheck glucose in 15 minutes','C. Provide a large meal containing protein and fat','D. Administer the patient\'s scheduled insulin dose as ordered'],correct:1,
    rat:'BEST/FIRST for a conscious, swallowing-capable hypoglycemic patient is the Rule of 15. Glucagon (A) is reserved for patients who cannot safely swallow; a large fatty meal (C) slows carbohydrate absorption; and giving insulin (D) would dangerously worsen the hypoglycemia.'},
 
-  {q:'A patient with glaucoma asks which type of vision loss occurs FIRST in their condition. Which is the ONLY correct answer?',type:'single',
+  {topic:'eye',q:'A patient with glaucoma asks which type of vision loss occurs FIRST in their condition. Which is the ONLY correct answer?',type:'single',
    opts:['A. Central vision, affecting reading and face recognition first','B. Peripheral (side) vision, producing a gradual tunnel-vision effect','C. Color vision, causing colors to appear faded','D. Near vision, similar to normal age-related presbyopia'],correct:1,
    rat:'ONLY correct = peripheral vision loss, since glaucoma damages the optic nerve from the outer edge inward. Central vision loss (A) describes macular degeneration instead — a frequently tested trap pairing between these two conditions.'},
 
-  {q:'Which statement about HHS is NOT true?',type:'single',
+  {topic:'general',q:'Which statement about HHS is NOT true?',type:'single',
    opts:['A. It occurs almost exclusively in patients with Type 2 diabetes','B. It involves severe hyperglycemia and profound dehydration','C. It typically causes significant ketoacidosis with Kussmaul respirations','D. Blood glucose levels are often above 600 mg/dL'],correct:2,
    rat:'NOT true = the false statement to identify. HHS does NOT cause significant ketoacidosis or Kussmaul breathing — that combination belongs to DKA. HHS patients retain just enough insulin to prevent ketone production, which is the entire mechanism distinguishing the two conditions.'},
 
-  {q:'Which of the following findings is the ONLY true medical emergency requiring immediate same-day treatment?',type:'single',
+  {topic:'eye',q:'Which of the following findings is the ONLY true medical emergency requiring immediate same-day treatment?',type:'single',
    opts:['A. Gradual peripheral vision loss occurring over several months','B. Sudden severe eye pain with halos, nausea, and a firm, hard globe','C. Painless, slowly progressive blurry vision from cataracts','D. Mild eye dryness and occasional irritation'],correct:1,
-   rat:'ONLY emergency = acute angle-closure glaucoma. The sudden severe pain, halos, nausea, and firm globe together signal a rapid IOP spike threatening permanent vision loss within hours — the other three findings are all chronic and non-urgent by comparison.'}
+   rat:'ONLY emergency = acute angle-closure glaucoma. The sudden severe pain, halos, nausea, and firm globe together signal a rapid IOP spike threatening permanent vision loss within hours — the other three findings are all chronic and non-urgent by comparison.'},
+
+  {topic:'eye',q:'All of the following are TRUE about macular degeneration EXCEPT:',type:'single',
+   opts:['A. It causes loss of central vision','B. Peripheral vision is generally preserved','C. It typically presents with sudden, severe eye pain','D. Straight lines may appear wavy or distorted'],correct:2,
+   rat:'EXCEPT = the false statement. Macular degeneration is painless and gradual — sudden severe pain belongs to angle-closure glaucoma, not this condition. Central loss, spared periphery, and wavy-line distortion are all true hallmarks of macular degeneration.'},
+
+  {topic:'eye',q:'A nurse is teaching a client the difference between conductive and sensorineural hearing loss, and separately reviewing why open-angle glaucoma is dangerous. Which statement reflects a correct understanding of BOTH topics?',type:'single',
+   opts:['A. "Both conditions are painless and can progress without the person noticing right away."','B. "Both conditions cause sudden, severe pain as their first symptom."','C. "Both conditions are fully reversible with early treatment."','D. "Neither condition has any warning signs at all."'],correct:0,
+   rat:'B is a much better fit for angle-closure glaucoma\'s presentation, not open-angle glaucoma or gradual hearing loss — both of which are notably painless. C overstates reversibility for both (glaucoma damage is permanent, sensorineural loss usually is too). D is simply false, since both have detectable patterns/signs even if subtle. The one true shared feature is that BOTH can progress quietly, painlessly, without the person noticing until real damage has occurred.'},
+
+  {topic:'eye',q:'The ONLY definitive treatment for a cataract is:',type:'single',
+   opts:['A. Prescription eyeglasses updated regularly','B. Surgical removal of the lens with an intraocular lens implant','C. Long-term use of lubricating eye drops','D. Anti-VEGF injections into the eye'],correct:1,
+   rat:'This is a genuine absolute — don\'t talk yourself out of it just because the stem says "only." Glasses can help manage symptoms temporarily, drops don\'t address the cloudy lens itself, and anti-VEGF injections are for macular degeneration, not cataracts. Surgical removal/replacement is the only true fix.'},
+
+  {topic:'eye',q:'Which of the following statements about pupil terminology is NOT correct?',type:'single',
+   opts:['A. Miosis refers to pupil constriction','B. Mydriasis refers to pupil dilation','C. A consensual response means the SAME eye that received light reacts','D. A direct response means the SAME eye that received light reacts'],correct:2,
+   rat:'NOT correct = the false statement. A consensual response is specifically about the OTHER eye reacting, not the same one — that description actually belongs to the direct response (D), which IS correctly stated. A and B are both accurate as written.'}
 ],'Spot-the-Trap Practice');
 </script>
 <script>
@@ -2113,73 +2199,93 @@ document.getElementById('sec-challenge').innerHTML=`
   </ul>
 </div>
 
+<div class="card" style="border-color:var(--purple);text-align:center">
+  <button class="btn vision-toggle-btn" onclick="toggleVisionOnly()" style="background:var(--purple)">🎯 Vision Only: OFF (tap to focus on vision)</button>
+</div>
+
 <div id="quiz-challenge"></div>
 `;
 
-renderQuiz('quiz-challenge',[
-  {q:'The nurse reviews morning labs for four clinic patients. Which result meets the diagnostic criteria for diabetes and requires provider follow-up today?',type:'single',
+renderFilteredQuiz('quiz-challenge',[
+  {topic:'general',q:'The nurse reviews morning labs for four clinic patients. Which result meets the diagnostic criteria for diabetes and requires provider follow-up today?',type:'single',
    opts:['A. A 48-year-old with a hemoglobin A1C of 6.1%','B. A 58-year-old with a fasting blood glucose of 111 mg/dL','C. A 62-year-old with a hemoglobin A1C of 8.4%','D. A 40-year-old with a random glucose of 150 mg/dL and no symptoms'],correct:2,
    rat:'The trap: B (111) and A (6.1%) both fall in the PREDIABETES range, not diagnostic — easy to overreact to. D is an isolated random glucose without symptoms, which doesn\'t meet criteria alone. An A1C of 8.4% is well above the ≥6.5% diagnostic threshold and reflects sustained hyperglycemia — this is the one that needs same-day follow-up.'},
 
-  {q:'A client asks how their insulin pump works. Which explanation is correct?',type:'single',
+  {topic:'general',q:'A client asks how their insulin pump works. Which explanation is correct?',type:'single',
    opts:['A. It releases programmed doses of NPH insulin into the bloodstream at set intervals throughout the day','B. It delivers a small continuous dose of rapid- or short-acting insulin subcutaneously, with the client able to self-administer a bolus before meals','C. It is surgically attached to the pancreas and delivers regular insulin directly into pancreatic tissue','D. It continuously infuses NPH insulin while automatically adjusting the rate based on continuous glucose readings'],correct:1,
    rat:'The trap: A and D both insert NPH into the answer — NPH is never used in insulin pumps because pumps require a rapid- or short-acting insulin for the basal/bolus model to work safely. C invents a surgical attachment that doesn\'t exist. Pumps deliver continuous subcutaneous basal insulin with patient-triggered mealtime boluses.'},
 
-  {q:'A client with DKA has an initial glucose of 950 mg/dL. After several hours on an IV insulin drip with 0.9% NS, the glucose is now 240 mg/dL. What should the nurse prepare to administer next?',type:'single',
+  {topic:'general',q:'A client with DKA has an initial glucose of 950 mg/dL. After several hours on an IV insulin drip with 0.9% NS, the glucose is now 240 mg/dL. What should the nurse prepare to administer next?',type:'single',
    opts:['A. An ampule of 50% dextrose to prevent further glucose drop','B. NPH insulin subcutaneously to transition off the drip','C. IV fluids containing dextrose so the insulin drip can safely continue','D. Phenytoin to prevent seizures from the rapid glucose change'],correct:2,
    rat:'The trap: A treats the glucose drop as an emergency requiring a large dextrose bolus, when the correct move is a controlled addition of dextrose-containing fluids so the drip can keep running. B introduces the wrong insulin type at the wrong time (NPH is never used to "transition off" an active DKA drip). D is an unrelated and unsupported intervention. Once glucose approaches ~200-250, dextrose is added to the IV fluids so the insulin can keep clearing ketones without causing hypoglycemia.'},
 
-  {q:'An older adult with type 2 diabetes is admitted with pneumonia, glucose 620 mg/dL, and serum osmolality 330 mOsm/kg. Which nursing action is the PRIORITY?',type:'single',
+  {topic:'general',q:'An older adult with type 2 diabetes is admitted with pneumonia, glucose 620 mg/dL, and serum osmolality 330 mOsm/kg. Which nursing action is the PRIORITY?',type:'single',
    opts:['A. Continuous cardiac monitoring, since fluid and insulin therapy will shift potassium significantly','B. Administering sodium bicarbonate to correct the expected acidosis','C. Encouraging light exercise to help lower the blood glucose','D. Preparing for likely endotracheal intubation given the severity of the hyperglycemia'],correct:0,
    rat:'The trap: B assumes DKA-style acidosis is present, but this vignette is HHS — no acidosis to correct. C is actively dangerous in a profoundly dehydrated, hyperosmolar patient. D isn\'t indicated by anything in the vignette. Cardiac monitoring is the priority because HHS treatment (fluids + insulin) causes major potassium shifts, and this patient is older with likely cardiac vulnerability.'},
 
-  {q:'The nurse is caring for four patients on a medical-surgical floor. Which patient should the nurse assess FIRST?',type:'single',
+  {topic:'general',q:'The nurse is caring for four patients on a medical-surgical floor. Which patient should the nurse assess FIRST?',type:'single',
    opts:['A. A patient with a Braden Scale score of 18 who was just repositioned','B. A patient with type 2 diabetes and a glucose of 180 mg/dL after breakfast','C. A patient with a healing Stage 2 pressure injury due for a scheduled dressing change','D. A patient with a Braden Scale score of 9 who has not been repositioned in 3 hours'],correct:3,
    rat:'The trap: A Braden score of 18 sounds low-risk-adjacent but is actually the cutoff for "at risk" — not the most urgent finding here. B is a mildly elevated, expected postprandial glucose. C is routine, scheduled care. A Braden score of 9 indicates SEVERE risk, and combined with 3 hours without repositioning, this patient has the highest immediate risk for a new pressure injury — assess and reposition first.'},
 
-  {q:'A patient is positioned in the right lateral recumbent position for an extended period. Which sites are at HIGHEST risk for pressure injury in this position? (Select all that apply)',type:'multi',
+  {topic:'general',q:'A patient is positioned in the right lateral recumbent position for an extended period. Which sites are at HIGHEST risk for pressure injury in this position? (Select all that apply)',type:'multi',
    opts:['A. Right hip (greater trochanter)','B. Right ear','C. Sacrum','D. Right shoulder','E. Right ankle/malleolus'],correct:[0,1,3,4],
    rat:'The trap: sacrum (C) is a SUPINE pressure point, not a side-lying one — a common mix-up. In right lateral recumbent, weight bears on the right-side structures: ear, shoulder, hip/greater trochanter, and ankle/malleolus (plus ribs and knee) — not the sacrum, which only bears weight when lying on the back.'},
 
-  {q:'A client is scheduled for cataract surgery in 5 days. Which instruction should the nurse reinforce for the pre-operative period?',type:'single',
+  {topic:'eye',q:'A client is scheduled for cataract surgery in 5 days. Which instruction should the nurse reinforce for the pre-operative period?',type:'single',
    opts:['A. Continue all home medications, including aspirin, exactly as prescribed until the day of surgery','B. Avoid lifting or straining with objects heavier than approximately 10-15 pounds even before surgery','C. Plan for a 2-3 day inpatient hospital stay following the procedure','D. Begin using an eye patch continuously starting 3 days before surgery'],correct:1,
    rat:'The trap: A ignores that medications increasing bleeding risk (like aspirin) are typically addressed before eye surgery per provider instruction, C wildly overstates the length of stay (cataract surgery is same-day outpatient), and D describes a post-op measure, not a pre-op one. Avoiding heavy lifting/straining (which raises IOP) is reinforced both before and especially after surgery.'},
 
-  {q:'A client had retinal detachment surgery with gas tamponade placed to help flatten the retina. Which nursing action is the PRIORITY immediately post-op?',type:'single',
+  {topic:'eye',q:'A client had retinal detachment surgery with gas tamponade placed to help flatten the retina. Which nursing action is the PRIORITY immediately post-op?',type:'single',
    opts:['A. Encourage ambulation to promote circulation','B. Position the client\'s head as specifically prescribed by the surgeon','C. Apply a warm compress to reduce swelling','D. Remove the eye shield to assess visual acuity hourly'],correct:1,
    rat:'The trap: A, C, and D all sound like generic post-surgical care but miss what\'s unique here — with a gas bubble in place, HEAD POSITIONING is what keeps the bubble pressed against the detached area to help it heal. Positioning per the surgeon\'s specific instructions (often face-down or a particular tilt) is the priority, and the shield stays on per protocol rather than being removed for frequent checks.'},
 
-  {q:'A client with early dry age-related macular degeneration asks what single lifestyle change would MOST slow disease progression. What is the BEST response?',type:'single',
+  {topic:'eye',q:'A client with early dry age-related macular degeneration asks what single lifestyle change would MOST slow disease progression. What is the BEST response?',type:'single',
    opts:['A. "Quitting smoking has been shown to significantly slow the progression of macular degeneration."','B. "Wearing dark sunglasses indoors will prevent further vision loss."','C. "Avoiding all screen time will protect your remaining central vision."','D. "Taking a daily multivitamin will reverse the damage already done."'],correct:0,
    rat:'The trap: B, C, and D all sound like reasonable protective habits but aren\'t supported — indoor sunglasses and screen avoidance don\'t meaningfully change progression, and no supplement reverses existing damage (AREDS2-type formulations may slow, not reverse, progression). Smoking cessation has the strongest evidence for slowing dry AMD progression specifically.'},
 
-  {q:'A client with chronic open-angle glaucoma, well-controlled on topical drops, reports subtle, gradual changes in their vision over the past month. What should the nurse recognize this finding as requiring?',type:'single',
+  {topic:'eye',q:'A client with chronic open-angle glaucoma, well-controlled on topical drops, reports subtle, gradual changes in their vision over the past month. What should the nurse recognize this finding as requiring?',type:'single',
    opts:['A. Reassurance, since gradual changes are expected and not clinically significant in treated glaucoma','B. Reassessment of intraocular pressure, since gradual vision changes can indicate the current regimen is no longer adequately controlling IOP','C. An urgent same-day emergency evaluation for angle-closure glaucoma','D. Discontinuation of the current eye drops due to treatment failure'],correct:1,
    rat:'The trap: A dismisses a finding that actually warrants follow-up, C escalates to the WRONG type of glaucoma emergency (angle-closure presents with sudden severe pain, not gradual change), and D jumps straight to stopping treatment without reassessment first. Gradual vision change in a previously stable glaucoma patient signals the IOP may no longer be adequately controlled and needs to be checked — not ignored, and not treated as the acute angle-closure emergency.'},
 
-  {q:'Which task related to a diabetic client\'s foot care can the RN safely delegate to unlicensed assistive personnel (UAP)?',type:'single',
+  {topic:'general',q:'Which task related to a diabetic client\'s foot care can the RN safely delegate to unlicensed assistive personnel (UAP)?',type:'single',
    opts:['A. Assessing a new client\'s feet for the first time and documenting baseline neuropathy findings','B. Teaching the client how to perform daily foot inspections at home','C. Reporting to the RN if the UAP notices redness, drainage, or a new wound while helping with morning hygiene care','D. Determining whether a callus should be trimmed by the client or referred to a podiatrist'],correct:2,
    rat:'The trap: A, B, and D all involve assessment, teaching, or clinical decision-making, which remain RN responsibilities and cannot be delegated. Reporting an observation the UAP happens to notice during routine hygiene care (not performing a clinical assessment) is within their scope — they observe and report, the RN assesses and decides.'},
 
-  {q:'A nurse reviews four sets of vital signs and glucose values at the start of a shift. Which combination of findings requires the MOST immediate action?',type:'single',
+  {topic:'general',q:'A nurse reviews four sets of vital signs and glucose values at the start of a shift. Which combination of findings requires the MOST immediate action?',type:'single',
    opts:['A. Glucose 68 mg/dL, patient asymptomatic, due for breakfast in 10 minutes','B. Glucose 250 mg/dL, patient asymptomatic, scheduled insulin due in 30 minutes','C. Glucose 48 mg/dL, patient diaphoretic and confused, last rapid-acting insulin given 40 minutes ago','D. Glucose 190 mg/dL, patient reports mild thirst'],correct:2,
    rat:'The trap: A looks low but is asymptomatic with food imminent — reasonable to monitor rather than treat aggressively. B and D are both mild-to-moderate hyperglycemia findings that can wait for scheduled care. C combines a genuinely low glucose WITH active neuroglycopenic symptoms (confusion) during the insulin\'s likely peak action window — this patient needs treatment now, not after rounds.'},
 
-  {q:'A client recovering from DKA has a repeat potassium of 3.0 mEq/L six hours after starting the insulin drip, down from an initial 5.3 mEq/L. What does the nurse recognize about this trend?',type:'single',
+  {topic:'general',q:'A client recovering from DKA has a repeat potassium of 3.0 mEq/L six hours after starting the insulin drip, down from an initial 5.3 mEq/L. What does the nurse recognize about this trend?',type:'single',
    opts:['A. This is an unexpected and dangerous lab error that should be immediately repeated before any action is taken','B. This is the expected effect of insulin therapy driving potassium back into cells, and it requires close monitoring with likely potassium replacement','C. This indicates the insulin drip should be discontinued immediately due to overcorrection','D. This indicates the patient is developing a new, unrelated renal problem'],correct:1,
    rat:'The trap: A dismisses a real and anticipated trend as an error, C jumps to stopping a needed treatment, and D invents an unrelated diagnosis. Insulin therapy is EXPECTED to drive serum potassium down as it shifts back into cells — this drop from 5.3 to 3.0 is the anticipated trend that requires close monitoring and replacement, not alarm or treatment cessation.'},
 
-  {q:'A 68-year-old with Type 2 diabetes (on glyburide and lisinopril), stage 3 CKD (eGFR 42), and a Braden score of 15 is admitted for a scheduled cardiac catheterization requiring IV contrast. Pre-procedure labs show potassium 5.2 mEq/L. Which combination of actions should the nurse anticipate or question?',type:'single',
+  {topic:'general',q:'A 68-year-old with Type 2 diabetes (on glyburide and lisinopril), stage 3 CKD (eGFR 42), and a Braden score of 15 is admitted for a scheduled cardiac catheterization requiring IV contrast. Pre-procedure labs show potassium 5.2 mEq/L. Which combination of actions should the nurse anticipate or question?',type:'single',
    opts:['A. Continue all home medications unchanged and proceed with the procedure as scheduled','B. Question continuing the glyburide given the renal function, anticipate holding the lisinopril given the potassium level, and confirm a plan for post-procedure renal monitoring given the contrast exposure','C. Discontinue all diabetes and blood pressure medications permanently in preparation for the procedure','D. Proceed as scheduled, since none of these findings are related to each other'],correct:1,
    rat:'A treats every home medication as automatically safe to continue despite three separate red flags in this vignette. C overcorrects with a permanent discontinuation instead of a procedure-specific hold. D misses that all three findings — reduced renal clearance, an ACE/ARB-related hyperkalemia risk, and contrast exposure — connect through the same kidney-function thread. The correct synthesis questions glyburide (renal clearance risk), anticipates holding lisinopril (potassium already elevated), and flags the contrast\'s added renal burden — three related concerns from one underlying issue, not three coincidences.'},
 
-  {q:'A client with Type 1 diabetes and a Braden score of 16 is recovering from a DKA admission. On day 2, the nurse notes the client has been NPO since midnight for a procedure, the sliding-scale insulin order is still active, and the client\'s heel appears intact but slightly duskier than surrounding skin under a pressure-relief boot. Which of the following reflects the BEST synthesis of priorities for this shift?',type:'single',
+  {topic:'general',q:'A client with Type 1 diabetes and a Braden score of 16 is recovering from a DKA admission. On day 2, the nurse notes the client has been NPO since midnight for a procedure, the sliding-scale insulin order is still active, and the client\'s heel appears intact but slightly duskier than surrounding skin under a pressure-relief boot. Which of the following reflects the BEST synthesis of priorities for this shift?',type:'single',
    opts:['A. Hold all insulin since the client is NPO, and address the heel finding at the end of the shift once the procedure is complete','B. Clarify the insulin order given the NPO status (basal needs still exist even without meals), and reassess the heel finding now given the client\'s combined diabetes/pressure-injury risk factors','C. Administer the full scheduled insulin dose as if the client were eating normally, and remove the pressure-relief boot until after the procedure','D. Defer both issues until the primary provider is available, since neither is an emergency'],correct:1,
    rat:'A treats "NPO" as synonymous with "no insulin needed," which ignores that basal insulin needs continue independent of eating — a common and dangerous assumption. C makes the opposite error by ignoring the NPO status entirely, and also removes a protective device without justification. D defers two findings that both warrant action within the shift, not at end-of-shift or by a provider not yet available. The correct synthesis: clarify/adjust the insulin plan for NPO status without stopping it outright, AND address the early skin finding promptly given this client\'s combined risk factors (diabetes impairs perfusion/healing, Braden 16 is at-risk) — two related, same-shift priorities, not one deferred to later and one handled incorrectly.'},
 
-  {q:'A client with diabetes, hypertension, and a recent diagnosis of early diabetic retinopathy is being evaluated for a new medication regimen. The provider is considering a beta-blocker for blood pressure control. Which additional client history detail would be MOST important for the nurse to clarify before this medication is started?',type:'single',
+  {topic:'eye',q:'A client with diabetes, hypertension, and a recent diagnosis of early diabetic retinopathy is being evaluated for a new medication regimen. The provider is considering a beta-blocker for blood pressure control. Which additional client history detail would be MOST important for the nurse to clarify before this medication is started?',type:'single',
    opts:['A. Whether the client has a personal or family history of cataracts, since beta-blockers are a recognized cataract risk factor and this adds relevant information to the client\'s overall eye-health picture','B. Whether the client prefers tablets or liquid formulations','C. Whether the client has ever had a seasonal allergy','D. Whether the client\'s last eye exam was more than 5 years ago, since retinopathy findings expire after that time'],correct:0,
-   rat:'B and C are both reasonable-sounding routine intake questions but have no particular relevance to this specific clinical decision. D invents a rule about retinopathy findings "expiring" that isn\'t how monitoring for a progressive condition works. Since beta-blocker use is a recognized cataract risk factor, and this client already has documented early retinopathy (indicating active diabetic eye disease), clarifying cataract history adds relevant context to the overall risk-benefit picture for this specific medication choice — connecting a systemic medication decision back to this client\'s existing eye findings is the actual clinical reasoning skill being tested.'}
+   rat:'B and C are both reasonable-sounding routine intake questions but have no particular relevance to this specific clinical decision. D invents a rule about retinopathy findings "expiring" that isn\'t how monitoring for a progressive condition works. Since beta-blocker use is a recognized cataract risk factor, and this client already has documented early retinopathy (indicating active diabetic eye disease), clarifying cataract history adds relevant context to the overall risk-benefit picture for this specific medication choice — connecting a systemic medication decision back to this client\'s existing eye findings is the actual clinical reasoning skill being tested.'},
+
+  {topic:'eye',q:'Match each finding to the condition it belongs to. A client reports: (1) a blank spot in the center of their vision with wavy lines when reading, (2) sudden flashes with a shadow creeping across one side of vision, (3) gradual loss of side vision with normal reading vision, (4) painless glare and haziness that\'s worse driving at night. Which condition pairs correctly with finding (2)?',type:'single',
+   opts:['A. Macular degeneration','B. Retinal detachment','C. Open-angle glaucoma','D. Cataracts'],correct:1,
+   rat:'Finding (1) is macular degeneration, (3) is glaucoma, and (4) is cataracts — all real matches embedded in the same vignette, which is exactly the multi-item matching format to expect. Finding (2), the sudden flashes with a shadow/curtain crossing the vision, is the classic retinal detachment sequence.'},
+
+  {topic:'eye',q:'Which of the following are TRUE statements about intraocular pressure and glaucoma? (Select all that apply)',type:'multi',
+   opts:['A. Normal IOP is roughly 10-21 mmHg','B. Open-angle glaucoma typically presents with a sudden, severely painful eye','C. Angle-closure glaucoma can cause the globe to feel firm or hard on palpation','D. Vision already lost from glaucoma can be restored with consistent drop use','E. Glaucoma medications are generally a lifelong treatment, not a cure'],correct:[0,2,4],
+   rat:'B describes angle-closure\'s presentation, not open-angle (which is gradual and painless) — a reversed-pairing trap. D is a dangerous misconception: glaucoma damage is permanent, drops only prevent further loss. A, C, and E are all accurate.'},
+
+  {topic:'eye',q:'A client is 2 hours post-op from cataract surgery and reports mild itching around the eye shield and a scratchy sensation, rated 1/10. Vital signs are stable. What is the nurse\'s BEST action?',type:'single',
+   opts:['A. Remove the shield to inspect the eye and relieve the itching','B. Reassure the client that mild itching/scratchiness is expected post-op and reinforce not to rub the eye','C. Notify the surgeon immediately for a possible complication','D. Apply ice directly to the surgical eye'],correct:1,
+   rat:'A removes a protective device over a mild, expected finding — the shield stays on per protocol regardless of minor discomfort. C escalates a benign, expected sensation to an urgent report, which could cause "alarm fatigue" if overused for non-concerning findings. Mild itching/scratchiness after eye surgery is expected; the teaching point is reassurance plus reinforcing not to rub, not to remove protective equipment or escalate unnecessarily.'},
+
+  {topic:'eye',q:'Place the following in the correct order a nurse should suspect and respond to sudden flashes of light with new floaters in one eye, progressing over an hour to a shadow across part of the visual field: (1) recognize this as a possible retinal detachment, (2) notify the ophthalmology provider urgently, (3) obtain a focused history of onset and progression, (4) prepare the client for likely urgent surgical evaluation. Which comes FIRST?',type:'single',
+   opts:['A. Notify the ophthalmology provider urgently','B. Obtain a focused history of onset and progression','C. Prepare the client for likely urgent surgical evaluation','D. Recognize this as a possible retinal detachment'],correct:3,
+   rat:'This is a sequencing/ordered-response style item — several of these steps DO need to happen quickly, which is what makes picking the very first one tricky. Before you can gather focused history, notify the provider, or prepare for surgery, you first have to RECOGNIZE the pattern (flashes → floaters → curtain) as a possible retinal detachment — recognition drives everything that follows.'}
 ],'Med-Surg 1 Level Challenge');
 </script>
 
@@ -2561,106 +2667,106 @@ startDrill();
 <script>
 /* ===== EXAM BANK ===== */
 const EXAM=[
-{q:'A patient with Type 1 diabetes is admitted with glucose 480, ketones in urine, and deep rapid breathing. Which condition is this?',o:['HHS','DKA','Hypoglycemia','Prediabetes'],c:1,t:'single',r:'Type 1 + high glucose + ketones + Kussmaul breathing = DKA (ketoacidosis).'},
-{q:'Which insulin is given IV in DKA?',o:['NPH','Glargine','Regular','Lispro'],c:2,t:'single',r:'Only regular insulin is given IV.'},
-{q:'What is the FIRST priority in treating DKA?',o:['Insulin bolus','IV fluid resuscitation with 0.9% NS','Sodium bicarbonate','Oral carbs'],c:1,t:'single',r:'Fluids first — the patient is profoundly dehydrated; insulin before rehydration risks hypotension.'},
-{q:'After starting insulin in DKA, the nurse monitors closely for:',o:['Hyperkalemia','Hypokalemia','Hypernatremia','Hypercalcemia'],c:1,t:'single',r:'Insulin drives potassium into cells → serum K⁺ falls. Monitor and replace.'},
-{q:'Which finding distinguishes DKA from HHS?',o:['Hyperglycemia','Dehydration','Ketoacidosis with Kussmaul breathing','Increased thirst'],c:2,t:'single',r:'Only DKA has ketoacidosis and Kussmaul breathing; both share hyperglycemia and dehydration.'},
-{q:'A Type 2 diabetic presents with glucose 720, profound dehydration, and altered mental status but no ketones. This is:',o:['DKA','HHS','Hypoglycemia','Normal'],c:1,t:'single',r:'HHS: extreme hyperglycemia + dehydration WITHOUT ketosis, in Type 2.'},
-{q:'Which oral diabetes medication must be held before IV contrast?',o:['Glipizide','Metformin','Insulin','Sitagliptin'],c:1,t:'single',r:'Hold metformin around contrast (lactic acidosis/kidney risk).'},
-{q:'An A1C of 7.5% indicates what?',o:['Normal control','Average glucose over ~3 months above goal','Current glucose is 75','Kidney disease'],c:1,t:'single',r:'A1C reflects ~3-month average glucose; >7% is above the usual goal for diabetics.'},
-{q:'A conscious patient has glucose 54 and is shaky and diaphoretic. FIRST action?',o:['IM glucagon','15 g fast carbs, recheck in 15 min','Insulin','Large fatty meal'],c:1,t:'single',r:'Conscious → Rule of 15.'},
-{q:'An unconscious hypoglycemic patient has no IV access. Give:',o:['Oral juice','Glucagon IM/SubQ','Insulin','Water'],c:1,t:'single',r:'Never put anything in the mouth of someone who can\'t swallow; give glucagon.'},
-{q:'Cold, clammy, shaky skin in a diabetic indicates:',o:['Hyperglycemia','Hypoglycemia','DKA','Dehydration'],c:1,t:'single',r:'"Cold and clammy, need candy" = hypoglycemia.'},
-{q:'The #1 cause of DKA is:',o:['Overeating','Stopping insulin during illness','Too much exercise','Drinking water'],c:1,t:'single',r:'Omitting insulin during illness is the leading cause.'},
-{q:'When mixing regular and NPH insulin, draw up:',o:['NPH first','Regular first','Either order','Neither can be mixed'],c:1,t:'single',r:'Clear before cloudy — regular before NPH.'},
-{q:'Which are the classic 3 P\'s of diabetes? (SATA)',o:['Polyuria','Polydipsia','Polyphagia','Polycythemia','Photophobia'],c:[0,1,2],t:'multi',r:'Polyuria, polydipsia, polyphagia.'},
-{q:'Why must a diabetic inspect their feet daily?',o:['To clean them','Neuropathy prevents feeling injuries','To measure size','To exercise'],c:1,t:'single',r:'Loss of sensation means injuries go unfelt; daily inspection catches them.'},
-{q:'Why should diabetics avoid heating pads on their feet?',o:['Cost','Can\'t feel a burn (neuropathy)','Too warm','Allergy'],c:1,t:'single',r:'Neuropathy = can\'t feel a burn → injury.'},
-{q:'Retinopathy and nephropathy are what kind of complication?',o:['Macrovascular','Microvascular','Autonomic','Infectious'],c:1,t:'single',r:'Microvascular — tiny vessels (eyes, kidneys).'},
-{q:'Which drug class protects the kidneys in diabetic nephropathy?',o:['NSAIDs','ACE inhibitors/ARBs','Antihistamines','Beta-agonists'],c:1,t:'single',r:'ACE inhibitors/ARBs slow nephropathy.'},
-{q:'A diabetic has an MI but reports no chest pain. Why?',o:['They\'re faking','Autonomic neuropathy blunts pain (silent MI)','Diabetics don\'t get MIs','The heart isn\'t involved'],c:1,t:'single',r:'Autonomic neuropathy can cause a silent MI.'},
-{q:'Which foot-care instructions are correct? (SATA)',o:['Inspect feet daily','Never go barefoot','Use heating pads for cold feet','Wear well-fitting shoes','Cut calluses yourself'],c:[0,1,3],t:'multi',r:'Daily inspection, never barefoot, well-fitting shoes. NOT heating pads or self-cutting calluses.'},
-{q:'A pressure injury with intact skin and non-blanchable redness is:',o:['Stage 1','Stage 2','Stage 3','Unstageable'],c:0,t:'single',r:'Stage 1 = intact skin, non-blanchable erythema.'},
-{q:'A pressure injury exposing bone is:',o:['Stage 2','Stage 3','Stage 4','Deep tissue injury'],c:2,t:'single',r:'Stage 4 = bone/tendon/muscle visible.'},
-{q:'A wound base covered with eschar is staged as:',o:['Stage 3','Stage 4','Unstageable','Stage 1'],c:2,t:'single',r:'Unstageable until dead tissue is removed to see depth.'},
-{q:'The single best prevention for pressure injuries is:',o:['Massage red areas','Reposition every 2 hours','Keep patient flat','Fluid restriction'],c:1,t:'single',r:'Reposition q2h to relieve pressure.'},
-{q:'A reddened area over the sacrum: the nurse should:',o:['Massage it','Relieve pressure and keep clean/dry','Apply heat','Ignore it'],c:1,t:'single',r:'Never massage; relieve pressure and monitor.'},
-{q:'Which raise pressure injury risk? (SATA)',o:['Immobility','Low albumin (<3)','Incontinence/moisture','Frequent repositioning','Impaired sensation'],c:[0,1,2,4],t:'multi',r:'All except frequent repositioning, which is protective.'},
-{q:'A partial-thickness pressure injury (shallow open ulcer/blister) is:',o:['Stage 1','Stage 2','Stage 3','Stage 4'],c:1,t:'single',r:'Stage 2 = partial-thickness, shallow open ulcer or blister.'},
-{q:'Which risk-assessment tool predicts pressure injury risk?',o:['Glasgow scale','Braden scale','Apgar score','Morse scale'],c:1,t:'single',r:'Braden scale assesses pressure injury risk.'},
-{q:'Debridement using the body\'s own enzymes under a moist dressing is:',o:['Surgical','Mechanical','Autolytic','Sharp'],c:2,t:'single',r:'Autolytic debridement uses the body\'s enzymes under occlusive/moist dressing.'},
-{q:'Which serum albumin level increases pressure injury risk?',o:['>4','<3 g/dL','5','2 mg/dL'],c:1,t:'single',r:'Albumin <3 g/dL indicates poor nutrition → higher risk, slower healing.'},
-{q:'In darker skin tones, where does the nurse best check for jaundice?',o:['Palms','Sclerae and mucous membranes','Nail polish','Hair'],c:1,t:'single',r:'Check sclerae, hard palate, and mucous membranes for jaundice.'},
-{q:'Cyanosis in dark skin often appears as:',o:['Bright blue lips','A grayish cast; check mucous membranes and nail beds','Yellow skin','Red patches'],c:1,t:'single',r:'Cyanosis appears grayish in dark skin; assess mucous membranes, nail beds, conjunctivae.'},
-{q:'Open-angle glaucoma first causes loss of:',o:['Central vision','Peripheral (side) vision','Color vision','Near vision'],c:1,t:'single',r:'Peripheral vision (tunnel vision) first, painless and gradual.'},
-{q:'Normal intraocular pressure is:',o:['10–21 mmHg','30–40 mmHg','50 mmHg','2–5 mmHg'],c:0,t:'single',r:'Normal IOP = 10–21 mmHg.'},
-{q:'Sudden severe eye pain, halos, nausea, and a rock-hard eye indicate:',o:['Cataract','Acute angle-closure glaucoma (emergency)','Presbyopia','Conjunctivitis'],c:1,t:'single',r:'Angle-closure glaucoma — a medical emergency.'},
-{q:'The mechanism of glaucoma is:',o:['Cloudy lens','Poor aqueous drainage → high IOP → optic nerve damage','Detached retina','Corneal scarring'],c:1,t:'single',r:'High IOP from poor drainage damages the optic nerve.'},
-{q:'Cataracts cause which symptoms? (SATA)',o:['Painless blurry vision','Glare and halos','Sudden severe pain','Difficulty at night','Faded colors'],c:[0,1,3,4],t:'multi',r:'Painless blurring, glare/halos, night difficulty, faded colors. NOT sudden severe pain.'},
-{q:'After cataract surgery, the nurse teaches the patient to:',o:['Bend and lift freely','Avoid bending, lifting, and straining','Remove the eye shield at night','Rub the eye'],c:1,t:'single',r:'Avoid raising IOP; keep shield on; don\'t rub; report sudden pain/vision change.'},
-{q:'Macular degeneration causes loss of ___ vision.',o:['Peripheral','Central','No','All'],c:1,t:'single',r:'Central vision loss (opposite of glaucoma).'},
-{q:'A patient reports sudden floaters, flashes, and a curtain over vision. This suggests:',o:['Cataract','Retinal detachment (emergency)','Glaucoma','Dry eye'],c:1,t:'single',r:'Retinal detachment — needs prompt surgery.'},
-{q:'The classic triad of Ménière\'s disease is:',o:['Pain, fever, discharge','Episodic vertigo, tinnitus, fluctuating sensorineural hearing loss','Headache, vertigo, fever','Tinnitus, pain, nausea'],c:1,t:'single',r:'Vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
-{q:'Dietary management for Ménière\'s disease:',o:['High sodium','Low sodium','High protein','Low fat'],c:1,t:'single',r:'Low sodium (+ diuretics) reduces inner-ear fluid pressure.'},
-{q:'During a Ménière\'s vertigo attack, the priority is:',o:['Encourage walking','Fall safety — lie still in a quiet, dark room','Give food','Bright lights'],c:1,t:'single',r:'Vertigo → falls; keep the patient safe and still.'},
-{q:'Hearing loss from earwax or middle-ear fluid is:',o:['Sensorineural','Conductive','Central','Functional'],c:1,t:'single',r:'Conductive — blockage in outer/middle ear; often reversible.'},
-{q:'Age-related sensorineural hearing loss is called:',o:['Presbyopia','Presbycusis','Tinnitus','Otitis'],c:1,t:'single',r:'Presbycusis — high-frequency loss first.'},
-{q:'Which drugs are ototoxic? (SATA)',o:['Aminoglycosides','Furosemide (loop diuretic)','High-dose aspirin','Acetaminophen','Some chemo agents'],c:[0,1,2,4],t:'multi',r:'Aminoglycosides, loop diuretics, high-dose aspirin, and some chemo are ototoxic. Acetaminophen is not.'},
-{q:'When communicating with a hard-of-hearing patient, the nurse should:',o:['Shout','Face the patient and speak clearly, reducing background noise','Cover their mouth','Speak very fast'],c:1,t:'single',r:'Face them, speak clearly, reduce noise; don\'t shout (distorts sound).'},
-{q:'A sick Type 1 diabetic asks if they should stop insulin since they\'re not eating. Best response?',o:['"Yes, skip it."','"Never stop insulin during illness — it can cause DKA."','"Take half."','"Stop checking glucose too."'],c:1,t:'single',r:'Never stop insulin during illness (top DKA cause).'},
-{q:'Which insulin has essentially no peak and is never given IV or mixed?',o:['Regular','Lispro','Glargine','NPH'],c:2,t:'single',r:'Glargine (long-acting) is peakless, never IV, never mixed.'},
-{q:'When does hypoglycemia risk peak for a given insulin?',o:['At injection','At the insulin\'s peak action time','Only at night','Never'],c:1,t:'single',r:'Hypoglycemia risk is highest at the insulin\'s peak.'},
-{q:'A diabetic foot ulcer that goes untreated most seriously risks:',o:['A cold','Amputation','Hair loss','Weight gain'],c:1,t:'single',r:'Unhealed ulcers + poor circulation + infection → amputation.'},
-{q:'Which are microvascular complications of diabetes? (SATA)',o:['Retinopathy','Nephropathy','Coronary artery disease','Stroke','Peripheral neuropathy'],c:[0,1,4],t:'multi',r:'Micro = retinopathy, nephropathy, neuropathy. CAD and stroke are macrovascular.'},
-{q:'Kussmaul respirations in DKA are the body\'s attempt to:',o:['Warm up','Blow off CO₂ (acid) to raise pH','Cool down','Increase glucose'],c:1,t:'single',r:'Deep rapid breathing exhales CO₂ to compensate for the metabolic acidosis.'},
-{q:'A diabetic patient\'s glucose is 60 and they are unconscious in the hospital with IV access. Give:',o:['Oral glucose gel','IV dextrose (D50)','Insulin','Nothing'],c:1,t:'single',r:'With IV access and unconscious → IV dextrose (D50).'},
-{q:'Which best describes Type 2 diabetes?',o:['No insulin produced','Insulin resistance with declining production','Autoimmune','Only in children'],c:1,t:'single',r:'Type 2 = insulin resistance + declining production.'},
-{q:'A patient with a Stage 3 pressure injury has visible:',o:['Intact red skin','A shallow blister','Subcutaneous fat','Bone'],c:2,t:'single',r:'Stage 3 = full-thickness, fat visible, no bone/tendon.'},
-{q:'The most common sites for pressure injuries include: (SATA)',o:['Sacrum','Heels','Ischial tuberosities','Forehead','Greater trochanter'],c:[0,1,2,4],t:'multi',r:'Sacrum, heels, ischial tuberosities, trochanter, elbows — weight-bearing bony prominences.'},
-{q:'A patient in a wheelchair should be repositioned how often to prevent pressure injury?',o:['Every 2 hours','Every 15 minutes','Every 8 hours','Once a shift'],c:1,t:'single',r:'Chair/wheelchair = reposition every 15 minutes; bed = every 2 hours.'},
-{q:'For a side-lying (lateral) patient, which areas are at highest pressure-injury risk?',o:['Sacrum and heels','Hip and iliac crest','Breasts and genitalia','Back of head'],c:1,t:'single',r:'Side-lying → hip and iliac crest (plus ear, ribs, ankle).'},
-{q:'A patient has an existing pressure ulcer. The main goal of care is to:',o:['Massage it','Offload the area to restore circulation and healing','Keep them still','Apply heat'],c:1,t:'single',r:'Offload — remove all pressure from the area so it can heal.'},
-{q:'Which are domains scored by the Braden scale? (SATA)',o:['Sensory perception','Moisture','Mobility/activity','Nutrition','Blood glucose'],c:[0,1,2,3],t:'multi',r:'Braden: sensory, moisture, activity, mobility, nutrition, friction/shear. Not blood glucose.'},
-{q:'Intact skin that is purple/maroon and feels boggy indicates:',o:['Stage 1','Stage 2','Deep tissue injury','Unstageable'],c:2,t:'single',r:'Deep tissue injury — intact skin, purple/maroon, boggy; damage is happening underneath.'},
-{q:'A patient on furosemide reports new ringing in the ears. The nurse recognizes this as:',o:['Normal','Possible ototoxicity','A cold','Anxiety'],c:1,t:'single',r:'Loop diuretics are ototoxic; tinnitus can signal ear damage — report it.'},
-{q:'Which statement about lost vision in glaucoma is true?',o:['It fully returns with drops','It is permanent; treatment prevents further loss','It resolves on its own','Surgery restores it'],c:1,t:'single',r:'Optic nerve damage is permanent; treatment preserves remaining vision.'},
-{q:'A patient with hypoglycemia unawareness needs:',o:['Less monitoring','Frequent glucose checks and family taught to give glucagon','No treatment','Only insulin'],c:1,t:'single',r:'They lose early warning signs → check often; family should know glucagon.'},
-{q:'When glucose reaches ~250 during DKA treatment, the nurse anticipates:',o:['Stopping fluids','Adding dextrose (D5W) to the fluids','Stopping insulin','Giving bicarbonate'],c:1,t:'single',r:'Add dextrose so glucose doesn\'t crash while insulin keeps clearing ketones.'},
-{q:'Which patient should the nurse see FIRST?',o:['Type 2 diabetic, glucose 190','Type 1 diabetic who is confused, sweaty, and shaky','Healing Stage 2 pressure injury','Glaucoma patient due for drops'],c:1,t:'single',r:'Hypoglycemia signs = acute brain emergency → see first.'},
-{q:'Sick-day rules for diabetes include: (SATA)',o:['Never stop insulin','Check glucose/ketones every 3–4 hours','Sip fluids hourly','Stop all monitoring','Take small carb portions'],c:[0,1,2,4],t:'multi',r:'Continue insulin, monitor glucose/ketones, stay hydrated, small carbs. Never stop monitoring.'},
-{q:'A patient recovering from eye surgery suddenly reports severe eye pain. The nurse should:',o:['Ignore it','Notify the provider — could signal a complication','Tell them to rub it','Remove the shield'],c:1,t:'single',r:'Sudden pain post-eye-surgery can signal increased IOP or hemorrhage — report immediately.'},
-{q:'Which is a sign of autonomic neuropathy in diabetes?',o:['Stocking-glove numbness','Orthostatic hypotension and delayed gastric emptying','Barrel chest','Peaked T waves'],c:1,t:'single',r:'Autonomic neuropathy affects automatic functions: orthostatic hypotension, gastroparesis, silent MI, bladder issues.'},
-{q:'A patient asks why their blurry cataract vision is worse in bright light. Best explanation:',o:['The lens is detaching','The cloudy lens scatters light, causing glare','The retina is bleeding','The pressure is high'],c:1,t:'single',r:'A cloudy lens scatters incoming light → glare and halos, worse in bright light/at night.'},
-{q:'Which finding in a diabetic foot exam is MOST concerning?',o:['Dry skin','A non-healing ulcer with drainage and redness','Slightly thick toenails','A small callus'],c:1,t:'single',r:'A non-healing, draining, red ulcer signals infection that can progress to amputation — most concerning.'},
-{q:'The nurse is teaching about metformin. Which side effect is common?',o:['Hypoglycemia alone','GI upset (nausea, diarrhea)','Hyperkalemia','Vision loss'],c:1,t:'single',r:'Metformin commonly causes GI upset; it does not cause hypoglycemia by itself.'},
-{q:'Which insulins can be mixed in the same syringe?',o:['Glargine and regular','Regular and NPH','NPH and detemir','No insulins can be mixed'],c:1,t:'single',r:'Regular and NPH can be mixed (clear before cloudy). Long-acting insulins are never mixed.'},
-{q:'A key difference in HHS management vs DKA is:',o:['No fluids needed','Insulin is not needed to reverse acidosis (there is none)','No monitoring','Give bicarbonate'],c:1,t:'single',r:'HHS has no acidosis, so insulin is for glucose, not acid reversal; fluids are even more central.'},
-{q:'Which statement about A1C is correct?',o:['It shows today\'s glucose','It reflects average glucose over ~3 months','It measures insulin','It changes hourly'],c:1,t:'single',r:'A1C = ~3-month average glucose.'},
-{q:'A patient with peripheral neuropathy describes their symptoms as:',o:['Sharp central chest pain','Numbness and burning in a stocking-glove pattern','Sudden vision loss','Ear ringing'],c:1,t:'single',r:'Peripheral neuropathy = stocking-glove numbness/burning starting in toes/fingers.'},
-{q:'Which is the priority teaching to prevent DKA?',o:['Exercise less','Never omit insulin, especially when ill','Eat less protein','Avoid all carbs'],c:1,t:'single',r:'Omitting insulin during illness is the top DKA cause — never stop it.'},
-{q:'A patient with glaucoma must understand that eye drops:',o:['Cure the disease','Must be used lifelong to control IOP','Are optional','Restore lost vision'],c:1,t:'single',r:'Drops control IOP for life; they prevent further loss but don\'t restore vision.'},
-{q:'Which are signs of hypoglycemia? (SATA)',o:['Sweating','Shakiness','Confusion','Fruity breath','Tachycardia'],c:[0,1,2,4],t:'multi',r:'Sweating, shakiness, tachycardia (adrenergic) and confusion (neuro) are hypoglycemia. Fruity breath is DKA.'},
-{q:'A patient with a Stage 4 pressure injury needs which nutrition focus?',o:['Low protein','High protein and adequate calories for healing','Fluid restriction','Low calorie'],c:1,t:'single',r:'Wound healing needs protein and calories; correct albumin/protein deficits.'},
-{q:'Which describes proper diabetic foot washing?',o:['Soak feet for an hour','Wash and dry daily, especially between toes','Never wash feet','Use very hot water'],c:1,t:'single',r:'Wash and dry daily (dry between toes); avoid hot water (burn risk) and long soaking.'},
-{q:'A patient reports halos around lights and gradual peripheral vision loss. This suggests:',o:['Cataract only','Open-angle glaucoma','Retinal detachment','Conjunctivitis'],c:1,t:'single',r:'Gradual peripheral loss + halos = open-angle glaucoma.'},
-{q:'Which is TRUE of sensorineural hearing loss?',o:['Always reversible','Usually permanent (nerve/cochlea damage)','Caused by earwax','Cured by irrigation'],c:1,t:'single',r:'Sensorineural = permanent inner-ear/nerve damage. Conductive is often reversible.'},
-{q:'The nurse should question a potassium order in DKA if:',o:['The patient is urinating well','The patient has no urine output','Potassium is low','Insulin is running'],c:1,t:'single',r:'Hold K⁺ if the patient isn\'t urinating (K⁺ can build to dangerous levels) or if K⁺ is high.'},
-{q:'Which is the earliest sign the body gives during a drop in blood sugar?',o:['Seizure','Adrenergic symptoms (shaky, sweaty, fast heart)','Coma','Fruity breath'],c:1,t:'single',r:'Adrenaline release causes early shaky/sweaty/tachycardic symptoms before neuro signs.'},
-{q:'A patient with diabetic gastroparesis (autonomic neuropathy) should:',o:['Eat large fatty meals','Eat small, low-fat meals','Fast all day','Only drink liquids forever'],c:1,t:'single',r:'Gastroparesis (delayed emptying) → small, low-fat meals help.'},
-{q:'Which is the priority during an acute vertigo attack in Ménière\'s?',o:['Ambulate the patient','Ensure safety and prevent falls','Turn on bright lights','Give a large meal'],c:1,t:'single',r:'Fall prevention is the priority; keep the patient still in a calm environment.'},
-{q:'What is the mechanism behind diabetic retinopathy?',o:['Cloudy lens','Damage to tiny retinal blood vessels from chronic hyperglycemia','High eye pressure','Nerve compression'],c:1,t:'single',r:'Chronic high glucose damages the retina\'s microvessels → retinopathy.'},
-{q:'A patient asks how to prevent Type 2 diabetes complications. Best answer:',o:['Nothing can be done','Tight glucose, BP, and lipid control plus healthy lifestyle','Only take vitamins','Avoid all doctors'],c:1,t:'single',r:'Controlling glucose, BP, and lipids plus lifestyle changes prevents/slows complications.'},
-{q:'Which insulin is rapid-acting and given right with meals?',o:['Glargine','NPH','Lispro','Regular'],c:2,t:'single',r:'Lispro (rapid) is given with food (~15 min onset).'},
-{q:'A patient with a new Stage 2 pressure injury needs a dressing that:',o:['Keeps the wound dry and open to air','Maintains a moist wound environment','Uses no dressing','Applies heat'],c:1,t:'single',r:'Wounds heal best in a moist (not wet/dry) environment.'},
-{q:'The nurse notes a diabetic patient\'s breath smells fruity. This suggests:',o:['Good control','DKA (ketones)','Hypoglycemia','Cataracts'],c:1,t:'single',r:'Fruity/acetone breath = ketones = DKA.'},
-{q:'Which action helps prevent diabetic retinopathy progression?',o:['Avoid eye exams','Regular dilated eye exams and glucose/BP control','Wear sunglasses only','Nothing'],c:1,t:'single',r:'Early detection (regular exams) plus glucose and BP control slows progression.'},
-{q:'Which findings make up metabolic syndrome? (SATA)',o:['Central obesity (waist >40 in men, >35 in women)','Hypertension','Low HDL / high LDL or triglycerides','Hyperinsulinemia with insulin resistance','Polycythemia'],c:[0,1,2,3],t:'multi',r:'Metabolic syndrome = central obesity + HTN + dyslipidemia + hyperinsulinemia/insulin resistance. It\'s a risk cluster, not a complication.'},
-{q:'A slow-onset autoimmune diabetes discovered in adulthood, initially mistaken for Type 2, is called:',o:['Gestational diabetes','LADA (\"Type 1.5\")','HHS','Prediabetes'],c:1,t:'single',r:'LADA = autoimmune beta-cell destruction like Type 1, but slower and in adults — often misdiagnosed as Type 2 at first.'},
-{q:'Which is a function of insulin besides moving glucose into cells? (SATA)',o:['Stores excess glucose as fat','Blocks fat breakdown (lipolysis)','Helps move potassium into cells','Stimulates glucagon release','Produces ketones'],c:[0,1,2],t:'multi',r:'Insulin stores glucose as fat, blocks lipolysis, and pushes K⁺ into cells. It does NOT stimulate glucagon or produce ketones — ketones happen when insulin is missing/ineffective.'},
-{q:'Why does an ill diabetic patient\'s glucose rise even without eating?',o:['It doesn\'t rise without food','Cortisol and stress hormones raise glucose and are released during illness','Insulin stops working permanently','Glucose only rises after meals'],c:1,t:'single',r:'Illness/stress triggers cortisol and adrenaline release, which raises blood glucose independent of food intake — why sick-day monitoring must continue even if the patient isn\'t eating.'},
-{q:'Approximately how much sugar should be circulating in the entire blood volume at one time?',o:['1 cup','About 1 teaspoon (~7 sugar cubes, ~30g)','1 pound','5 tablespoons'],c:1,t:'single',r:'Roughly 1 tsp (~30g) across the whole blood volume — a small homeostatic target that insulin works constantly to maintain.'},
-{q:'A pregnant patient develops diabetes only during pregnancy, with a larger-than-average baby. This is:',o:['Type 1 diabetes','Gestational diabetes','LADA','Prediabetes'],c:1,t:'single',r:'Gestational diabetes develops during pregnancy (more common with larger babies), usually resolves after delivery, but raises future Type 2 risk.'}
+{topic:'general',q:'A patient with Type 1 diabetes is admitted with glucose 480, ketones in urine, and deep rapid breathing. Which condition is this?',o:['HHS','DKA','Hypoglycemia','Prediabetes'],c:1,t:'single',r:'Type 1 + high glucose + ketones + Kussmaul breathing = DKA (ketoacidosis).'},
+{topic:'general',q:'Which insulin is given IV in DKA?',o:['NPH','Glargine','Regular','Lispro'],c:2,t:'single',r:'Only regular insulin is given IV.'},
+{topic:'general',q:'What is the FIRST priority in treating DKA?',o:['Insulin bolus','IV fluid resuscitation with 0.9% NS','Sodium bicarbonate','Oral carbs'],c:1,t:'single',r:'Fluids first — the patient is profoundly dehydrated; insulin before rehydration risks hypotension.'},
+{topic:'general',q:'After starting insulin in DKA, the nurse monitors closely for:',o:['Hyperkalemia','Hypokalemia','Hypernatremia','Hypercalcemia'],c:1,t:'single',r:'Insulin drives potassium into cells → serum K⁺ falls. Monitor and replace.'},
+{topic:'general',q:'Which finding distinguishes DKA from HHS?',o:['Hyperglycemia','Dehydration','Ketoacidosis with Kussmaul breathing','Increased thirst'],c:2,t:'single',r:'Only DKA has ketoacidosis and Kussmaul breathing; both share hyperglycemia and dehydration.'},
+{topic:'general',q:'A Type 2 diabetic presents with glucose 720, profound dehydration, and altered mental status but no ketones. This is:',o:['DKA','HHS','Hypoglycemia','Normal'],c:1,t:'single',r:'HHS: extreme hyperglycemia + dehydration WITHOUT ketosis, in Type 2.'},
+{topic:'general',q:'Which oral diabetes medication must be held before IV contrast?',o:['Glipizide','Metformin','Insulin','Sitagliptin'],c:1,t:'single',r:'Hold metformin around contrast (lactic acidosis/kidney risk).'},
+{topic:'general',q:'An A1C of 7.5% indicates what?',o:['Normal control','Average glucose over ~3 months above goal','Current glucose is 75','Kidney disease'],c:1,t:'single',r:'A1C reflects ~3-month average glucose; >7% is above the usual goal for diabetics.'},
+{topic:'general',q:'A conscious patient has glucose 54 and is shaky and diaphoretic. FIRST action?',o:['IM glucagon','15 g fast carbs, recheck in 15 min','Insulin','Large fatty meal'],c:1,t:'single',r:'Conscious → Rule of 15.'},
+{topic:'general',q:'An unconscious hypoglycemic patient has no IV access. Give:',o:['Oral juice','Glucagon IM/SubQ','Insulin','Water'],c:1,t:'single',r:'Never put anything in the mouth of someone who can\'t swallow; give glucagon.'},
+{topic:'general',q:'Cold, clammy, shaky skin in a diabetic indicates:',o:['Hyperglycemia','Hypoglycemia','DKA','Dehydration'],c:1,t:'single',r:'"Cold and clammy, need candy" = hypoglycemia.'},
+{topic:'general',q:'The #1 cause of DKA is:',o:['Overeating','Stopping insulin during illness','Too much exercise','Drinking water'],c:1,t:'single',r:'Omitting insulin during illness is the leading cause.'},
+{topic:'general',q:'When mixing regular and NPH insulin, draw up:',o:['NPH first','Regular first','Either order','Neither can be mixed'],c:1,t:'single',r:'Clear before cloudy — regular before NPH.'},
+{topic:'general',q:'Which are the classic 3 P\'s of diabetes? (SATA)',o:['Polyuria','Polydipsia','Polyphagia','Polycythemia','Photophobia'],c:[0,1,2],t:'multi',r:'Polyuria, polydipsia, polyphagia.'},
+{topic:'general',q:'Why must a diabetic inspect their feet daily?',o:['To clean them','Neuropathy prevents feeling injuries','To measure size','To exercise'],c:1,t:'single',r:'Loss of sensation means injuries go unfelt; daily inspection catches them.'},
+{topic:'general',q:'Why should diabetics avoid heating pads on their feet?',o:['Cost','Can\'t feel a burn (neuropathy)','Too warm','Allergy'],c:1,t:'single',r:'Neuropathy = can\'t feel a burn → injury.'},
+{topic:'general',q:'Retinopathy and nephropathy are what kind of complication?',o:['Macrovascular','Microvascular','Autonomic','Infectious'],c:1,t:'single',r:'Microvascular — tiny vessels (eyes, kidneys).'},
+{topic:'general',q:'Which drug class protects the kidneys in diabetic nephropathy?',o:['NSAIDs','ACE inhibitors/ARBs','Antihistamines','Beta-agonists'],c:1,t:'single',r:'ACE inhibitors/ARBs slow nephropathy.'},
+{topic:'general',q:'A diabetic has an MI but reports no chest pain. Why?',o:['They\'re faking','Autonomic neuropathy blunts pain (silent MI)','Diabetics don\'t get MIs','The heart isn\'t involved'],c:1,t:'single',r:'Autonomic neuropathy can cause a silent MI.'},
+{topic:'general',q:'Which foot-care instructions are correct? (SATA)',o:['Inspect feet daily','Never go barefoot','Use heating pads for cold feet','Wear well-fitting shoes','Cut calluses yourself'],c:[0,1,3],t:'multi',r:'Daily inspection, never barefoot, well-fitting shoes. NOT heating pads or self-cutting calluses.'},
+{topic:'general',q:'A pressure injury with intact skin and non-blanchable redness is:',o:['Stage 1','Stage 2','Stage 3','Unstageable'],c:0,t:'single',r:'Stage 1 = intact skin, non-blanchable erythema.'},
+{topic:'general',q:'A pressure injury exposing bone is:',o:['Stage 2','Stage 3','Stage 4','Deep tissue injury'],c:2,t:'single',r:'Stage 4 = bone/tendon/muscle visible.'},
+{topic:'general',q:'A wound base covered with eschar is staged as:',o:['Stage 3','Stage 4','Unstageable','Stage 1'],c:2,t:'single',r:'Unstageable until dead tissue is removed to see depth.'},
+{topic:'general',q:'The single best prevention for pressure injuries is:',o:['Massage red areas','Reposition every 2 hours','Keep patient flat','Fluid restriction'],c:1,t:'single',r:'Reposition q2h to relieve pressure.'},
+{topic:'general',q:'A reddened area over the sacrum: the nurse should:',o:['Massage it','Relieve pressure and keep clean/dry','Apply heat','Ignore it'],c:1,t:'single',r:'Never massage; relieve pressure and monitor.'},
+{topic:'general',q:'Which raise pressure injury risk? (SATA)',o:['Immobility','Low albumin (<3)','Incontinence/moisture','Frequent repositioning','Impaired sensation'],c:[0,1,2,4],t:'multi',r:'All except frequent repositioning, which is protective.'},
+{topic:'general',q:'A partial-thickness pressure injury (shallow open ulcer/blister) is:',o:['Stage 1','Stage 2','Stage 3','Stage 4'],c:1,t:'single',r:'Stage 2 = partial-thickness, shallow open ulcer or blister.'},
+{topic:'general',q:'Which risk-assessment tool predicts pressure injury risk?',o:['Glasgow scale','Braden scale','Apgar score','Morse scale'],c:1,t:'single',r:'Braden scale assesses pressure injury risk.'},
+{topic:'general',q:'Debridement using the body\'s own enzymes under a moist dressing is:',o:['Surgical','Mechanical','Autolytic','Sharp'],c:2,t:'single',r:'Autolytic debridement uses the body\'s enzymes under occlusive/moist dressing.'},
+{topic:'general',q:'Which serum albumin level increases pressure injury risk?',o:['>4','<3 g/dL','5','2 mg/dL'],c:1,t:'single',r:'Albumin <3 g/dL indicates poor nutrition → higher risk, slower healing.'},
+{topic:'general',q:'In darker skin tones, where does the nurse best check for jaundice?',o:['Palms','Sclerae and mucous membranes','Nail polish','Hair'],c:1,t:'single',r:'Check sclerae, hard palate, and mucous membranes for jaundice.'},
+{topic:'general',q:'Cyanosis in dark skin often appears as:',o:['Bright blue lips','A grayish cast; check mucous membranes and nail beds','Yellow skin','Red patches'],c:1,t:'single',r:'Cyanosis appears grayish in dark skin; assess mucous membranes, nail beds, conjunctivae.'},
+{topic:'eye',q:'Open-angle glaucoma first causes loss of:',o:['Central vision','Peripheral (side) vision','Color vision','Near vision'],c:1,t:'single',r:'Peripheral vision (tunnel vision) first, painless and gradual.'},
+{topic:'eye',q:'Normal intraocular pressure is:',o:['10–21 mmHg','30–40 mmHg','50 mmHg','2–5 mmHg'],c:0,t:'single',r:'Normal IOP = 10–21 mmHg.'},
+{topic:'eye',q:'Sudden severe eye pain, halos, nausea, and a rock-hard eye indicate:',o:['Cataract','Acute angle-closure glaucoma (emergency)','Presbyopia','Conjunctivitis'],c:1,t:'single',r:'Angle-closure glaucoma — a medical emergency.'},
+{topic:'eye',q:'The mechanism of glaucoma is:',o:['Cloudy lens','Poor aqueous drainage → high IOP → optic nerve damage','Detached retina','Corneal scarring'],c:1,t:'single',r:'High IOP from poor drainage damages the optic nerve.'},
+{topic:'eye',q:'Cataracts cause which symptoms? (SATA)',o:['Painless blurry vision','Glare and halos','Sudden severe pain','Difficulty at night','Faded colors'],c:[0,1,3,4],t:'multi',r:'Painless blurring, glare/halos, night difficulty, faded colors. NOT sudden severe pain.'},
+{topic:'eye',q:'After cataract surgery, the nurse teaches the patient to:',o:['Bend and lift freely','Avoid bending, lifting, and straining','Remove the eye shield at night','Rub the eye'],c:1,t:'single',r:'Avoid raising IOP; keep shield on; don\'t rub; report sudden pain/vision change.'},
+{topic:'eye',q:'Macular degeneration causes loss of ___ vision.',o:['Peripheral','Central','No','All'],c:1,t:'single',r:'Central vision loss (opposite of glaucoma).'},
+{topic:'eye',q:'A patient reports sudden floaters, flashes, and a curtain over vision. This suggests:',o:['Cataract','Retinal detachment (emergency)','Glaucoma','Dry eye'],c:1,t:'single',r:'Retinal detachment — needs prompt surgery.'},
+{topic:'general',q:'The classic triad of Ménière\'s disease is:',o:['Pain, fever, discharge','Episodic vertigo, tinnitus, fluctuating sensorineural hearing loss','Headache, vertigo, fever','Tinnitus, pain, nausea'],c:1,t:'single',r:'Vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
+{topic:'general',q:'Dietary management for Ménière\'s disease:',o:['High sodium','Low sodium','High protein','Low fat'],c:1,t:'single',r:'Low sodium (+ diuretics) reduces inner-ear fluid pressure.'},
+{topic:'general',q:'During a Ménière\'s vertigo attack, the priority is:',o:['Encourage walking','Fall safety — lie still in a quiet, dark room','Give food','Bright lights'],c:1,t:'single',r:'Vertigo → falls; keep the patient safe and still.'},
+{topic:'general',q:'Hearing loss from earwax or middle-ear fluid is:',o:['Sensorineural','Conductive','Central','Functional'],c:1,t:'single',r:'Conductive — blockage in outer/middle ear; often reversible.'},
+{topic:'eye',q:'Age-related sensorineural hearing loss is called:',o:['Presbyopia','Presbycusis','Tinnitus','Otitis'],c:1,t:'single',r:'Presbycusis — high-frequency loss first.'},
+{topic:'general',q:'Which drugs are ototoxic? (SATA)',o:['Aminoglycosides','Furosemide (loop diuretic)','High-dose aspirin','Acetaminophen','Some chemo agents'],c:[0,1,2,4],t:'multi',r:'Aminoglycosides, loop diuretics, high-dose aspirin, and some chemo are ototoxic. Acetaminophen is not.'},
+{topic:'general',q:'When communicating with a hard-of-hearing patient, the nurse should:',o:['Shout','Face the patient and speak clearly, reducing background noise','Cover their mouth','Speak very fast'],c:1,t:'single',r:'Face them, speak clearly, reduce noise; don\'t shout (distorts sound).'},
+{topic:'general',q:'A sick Type 1 diabetic asks if they should stop insulin since they\'re not eating. Best response?',o:['"Yes, skip it."','"Never stop insulin during illness — it can cause DKA."','"Take half."','"Stop checking glucose too."'],c:1,t:'single',r:'Never stop insulin during illness (top DKA cause).'},
+{topic:'general',q:'Which insulin has essentially no peak and is never given IV or mixed?',o:['Regular','Lispro','Glargine','NPH'],c:2,t:'single',r:'Glargine (long-acting) is peakless, never IV, never mixed.'},
+{topic:'general',q:'When does hypoglycemia risk peak for a given insulin?',o:['At injection','At the insulin\'s peak action time','Only at night','Never'],c:1,t:'single',r:'Hypoglycemia risk is highest at the insulin\'s peak.'},
+{topic:'general',q:'A diabetic foot ulcer that goes untreated most seriously risks:',o:['A cold','Amputation','Hair loss','Weight gain'],c:1,t:'single',r:'Unhealed ulcers + poor circulation + infection → amputation.'},
+{topic:'general',q:'Which are microvascular complications of diabetes? (SATA)',o:['Retinopathy','Nephropathy','Coronary artery disease','Stroke','Peripheral neuropathy'],c:[0,1,4],t:'multi',r:'Micro = retinopathy, nephropathy, neuropathy. CAD and stroke are macrovascular.'},
+{topic:'general',q:'Kussmaul respirations in DKA are the body\'s attempt to:',o:['Warm up','Blow off CO₂ (acid) to raise pH','Cool down','Increase glucose'],c:1,t:'single',r:'Deep rapid breathing exhales CO₂ to compensate for the metabolic acidosis.'},
+{topic:'general',q:'A diabetic patient\'s glucose is 60 and they are unconscious in the hospital with IV access. Give:',o:['Oral glucose gel','IV dextrose (D50)','Insulin','Nothing'],c:1,t:'single',r:'With IV access and unconscious → IV dextrose (D50).'},
+{topic:'general',q:'Which best describes Type 2 diabetes?',o:['No insulin produced','Insulin resistance with declining production','Autoimmune','Only in children'],c:1,t:'single',r:'Type 2 = insulin resistance + declining production.'},
+{topic:'general',q:'A patient with a Stage 3 pressure injury has visible:',o:['Intact red skin','A shallow blister','Subcutaneous fat','Bone'],c:2,t:'single',r:'Stage 3 = full-thickness, fat visible, no bone/tendon.'},
+{topic:'general',q:'The most common sites for pressure injuries include: (SATA)',o:['Sacrum','Heels','Ischial tuberosities','Forehead','Greater trochanter'],c:[0,1,2,4],t:'multi',r:'Sacrum, heels, ischial tuberosities, trochanter, elbows — weight-bearing bony prominences.'},
+{topic:'general',q:'A patient in a wheelchair should be repositioned how often to prevent pressure injury?',o:['Every 2 hours','Every 15 minutes','Every 8 hours','Once a shift'],c:1,t:'single',r:'Chair/wheelchair = reposition every 15 minutes; bed = every 2 hours.'},
+{topic:'general',q:'For a side-lying (lateral) patient, which areas are at highest pressure-injury risk?',o:['Sacrum and heels','Hip and iliac crest','Breasts and genitalia','Back of head'],c:1,t:'single',r:'Side-lying → hip and iliac crest (plus ear, ribs, ankle).'},
+{topic:'general',q:'A patient has an existing pressure ulcer. The main goal of care is to:',o:['Massage it','Offload the area to restore circulation and healing','Keep them still','Apply heat'],c:1,t:'single',r:'Offload — remove all pressure from the area so it can heal.'},
+{topic:'general',q:'Which are domains scored by the Braden scale? (SATA)',o:['Sensory perception','Moisture','Mobility/activity','Nutrition','Blood glucose'],c:[0,1,2,3],t:'multi',r:'Braden: sensory, moisture, activity, mobility, nutrition, friction/shear. Not blood glucose.'},
+{topic:'general',q:'Intact skin that is purple/maroon and feels boggy indicates:',o:['Stage 1','Stage 2','Deep tissue injury','Unstageable'],c:2,t:'single',r:'Deep tissue injury — intact skin, purple/maroon, boggy; damage is happening underneath.'},
+{topic:'general',q:'A patient on furosemide reports new ringing in the ears. The nurse recognizes this as:',o:['Normal','Possible ototoxicity','A cold','Anxiety'],c:1,t:'single',r:'Loop diuretics are ototoxic; tinnitus can signal ear damage — report it.'},
+{topic:'eye',q:'Which statement about lost vision in glaucoma is true?',o:['It fully returns with drops','It is permanent; treatment prevents further loss','It resolves on its own','Surgery restores it'],c:1,t:'single',r:'Optic nerve damage is permanent; treatment preserves remaining vision.'},
+{topic:'general',q:'A patient with hypoglycemia unawareness needs:',o:['Less monitoring','Frequent glucose checks and family taught to give glucagon','No treatment','Only insulin'],c:1,t:'single',r:'They lose early warning signs → check often; family should know glucagon.'},
+{topic:'general',q:'When glucose reaches ~250 during DKA treatment, the nurse anticipates:',o:['Stopping fluids','Adding dextrose (D5W) to the fluids','Stopping insulin','Giving bicarbonate'],c:1,t:'single',r:'Add dextrose so glucose doesn\'t crash while insulin keeps clearing ketones.'},
+{topic:'eye',q:'Which patient should the nurse see FIRST?',o:['Type 2 diabetic, glucose 190','Type 1 diabetic who is confused, sweaty, and shaky','Healing Stage 2 pressure injury','Glaucoma patient due for drops'],c:1,t:'single',r:'Hypoglycemia signs = acute brain emergency → see first.'},
+{topic:'general',q:'Sick-day rules for diabetes include: (SATA)',o:['Never stop insulin','Check glucose/ketones every 3–4 hours','Sip fluids hourly','Stop all monitoring','Take small carb portions'],c:[0,1,2,4],t:'multi',r:'Continue insulin, monitor glucose/ketones, stay hydrated, small carbs. Never stop monitoring.'},
+{topic:'eye',q:'A patient recovering from eye surgery suddenly reports severe eye pain. The nurse should:',o:['Ignore it','Notify the provider — could signal a complication','Tell them to rub it','Remove the shield'],c:1,t:'single',r:'Sudden pain post-eye-surgery can signal increased IOP or hemorrhage — report immediately.'},
+{topic:'general',q:'Which is a sign of autonomic neuropathy in diabetes?',o:['Stocking-glove numbness','Orthostatic hypotension and delayed gastric emptying','Barrel chest','Peaked T waves'],c:1,t:'single',r:'Autonomic neuropathy affects automatic functions: orthostatic hypotension, gastroparesis, silent MI, bladder issues.'},
+{topic:'eye',q:'A patient asks why their blurry cataract vision is worse in bright light. Best explanation:',o:['The lens is detaching','The cloudy lens scatters light, causing glare','The retina is bleeding','The pressure is high'],c:1,t:'single',r:'A cloudy lens scatters incoming light → glare and halos, worse in bright light/at night.'},
+{topic:'general',q:'Which finding in a diabetic foot exam is MOST concerning?',o:['Dry skin','A non-healing ulcer with drainage and redness','Slightly thick toenails','A small callus'],c:1,t:'single',r:'A non-healing, draining, red ulcer signals infection that can progress to amputation — most concerning.'},
+{topic:'eye',q:'The nurse is teaching about metformin. Which side effect is common?',o:['Hypoglycemia alone','GI upset (nausea, diarrhea)','Hyperkalemia','Vision loss'],c:1,t:'single',r:'Metformin commonly causes GI upset; it does not cause hypoglycemia by itself.'},
+{topic:'general',q:'Which insulins can be mixed in the same syringe?',o:['Glargine and regular','Regular and NPH','NPH and detemir','No insulins can be mixed'],c:1,t:'single',r:'Regular and NPH can be mixed (clear before cloudy). Long-acting insulins are never mixed.'},
+{topic:'general',q:'A key difference in HHS management vs DKA is:',o:['No fluids needed','Insulin is not needed to reverse acidosis (there is none)','No monitoring','Give bicarbonate'],c:1,t:'single',r:'HHS has no acidosis, so insulin is for glucose, not acid reversal; fluids are even more central.'},
+{topic:'general',q:'Which statement about A1C is correct?',o:['It shows today\'s glucose','It reflects average glucose over ~3 months','It measures insulin','It changes hourly'],c:1,t:'single',r:'A1C = ~3-month average glucose.'},
+{topic:'eye',q:'A patient with peripheral neuropathy describes their symptoms as:',o:['Sharp central chest pain','Numbness and burning in a stocking-glove pattern','Sudden vision loss','Ear ringing'],c:1,t:'single',r:'Peripheral neuropathy = stocking-glove numbness/burning starting in toes/fingers.'},
+{topic:'general',q:'Which is the priority teaching to prevent DKA?',o:['Exercise less','Never omit insulin, especially when ill','Eat less protein','Avoid all carbs'],c:1,t:'single',r:'Omitting insulin during illness is the top DKA cause — never stop it.'},
+{topic:'eye',q:'A patient with glaucoma must understand that eye drops:',o:['Cure the disease','Must be used lifelong to control IOP','Are optional','Restore lost vision'],c:1,t:'single',r:'Drops control IOP for life; they prevent further loss but don\'t restore vision.'},
+{topic:'general',q:'Which are signs of hypoglycemia? (SATA)',o:['Sweating','Shakiness','Confusion','Fruity breath','Tachycardia'],c:[0,1,2,4],t:'multi',r:'Sweating, shakiness, tachycardia (adrenergic) and confusion (neuro) are hypoglycemia. Fruity breath is DKA.'},
+{topic:'general',q:'A patient with a Stage 4 pressure injury needs which nutrition focus?',o:['Low protein','High protein and adequate calories for healing','Fluid restriction','Low calorie'],c:1,t:'single',r:'Wound healing needs protein and calories; correct albumin/protein deficits.'},
+{topic:'general',q:'Which describes proper diabetic foot washing?',o:['Soak feet for an hour','Wash and dry daily, especially between toes','Never wash feet','Use very hot water'],c:1,t:'single',r:'Wash and dry daily (dry between toes); avoid hot water (burn risk) and long soaking.'},
+{topic:'eye',q:'A patient reports halos around lights and gradual peripheral vision loss. This suggests:',o:['Cataract only','Open-angle glaucoma','Retinal detachment','Conjunctivitis'],c:1,t:'single',r:'Gradual peripheral loss + halos = open-angle glaucoma.'},
+{topic:'general',q:'Which is TRUE of sensorineural hearing loss?',o:['Always reversible','Usually permanent (nerve/cochlea damage)','Caused by earwax','Cured by irrigation'],c:1,t:'single',r:'Sensorineural = permanent inner-ear/nerve damage. Conductive is often reversible.'},
+{topic:'general',q:'The nurse should question a potassium order in DKA if:',o:['The patient is urinating well','The patient has no urine output','Potassium is low','Insulin is running'],c:1,t:'single',r:'Hold K⁺ if the patient isn\'t urinating (K⁺ can build to dangerous levels) or if K⁺ is high.'},
+{topic:'general',q:'Which is the earliest sign the body gives during a drop in blood sugar?',o:['Seizure','Adrenergic symptoms (shaky, sweaty, fast heart)','Coma','Fruity breath'],c:1,t:'single',r:'Adrenaline release causes early shaky/sweaty/tachycardic symptoms before neuro signs.'},
+{topic:'general',q:'A patient with diabetic gastroparesis (autonomic neuropathy) should:',o:['Eat large fatty meals','Eat small, low-fat meals','Fast all day','Only drink liquids forever'],c:1,t:'single',r:'Gastroparesis (delayed emptying) → small, low-fat meals help.'},
+{topic:'general',q:'Which is the priority during an acute vertigo attack in Ménière\'s?',o:['Ambulate the patient','Ensure safety and prevent falls','Turn on bright lights','Give a large meal'],c:1,t:'single',r:'Fall prevention is the priority; keep the patient still in a calm environment.'},
+{topic:'eye',q:'What is the mechanism behind diabetic retinopathy?',o:['Cloudy lens','Damage to tiny retinal blood vessels from chronic hyperglycemia','High eye pressure','Nerve compression'],c:1,t:'single',r:'Chronic high glucose damages the retina\'s microvessels → retinopathy.'},
+{topic:'general',q:'A patient asks how to prevent Type 2 diabetes complications. Best answer:',o:['Nothing can be done','Tight glucose, BP, and lipid control plus healthy lifestyle','Only take vitamins','Avoid all doctors'],c:1,t:'single',r:'Controlling glucose, BP, and lipids plus lifestyle changes prevents/slows complications.'},
+{topic:'general',q:'Which insulin is rapid-acting and given right with meals?',o:['Glargine','NPH','Lispro','Regular'],c:2,t:'single',r:'Lispro (rapid) is given with food (~15 min onset).'},
+{topic:'general',q:'A patient with a new Stage 2 pressure injury needs a dressing that:',o:['Keeps the wound dry and open to air','Maintains a moist wound environment','Uses no dressing','Applies heat'],c:1,t:'single',r:'Wounds heal best in a moist (not wet/dry) environment.'},
+{topic:'eye',q:'The nurse notes a diabetic patient\'s breath smells fruity. This suggests:',o:['Good control','DKA (ketones)','Hypoglycemia','Cataracts'],c:1,t:'single',r:'Fruity/acetone breath = ketones = DKA.'},
+{topic:'eye',q:'Which action helps prevent diabetic retinopathy progression?',o:['Avoid eye exams','Regular dilated eye exams and glucose/BP control','Wear sunglasses only','Nothing'],c:1,t:'single',r:'Early detection (regular exams) plus glucose and BP control slows progression.'},
+{topic:'general',q:'Which findings make up metabolic syndrome? (SATA)',o:['Central obesity (waist >40 in men, >35 in women)','Hypertension','Low HDL / high LDL or triglycerides','Hyperinsulinemia with insulin resistance','Polycythemia'],c:[0,1,2,3],t:'multi',r:'Metabolic syndrome = central obesity + HTN + dyslipidemia + hyperinsulinemia/insulin resistance. It\'s a risk cluster, not a complication.'},
+{topic:'general',q:'A slow-onset autoimmune diabetes discovered in adulthood, initially mistaken for Type 2, is called:',o:['Gestational diabetes','LADA (\"Type 1.5\")','HHS','Prediabetes'],c:1,t:'single',r:'LADA = autoimmune beta-cell destruction like Type 1, but slower and in adults — often misdiagnosed as Type 2 at first.'},
+{topic:'general',q:'Which is a function of insulin besides moving glucose into cells? (SATA)',o:['Stores excess glucose as fat','Blocks fat breakdown (lipolysis)','Helps move potassium into cells','Stimulates glucagon release','Produces ketones'],c:[0,1,2],t:'multi',r:'Insulin stores glucose as fat, blocks lipolysis, and pushes K⁺ into cells. It does NOT stimulate glucagon or produce ketones — ketones happen when insulin is missing/ineffective.'},
+{topic:'general',q:'Why does an ill diabetic patient\'s glucose rise even without eating?',o:['It doesn\'t rise without food','Cortisol and stress hormones raise glucose and are released during illness','Insulin stops working permanently','Glucose only rises after meals'],c:1,t:'single',r:'Illness/stress triggers cortisol and adrenaline release, which raises blood glucose independent of food intake — why sick-day monitoring must continue even if the patient isn\'t eating.'},
+{topic:'general',q:'Approximately how much sugar should be circulating in the entire blood volume at one time?',o:['1 cup','About 1 teaspoon (~7 sugar cubes, ~30g)','1 pound','5 tablespoons'],c:1,t:'single',r:'Roughly 1 tsp (~30g) across the whole blood volume — a small homeostatic target that insulin works constantly to maintain.'},
+{topic:'general',q:'A pregnant patient develops diabetes only during pregnancy, with a larger-than-average baby. This is:',o:['Type 1 diabetes','Gestational diabetes','LADA','Prediabetes'],c:1,t:'single',r:'Gestational diabetes develops during pregnancy (more common with larger babies), usually resolves after delivery, but raises future Type 2 risk.'}
 ];
 </script>
 <script>
@@ -2697,6 +2803,9 @@ function renderExam(){
       <button class="mode-btn" id="modeStudyBtn" onclick="setExamMode('study')">📖 Study Mode</button>
       <button class="mode-btn" id="modeTestBtn" onclick="setExamMode('test')">📝 Test Mode</button>
     </div>
+    <div class="center" style="margin:8px 0">
+      <button class="btn vision-toggle-btn" onclick="toggleVisionOnly()" style="background:var(--purple)">🎯 Vision Only: OFF (tap to focus on vision)</button>
+    </div>
     <div class="tipbar" id="examModeTip"></div>
     <div id="examBody"></div>
     <div class="exam-nav">
@@ -2713,7 +2822,8 @@ function renderExam(){
   } else { setExamMode(examMode); }
 }
 function buildQuizSet(m){
-  const all=EXAM.map((_,i)=>i);
+  let all=EXAM.map((_,i)=>i);
+  if(visionOnlyGlobal) all=all.filter(i=>EXAM[i].topic==='eye');
   quizSet = m==='test' ? shuffleArr(all).slice(0,Math.min(50,all.length)) : all;
 }
 function applyModeUI(m){
@@ -2809,6 +2919,6 @@ function resetExam(){ examState={}; examIdx=0; examSubmitted=false; examChecked=
 renderExam();
 </script>
 
-<script>/* init progress total */ updateProg();</script>
+<script>/* init progress total */ updateProg(); if(typeof updateVisionToggleButtons==='function') updateVisionToggleButtons();</script>
 </body>
 </html>
