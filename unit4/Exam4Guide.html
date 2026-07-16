@@ -149,7 +149,8 @@ body.mobile-mode .match-stats{font-size:1rem}
 /* exam layout */
 .mode-btn{flex:1;border:2px solid var(--card-border);background:var(--card);color:var(--ink);padding:12px;border-radius:12px;font-weight:800;cursor:pointer}
 .mode-btn.active{background:linear-gradient(90deg,var(--purple),var(--pink));color:#fff;border-color:transparent}
-.exam-mode-toggle{display:flex;gap:10px;margin:10px 0}
+.exam-mode-toggle{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.exam-mode-toggle .mode-btn{flex:1 1 90px;font-size:.85rem;padding:10px 6px}
 .exam-q{background:var(--card);border:2px solid var(--card-border);border-radius:16px;padding:16px;margin:12px 0}
 .qnum{font-size:.78rem;font-weight:800;color:var(--muted)}
 .qtype{float:right;background:var(--teal-soft);color:var(--teal);padding:2px 10px;border-radius:20px;font-size:.7rem;font-weight:800}
@@ -449,32 +450,36 @@ function renderVaultSection(){
   if(wrongVault.length===0){
     host.innerHTML=`
     <h2 class="sec-title"><span class="sec-emoji">🗄️</span> Wrong Answer Vault</h2>
-    <p class="intro-line">Every question you miss anywhere in this guide automatically lands here so you can drill your actual weak spots instead of re-reviewing everything.</p>
+    <p class="intro-line">Every question you miss anywhere in this guide — including the Practice Exam — automatically lands here so you can drill your actual weak spots instead of re-reviewing everything.</p>
     <div class="card"><div class="vault-empty">🎉<br><b>Your vault is empty!</b><br>Either you haven't missed anything yet, or you've already cleared it out. Go answer some questions — anything you get wrong will show up here automatically.</div></div>`;
     return;
   }
   let html=`
     <h2 class="sec-title"><span class="sec-emoji">🗄️</span> Wrong Answer Vault</h2>
-    <p class="intro-line">These are the exact questions you've missed, pulled from every section. Re-answer them here — get one right and it clears itself out of the vault.</p>
+    <p class="intro-line">These are the exact questions you've missed, pulled from every section — including the Practice Exam. Re-answer them here — get one right and it clears itself out of the vault.</p>
     <div class="card" style="border-color:var(--red)">
       <h3>📋 ${wrongVault.length} question${wrongVault.length===1?'':'s'} to review</h3>
       <button class="btn" style="background:var(--red)" onclick="if(confirm('Clear the entire vault? This cannot be undone.')){wrongVault=[];saveVault();document.getElementById('vaultCount').textContent='0';renderVaultSection();}">🗑️ Clear entire vault</button>
     </div>
   `;
   wrongVault.forEach(entry=>{
-    html+=`<div class="card" id="vaultcard-${entry.id.replace(/[^a-zA-Z0-9-]/g,'')}">
+    const safeId=entry.id.replace(/[^a-zA-Z0-9-]/g,'');
+    html+=`<div class="card" id="vaultcard-${safeId}">
       <span class="vault-tag">${entry.source||'Review'}</span>
       <div class="q-text">${entry.q}</div>
-      <div class="opts" id="vopts-${entry.id.replace(/[^a-zA-Z0-9-]/g,'')}"></div>
-      <div class="rationale" id="vrat-${entry.id.replace(/[^a-zA-Z0-9-]/g,'')}"><b>Rationale:</b> ${entry.rat}</div>
+      <div id="vbody-${safeId}"></div>
+      <div class="rationale" id="vrat-${safeId}"><b>Rationale:</b> ${entry.rat}</div>
     </div>`;
   });
   host.innerHTML=html;
   wrongVault.forEach(rawEntry=>{
-    const entry=prepareQuestion(rawEntry);
     const safeId=rawEntry.id.replace(/[^a-zA-Z0-9-]/g,'');
-    const optsHost=document.getElementById('vopts-'+safeId);
+    const bodyHost=document.getElementById('vbody-'+safeId);
     const ratHost=document.getElementById('vrat-'+safeId);
+    if(rawEntry.type==='match'){ renderVaultMatch(rawEntry, safeId, bodyHost, ratHost); return; }
+    if(rawEntry.type==='order'){ renderVaultOrder(rawEntry, safeId, bodyHost, ratHost); return; }
+    const entry=prepareQuestion(rawEntry);
+    const optsHost=document.createElement('div'); optsHost.className='opts'; bodyHost.appendChild(optsHost);
     if(entry.type==='multi'){
       const chosen=new Set();
       entry.opts.forEach((o,i)=>{
@@ -518,6 +523,87 @@ function renderVaultSection(){
       });
     }
   });
+}
+function renderVaultMatch(rawEntry, safeId, bodyHost, ratHost){
+  const order = shuffleAnswers ? shuffle(rawEntry.items.map((_,i)=>i)) : rawEntry.items.map((_,i)=>i);
+  const defs = order.map(i=>rawEntry.items[i].def);
+  const picks=[];
+  bodyHost.innerHTML='';
+  rawEntry.items.forEach((item,itemIdx)=>{
+    const row=document.createElement('div'); row.className='dm-row';
+    const termEl=document.createElement('div'); termEl.className='dm-term'; termEl.textContent=item.term; row.appendChild(termEl);
+    const sel=document.createElement('select'); sel.className='dm-select';
+    const blank=document.createElement('option'); blank.value=''; blank.textContent='— choose a definition —'; sel.appendChild(blank);
+    defs.forEach((d,pos)=>{ const opt=document.createElement('option'); opt.value=pos; opt.textContent=d; sel.appendChild(opt); });
+    sel.onchange=()=>{ picks[itemIdx] = sel.value===''? undefined : parseInt(sel.value,10); };
+    row.appendChild(sel); bodyHost.appendChild(row);
+  });
+  const sub=document.createElement('button'); sub.className='submit-multi'; sub.textContent='Check Answers';
+  sub.onclick=()=>{
+    const allRight = rawEntry.items.every((_,i)=>picks[i]!==undefined && order[picks[i]]===i);
+    bodyHost.querySelectorAll('.dm-row').forEach((row,i)=>{
+      row.classList.add(picks[i]!==undefined && order[picks[i]]===i ? 'dm-correct' : 'dm-wrong');
+    });
+    bodyHost.querySelectorAll('select').forEach(s=>s.disabled=true);
+    ratHost.classList.add('show'); sub.style.display='none';
+    if(allRight){
+      const solved=document.createElement('div'); solved.className='vault-solved'; solved.textContent='✅ Correct! Removing from vault...';
+      bodyHost.appendChild(solved);
+      setTimeout(()=>{ removeFromVault(rawEntry.id); const el=document.getElementById('vaultcard-'+safeId); if(el)el.remove(); if(wrongVault.length===0)renderVaultSection(); },900);
+    }
+  };
+  bodyHost.appendChild(sub);
+}
+function renderVaultOrder(rawEntry, safeId, bodyHost, ratHost){
+  const order = shuffleAnswers ? shuffle(rawEntry.steps.map((_,i)=>i)) : rawEntry.steps.map((_,i)=>i);
+  const displaySteps = order.map(i=>rawEntry.steps[i]);
+  let picks=[];
+  function redraw(){
+    bodyHost.innerHTML='';
+    const answerList=document.createElement('div'); answerList.className='order-answer';
+    picks.forEach((origIdx,pos)=>{
+      const item=document.createElement('div'); item.className='order-answer-item';
+      item.innerHTML=`<span class="num">${pos+1}</span><span>${rawEntry.steps[origIdx]}</span>`;
+      answerList.appendChild(item);
+    });
+    bodyHost.appendChild(answerList);
+    const pool=document.createElement('div'); pool.className='order-pool';
+    displaySteps.forEach((step,displayPos)=>{
+      const origIdx=order[displayPos];
+      const btn=document.createElement('button'); btn.className='order-chip'; btn.textContent=step;
+      if(picks.includes(origIdx)) btn.disabled=true;
+      btn.onclick=()=>{ if(!picks.includes(origIdx)){ picks.push(origIdx); redraw(); } };
+      pool.appendChild(btn);
+    });
+    bodyHost.appendChild(pool);
+    const btnRow=document.createElement('div'); btnRow.className='center'; btnRow.style.cssText='display:flex;gap:8px;justify-content:center;flex-wrap:wrap';
+    const undoBtn=document.createElement('button'); undoBtn.className='btn ghost'; undoBtn.textContent='↺ Undo Last';
+    undoBtn.onclick=()=>{ picks.pop(); redraw(); };
+    btnRow.appendChild(undoBtn);
+    if(picks.length===rawEntry.steps.length){
+      const checkBtn=document.createElement('button'); checkBtn.className='btn'; checkBtn.style.background='linear-gradient(90deg,var(--teal),var(--green))'; checkBtn.textContent='✓ Check Order';
+      checkBtn.onclick=()=>{
+        const allRight = picks.every((v,i)=>v===i);
+        bodyHost.innerHTML='';
+        const finalList=document.createElement('div'); finalList.className='order-answer';
+        picks.forEach((origIdx,pos)=>{
+          const item=document.createElement('div'); item.className='order-answer-item '+(origIdx===pos?'order-correct':'order-wrong');
+          item.innerHTML=`<span class="num">${pos+1}</span><span>${rawEntry.steps[origIdx]}</span>`;
+          finalList.appendChild(item);
+        });
+        bodyHost.appendChild(finalList);
+        ratHost.classList.add('show');
+        if(allRight){
+          const solved=document.createElement('div'); solved.className='vault-solved'; solved.textContent='✅ Correct! Removing from vault...';
+          bodyHost.appendChild(solved);
+          setTimeout(()=>{ removeFromVault(rawEntry.id); const el=document.getElementById('vaultcard-'+safeId); if(el)el.remove(); if(wrongVault.length===0)renderVaultSection(); },900);
+        }
+      };
+      btnRow.appendChild(checkBtn);
+    }
+    bodyHost.appendChild(btnRow);
+  }
+  redraw();
 }
 </script>
 
@@ -1032,7 +1118,43 @@ renderQuiz('quiz-htn',[
 
   {q:'A client asks why decreased vasodilation from endothelial dysfunction contributes to hypertension. What is the correct explanation?',type:'single',
    opts:['A. Endothelial function has no relationship to blood pressure','B. Impaired vasodilation means vessels stay more constricted, raising peripheral resistance and blood pressure','C. Endothelial dysfunction only affects heart rate, not vessel tone','D. Vasodilation always raises blood pressure'],correct:1,
-   rat:'A dismisses a genuine mechanism, C misattributes the effect, and D reverses the actual relationship (vasodilation LOWERS resistance and pressure). Impaired vasodilation keeps vessels more constricted, raising peripheral resistance and contributing to hypertension.'}
+   rat:'A dismisses a genuine mechanism, C misattributes the effect, and D reverses the actual relationship (vasodilation LOWERS resistance and pressure). Impaired vasodilation keeps vessels more constricted, raising peripheral resistance and contributing to hypertension.'},
+
+  {q:'A client with newly diagnosed hypertension asks why the provider wants a urinalysis and BUN/creatinine before starting treatment. What is the correct explanation?',type:'single',
+   opts:['A. These tests have no relevance to hypertension','B. These establish a baseline for kidney function/target organ involvement, since the kidneys are a classic hypertension target organ','C. These tests are only used to diagnose diabetes','D. These are required only if the client already has known kidney disease'],correct:1,
+   rat:'A dismisses relevant baseline testing, C misattributes the tests to an unrelated condition, and D limits testing to only those already known to have disease — missing the point of baseline screening. Since kidneys are a classic HTN target organ, baseline renal function testing is a reasonable part of the initial workup.'},
+
+  {q:'A client on multiple antihypertensive medications reports their BP is well controlled at 122/78 mmHg. They ask if they can stop taking their medications since their BP is now normal. What is the BEST nursing response?',type:'single',
+   opts:['A. "Yes, since your BP is normal, the medications are no longer needed."','B. "Your BP is well-controlled because of the medications — stopping them would likely cause your BP to rise again, since hypertension is a chronic condition being managed, not cured."','C. "You can stop the medications but should still get help immediately once symptoms return."','D. "Medications only need to be taken during a hypertensive crisis."'],correct:1,
+   rat:'A dangerously encourages self-discontinuation based on a controlled number rather than an underlying cure, and C and D both reflect the same fundamental misunderstanding. Controlled BP reflects the medication working, not the underlying condition resolving — this is a critical distinction for long-term adherence teaching.'},
+
+  {q:'Which of the following are appropriate DASH diet teaching points for a client with hypertension? (Select all that apply)',type:'multi',
+   opts:['A. Increase fruits and vegetables','B. Reduce sodium intake','C. Choose low-fat dairy options','D. Increase processed/canned food intake for convenience','E. Limit red meat'],correct:[0,1,2,4],
+   rat:'Processed/canned foods are typically HIGH in sodium, directly working against DASH diet goals — the opposite of appropriate teaching. Increasing produce, reducing sodium, choosing low-fat dairy, and limiting red meat are all core DASH principles.'},
+
+  {q:'A client asks why obesity is considered both a modifiable risk factor and a contributor to insulin resistance in the context of hypertension. What is the correct connection?',type:'single',
+   opts:['A. Obesity and insulin resistance are unrelated to each other','B. Excess adipose tissue contributes to insulin resistance, and both together raise blood pressure through overlapping metabolic and vascular mechanisms','C. Only insulin resistance affects blood pressure; obesity itself has no independent effect','D. Weight has no bearing on blood pressure regulation'],correct:1,
+   rat:'A, C, and D all deny a real, overlapping metabolic relationship. Obesity and insulin resistance interact and compound each other\'s effects on blood pressure — a good example of why hypertension risk factors are best understood as a connected cluster, not isolated variables.'},
+
+  {q:'A client is prescribed a thiazide diuretic for hypertension and asks about potential electrolyte effects. What is the correct teaching point?',type:'single',
+   opts:['A. Thiazides have no effect on electrolytes','B. Thiazides can cause potassium loss, so monitoring potassium levels is appropriate','C. Thiazides always cause potassium retention','D. Electrolyte monitoring is unnecessary with any diuretic class'],correct:1,
+   rat:'A and D both dismiss a real, class-wide diuretic consideration, and C reverses the actual effect (loss, not retention). Thiazide diuretics, like loop diuretics, can cause potassium loss, making periodic monitoring appropriate.'},
+
+  {q:'A client asks why untreated hypertension is specifically linked to left ventricular hypertrophy (LVH). What is the correct mechanism?',type:'single',
+   opts:['A. LVH is unrelated to blood pressure','B. The heart must work harder against chronically elevated systemic resistance, causing the left ventricle to thicken/enlarge over time','C. LVH is caused exclusively by genetics, unrelated to blood pressure','D. LVH only occurs in the right ventricle, not the left'],correct:1,
+   rat:'A and C both deny the well-established hemodynamic mechanism, and D confuses left vs. right-sided changes. Chronically elevated afterload (systemic resistance) makes the left ventricle work harder, leading to compensatory hypertrophy over time.'},
+
+  {q:'A client with hypertension and no other risk factors asks how often blood pressure should be reassessed once well controlled on medication. What is a reasonable general principle?',type:'single',
+   opts:['A. Regular follow-up monitoring is appropriate even once BP is controlled, to ensure continued effectiveness and catch any changes','B. Once controlled, no further monitoring is ever needed','C. Monitoring is only necessary if new symptoms develop','D. Annual monitoring is excessive and unnecessary for hypertensive clients'],correct:0,
+   rat:'B, C, and D all under-emphasize the importance of ongoing monitoring for a chronic condition. Regular follow-up, even when well-controlled, helps ensure continued effectiveness and catches any needed adjustments.'},
+
+  {q:'Which of the following statements correctly reflects current hypertension staging categories?',type:'single',
+   opts:['A. Elevated BP, Stage 1, and Stage 2 are recognized categories above normal, each with different management implications','B. There is only one category: hypertensive or not hypertensive','C. Staging has no bearing on treatment decisions','D. Stage 2 hypertension requires less aggressive treatment than Stage 1'],correct:0,
+   rat:'B oversimplifies a graded classification system, C denies that staging informs treatment, and D reverses the actual relationship (Stage 2 is more severe, generally warranting more aggressive management). Recognizing distinct staging categories (elevated, Stage 1, Stage 2) reflects current classification and helps guide the intensity of management.'},
+
+  {q:'A client asks why chronic stress is considered a contributing factor to hypertension. What is the correct explanation?',type:'single',
+   opts:['A. Stress has no physiological connection to blood pressure','B. Chronic stress activates the sympathetic nervous system, increasing heart rate and causing vasoconstriction, both of which can raise blood pressure over time','C. Stress only affects mental health, never physical health markers','D. Stress lowers blood pressure by promoting relaxation'],correct:1,
+   rat:'A and C both deny a real physiological pathway, and D states the opposite of the actual effect. Chronic sympathetic activation from stress increases heart rate and causes vasoconstriction — both of which contribute to elevated blood pressure over time.'}
 ],'Hypertension Check');
 </script>
 
@@ -1169,7 +1291,39 @@ renderQuiz('quiz-acs',[
 
   {q:'A client asks what the goal of ACS treatment is beyond managing the current episode. What is the BEST response?',type:'single',
    opts:['A. The only goal is symptom relief during the current episode','B. Preventing a future MI and improving overall heart health through medications and lifestyle changes','C. The goal is exclusively surgical intervention','D. There is no long-term goal beyond hospital discharge'],correct:1,
-   rat:'A, C, and D all understate the broader treatment goal. ACS management aims not just to address the current event but to prevent a FUTURE MI and improve overall cardiovascular health through both medication and lifestyle change.'}
+   rat:'A, C, and D all understate the broader treatment goal. ACS management aims not just to address the current event but to prevent a FUTURE MI and improve overall cardiovascular health through both medication and lifestyle change.'},
+
+  {q:'A client asks why aspirin is given so early in suspected ACS, even before full diagnostic confirmation. What is the correct explanation?',type:'single',
+   opts:['A. Aspirin has no benefit until the diagnosis is fully confirmed','B. Aspirin\'s antiplatelet effect can limit further clot growth quickly, and the benefit of early administration generally outweighs the risk while workup continues','C. Aspirin is given only to reduce pain, unrelated to clotting','D. Aspirin should be withheld until cardiac catheterization is performed'],correct:1,
+   rat:'A and D both delay a time-sensitive intervention unnecessarily, and C misattributes its purpose to pain relief rather than its antiplatelet effect. Early aspirin administration is standard specifically because its antiplatelet effect can limit clot progression while the full diagnostic picture is still being established.'},
+
+  {q:'A client\'s ECG shows ST-segment elevation in suspected acute MI. What does this finding generally indicate?',type:'single',
+   opts:['A. A normal variant requiring no further action','B. Acute, full-thickness myocardial injury, often prompting urgent reperfusion therapy','C. Old, resolved cardiac damage only','D. A finding unrelated to coronary blood flow'],correct:1,
+   rat:'A and D both dismiss a genuinely significant finding, and C misattributes it to old rather than acute injury. ST-segment elevation is generally associated with acute, full-thickness myocardial injury, prompting urgent evaluation for reperfusion therapy.'},
+
+  {q:'Which of the following are appropriate nursing actions for a client with suspected ACS in the emergency department? (Select all that apply)',type:'multi',
+   opts:['A. Obtain IV access','B. Administer supplemental oxygen if hypoxic','C. Obtain a 12-lead ECG promptly','D. Delay pain assessment until diagnostics are complete','E. Monitor vital signs continuously'],correct:[0,1,2,4],
+   rat:'Delaying pain assessment is inappropriate — pain characteristics are actually part of the diagnostic picture and should be assessed promptly, not deferred. IV access, oxygen as needed, prompt ECG, and continuous monitoring are all appropriate initial actions.'},
+
+  {q:'A client asks why beta-blockers are often continued long-term after an MI, not just during the acute event. What is the correct explanation?',type:'single',
+   opts:['A. Beta-blockers only work during the acute phase and provide no additional benefit afterward','B. Long-term use reduces myocardial oxygen demand and has been shown to reduce future cardiac events in this population','C. Beta-blockers are continued only to manage anxiety','D. There is no evidence supporting long-term beta-blocker use post-MI'],correct:1,
+   rat:'A and D both dismiss well-established long-term benefit, and C misattributes the purpose. Long-term beta-blocker use post-MI reduces oxygen demand and is associated with reduced future cardiac event risk, which is why it\'s continued beyond the acute phase.'},
+
+  {q:'A client with a family history of premature coronary artery disease (CAD in a first-degree relative before age 55 for men or 65 for women) asks about their own risk. What is the correct response?',type:'single',
+   opts:['A. Family history has no bearing on individual risk','B. A family history of premature CAD is a recognized, non-modifiable risk factor that warrants attention alongside modifiable risk factors','C. Family history only matters if every relative has been affected','D. This history eliminates the value of addressing modifiable risk factors'],correct:1,
+   rat:'A dismisses a real risk factor, C sets an unreasonably high bar for relevance, and D incorrectly suggests modifiable factors don\'t matter once family history is present — they still do. Family history of premature CAD is a genuine, non-modifiable risk factor worth incorporating into overall risk assessment.'},
+
+  {q:'A client asks why exercise stress testing is sometimes combined with imaging (like echocardiography or nuclear imaging) rather than ECG alone. What is the correct explanation?',type:'single',
+   opts:['A. Imaging has no added value over ECG alone','B. Combined imaging can improve detection of ischemia, especially when baseline ECG changes make interpretation difficult','C. Imaging replaces the need for any exercise component','D. This combination is used only in pediatric patients'],correct:1,
+   rat:'A dismisses genuine added diagnostic value, and C and D both misstate how/when this combination is used. Adding imaging can improve ischemia detection sensitivity, particularly when baseline ECG abnormalities would otherwise complicate interpretation.'},
+
+  {q:'A client recovering from MI asks why cardiac rehabilitation is recommended. What is the correct explanation?',type:'single',
+   opts:['A. Cardiac rehab has no proven benefit','B. Structured, supervised exercise and education can improve functional capacity and support long-term risk factor modification','C. Cardiac rehab is only for clients who had cardiac surgery','D. Cardiac rehab replaces the need for any medication'],correct:1,
+   rat:'A dismisses a well-supported intervention, and C and D both misstate its scope/role. Cardiac rehabilitation supports functional recovery and long-term risk factor management, complementing (not replacing) medication therapy.'},
+
+  {q:'A client asks why a D-dimer might be checked in a workup that also includes cardiac markers. What is the correct explanation?',type:'single',
+   opts:['A. D-dimer is a cardiac-specific marker identical to troponin','B. D-dimer helps evaluate for a clot-related process (like PE) that can also present with chest pain and needs to be distinguished from a cardiac cause','C. D-dimer has no diagnostic value in a cardiac workup','D. D-dimer confirms a cardiac diagnosis on its own'],correct:1,
+   rat:'A incorrectly equates two different biomarkers, and C and D both misstate its actual role. D-dimer is useful for evaluating a possible clot-related cause (like PE) of chest pain, helping differentiate it from a cardiac-origin process — a good example of why the differential for chest pain spans more than one body system.'}
 ],'ACS & Cardiac Check');
 </script>
 
@@ -2112,6 +2266,28 @@ document.getElementById('sec-studymode').innerHTML=`
   <div class="hy">⭐ Mixing up arterial and venous wound care isn't a minor error — treating an arterial ulcer like a venous one (compression, aggressive elevation) can worsen ischemia. This is exactly why the "why" behind the distinction matters more than memorizing two separate fact lists.</div>
 </div>
 
+<div class="card" style="border-color:var(--purple)">
+  <h3>🔍 Worked example #2 — a keyword that flips the entire answer</h3>
+  <p><b>Stem:</b> "All of the following are appropriate teaching points for a client on warfarin EXCEPT:" followed by four statements about diet, missed doses, INR monitoring, and bleeding precautions.</p>
+  <p><b>Step 1:</b> This is a teaching/evaluation-of-understanding question — but phrased backwards from how these usually read.</p>
+  <p><b>Step 2 — keyword:</b> "EXCEPT." This is the single most important word in the stem. Skip it, and you'll instinctively hunt for the BEST teaching point instead of the ONE THAT DOESN'T BELONG — the exact opposite of what's being asked.</p>
+  <p><b>Step 3 — framework:</b> safe vs. unsafe medication teaching — three statements will be genuinely correct, and one will be the unsafe outlier you're actually looking for.</p>
+  <p><b>Step 4 — eliminate the unsafe option (which here is actually the ANSWER):</b> a statement like "eliminate all vitamin K-containing foods" sounds cautious but is actually wrong — the real teaching is CONSISTENT intake, not elimination.</p>
+  <p><b>Step 5 — match to your own answer:</b> because the keyword is EXCEPT, the "wrong-sounding" statement is the one to select. This is exactly where points get lost — not from lack of knowledge, but from answering as if the keyword wasn't there.</p>
+  <div class="hy">⭐ Whenever you see NOT or EXCEPT, physically say "which one is the ODD ONE OUT" in your head before reading the options — it resets your brain to hunt for the wrong-fitting choice instead of the best-sounding one.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>⚠️ The most common ways students misread a question with this instructor</h3>
+  <ul class="clean">
+    <li><b>Missing the keyword</b> (NOT/EXCEPT/FIRST) and answering the opposite question.</li>
+    <li><b>Reacting to a general impression instead of the specific data in the stem</b> — "this sounds serious, must be X" instead of actually matching the described findings to the correct condition.</li>
+    <li><b>Confusing "what's abnormal" with "what's most urgent."</b> A stem can list several abnormal findings and one truly urgent one — the urgent one wins.</li>
+    <li><b>Treating a drug fact in isolation</b> instead of connecting it back to the disease process it's being used for — this instructor consistently ties medications to WHY they matter for a specific condition, not just what they do.</li>
+    <li><b>Forgetting what TYPE of question it is</b> — mixing up an assessment question (gather data) with an intervention question (take action).</li>
+  </ul>
+</div>
+
 <div id="quiz-studymode"></div>
 `;
 renderQuiz('quiz-studymode',[
@@ -2121,7 +2297,19 @@ renderQuiz('quiz-studymode',[
 
   {q:'PRACTICE — A question describes a wound with irregular borders, a ruddy wound bed, and warm, discolored surrounding skin, then asks what type of ulcer this is. A classmate assumes "arterial" because ulcers sound serious either way. What did they do wrong?',type:'single',
    opts:['A. Nothing — all ulcers are arterial by definition','B. They ignored the specific descriptive data in the stem (irregular borders, ruddy bed, warm skin) that actually points to VENOUS, not arterial','C. They should have assumed venous automatically, since it is the more common type','D. The question is unanswerable without additional labs'],correct:1,
-   rat:'This mirrors a common mistake: reacting to a general impression ("this sounds bad, must be arterial") instead of using the specific data given. Irregular borders, a ruddy/exudative bed, and warm discolored skin are the classic VENOUS pattern, not arterial.'}
+   rat:'This mirrors a common mistake: reacting to a general impression ("this sounds bad, must be arterial") instead of using the specific data given. Irregular borders, a ruddy/exudative bed, and warm discolored skin are the classic VENOUS pattern, not arterial.'},
+
+  {q:'PRACTICE — "All of the following are TRUE about right-sided heart failure EXCEPT:" How should you approach the four options?',type:'single',
+   opts:['A. Pick the option that sounds most severe','B. Look for the one option that does NOT belong — the odd one out among otherwise-true statements','C. Assume all four options are false','D. Skip the word EXCEPT since it rarely changes the answer'],correct:1,
+   rat:'D is exactly the trap — EXCEPT changes everything about how you should scan the options. You\'re hunting for the single FALSE statement hiding among three true ones, not ranking by severity or assuming a blanket outcome.'},
+
+  {q:'PRACTICE — A question gives a client\'s CVP of 8 mmHg, reported dyspnea, and an elevated BNP, then asks how the nurse should interpret these findings TOGETHER. A classmate treats each value as a separate, unrelated finding to analyze one at a time. What\'s the better approach?',type:'single',
+   opts:['A. Recognize that all three findings likely reflect ONE underlying process (volume overload) rather than three coincidental, unrelated problems','B. The classmate\'s approach is correct — each lab should always be interpreted in isolation','C. Only the BNP matters; the CVP and dyspnea are irrelevant','D. These three findings can never occur together in real practice'],correct:0,
+   rat:'This is a synthesis-question trap — treating connected findings as separate facts to memorize misses the actual skill being tested. When a question presents multiple findings together, look for the ONE mechanism that explains all of them at once before assuming they\'re unrelated.'},
+
+  {q:'PRACTICE — A stem asks "which order should the nurse question?" listing four medication orders. What is this question actually testing?',type:'single',
+   opts:['A. Whether you can recall the drug\'s general side effects only','B. Whether you can connect a specific drug to a specific disease-process contraindication that makes THIS order unsafe for THIS patient','C. Whether you know the brand name versus generic name','D. Whether the medication is expensive'],correct:1,
+   rat:'"Which order should you question" is never really about the drug in isolation — it\'s testing whether you can connect the medication to the PATIENT\'S specific condition (like WPW, heart block, active bleeding, or HIT) that makes this particular order unsafe.'}
 ],'Practice: Spot the Question Type');
 </script>
 
@@ -3141,20 +3329,41 @@ function getExamQ(qi){
 function saveExam(){ try{ localStorage.setItem('nur256u4_exam', JSON.stringify({mode:examMode,set:quizSet,state:examState,checked:examChecked,idx:examIdx,submitted:examSubmitted,shuffle:examShuffleMap})); }catch(e){} }
 function loadExam(){ try{ const r=localStorage.getItem('nur256u4_exam'); return r?JSON.parse(r):null; }catch(e){ return null; } }
 function shuffleArr(a){return shuffle(a);}
+let examQuestionCount='50'; // '25' | '50' | 'all'
+(function restoreExamCount(){ try{ const r=localStorage.getItem('nur256u4_examcount'); if(r) examQuestionCount=r; }catch(e){} })();
+function setExamQuestionCount(n){
+  examQuestionCount=n;
+  try{ localStorage.setItem('nur256u4_examcount', n); }catch(e){}
+  examIdx=0; examChecked={}; examState={}; examShuffleMap={};
+  document.getElementById('examResult').innerHTML='';
+  buildQuizSet(examMode); updateExamCountButtons(); saveExam(); drawExamQ();
+}
+function updateExamCountButtons(){
+  document.querySelectorAll('.exam-count-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.count===examQuestionCount);
+  });
+}
 function buildQuizSet(m){
   let all=EXAM.map((_,i)=>i);
   if(topicFilterMode!=='all') all=all.filter(i=>EXAM[i].topic===topicFilterMode);
-  quizSet = m==='test' ? shuffleArr(all).slice(0,Math.min(50,all.length)) : all;
+  const shuffled = (m==='test') ? shuffleArr(all) : all;
+  if(examQuestionCount==='all'){
+    quizSet = shuffled;
+  } else {
+    const n=parseInt(examQuestionCount,10);
+    quizSet = shuffled.slice(0, Math.min(n, shuffled.length));
+  }
 }
 function applyModeUI(m){
   const sb=document.getElementById('modeStudyBtn'), tb=document.getElementById('modeTestBtn');
   sb.classList.toggle('active',m==='study'); tb.classList.toggle('active',m==='test');
   const tip=document.getElementById('examModeTip'); const submitWrap=document.getElementById('submitWrap');
+  const countLabel = examQuestionCount==='all' ? 'all matching' : examQuestionCount;
   if(m==='study'){
-    tip.innerHTML='📖 <b>Study Mode:</b> all '+EXAM.length+' questions in order. Tap an answer to instantly see right/wrong + rationale. SATA/Match/Order use Check. Progress saves automatically.';
+    tip.innerHTML='📖 <b>Study Mode:</b> '+countLabel+' question(s) in order. Tap an answer to instantly see right/wrong + rationale. SATA/Match/Order use Check. Progress saves automatically.';
     submitWrap.style.display='none';
   } else {
-    tip.innerHTML='📝 <b>Test Mode:</b> <b>up to 50 random questions, scrambled</b> — like the real exam. No feedback until you submit.';
+    tip.innerHTML='📝 <b>Test Mode:</b> <b>'+countLabel+' random question(s), scrambled</b> — like the real exam. No feedback until you submit.';
     submitWrap.style.display='block';
   }
 }
@@ -3236,9 +3445,19 @@ function examMatchPick(itemIdx, val){
   examState[qi][itemIdx] = val===''? undefined : parseInt(val,10);
   saveExam(); drawExamQ();
 }
+function addExamWrongToVault(qi, q){
+  const id='examvault-'+qi, source='Exam';
+  if(q.t==='single'){ addToVault({id, source, type:'single', q:q.q, opts:q.o, correct:q.c, rat:q.r}); }
+  else if(q.t==='multi'){ addToVault({id, source, type:'multi', q:q.q, opts:q.o, correct:q.c, rat:q.r}); }
+  else if(q.t==='match'){ addToVault({id, source, type:'match', q:q.q, items:q.items, defs:q.defs, defOrder:q.defOrder, rat:q.r}); }
+  else if(q.t==='order'){ addToVault({id, source, type:'order', q:q.q, steps:q.steps, displayOrder:q.displayOrder, rat:q.r}); }
+}
 function checkExamMatch(){
   const qi=quizSet[examIdx];
-  examChecked[qi]=true; bumpProgress('exam-'+qi); drawExamQ(); saveExam();
+  examChecked[qi]=true; bumpProgress('exam-'+qi);
+  const q=getExamQ(qi); const ans=examState[qi];
+  if(!isExamCorrect(q, ans)) addExamWrongToVault(qi, q);
+  drawExamQ(); saveExam();
 }
 function drawExamOrderQ(qi,q,body){
   const checked = examMode==='study' && examChecked[qi];
@@ -3286,7 +3505,10 @@ function examOrderUndo(){
 }
 function checkExamOrder(){
   const qi=quizSet[examIdx];
-  examChecked[qi]=true; bumpProgress('exam-'+qi); drawExamQ(); saveExam();
+  examChecked[qi]=true; bumpProgress('exam-'+qi);
+  const q=getExamQ(qi); const ans=examState[qi];
+  if(!isExamCorrect(q, ans)) addExamWrongToVault(qi, q);
+  drawExamQ(); saveExam();
 }
 function drawDots(){
   const d=document.getElementById('examDots'); d.innerHTML='';
@@ -3306,13 +3528,23 @@ function examPick(i){
   if(q.t==='multi'){
     if(!examState[qi])examState[qi]=[]; const arr=examState[qi]; const idx=arr.indexOf(i);
     if(idx>-1)arr.splice(idx,1); else arr.push(i); drawExamQ();
-  } else { examState[qi]=i; if(examMode==='study'){ examChecked[qi]=true; bumpProgress('exam-'+qi); } drawExamQ(); }
+  } else {
+    examState[qi]=i;
+    if(examMode==='study'){
+      examChecked[qi]=true; bumpProgress('exam-'+qi);
+      if(i!==q.c) addExamWrongToVault(qi, q);
+    }
+    drawExamQ();
+  }
   saveExam();
 }
 function checkExamQ(){
   const qi=quizSet[examIdx]; const ans=examState[qi];
   if(ans===undefined||(Array.isArray(ans)&&ans.length===0))return;
-  examChecked[qi]=true; bumpProgress('exam-'+qi); drawExamQ(); saveExam();
+  examChecked[qi]=true; bumpProgress('exam-'+qi);
+  const q=getExamQ(qi);
+  if(!isExamCorrect(q, ans)) addExamWrongToVault(qi, q);
+  drawExamQ(); saveExam();
 }
 function examNext(){ if(examIdx<quizSet.length-1){examIdx++;drawExamQ();saveExam();window.scrollTo({top:0,behavior:'smooth'});} }
 function examPrev(){ if(examIdx>0){examIdx--;drawExamQ();saveExam();window.scrollTo({top:0,behavior:'smooth'});} }
@@ -3330,7 +3562,7 @@ function examAnswerSummary(q, ans){
 }
 function submitExam(){
   let correct=0;
-  quizSet.forEach(qi=>{ const q=getExamQ(qi); if(isExamCorrect(q, examState[qi]))correct++; });
+  quizSet.forEach(qi=>{ const q=getExamQ(qi); if(isExamCorrect(q, examState[qi])){correct++;} else { addExamWrongToVault(qi, q); } });
   const total=quizSet.length; const pct=Math.round(correct/total*100);
   examSubmitted=true; saveExam();
   let msg = pct>=85?'🌟 Outstanding — exam-ready!':pct>=75?'✅ Passing! Polish the misses.':pct>=60?'💪 Getting there — review and retake.':'📚 Keep grinding — revisit the sections.';
@@ -3340,7 +3572,7 @@ function submitExam(){
     const sum=examAnswerSummary(q,ans);
     html+=`<div class="exam-q" style="border-color:${isCorrect?'var(--green)':'var(--red)'}"><div class="qnum">Q${pos+1} ${isCorrect?'✅':'❌'}</div><div class="qtext" style="font-size:.92rem">${q.q}</div><div style="font-size:.85rem"><b>Your answer:</b> ${sum.your} &nbsp;|&nbsp; <b>Correct:</b> ${sum.correct}</div><div class="rationale show" style="margin-top:8px"><b>Rationale:</b> ${q.r}</div></div>`;
   });
-  html+=`<div class="center"><button class="btn" onclick="resetExam()">🔄 New Test (fresh 50)</button></div>`;
+  html+=`<div class="center"><button class="btn" onclick="resetExam()">🔄 New Test (fresh set)</button></div>`;
   document.getElementById('examResult').innerHTML=html;
   const _er=document.getElementById('examResult'); if(_er.scrollIntoView)_er.scrollIntoView({behavior:'smooth'});
 }
@@ -3348,10 +3580,15 @@ function resetExam(){ examState={}; examIdx=0; examSubmitted=false; examChecked=
 function renderExam(){
   document.getElementById('sec-exam').innerHTML=`
   <h2 class="sec-title"><span class="sec-emoji">📝</span> Practice Exam</h2>
-  <p class="intro-line">Study Mode = every question, instant feedback. Test Mode = up to 50 scrambled, no feedback until submit — like the real thing.</p>
+  <p class="intro-line">Study Mode = instant feedback as you go. Test Mode = scrambled, no feedback until submit — like the real thing. Pick how many questions and which topics.</p>
   <div class="exam-mode-toggle">
     <button class="mode-btn" id="modeStudyBtn" onclick="setExamMode('study')">📖 Study Mode</button>
     <button class="mode-btn" id="modeTestBtn" onclick="setExamMode('test')">📝 Test Mode</button>
+  </div>
+  <div class="exam-mode-toggle">
+    <button class="mode-btn exam-count-btn" data-count="25" onclick="setExamQuestionCount('25')">25 Questions</button>
+    <button class="mode-btn exam-count-btn" data-count="50" onclick="setExamQuestionCount('50')">50 Questions</button>
+    <button class="mode-btn exam-count-btn" data-count="all" onclick="setExamQuestionCount('all')">All Questions</button>
   </div>
   <div class="center" style="margin:8px 0"><button class="btn topic-filter-btn" onclick="cycleExamTopicFilter()" style="background:var(--purple)">🎯 All Topics</button></div>
   <div class="tipbar" id="examModeTip"></div>
@@ -3369,6 +3606,8 @@ function renderExam(){
     examMode=saved.mode||'study'; quizSet=saved.set; examState=saved.state||{}; examChecked=saved.checked||{}; examIdx=saved.idx||0; examSubmitted=saved.submitted||false; examShuffleMap=saved.shuffle||{};
     applyModeUI(examMode); drawExamQ();
   } else { setExamMode(examMode); }
+  updateExamCountButtons();
+  updateTopicFilterButtons();
 }
 renderExam();
 </script>
