@@ -13,6 +13,7 @@
   --card:#ffffff; --card-border:#ffd4cf;
   --pink:#e11d48; --pink-soft:#ffe1e6;
   --purple:#be123c; --purple-soft:#ffe4e9;
+  --select:#c98a9a; --select-soft:#faf0f2;
   --teal:#ea580c; --teal-soft:#ffedd5;
   --green:#22c55e; --green-soft:#dcfce7;
   --red:#dc2626; --red-soft:#fee2e2;
@@ -26,6 +27,7 @@
   --card:#241417; --card-border:#4a2226;
   --pink:#fb7185; --pink-soft:#3a1720;
   --purple:#f472b6; --purple-soft:#3a1526;
+  --select:#d9a3b3; --select-soft:#3d2530;
   --teal:#fb923c; --teal-soft:#3a2211;
   --green-soft:#123321; --red-soft:#3a1f1f; --amber-soft:#3a2f12;
   --blue:#fb7185; --blue-soft:#3a1720;
@@ -81,7 +83,7 @@ table.lab tr:nth-child(even){background:var(--bg2)}
 .q-text{font-weight:700;margin-bottom:10px}
 .opts{display:flex;flex-direction:column;gap:8px}
 .opt{text-align:left;background:var(--bg2);border:2px solid var(--card-border);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:.9rem}
-.opt.sel-multi{border-color:var(--purple);background:var(--purple-soft)}
+.opt.sel-multi{border-color:var(--select);background:var(--select-soft)}
 .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green)}
 .opt.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
 .opt.disabled{pointer-events:none;opacity:.85}
@@ -539,6 +541,8 @@ const MATCH_GAMES = {
       {tier:1,a:'Orthostatic hypotension threshold',b:'≥20 mmHg systolic or ≥10 mmHg diastolic drop within 3 minutes of standing'},
       {tier:1,a:'Troponin I',b:'Most sensitive/specific biomarker for myocardial injury'},
       {tier:1,a:'BNP',b:'Elevates with fluid retention and ventricular strain'},
+      {tier:1,a:'Normal CVP range',b:'2-6 mmHg'},
+      {tier:1,a:'Diuretic potency ranking',b:'Loop (strongest) > Thiazide > Potassium-sparing (weakest)'},
       {tier:2,a:'Right-sided heart failure',b:'Peripheral edema, JVD, weight gain'},
       {tier:2,a:'Left-sided heart failure',b:'Pulmonary congestion, crackles, dyspnea'},
       {tier:2,a:'PAD (arterial disease)',b:'Cool, pale extremities, hair loss, brittle nails, pain worse with elevation'},
@@ -548,6 +552,10 @@ const MATCH_GAMES = {
       {tier:2,a:'Hypertensive urgency',b:'BP >180/>120 WITHOUT target organ damage'},
       {tier:2,a:'ACE inhibitors ("-prils")',b:'Block RAAS; classic side effect is a dry cough'},
       {tier:2,a:'Digoxin',b:'Positive inotrope, negative chronotrope; toxicity risk rises with hypokalemia'},
+      {tier:2,a:'Heparin monitoring + antidote',b:'PTT; Protamine Sulfate'},
+      {tier:2,a:'Warfarin monitoring + antidote',b:'PT/INR; Vitamin K'},
+      {tier:2,a:'Atropine antidote',b:'Physostigmine'},
+      {tier:2,a:'Adenosine\'s therapeutic use',b:'First-line treatment for PSVT/SVT'},
       {tier:2,a:'Heparin-induced thrombocytopenia (HIT)',b:'Sudden platelet drop during heparin therapy'},
       {tier:2,a:'Warfarin therapeutic INR range',b:'2 to 3'},
       {tier:2,a:'DOACs',b:'Increasingly preferred anticoagulants — safer profile, no routine INR monitoring'},
@@ -558,7 +566,10 @@ const MATCH_GAMES = {
       {tier:3,a:'Why paralysis is an ominous late sign in arterial obstruction',b:'It means nerve and muscle tissue have been oxygen-deprived long enough to stop functioning'},
       {tier:3,a:'Why ED can be an early vascular warning sign',b:'Smaller penile vessels show the effects of atherosclerosis before larger coronary arteries do'},
       {tier:3,a:'Arterial ulcer characteristics',b:'Well-defined "punched out" borders, pale wound bed, cool surrounding skin'},
-      {tier:3,a:'Venous ulcer characteristics',b:'Irregular borders, ruddy wound bed, warm/discolored surrounding skin'}
+      {tier:3,a:'Venous ulcer characteristics',b:'Irregular borders, ruddy wound bed, warm/discolored surrounding skin'},
+      {tier:3,a:'Why claudication progresses to critical limb ischemia',b:'The artery can no longer meet even RESTING oxygen demand, not just exercise demand — a true emergency'},
+      {tier:3,a:'Why a high CVP, dyspnea, and elevated BNP occur together',b:'All three reflect the same right-sided volume overload stretching cardiac chambers and backing up toward the lungs'},
+      {tier:3,a:'Why atropine doses below 0.5 mg IV are dangerous',b:'A dose too low can cause paradoxical bradycardia — the opposite of the intended effect'}
     ]
   },
   repromatch: {
@@ -567,7 +578,8 @@ const MATCH_GAMES = {
     pairs:[
       {tier:1,a:'Dyspareunia',b:'Painful intercourse'},
       {tier:1,a:'Amenorrhea',b:'Absence of menstruation'},
-      {tier:1,a:'Menorrhagia',b:'Excessive menstrual bleeding'},
+      {tier:1,a:'Menorrhagia',b:'Excessive menstrual bleeding DURING a period'},
+      {tier:1,a:'Metrorrhagia',b:'Bleeding that occurs BETWEEN periods'},
       {tier:1,a:'Menopause definition',b:'12 consecutive months without a period'},
       {tier:1,a:'Average menstrual cycle length',b:'28 days'},
       {tier:1,a:'Testicular cancer tumor markers',b:'AFP, hCG, LDH'},
@@ -829,6 +841,28 @@ document.getElementById('sec-why').innerHTML=`
   </ul>
   <p class="why-chain"><b>Why this matters clinically:</b> a potent vasodilator drops afterload (less resistance to push against) — <b>but</b> if it dilates veins too, it can also drop preload (less blood returning), which can drop cardiac output and blood pressure more than intended. <b>This is exactly why the nurse monitors BP closely during vasodilator administration</b> — you're adjusting both sides of the same equation at once, and can overshoot into hypotension.</p>
   <div class="hy">⭐ Nitroglycerin's mechanism is specifically about REDUCING PRELOAD (venodilation, less blood returning to an already-oxygen-starved heart) — that's why it helps angina: less volume for the struggling heart to deal with, not primarily an afterload effect.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💧 CVP (Central Venous Pressure) — reading fluid status directly</h3>
+  <p>CVP measures pressure in the vena cava/right atrium — a direct readout of fluid status in the vascular space and right ventricular preload. <b>Normal range: 2-6 mmHg.</b></p>
+  <table class="lab">
+    <tr><th>CVP</th><th>Interpretation</th></tr>
+    <tr><td><b>&lt; 2 mmHg</b></td><td>Dehydration / fluid volume deficit</td></tr>
+    <tr><td><b>2-6 mmHg</b></td><td>Normal</td></tr>
+    <tr><td><b>&gt; 6 mmHg</b></td><td>Fluid overload / right-sided heart failure</td></tr>
+  </table>
+  <p><b>Why CVP requires a CENTRAL line specifically:</b> a central line's catheter tip terminates in the vena cava, just above the right atrium — that's what makes it "central." A peripheral IV or midline stops well short of that point in the peripheral circulation, so it physically cannot measure this pressure. This is the actual anatomical distinction between "central" and "peripheral" access, not just a naming convention.</p>
+  <p class="why-chain"><b>Why this connects to BNP:</b> a high CVP means excess volume is backing up on the right side — the same fluid overload that stretches the cardiac chambers and triggers BNP release. <b>A high CVP with dyspnea and an elevated BNP all point to the same underlying story</b> — right-sided volume overload significant enough to also strain pulmonary/left-sided function, not three unrelated findings.</p>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🩸 Atherosclerosis vs. Arteriosclerosis — not interchangeable</h3>
+  <ul class="clean">
+    <li><b>Arteriosclerosis</b> is the broader, general term — thickening, hardening, and loss of elasticity of arterial walls from ANY cause.</li>
+    <li><b>Atherosclerosis</b> is the SPECIFIC, most common form of arteriosclerosis — caused by fatty/lipid plaque (atheroma) buildup narrowing the artery. This is the process behind PAD, CAD, and most of the vascular disease covered in this unit.</li>
+  </ul>
+  <div class="hy">⭐ Every atherosclerosis is a type of arteriosclerosis, but not every arteriosclerosis is atherosclerosis — arteriosclerosis is the umbrella term, atherosclerosis is the specific plaque-driven mechanism most relevant to everything else in this unit.</div>
 </div>
 
 <div class="card" style="border-color:var(--red)">
@@ -1149,12 +1183,14 @@ document.getElementById('sec-vascular').innerHTML=`
   <ul class="clean">
     <li><b>Cause:</b> atherosclerosis narrowing arteries. Nonmodifiable: age, genetics. Modifiable: smoking (major risk factor), diabetes, HTN, hyperlipidemia, stress, sedentary lifestyle, inflammation.</li>
     <li><b>Symptoms:</b> <b>intermittent claudication</b> (pain/cramping with exercise, relieved by rest), numbness/weakness, coldness of the limb, non-healing sores on toes/feet/legs, pale or bluish skin color.</li>
+    <li><b>Critical Limb Ischemia (CLI)</b> — the escalation beyond claudication: pain occurs AT REST, not just with activity. This represents severely inadequate blood flow even at baseline demand and is considered a medical emergency, since it threatens limb viability.</li>
     <li><b>Diagnosis:</b> <b>ABI (ankle-brachial index)</b> — normal range 1.0-1.4; below that indicates arterial narrowing (lower = worse); <b>above 1.4 indicates arterial calcification</b>, which itself correlates with heart disease risk. Also: ultrasound, angiography, blood tests (diabetes, cholesterol).</li>
     <li><b>Treatment:</b> lifestyle changes (smoking cessation, exercise, diet), medications (cholesterol/BP control, pain management, <b>cilostazol</b> specifically for claudication), angioplasty, bypass surgery.</li>
     <li><b>Nursing goals:</b> improve mobilization and circulation. Interventions: patient education, monitoring, wound care, pain management, supervised exercise programs.</li>
     <li><b>Complications:</b> critical limb ischemia, stroke, heart attack (same atherosclerotic process affects other vessels too).</li>
   </ul>
   <div class="hy">⭐ <b>Nursing diagnoses for PAD:</b> ineffective peripheral tissue perfusion, chronic pain, impaired skin integrity, activity intolerance, risk for infection.</div>
+  <p class="why-chain"><b>Why claudication progresses to critical limb ischemia:</b> as atherosclerotic narrowing worsens over time, the artery eventually can't supply enough oxygen even for the tissue's RESTING demand, not just its exercise demand. <b>Because</b> there's no longer a "lower demand" state where the narrowed vessel can keep up, the pain becomes constant rather than activity-triggered — and without urgent revascularization, the tissue is at real risk of necrosis and limb loss, which is exactly why CLI is treated as a medical emergency rather than a more severe version of routine claudication management.</p>
 </div>
 
 <div class="card" style="border-color:var(--purple)">
@@ -1186,12 +1222,13 @@ document.getElementById('sec-vascular').innerHTML=`
   <ul class="clean">
     <li><b>Diagnostics:</b> duplex Doppler/ultrasound imaging, <b>D-dimer</b> (elevated with clot breakdown products), <b>PT/INR</b> for baseline coagulation status.</li>
     <li><b>Treatment choice depends on:</b> severity of the clot, patient's overall health, bleeding risk, and resource availability.</li>
-    <li><b>Heparin</b> — IV/subcutaneous, fast-acting, used acutely; monitor aPTT, platelets. <b>Heparin-induced thrombocytopenia (HIT)</b> is a serious potential complication — watch platelet counts.</li>
-    <li><b>Warfarin (Coumadin)</b> — oral, used for longer-term/maintenance therapy (historically common after orthopedic surgery); monitor INR (therapeutic range 2-3), consistent vitamin K intake, watch for bleeding, missed dose taken ASAP but <b>never double up</b>. Typical hospital pattern: start a heparin drip acutely, then transition/bridge to oral warfarin for maintenance.</li>
-    <li><b>DOACs (direct oral anticoagulants)</b> — increasingly preferred over warfarin due to a better safety profile and no routine INR monitoring requirement, though heparin and warfarin remain in common hospital use for acute care.</li>
+    <li><b>Heparin</b> — IV/subcutaneous, fast-acting, used acutely; monitor <b>PTT</b>, platelets. <b>Antidote: Protamine Sulfate.</b> <b>Heparin-induced thrombocytopenia (HIT)</b> is a serious potential complication — watch platelet counts.</li>
+    <li><b>Warfarin (Coumadin)</b> — oral, used for longer-term/maintenance therapy (historically common after orthopedic surgery); monitor <b>PT/INR</b> (therapeutic range 2-3), consistent dietary vitamin K intake, watch for bleeding, missed dose taken ASAP but <b>never double up</b>. <b>Antidote: Vitamin K</b> (given to reverse excessive anticoagulation/bleeding — distinct from the DIETARY vitamin K consistency teaching above). Typical hospital pattern: start a heparin drip acutely, then transition/bridge to oral warfarin for maintenance.</li>
+    <li><b>DOACs (direct oral anticoagulants, e.g., Apixaban)</b> — increasingly preferred over warfarin due to a better safety profile and no routine INR monitoring requirement, though heparin and warfarin remain in common hospital use for acute care.</li>
     <li>If anticoagulation is contraindicated or ineffective, interventional procedures may be considered (e.g., IVC filter).</li>
-    <li><b>Supportive care:</b> compression stockings, leg elevation, pain relievers.</li>
+    <li><b>Supportive care:</b> leg elevation, pain relievers, and <b>compression stockings — but NOT immediately during acute hospitalization.</b> Compression is typically held until the client is therapeutically anticoagulated (roughly a 3-7 day acute treatment window), and is usually introduced once they've transitioned to oral anticoagulation for the maintenance phase at home — not started the moment an active DVT is diagnosed.</li>
   </ul>
+  <div class="mnem"><div class="tag">Monitoring + Antidote pairs — high yield</div><div class="big">Heparin → PTT → Protamine Sulfate. Coumadin/Warfarin → PT/INR → Vitamin K.</div></div>
 </div>
 
 <div class="mnem"><div class="tag">Quick contrast</div><div class="big">PAD/arterial = pale, cold, hair loss, brittle nails, pain WORSE with elevation. PVD/venous = rubor, itchy, edema, pain WORSE with dependent position (hanging down).</div></div>
@@ -1277,7 +1314,39 @@ renderQuiz('quiz-vascular',[
 
   {q:'A client asks why compression stockings would NOT be appropriate for someone with significant arterial insufficiency. What is the correct explanation?',type:'single',
    opts:['A. Compression has no effect on arterial blood flow either way','B. Compression can further reduce already-compromised arterial blood flow to the limb','C. Compression stockings are only used for arterial disease, never venous','D. There is no reason to avoid compression in arterial disease'],correct:1,
-   rat:'A dismisses a real physiological concern, and C reverses which condition compression is actually indicated for (venous, not arterial). External compression can further restrict blood flow in a limb already compromised by arterial insufficiency, making it inappropriate in that setting.'}
+   rat:'A dismisses a real physiological concern, and C reverses which condition compression is actually indicated for (venous, not arterial). External compression can further restrict blood flow in a limb already compromised by arterial insufficiency, making it inappropriate in that setting.'},
+
+  {q:'A client with known PAD reports that leg pain now occurs even while resting, not just with activity as before. How should the nurse interpret this change?',type:'single',
+   opts:['A. This is an expected variant of intermittent claudication requiring no escalation in care','B. This suggests progression to critical limb ischemia, a medical emergency threatening limb viability','C. This indicates the PAD has resolved','D. This is unrelated to the client\'s PAD diagnosis'],correct:1,
+   rat:'A dangerously downplays a significant change, and C and D both dismiss the connection entirely. Pain progressing from activity-triggered to present AT REST signals the artery can no longer meet even resting oxygen demand — critical limb ischemia, a true emergency.'},
+
+  {q:'Which lab value is used to monitor heparin therapy, and what is its antidote?',type:'single',
+   opts:['A. PT/INR; Vitamin K','B. PTT; Protamine Sulfate','C. D-dimer; Protamine Sulfate','D. PTT; Vitamin K'],correct:1,
+   rat:'A describes warfarin\'s monitoring/antidote pair instead, and C and D both mismatch the components. Heparin is monitored via PTT, with Protamine Sulfate as its antidote.'},
+
+  {q:'Which lab value is used to monitor warfarin (Coumadin) therapy, and what is its antidote?',type:'single',
+   opts:['A. PTT; Protamine Sulfate','B. PT/INR; Vitamin K','C. D-dimer; Vitamin K','D. PT/INR; Protamine Sulfate'],correct:1,
+   rat:'A describes heparin\'s pair instead, and C and D both mismatch the components. Warfarin is monitored via PT/INR, with Vitamin K as its antidote for excessive anticoagulation/bleeding.'},
+
+  {q:'A client asks whether the "consistent vitamin K intake" dietary teaching and "Vitamin K as an antidote" are the same thing. What is the correct clarification?',type:'single',
+   opts:['A. They are the same concept applied twice for emphasis','B. Dietary consistency prevents unpredictable INR swings day-to-day, while Vitamin K as an antidote is a treatment given to actively reverse dangerous over-anticoagulation/bleeding — two distinct purposes','C. Dietary vitamin K has no relationship to warfarin at all','D. Only the antidote use is medically relevant; the dietary teaching is unnecessary'],correct:1,
+   rat:'A collapses two genuinely distinct concepts into one, and C and D both dismiss one of the two real purposes. Consistent dietary intake keeps day-to-day INR predictable; therapeutic Vitamin K is a separate, active reversal treatment for dangerous bleeding/over-anticoagulation.'},
+
+  {q:'A client\'s CVP reading is 1 mmHg. What does this MOST likely indicate?',type:'single',
+   opts:['A. Fluid overload','B. Dehydration or fluid volume deficit','C. A normal finding requiring no action','D. Right-sided heart failure'],correct:1,
+   rat:'A and D both describe the HIGH-CVP pattern (>6 mmHg), and C treats an abnormal value as normal (normal range is 2-6 mmHg). A CVP below 2 mmHg indicates dehydration/fluid volume deficit.'},
+
+  {q:'A client\'s CVP reading is 9 mmHg. What does this MOST likely indicate?',type:'single',
+   opts:['A. Dehydration','B. Fluid overload / right-sided heart failure','C. A normal finding requiring no action','D. Hypovolemic shock'],correct:1,
+   rat:'A and D both describe patterns associated with LOW, not high, CVP, and C misclassifies an abnormal value as normal. A CVP above 6 mmHg indicates fluid overload or right-sided heart failure.'},
+
+  {q:'A client was just diagnosed with an acute DVT and started on a heparin infusion in the hospital. The client asks if they can start wearing compression stockings right away. What is the correct response?',type:'single',
+   opts:['A. Yes, compression stockings should be applied immediately upon diagnosis','B. Compression is typically held until the client is therapeutically anticoagulated, then introduced closer to the transition to oral anticoagulation at home','C. Compression stockings are never used for DVT under any circumstances','D. Compression stockings replace the need for anticoagulation entirely'],correct:1,
+   rat:'A jumps ahead of the actual protocol timing, and C and D both misstate their role entirely. Compression is generally not started the moment an active DVT is diagnosed — it\'s introduced once the client is therapeutically anticoagulated, typically closer to transitioning to oral anticoagulation for home management.'},
+
+  {q:'Which statement correctly distinguishes atherosclerosis from arteriosclerosis?',type:'single',
+   opts:['A. They are simply two different names for the exact same single process','B. Arteriosclerosis is the general term for arterial wall thickening/hardening from any cause; atherosclerosis is the specific, most common form caused by fatty plaque buildup','C. Atherosclerosis is the broader term, and arteriosclerosis is one specific type of it','D. Arteriosclerosis only affects veins, while atherosclerosis only affects arteries'],correct:1,
+   rat:'A collapses a real distinction, C reverses which term is the umbrella category, and D invents a vein/artery split that doesn\'t exist. Arteriosclerosis is the general term for arterial hardening from any cause; atherosclerosis is specifically the fatty-plaque-driven process behind most of the vascular disease covered in this unit.'}
 ],'PAD / PVD / DVT Check');
 </script>
 
@@ -1297,32 +1366,94 @@ document.getElementById('sec-meds').innerHTML=`
 </div>
 
 <div class="card">
-  <h3>💊 Beta-Blockers</h3>
-  <p><b>Mechanism:</b> block sympathetic (catecholamine) effects on the heart → decreased heart rate, decreased contractility, lower BP, and lower myocardial oxygen demand. Useful in HTN, ACS, and arrhythmias.</p>
+  <h3>💊 Beta-Blockers — Propranolol (nonselective) vs. Metoprolol (cardioselective)</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> block catecholamine (sympathetic) stimulation of the heart → decreased HR, decreased contractility, lower BP, lower myocardial oxygen demand. Also decreases renin secretion.</li>
+    <li><b>Propranolol</b> — <b>nonselective</b> (blocks both beta-1 AND beta-2). Blocking beta-2 in the lungs is exactly why it carries a real bronchospasm risk in asthma/COPD.</li>
+    <li><b>Metoprolol</b> — <b>cardioselective</b> (beta-1 preferring) at therapeutic doses — safer in reactive airway disease, but "cardioselective" is not "cardiospecific": at higher doses it can lose selectivity and still cause bronchospasm.</li>
+    <li><b>Therapeutic uses (both):</b> hypertension, angina, dysrhythmias (SVT, afib/flutter), post-MI cardioprotection, migraine prophylaxis. Metoprolol succinate (Toprol XL) is also used in stable HF.</li>
+    <li><b>Contraindications/precautions:</b> cardiogenic shock, decompensated HF, sinus bradycardia, 2nd/3rd degree heart block, asthma/COPD (relative), Raynaud's.</li>
+    <li><b>Adverse effects:</b> bradycardia, hypotension, heart block, HF exacerbation, bronchospasm, fatigue, depression, sexual dysfunction, <b>masks hypoglycemia symptoms in diabetics</b>, cold extremities.</li>
+    <li><b>Nursing:</b> hold if HR &lt;60 (metoprolol: hold if HR&lt;60 OR SBP&lt;90). <b>Never stop abruptly</b> — taper to prevent rebound hypertension/angina/MI. Monitor glucose in diabetics. Assess lung sounds.</li>
+  </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> IV beta-blocker ordered together with IV diltiazem/verapamil — this combination risks fatal bradycardia/heart block and is a genuine contraindication, not just a caution.</div>
 </div>
 
 <div class="card">
-  <h3>💊 Calcium Channel Blockers</h3>
-  <p><b>Mechanism:</b> block calcium entry into cardiac and vascular smooth muscle cells → decreased contractility and vasodilation → "calms the heart" (lower BP, lower HR).</p>
+  <h3>💊 Calcium Channel Blockers — Diltiazem</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> blocks L-type calcium channels in cardiac and vascular smooth muscle. In the heart: decreases SA node automaticity and AV nodal conduction. In vessels: vasodilation, reducing afterload.</li>
+    <li><b>Therapeutic uses:</b> angina (vasospastic and chronic stable), hypertension, rate control in afib/flutter, SVT (IV form).</li>
+    <li><b>Contraindications/precautions:</b> sick sinus syndrome (without pacemaker), 2nd/3rd degree AV block, severe hypotension, acute MI with pulmonary congestion, WPW with accessory pathway, <b>concurrent IV beta-blocker</b> (fatal bradycardia/AV block risk).</li>
+    <li><b>Adverse effects:</b> bradycardia, AV block, hypotension, peripheral edema, constipation, dizziness, worsening HF.</li>
+    <li><b>Interactions:</b> increases digoxin levels; simvastatin/lovastatin myopathy risk (CYP3A4 inhibition); grapefruit juice increases drug levels.</li>
+    <li><b>Nursing:</b> monitor HR/BP before and after dosing; ER tablets swallowed whole, never crushed; never stop suddenly.</li>
+  </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> IV diltiazem ordered for a client already on an IV beta-blocker — same fatal bradycardia/AV block risk as above, from the opposite direction. Also question diltiazem in a client with acute MI and pulmonary congestion (worsens HF).</div>
 </div>
 
 <div class="card" style="border-color:var(--red)">
   <h3>💊 Digoxin</h3>
   <ul class="clean">
-    <li><b>Positive inotrope</b> — increases contractile force (stronger squeeze).</li>
-    <li><b>Negative chronotrope</b> — lowers heart rate.</li>
-    <li><b>Renally cleared</b> — monitor closely in renal failure, since reduced clearance lets it accumulate toward toxic levels.</li>
-    <li><b>Hypokalemia increases toxicity risk</b> — potassium and digoxin compete for the same binding site on the Na-K pump, so low potassium lets digoxin bind more readily, worsening toxicity risk.</li>
+    <li><b>Mechanism:</b> inhibits the Na+/K+ ATPase pump → increased intracellular Na+ → increased intracellular Ca2+ → increased myocardial contractility (<b>positive inotrope</b>). Also increases vagal tone → decreased HR and AV conduction (<b>negative chronotrope/dromotrope</b>).</li>
+    <li><b>Therapeutic uses:</b> heart failure with reduced ejection fraction (HFrEF), rate control in afib/flutter. <b>Narrow therapeutic index</b> — therapeutic serum level 0.5-2 ng/mL.</li>
+    <li><b>Contraindications/precautions:</b> ventricular fibrillation, <b>WPW syndrome</b> (can accelerate accessory pathway conduction), 2nd/3rd degree heart block (without pacemaker), hypertrophic obstructive cardiomyopathy.</li>
+    <li><b>Toxicity signs:</b> <b>nausea/vomiting is classically the FIRST sign</b>, anorexia, bradycardia, visual disturbances (yellow-green halos, blurred vision), any new dysrhythmia, confusion. <b>Hypokalemia GREATLY increases toxicity risk</b> (shared Na-K pump binding site).</li>
+    <li><b>Antidote for severe toxicity: Digibind/DigiFab.</b></li>
+    <li><b>Nursing:</b> <b>check apical pulse for 1 full minute before every dose — hold if &lt;60 bpm.</b> Monitor digoxin level, potassium, magnesium. Never double a missed dose.</li>
   </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> Digoxin ordered for a client with WPW syndrome or ventricular fibrillation — both are genuine contraindications. Also question if the apical pulse is &lt;60 or if serum potassium is low (raises toxicity risk before the dose is even given).</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💊 Atropine</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> anticholinergic — competitively blocks muscarinic receptors. In the heart, blocks vagal tone on the SA/AV nodes → increased HR and AV conduction. Also reduces secretions, causes bronchodilation and mydriasis (pupil dilation).</li>
+    <li><b>Therapeutic uses:</b> <b>first-line for symptomatic bradycardia</b>, AV block (nodal level), organophosphate/nerve agent antidote, preop secretion reduction.</li>
+    <li><b>Dosing rule:</b> 0.5-1 mg IV q3-5 min, max 3 mg. <b>NEVER give less than 0.5 mg</b> — a dose that low can cause <i>paradoxical bradycardia</i> instead of the intended effect.</li>
+    <li><b>Contraindications/precautions:</b> <b>narrow-angle glaucoma</b>, tachycardia, myasthenia gravis, GI/GU obstruction. Extreme caution in BPH and the elderly (confusion/delirium risk).</li>
+    <li><b>Adverse effects:</b> tachycardia, urinary retention, constipation, dry mouth, blurred vision, confusion/delirium (especially elderly), <b>paradoxical bradycardia with doses &lt;0.5 mg.</b></li>
+    <li><b>Antidote for anticholinergic toxicity: Physostigmine.</b></li>
+  </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> An atropine dose ordered below 0.5 mg IV — this specific under-dosing risk (paradoxical bradycardia) is exactly opposite of the intended effect. Also question atropine in a client with narrow-angle glaucoma — same dilating-pupil mechanism concern from the Eye unit, now showing up in a cardiac drug.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>💊 Adenosine</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> activates adenosine A1 receptors, slowing conduction through the AV node, causing a brief, transient AV block that terminates AV-node-dependent reentry circuits. Extremely short half-life (~10 seconds).</li>
+    <li><b>Therapeutic use:</b> <b>first-line treatment for PSVT/SVT.</b></li>
+    <li><b>Administration:</b> IV ONLY — 6 mg rapid IV push over 1-2 seconds into a large vein, immediately followed by a 20 mL NS flush. If no response in 1-2 min, may repeat at 12 mg (max single dose 12 mg).</li>
+    <li><b>Contraindications/precautions:</b> 2nd/3rd degree heart block, sick sinus syndrome (without pacemaker), <b>WPW with atrial flutter/fib</b> (may accelerate conduction), asthma/severe COPD.</li>
+    <li><b>Interactions:</b> caffeine/theophylline (methylxanthines) BLOCK its effect — larger doses may be needed; dipyridamole POTENTIATES it — reduce dose.</li>
+    <li><b>Expected/therapeutic effect:</b> a brief period of <b>transient asystole</b> is expected and therapeutic, not a complication to panic over — along with brief flushing, chest pressure, and a feeling of impending doom.</li>
+    <li><b>Nursing:</b> continuous cardiac monitoring required, crash cart at bedside, document rhythm strip before/during/after, warn the patient about the brief sensation beforehand.</li>
+  </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> Adenosine ordered for a client with WPW who is currently in atrial fibrillation/flutter (not simple SVT) — this specific combination can accelerate conduction through the accessory pathway rather than terminate the arrhythmia.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>💊 Heparin (Unfractionated) — expanded</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> binds antithrombin III, potentiating its inhibition of thrombin and factor Xa. Prevents fibrinogen→fibrin and prothrombin→thrombin conversion. <b>Does NOT dissolve existing clots</b> — prevents new clot formation/extension only.</li>
+    <li><b>Administration:</b> weight-based IV protocol; bolus ~60-80 units/kg, infusion 12-18 units/kg/hr, adjusted to aPTT (therapeutic goal typically 60-100 sec, or 1.5-2.5× normal). <b>Never give IM</b> (hematoma risk).</li>
+    <li><b>Contraindications/precautions:</b> active uncontrolled bleeding, HIT (Type II), severe thrombocytopenia, intracranial hemorrhage.</li>
+    <li><b>Adverse effects:</b> bleeding (major risk, any site), <b>HIT</b> — platelet count drop &gt;50% from baseline typically on days 4-10 (paradoxically causes CLOTTING, not just bleeding risk), osteoporosis with long-term use.</li>
+    <li><b>Antidote: Protamine Sulfate.</b></li>
+    <li><b>Nursing:</b> monitor aPTT q6h, check platelets every 2-3 days, two-nurse verification of dose, infusion pump only.</li>
+  </ul>
+  <div class="hy">⭐ <b>Which order should you question?</b> Heparin ordered for a client with active uncontrolled bleeding or a history of HIT — both genuine contraindications. Also question an IM heparin order specifically (should never be given IM regardless of the reason stated).</div>
 </div>
 
 <div class="card">
   <h3>💊 Diuretics</h3>
   <ul class="clean">
-    <li><b>Usually the #1 medication for heart failure</b> — directly reduces fluid volume/preload, lowering cardiac workload.</li>
-    <li><b>Lasix (furosemide)</b> — loop diuretic, commonly used.</li>
+    <li><b>First-line treatment for hypertension</b>, and usually the #1 medication for heart failure — directly reduces fluid volume/preload, lowering cardiac workload.</li>
+    <li><b>Potency ranking (strongest to weakest): Loop &gt; Thiazide &gt; Potassium-sparing.</b> Loop diuretics (e.g., Lasix/furosemide) are the STRONGEST; potassium-sparing diuretics (e.g., spironolactone) are the WEAKEST of the three.</li>
+    <li><b>Loop diuretic-specific concerns (explicitly flagged as testable):</b> significant potassium WASTING (hypokalemia — monitor levels, watch for arrhythmia/digoxin interaction risk) and <b>ototoxicity</b>, especially with high doses or rapid IV push — watch for tinnitus/hearing changes.</li>
     <li><b>Teach slow position changes</b> — diuretics increase orthostatic hypotension risk.</li>
   </ul>
+  <div class="hy">⭐ Potency ranking matters clinically: a client needing aggressive fluid removal (like acute pulmonary edema) needs a LOOP diuretic, not a potassium-sparing one — the weakest option wouldn't be enough for that level of overload. But that same potency is exactly why loop diuretics carry the bigger potassium-wasting and ototoxicity risk of the three.</div>
 </div>
 
 <div class="card">
@@ -1411,7 +1542,59 @@ renderQuiz('quiz-meds',[
 
   {q:'A client asks why alpha-blockers are sometimes used for BPH rather than as a primary hypertension treatment. What is the correct explanation?',type:'single',
    opts:['A. Alpha-blockers have no urinary tract effect','B. Alpha-blockers relax smooth muscle in the prostate/bladder neck, improving urinary flow, which is a separate use from routine BP management','C. Alpha-blockers are the first-line choice for all hypertensive patients','D. Alpha-blockers cannot be used in male patients'],correct:1,
-   rat:'A denies their actual urinary-tract mechanism, and C and D both misstate their role/eligibility. Alpha-blockers relax prostate/bladder neck smooth muscle, which is why they\'re used for BPH symptoms specifically, separate from their more limited role in general hypertension management.'}
+   rat:'A denies their actual urinary-tract mechanism, and C and D both misstate their role/eligibility. Alpha-blockers relax prostate/bladder neck smooth muscle, which is why they\'re used for BPH symptoms specifically, separate from their more limited role in general hypertension management.'},
+
+  {q:'A client in acute pulmonary edema needs aggressive, rapid fluid removal. Which diuretic class is MOST appropriate given diuretic potency ranking?',type:'single',
+   opts:['A. Potassium-sparing diuretics, the strongest class','B. Loop diuretics, the strongest of the three major classes','C. Thiazide diuretics, equally strong as loop diuretics','D. Any diuretic class works identically regardless of potency'],correct:1,
+   rat:'A reverses the actual ranking (potassium-sparing is the WEAKEST, not strongest), and C and D both flatten a real potency difference. Loop diuretics are the strongest of the three classes (loop > thiazide > potassium-sparing), making them appropriate for a situation needing aggressive fluid removal.'},
+
+  {q:'A client with 2nd-degree heart block is prescribed IV diltiazem, and the nurse notes an active order for IV metoprolol as well. What should the nurse do?',type:'single',
+   opts:['A. Administer both medications as ordered without concern','B. Question the order — concurrent IV calcium channel blocker and IV beta-blocker carries a real risk of fatal bradycardia/heart block, especially with existing conduction disease','C. Give only the diltiazem and skip the metoprolol without notifying the provider','D. Give both medications, but only if the heart rate is above 100'],correct:1,
+   rat:'A ignores a genuine, dangerous combination, and C independently alters the order without provider communication (never appropriate). Concurrent IV diltiazem and IV beta-blocker is specifically flagged as risking fatal bradycardia/AV block — this order should be questioned, especially in a client who already has 2nd-degree heart block.'},
+
+  {q:'A client with newly diagnosed Wolff-Parkinson-White (WPW) syndrome, currently in atrial fibrillation, has a STAT order for adenosine. What should the nurse do?',type:'single',
+   opts:['A. Administer the adenosine immediately as ordered','B. Question the order — adenosine in WPW with atrial fib/flutter can accelerate conduction through the accessory pathway rather than terminate the arrhythmia','C. Give a double dose to ensure effectiveness','D. Substitute digoxin without contacting the provider'],correct:1,
+   rat:'A gives a medication that carries a specific, serious contraindication in this exact combination, and D independently substitutes a different drug without provider involvement (also inappropriate — and digoxin carries its own WPW contraindication). This combination should be questioned before administration.'},
+
+  {q:'A nurse prepares to administer atropine 0.3 mg IV for a client with symptomatic bradycardia. What should the nurse do?',type:'single',
+   opts:['A. Administer the dose as ordered','B. Question the order — doses below 0.5 mg IV can cause paradoxical bradycardia, the opposite of the intended effect','C. Double the dose to 0.6 mg without checking with the provider','D. Give the dose IM instead of IV to reduce this risk'],correct:1,
+   rat:'A administers a dose below the safe threshold, and C and D both independently alter the order without provider communication. Atropine doses under 0.5 mg IV are specifically associated with paradoxical bradycardia — this order should be questioned and clarified before giving.'},
+
+  {q:'A client with digoxin toxicity concerns has a serum potassium of 3.0 mEq/L and is due for a scheduled digoxin dose. What should the nurse do?',type:'single',
+   opts:['A. Administer the digoxin as scheduled','B. Question/hold the dose and notify the provider, since hypokalemia significantly increases digoxin toxicity risk','C. Give the dose along with a potassium-wasting diuretic','D. Double the digoxin dose to compensate for the low potassium'],correct:1,
+   rat:'A ignores a significant risk factor present right now, and C and D both make the situation more dangerous. Hypokalemia greatly increases digoxin toxicity risk — this finding should prompt holding the dose and notifying the provider rather than proceeding as scheduled.'},
+
+  {q:'A client reports nausea, loss of appetite, and seeing yellow-green halos around lights while taking digoxin. What should the nurse recognize?',type:'single',
+   opts:['A. A normal, expected side effect requiring no action','B. Possible digoxin toxicity — nausea/vomiting is classically the first sign, and visual disturbances are a hallmark finding','C. An unrelated viral illness','D. A sign that the digoxin dose should be increased'],correct:1,
+   rat:'A dangerously dismisses classic toxicity signs, and D suggests the opposite of the safe response. Nausea/vomiting as an early sign plus visual disturbances (yellow-green halos) together are the hallmark presentation of digoxin toxicity, requiring prompt evaluation.'},
+
+  {q:'A client with heparin-induced thrombocytopenia (HIT) has a new order for a heparin infusion to treat a DVT. What should the nurse do?',type:'single',
+   opts:['A. Administer the heparin infusion as ordered','B. Question the order — a history of HIT is a contraindication to further heparin use','C. Give half the ordered dose to reduce risk','D. Administer the heparin IM instead of IV'],correct:1,
+   rat:'A proceeds despite a genuine contraindication, and C and D both invent unsafe workarounds rather than questioning the order (heparin should never be given IM regardless). A HIT history contraindicates further heparin — this order should be questioned and an alternative anticoagulant discussed.'},
+
+  {q:'A client is ordered propranolol for migraine prophylaxis but has a history of asthma with recent exacerbations. What should the nurse do?',type:'single',
+   opts:['A. Administer the propranolol as ordered without concern','B. Question the order — propranolol\'s nonselective beta-2 blockade carries a real bronchospasm risk in reactive airway disease','C. Switch to a higher dose of the same medication','D. Give the medication only during an active asthma attack'],correct:1,
+   rat:'A overlooks a genuine respiratory risk specific to this NONselective beta-blocker, and C and D both fail to address the actual concern. Propranolol\'s beta-2 blockade (unlike cardioselective metoprolol) carries real bronchospasm risk in a client with active reactive airway disease — worth questioning/clarifying.'},
+
+  {q:'A client taking metoprolol for hypertension asks why they should never stop the medication abruptly. What is the correct explanation?',type:'single',
+   opts:['A. Abrupt discontinuation has no physiological consequence','B. Abruptly stopping can cause rebound hypertension, angina, or even MI due to sudden unmasking of upregulated beta receptors','C. The medication only works if taken continuously without any tapering ever needed','D. This warning only applies to elderly clients'],correct:1,
+   rat:'A dismisses a genuine, dangerous rebound phenomenon, and D limits it to a subgroup when it applies broadly. Abrupt beta-blocker discontinuation can cause rebound hypertension, angina, or MI — tapering is required precisely to avoid this.'},
+
+  {q:'Which of the following are appropriate nursing actions before administering IV adenosine? (Select all that apply)',type:'multi',
+   opts:['A. Ensure continuous cardiac monitoring is in place','B. Have a crash cart readily available','C. Warn the client about brief chest pressure/flushing sensations','D. Administer the dose slowly over 5 minutes','E. Document the rhythm strip before, during, and after administration'],correct:[0,1,2,4],
+   rat:'Adenosine is specifically given as a RAPID IV push (1-2 seconds) followed by a flush — giving it slowly over 5 minutes would defeat its mechanism given its ~10-second half-life. Continuous monitoring, crash cart availability, client warning, and rhythm documentation are all correct.'},
+
+  {q:'A client on diltiazem for rate control in atrial fibrillation is also newly prescribed simvastatin. What is the nurse\'s priority consideration?',type:'single',
+   opts:['A. These medications have no interaction of concern','B. Diltiazem inhibits CYP3A4 metabolism of simvastatin, increasing myopathy risk','C. Diltiazem increases the effectiveness of simvastatin with no added risk','D. This combination is only a concern in pediatric patients'],correct:1,
+   rat:'A dismisses a genuine, clinically relevant interaction. Diltiazem\'s CYP3A4 inhibition can raise simvastatin levels, increasing myopathy risk — a combination worth flagging for the provider\'s awareness, not administering without a second thought.'},
+
+  {q:'Which of the following are appropriate nursing actions when administering digoxin? (Select all that apply)',type:'multi',
+   opts:['A. Check apical pulse for one full minute before each dose','B. Hold the dose and notify the provider if the apical pulse is less than 60 bpm','C. Administer regardless of potassium level since digoxin dosing is independent of electrolytes','D. Monitor for visual disturbances as a possible toxicity sign','E. Never double a missed dose'],correct:[0,1,3,4],
+   rat:'Potassium level is NOT independent of digoxin dosing — hypokalemia significantly raises toxicity risk, making that statement false. Checking the apical pulse, holding for bradycardia, monitoring for visual disturbances, and never doubling a missed dose are all correct practices.'},
+
+  {q:'A client is started on IV furosemide (a loop diuretic) for acute fluid overload. Which of the following should the nurse specifically monitor for, given this drug class? (Select all that apply)',type:'multi',
+   opts:['A. Hypokalemia','B. Ototoxicity, especially with high doses or rapid IV push','C. Hyperkalemia','D. Tinnitus or hearing changes','E. Improved blood glucose control'],correct:[0,1,3],
+   rat:'Loop diuretics cause potassium WASTING (hypokalemia), not hyperkalemia, and have no established glucose-improving effect. Hypokalemia and ototoxicity (with associated tinnitus/hearing changes) are the two specific concerns tied to this drug class\'s potency.'}
 ],'Cardiac Meds Check');
 </script>
 
@@ -1424,15 +1607,18 @@ document.getElementById('sec-repro').innerHTML=`
   <h3>🌸 Female Reproductive Basics</h3>
   <ul class="clean">
     <li><b>Vaginal pH</b> acts as a protective mechanism against infection. It can be disrupted by hormones, hygiene products, soaps, douching, semen, antibiotics, aging, and poor hygiene practices.</li>
+    <li><b>Menarche (first period):</b> average onset around age 11-12. <b>Menopause:</b> average onset around age 50.</li>
     <li><b>Menstrual cycle:</b> average 28 days; ovulation occurs approximately 2 weeks BEFORE the next expected period (not 2 weeks after the last one — a common point of confusion).</li>
     <li><b>Key terminology:</b>
       <ul class="clean">
         <li><b>Dyspareunia</b> — painful intercourse.</li>
         <li><b>Amenorrhea</b> — absence of menstruation.</li>
-        <li><b>Menorrhagia</b> — excessive menstrual bleeding.</li>
+        <li><b>Menorrhagia</b> — excessive menstrual bleeding <i>during</i> a period.</li>
+        <li><b>Metrorrhagia</b> — bleeding that occurs <i>between</i> periods (irregular, not tied to the expected menstrual cycle) — easy to confuse with menorrhagia, but a distinct pattern.</li>
       </ul>
     </li>
     <li><b>Menstrual hygiene:</b> frequent tampon changes reduce infection risk, including <b>toxic shock syndrome (TSS)</b> — a rare but serious complication historically linked to prolonged tampon use.</li>
+    <li><b>PMS (premenstrual syndrome)</b> — the same hormonal shifting that drives perimenopausal symptoms (mood changes, occasional hot flashes) can also cause similar symptoms tied to the normal menstrual cycle itself, not just the menopausal transition. Don't confuse a PMS symptom pattern with perimenopause just because the symptoms look similar.</li>
   </ul>
 </div>
 
@@ -1459,7 +1645,7 @@ document.getElementById('sec-repro').innerHTML=`
     <li><b>Recovery:</b> typically <b>6-8 weeks</b> with restricted activity and travel; overall psychological recovery and adjustment can take longer (months), with possible grief, depression, and body image effects — particularly given the loss of reproductive organs and its impact on identity and sexuality.</li>
     <li><b>Nursing approach:</b> sensitive, open-ended questioning about how the patient is coping; involve the partner in recovery support when appropriate; explore alternative ways to maintain emotional/physical intimacy during the recovery window; offer support groups.</li>
   </ul>
-  <div class="hy">⭐ <b>Cervical cancer risk reduction:</b> smoking cessation, safe sex practices, and the HPV vaccine (now available to an expanded age range for BOTH genders).</div>
+  <div class="hy">⭐ <b>Cervical cancer risk reduction:</b> smoking cessation, safe sex practices, and the HPV vaccine (now approved for an expanded age range in BOTH genders — roughly age 9 through the mid-40s, not just adolescents). Additional cervical cancer risk factors: early onset of sexual activity and multiple sexual partners/STI history.</div>
 </div>
 
 <div class="card" style="border-color:var(--purple)">
@@ -1477,6 +1663,7 @@ document.getElementById('sec-repro').innerHTML=`
   <ul class="clean">
     <li><b>HRT benefits:</b> relieves menopausal symptoms, protects bone health, reduces some cardiovascular risks.</li>
     <li><b>HRT cautions/contraindications:</b> history of breast cancer, blood clotting issues, HTN, smoking. Alternatives: vitamin/herbal supplements.</li>
+    <li><b>Combination therapy vs. estrogen-only — a key nuance:</b> the increased cancer risk historically associated with HRT is specifically tied to <b>combination estrogen-progesterone therapy</b>. Research has shown that <b>estrogen-only therapy carries a notably lower risk</b> — this distinction matters for counseling and is easy to over-generalize if you only remember "HRT raises cancer risk" without the nuance of which formulation.</li>
     <li><b>Oral contraceptive contraindications:</b> HTN, history of DVT/stroke/PE, smoking, breast cancer, liver disease.</li>
   </ul>
   <div class="hy">⭐ Notice the overlap: HTN, clotting history, and smoking disqualify BOTH HRT and oral contraceptives — because both involve exogenous estrogen, which raises clotting risk and interacts with the same cardiovascular risk factors.</div>
@@ -1484,28 +1671,31 @@ document.getElementById('sec-repro').innerHTML=`
 
 <div class="card" style="border-color:var(--teal)">
   <h3>👨 Benign Prostatic Hyperplasia (BPH)</h3>
-  <p><b>Mechanism:</b> the prostate gland sits around the urethra; as it enlarges with age (very common in older males), it constricts/compresses the urethra and impairs urinary flow.</p>
+  <p><b>Anatomy:</b> the prostate gland sits at the base of the bladder, wrapping around the urethra. It (along with Cowper's/bulbourethral glands) contributes secretions to the ejaculate. As the prostate enlarges with age (very common in older males), it constricts/compresses the urethra and impairs urinary flow.</p>
   <ul class="clean">
-    <li><b>Clinical signs from urethral constriction:</b> post-void dribbling, incomplete bladder emptying, urinary frequency, frequent NOCTURNAL urination (nocturia) from chronic retention.</li>
+    <li><b>Prevalence:</b> some degree of prostate enlargement is extremely common with age — a large majority of men over 70 have it.</li>
+    <li><b>Clinical signs from urethral constriction:</b> post-void dribbling, incomplete bladder emptying, urinary frequency, frequent NOCTURNAL urination (nocturia) from chronic retention — the bladder never fully empties, so it refills faster.</li>
   </ul>
 </div>
 
 <div class="card" style="border-color:var(--red)">
   <h3>💊 Erectile Dysfunction (ED) & the Nitrate Danger</h3>
   <ul class="clean">
-    <li><b>Multifactorial causes:</b> psychosomatic/psychological stress, vascular disease, hormonal factors. (See the Why Engine card connecting ED to early vascular disease detection.)</li>
+    <li><b>Multifactorial causes:</b> psychosomatic/psychological stress, vascular disease, hormonal factors (natural age-related testosterone decline). (See the Why Engine card connecting ED to early vascular disease detection.)</li>
+    <li><b>Vascular contributors:</b> atherosclerosis, hypertension, and diabetes can all impair the (highly vascular) blood flow needed for erectile function — the same disease processes covered throughout this unit.</li>
+    <li><b>Treatment options:</b> addressing the specific broken component matters — psychological support for psychosomatic causes, hormone therapy for a hormonal component (same increased-cancer-risk caveat as other hormone therapy), <b>vacuum erection devices (pumps)</b>, and medication.</li>
     <li><b>ED medications (PDE5 inhibitors, e.g., sildenafil/Viagra)</b> — work via a nitric oxide-based mechanism causing vasodilation.</li>
     <li><b style="color:var(--red)">CONTRAINDICATED with nitrates</b> (like nitroglycerin) — combining the two causes profound, dangerous vasodilation and hypotension, risking severe blood pressure drops, fainting, and cardiac events. This is a critical medication safety teaching point.</li>
-    <li><b>Management:</b> address underlying psychological and physiological factors together; exercise/testosterone regulation where relevant; professional psychological support for psychosomatic components.</li>
   </ul>
 </div>
 
 <div class="card">
-  <h3>👨 Phimosis</h3>
+  <h3>👨 Phimosis & Male Hygiene</h3>
   <ul class="clean">
     <li><b>Definition:</b> inflammation/tightening of the foreskin that prevents normal retraction.</li>
     <li><b>Cause:</b> often related to inadequate hygiene, allowing bacteria/debris accumulation, or improper retraction technique causing swelling/constriction.</li>
     <li><b>Critical teaching point:</b> after retracting the foreskin for cleaning, it must always be <b>returned to its original (unretracted) position</b> — leaving it retracted can cause painful constriction and swelling (paraphimosis), a genuine complication.</li>
+    <li><b>Male hygiene technique:</b> clean the shaft moving AWAY from the meatus (urinary opening), not toward it — the parallel teaching point to "wipe front to back" for females. Introducing bacteria toward the meatus raises UTI risk.</li>
   </ul>
 </div>
 
@@ -1523,7 +1713,7 @@ document.getElementById('sec-repro').innerHTML=`
       </ul>
     </li>
     <li><b>Chlamydia:</b> ranges from no symptoms to dysuria, thick white/yellow discharge, abdominal pain, pain during intercourse.</li>
-    <li><b>Gonorrhea:</b> increased vaginal discharge — can be white, yellow, or green.</li>
+    <li><b>Gonorrhea:</b> increased vaginal discharge — can be white, yellow, or green. <b>Newer, more virulent/antibiotic-resistant strains</b> are an emerging concern — in severe or disseminated cases, gonorrhea can spread beyond the genital tract to distant sites (eyes, joints, kidneys, even the meninges/CNS), a significantly more dangerous presentation than the classic localized infection.</li>
     <li><b>Trichomoniasis:</b> frothy yellow-white or yellow-green discharge; treated with <b>metronidazole</b>.</li>
     <li><b>Candidiasis:</b> white, cottage cheese-like discharge.</li>
   </ul>
@@ -1612,7 +1802,43 @@ renderQuiz('quiz-repro',[
 
   {q:'A client asks whether hormone replacement therapy is right for her, given a family history of breast cancer. What is the MOST appropriate nursing response?',type:'single',
    opts:['A. "HRT has no connection to breast cancer risk, so it\'s always safe."','B. "A history of breast cancer is a recognized caution/contraindication for HRT — this is an important discussion to have with your provider."','C. "You should start HRT immediately regardless of your history."','D. "Breast cancer history is irrelevant to this decision."'],correct:1,
-   rat:'A, C, and D all dismiss a genuinely important contraindication. A history of breast cancer is a recognized caution for HRT, making this an important, individualized discussion with the provider rather than an automatic yes or no.'}
+   rat:'A, C, and D all dismiss a genuinely important contraindication. A history of breast cancer is a recognized caution for HRT, making this an important, individualized discussion with the provider rather than an automatic yes or no.'},
+
+  {q:'A client asks whether ALL forms of hormone replacement therapy carry the same increased cancer risk. What is the MOST accurate response?',type:'single',
+   opts:['A. Yes, every formulation of HRT carries an identical risk level','B. No — the increased risk is specifically associated with combination estrogen-progesterone therapy; estrogen-only therapy has been shown to carry a notably lower risk','C. No HRT formulation carries any cancer risk at all','D. Only injectable HRT carries risk; oral forms are risk-free'],correct:1,
+   rat:'A oversimplifies a real and clinically important distinction, and C and D both misstate the actual research. The elevated risk historically associated with HRT is specifically tied to the combination (estrogen + progesterone) formulation — estrogen-only therapy has shown a lower risk profile in research.'},
+
+  {q:'What is the average age of menarche (first menstrual period)?',type:'single',
+   opts:['A. Age 6-8','B. Age 11-12','C. Age 16-18','D. Age 20-22'],correct:1,
+   rat:'The average age of menarche is approximately 11-12 years old, though this can vary by individual.'},
+
+  {q:'A client asks how PMS (premenstrual syndrome) relates to perimenopause, since both can cause mood changes and hot flashes. What is the correct explanation?',type:'single',
+   opts:['A. PMS and perimenopause are the exact same condition','B. Both are driven by hormonal shifts, but PMS is tied to the normal monthly cycle while perimenopause reflects the longer-term transition toward menopause','C. PMS only occurs after menopause is complete','D. Hot flashes and mood changes can only occur during perimenopause, never as part of PMS'],correct:1,
+   rat:'A incorrectly equates two distinct (though hormonally related) processes, and C and D both misplace when PMS can occur. Both involve hormonal shifts producing overlapping symptoms, but PMS ties to the regular monthly cycle while perimenopause reflects the broader transition toward menopause.'},
+
+  {q:'A client asks why her provider recommends weight-bearing exercise specifically, rather than just any physical activity, for menopause-related bone health. What is the correct explanation?',type:'single',
+   opts:['A. Weight-bearing exercise puts tension on bone, which helps maintain bone density and slow osteoporosis progression','B. Weight-bearing exercise has no specific effect on bone compared to other exercise types','C. Only swimming and cycling are effective for bone health in menopause','D. Bone density is unrelated to any form of exercise'],correct:0,
+   rat:'B, C, and D all dismiss the specific mechanism at play. Weight-bearing/resistance exercise puts mechanical tension on bone, which stimulates the body to maintain bone density — directly relevant to slowing osteoporosis after estrogen decline.'},
+
+  {q:'Which gland, in addition to the prostate, contributes secretions to the ejaculate?',type:'single',
+   opts:['A. The thyroid gland','B. The Cowper\'s (bulbourethral) gland','C. The adrenal gland','D. The pituitary gland'],correct:1,
+   rat:'The thyroid, adrenal, and pituitary glands have no role in ejaculate composition. The Cowper\'s (bulbourethral) gland, along with the prostate, contributes secretions to the ejaculate.'},
+
+  {q:'A client asks about non-medication treatment options for erectile dysfunction. Which of the following is an appropriate option?',type:'single',
+   opts:['A. Vacuum erection devices (pumps)','B. Antibiotics','C. Insulin therapy regardless of diabetes status','D. There are no non-medication options available'],correct:0,
+   rat:'B and C are unrelated treatments for different conditions, and D dismisses a real option. Vacuum erection devices are a recognized non-pharmacologic treatment option for ED, alongside psychological support and addressing underlying hormonal/vascular contributors.'},
+
+  {q:'A nurse is teaching a father how to clean his uncircumcised infant son. Which technique is correct for cleaning the shaft?',type:'single',
+   opts:['A. Clean from the meatus (tip) down toward the base','B. Clean moving away from the meatus (tip), the same directional principle as "front to back" wiping in females','C. Direction does not matter for male hygiene','D. The foreskin should be left retracted after cleaning'],correct:1,
+   rat:'A reverses the safer direction (moving TOWARD the meatus risks introducing bacteria into the urethra), C dismisses a real hygiene principle, and D risks paraphimosis. Cleaning away from the meatus mirrors the same logic as front-to-back wiping in females — both aim to avoid pushing bacteria toward the urethral opening.'},
+
+  {q:'A client asks why newer strains of gonorrhea are of particular clinical concern beyond the classic genital presentation. What is the correct explanation?',type:'single',
+   opts:['A. Newer strains are less contagious and less concerning overall','B. Some newer, resistant strains can disseminate beyond the genital tract to sites like the eyes, joints, kidneys, or even the meninges — a far more dangerous presentation','C. Gonorrhea has never been found outside the genital tract in any case','D. This is not a genuine clinical concern'],correct:1,
+   rat:'A, C, and D all understate a real and growing concern. Emerging antibiotic-resistant gonorrhea strains have been associated with disseminated infection reaching distant sites — a significantly more dangerous presentation than the typical localized infection.'},
+
+  {q:'A client reports unpredictable spotting/bleeding occurring between her regular menstrual periods, separate from her normal cycle. Which term correctly describes this finding?',type:'single',
+   opts:['A. Menorrhagia','B. Metrorrhagia','C. Amenorrhea','D. Dyspareunia'],correct:1,
+   rat:'Menorrhagia describes excessive bleeding DURING an expected period — not the right fit here. Amenorrhea is absence of periods entirely, and dyspareunia is painful intercourse — neither matches this description either. Bleeding occurring BETWEEN periods is specifically metrorrhagia.'}
 ],'Reproductive Health & STI Check');
 </script>
 
@@ -2159,7 +2385,15 @@ renderFilteredQuiz('quiz-challenge',[
 
   {topic:'repro',q:'A client asks why her provider ordered both a chlamydia test and a gonorrhea test together, even though she has no symptoms. What is the BEST explanation?',type:'single',
    opts:['A. Both infections can be asymptomatic, and co-testing helps catch infections that might otherwise go undetected and progress to complications like PID','B. Testing for both simultaneously is done only to increase cost','C. These two infections are never found together, so testing both is unnecessary','D. Symptoms are always required before any STI testing is appropriate'],correct:0,
-   rat:'C incorrectly assumes mutual exclusivity, and D denies the value of routine or risk-based screening without symptoms. Both infections can be asymptomatic, and co-testing helps catch infections before they progress to complications like PID.'}
+   rat:'C incorrectly assumes mutual exclusivity, and D denies the value of routine or risk-based screening without symptoms. Both infections can be asymptomatic, and co-testing helps catch infections before they progress to complications like PID.'},
+
+  {topic:'cardio',q:'A client presents with a CVP of 8 mmHg and reports dyspnea. Labs show an elevated BNP. How should the nurse synthesize these three findings?',type:'single',
+   opts:['A. These are three unrelated findings that happen to occur together by coincidence','B. All three findings point to the same underlying process — right-sided volume overload significant enough to also cause pulmonary symptoms and ventricular strain, consistent with heart failure','C. The CVP and BNP are contradictory findings that cannot both be accurate','D. Dyspnea in this context is unrelated to cardiac status and reflects a primary respiratory problem only'],correct:1,
+   rat:'A treats connected findings as coincidental, C claims a contradiction where none exists, and D ignores the well-established cardiac connection to this symptom pattern. A CVP above the 2-6 mmHg normal range (8 mmHg) reflects right-sided volume overload; that same overload stretches cardiac chambers (driving BNP up) and can back up enough to cause dyspnea — three findings from one process, not three separate problems.'},
+
+  {topic:'cardio',q:'A client with PAD initially had pain only with exercise, but now reports pain occurring at rest. Which explanation BEST describes why this progression makes the situation a medical emergency?',type:'single',
+   opts:['A. Rest pain is simply a more annoying version of the same condition with no change in urgency','B. The artery can no longer supply adequate oxygen even at the lower resting demand, meaning tissue viability is now directly threatened without urgent intervention','C. This progression indicates the PAD is actually improving','D. Rest pain has no relationship to the severity of arterial narrowing'],correct:1,
+   rat:'A dangerously understates the significance of this change, and C and D both misread the clinical meaning of rest pain entirely. Once even resting oxygen demand can\'t be met, tissue is at direct risk of necrosis — this is why critical limb ischemia is treated as a limb-threatening emergency, not just "worse claudication."'}
 ],'Med-Surg 1 Level Challenge');
 </script>
 
@@ -2854,7 +3088,18 @@ const EXAM=[
 {topic:'repro',q:'Which medication is commonly used to treat trichomoniasis?',o:['Penicillin','Metronidazole','An antifungal cream','No medication is used'],t:'single',c:1,r:'Metronidazole is the standard treatment for trichomoniasis.'},
 {topic:'repro',q:'Which of the following STIs is curable with antibiotics if caught early?',o:['Herpes','HIV','Syphilis','HPV'],t:'single',c:2,r:'Syphilis is curable with antibiotics (like penicillin), especially when caught in early stages.'},
 {topic:'repro',q:'What is the general definition of menopause?',o:['Any single missed period','12 consecutive months without a period','The first hot flash a woman experiences','A specific age milestone regardless of menstrual history'],t:'single',c:1,r:'Menopause is defined by 12 consecutive months without a menstrual period.'},
-{topic:'repro',q:'Which of the following is a classic symptom of BPH?',o:['Painless testicular lump','Post-void dribbling','Hot flashes','Painful chancre'],t:'single',c:1,r:'Post-void dribbling is a classic BPH symptom from urethral compression.'}
+{topic:'repro',q:'Which of the following is a classic symptom of BPH?',o:['Painless testicular lump','Post-void dribbling','Hot flashes','Painful chancre'],t:'single',c:1,r:'Post-void dribbling is a classic BPH symptom from urethral compression.'},
+{topic:'cardio',q:'A client on IV diltiazem has a new order added for IV metoprolol. What should the nurse do?',o:['Administer both as ordered','Question the order — concurrent IV CCB and IV beta-blocker risks fatal bradycardia/AV block','Give only the metoprolol','Give both but at half the ordered doses'],t:'single',c:1,r:'This specific combination carries a real, serious bradycardia/heart block risk and should be questioned before administration, not adjusted informally.'},
+{topic:'cardio',q:'What is the antidote for heparin?',o:['Vitamin K','Protamine Sulfate','Physostigmine','Digibind/DigiFab'],t:'single',c:1,r:'Protamine Sulfate is the antidote for heparin; Vitamin K reverses warfarin, Digibind/DigiFab reverses digoxin toxicity, and physostigmine reverses anticholinergic toxicity.'},
+{topic:'cardio',q:'What is the antidote for digoxin toxicity?',o:['Protamine Sulfate','Vitamin K','Digibind/DigiFab','Physostigmine'],t:'single',c:2,r:'Digibind/DigiFab is the specific antidote for severe digoxin toxicity.'},
+{topic:'cardio',q:'What is the antidote for atropine/anticholinergic toxicity?',o:['Protamine Sulfate','Vitamin K','Digibind/DigiFab','Physostigmine'],t:'single',c:3,r:'Physostigmine reverses anticholinergic toxicity, including from atropine.'},
+{topic:'cardio',q:'A nurse prepares to give atropine 0.3 mg IV for symptomatic bradycardia. What is the concern with this dose?',o:['The dose is too high and risks tachycardia','Doses below 0.5 mg IV can cause paradoxical bradycardia','This dose is appropriate and should be given without question','Atropine cannot be given IV at any dose'],t:'single',c:1,r:'Atropine doses under 0.5 mg IV carry a specific, counterintuitive risk of paradoxical bradycardia rather than the intended heart-rate increase.'},
+{topic:'cardio',q:'Which finding would make the nurse question an order for adenosine?',o:['The client is in simple PSVT/SVT','The client has WPW syndrome and is currently in atrial fibrillation','The client has continuous cardiac monitoring in place','The client has IV access established'],t:'single',c:1,r:'Adenosine in WPW with atrial fib/flutter can accelerate conduction through the accessory pathway — a genuine reason to question this specific combination, unlike the other listed (expected/appropriate) findings.'},
+{topic:'cardio',q:'Which lab value should be checked before administering a digoxin dose, beyond the apical pulse?',o:['Serum potassium, since hypokalemia increases toxicity risk','Serum glucose only','White blood cell count only','Liver enzymes exclusively'],t:'single',c:0,r:'Potassium level is directly relevant to digoxin safety — hypokalemia significantly raises toxicity risk via the shared Na-K pump binding site.'},
+{topic:'cardio',q:'A client taking propranolol reports new wheezing and shortness of breath. What is the MOST likely explanation?',o:['This is unrelated to the medication','Propranolol\'s nonselective beta-2 blockade can cause bronchospasm, especially in reactive airway disease','This is an expected, harmless finding requiring no action','Propranolol only affects the eyes, not the lungs'],t:'single',c:1,r:'Propranolol blocks beta-2 receptors in the lungs (unlike cardioselective metoprolol), which is exactly why bronchospasm is a recognized risk, particularly in asthma/COPD.'},
+{topic:'cardio',q:'Which of the following are appropriate reasons to hold a scheduled dose of metoprolol? (Select all that apply)',o:['Heart rate below 60 bpm','Systolic blood pressure below 90 mmHg','Heart rate of 78 bpm','Blood pressure of 128/76 mmHg','Client reports mild fatigue only'],c:[0,1],t:'multi',r:'A heart rate of 78 and BP of 128/76 are both within acceptable ranges, and mild fatigue alone isn\'t an automatic hold criterion. HR <60 or SBP <90 are the specific hold parameters for metoprolol.'},
+{topic:'cardio',q:'A client with a history of heparin-induced thrombocytopenia (HIT) needs anticoagulation for a new DVT. What should the nurse anticipate?',o:['Heparin will be used again since it worked previously','An alternative anticoagulant will likely be used, since HIT history contraindicates further heparin','No anticoagulation will be given under any circumstance','Heparin will be given at a lower dose to avoid recurrence'],t:'single',c:1,r:'A history of HIT is a genuine contraindication to further heparin use — an alternative anticoagulant (not simply a lower heparin dose) is the appropriate approach.'},
+{topic:'cardio',q:'Why is adenosine administered as a rapid IV push followed immediately by a saline flush, rather than a slow infusion?',o:['To reduce cost','Adenosine has an extremely short half-life (~10 seconds), so a slow infusion would allow it to be metabolized before reaching the heart effectively','Slow infusion would cause more side effects','There is no specific reason for this administration technique'],t:'single',c:1,r:'Because adenosine is broken down almost immediately, a rapid push plus flush is needed to get an effective concentration to the AV node before it\'s cleared — a slow infusion would undermine the mechanism entirely.'}
 ];
 let examState={}, examIdx=0, examSubmitted=false, examMode='study', examChecked={};
 let quizSet=[], examShuffleMap={};
