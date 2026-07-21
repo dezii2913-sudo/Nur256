@@ -337,7 +337,9 @@ const SECTIONS=[
   {id:'acidbase',label:'⚗️ Acid–Base & Lytes'},
   {id:'diabetes',label:'🩸 Diabetes'},
   {id:'skin',label:'🔬 Skin'},
+  {id:'sensory',label:'👁️ Sensory (EENT)'},
   {id:'cancer',label:'🎗️ Cancer & EOL'},
+  {id:'drugs',label:'💊 Drugs'},
   {id:'match',label:'🔗 Match Game'},
   {id:'flash',label:'🎮 Flash Game'},
   {id:'vault',label:'🗄️ Wrong Answer Vault'},
@@ -619,7 +621,35 @@ const MATCH_GAMES = {
       {tier:3,a:'Palliative care',b:'Comfort at any stage; can run with curative treatment'},
       {tier:3,a:'Hospice care',b:'Comfort when cure is no longer the goal'},
       {tier:3,a:'Metformin + IV contrast',b:'Hold around contrast — lactic acidosis risk'},
-      {tier:3,a:'Hypercalcemia in bone metastasis',b:'Calcium released from destroyed bone'}
+      {tier:3,a:'Hypercalcemia in bone metastasis',b:'Calcium released from destroyed bone'},
+      {tier:1,a:'Glaucoma vision loss',b:'Peripheral first (tunnel vision)'},
+      {tier:1,a:'Macular degeneration vision loss',b:'Central vision (wavy lines, Amsler grid)'},
+      {tier:2,a:'Angle-closure glaucoma',b:'Sudden pain, halos, rock-hard eye — emergency'},
+      {tier:2,a:'Retinal detachment',b:'Flashes, floaters, curtain across vision'},
+      {tier:2,a:'Ménière\'s triad',b:'Vertigo + tinnitus + fluctuating hearing loss'},
+      {tier:2,a:'Ménière\'s management',b:'Low-sodium diet + diuretics'},
+      {tier:2,a:'Conductive hearing loss',b:'Blockage (earwax/fluid) — often reversible'},
+      {tier:2,a:'Sensorineural hearing loss',b:'Nerve/cochlea damage — usually permanent'},
+      {tier:1,a:'Isotonic fluid (NS, LR)',b:'Stays in vessels — shock, blood loss'},
+      {tier:2,a:'Hypotonic fluid (0.45% NS)',b:'Water into cells — avoid in head injury'},
+      {tier:2,a:'Hypertonic fluid (3% saline)',b:'Pulls water out of cells — severe hyponatremia'},
+      {tier:1,a:'Fluid hung with blood',b:'0.9% normal saline only'},
+      {tier:2,a:'Ethambutol (TB drug)',b:'Optic neuritis — report vision changes'},
+      {tier:2,a:'Isoniazid (TB drug)',b:'Peripheral neuropathy — give B6'},
+      {tier:1,a:'Rifampin (TB drug)',b:'Orange/red body fluids (harmless)'},
+      {tier:1,a:'Biopsy',b:'Only definitive way to diagnose cancer'},
+      {tier:2,a:'PSA',b:'Prostate cancer marker'},
+      {tier:2,a:'CA-125',b:'Ovarian cancer marker'},
+      {tier:2,a:'CEA',b:'Colorectal cancer marker (monitors recurrence)'},
+      {tier:2,a:'AFP',b:'Liver & testicular cancer marker'},
+      {tier:2,a:'CA 19-9',b:'Pancreatic cancer marker'},
+      {tier:2,a:'PET scan',b:'Finds metabolically active/metastatic disease'},
+      {tier:2,a:'Pap smear',b:'Cervical cancer screening'},
+      {tier:1,a:'Mammogram',b:'Breast cancer screening'},
+      {tier:1,a:'Colonoscopy',b:'Colorectal screening + biopsy'},
+      {tier:3,a:'Tumor lysis syndrome',b:'↑K⁺, ↑phosphate, ↑uric acid, ↓calcium after chemo'},
+      {tier:3,a:'SIADH in cancer',b:'Small-cell lung cancer → low sodium'},
+      {tier:3,a:'TNM staging',b:'Tumor size, Nodes, Metastasis'}
     ]
   }
 };
@@ -921,6 +951,39 @@ document.getElementById('sec-resp').innerHTML=`
     <li>Keep the system upright, below chest level; don't routinely clamp.</li>
     <li>COPD: <b>pursed-lip breathing</b>; accessory-muscle use = distress; O₂ target ~88–92%; smoking = #1 risk.</li>
   </ul></div>
+<div class="card" style="border-color:var(--red)"><h3>🦠 Tuberculosis — RIPE therapy (Casteel: "KNOW THIS")</h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Watch for</th></tr>
+    <tr><td><b>R</b>ifampin</td><td>Orange/red body fluids (harmless), ↑ liver enzymes</td></tr>
+    <tr><td><b>I</b>soniazid (INH)</td><td>Hepatotoxicity; peripheral neuropathy → give <b>B6 (pyridoxine)</b></td></tr>
+    <tr><td><b>P</b>yrazinamide</td><td>Hepatotoxicity; ↑ uric acid (gout)</td></tr>
+    <tr><td><b>E</b>thambutol</td><td><b>Optic neuritis</b> — vision changes, report!</td></tr>
+  </table>
+  <p style="margin:8px 0 0">Treatment lasts <b>6–12 months</b> — adherence is everything. No longer infectious after <b>3 consecutive negative sputum cultures</b>. All RIPE drugs → watch <b>liver toxicity</b>. <span class="hy">⭐ "Rifampin turns pee oRange."</span></p>
+</div>
+<div class="grid2">
+  <div class="card" style="border-color:var(--amber)"><h3>🆘 Status asthmaticus</h3>
+    <p style="margin:0">Life-threatening attack <b>not responding</b> to routine therapy. <b>ABG trap:</b> EARLY = respiratory <b>alkalosis</b> (hyperventilating); LATE = respiratory <b>acidosis</b> (tiring out, retaining CO₂) → danger sign. Tx: O₂, albuterol, corticosteroids, intubate if needed.</p>
+    <p style="margin:6px 0 0"><b>Rescue vs. maintenance:</b> SABA (<b>albuterol</b>) = acute rescue; LABA (salmeterol) = maintenance, <b>never alone</b>; inhaled corticosteroids = long-term control (<b>rinse mouth</b>).</p>
+  </div>
+  <div class="card"><h3>🫁 Artificial airways</h3>
+    <ul class="clean">
+      <li><b>ET tube cuff pressure = 20–25 mmHg.</b> Too HIGH → tracheal ischemia/necrosis; too LOW → aspiration risk.</li>
+      <li><b>Tracheostomy</b> = surgical airway for long-term ventilation, obstruction, or aspiration prevention. Early complications: bleeding, pneumothorax, <b>tube dislodgement</b>, air embolism.</li>
+      <li>A dislodged airway is an <b>emergency</b> — protect the airway, keep the obturator/spare at the bedside.</li>
+    </ul>
+  </div>
+</div>
+<div class="card" style="border-color:var(--purple)"><h3>🛡️ VAP bundle + aspiration pearl</h3>
+  <p style="margin:0 0 6px">Prevent ventilator-associated pneumonia — <b>"Heads up, clean mouth, wake up, protect gut &amp; legs":</b></p>
+  <ul class="clean">
+    <li><b>H</b>ead of bed elevated <b>30–45°</b></li>
+    <li><b>O</b>ral care with <b>chlorhexidine</b></li>
+    <li><b>B</b> — daily <b>sedation vacations</b> / wean-readiness</li>
+    <li>Peptic (stress) ulcer prophylaxis + DVT prophylaxis</li>
+  </ul>
+  <p class="hy" style="margin:8px 0 0">⭐ Aspiration pneumonia is more common in the <b>RIGHT lung</b> — the right mainstem bronchus is straighter and wider.</p>
+</div>
 <div id="quiz-resp"></div>`;
 renderQuiz('quiz-resp',[
   {q:'Three days post-op a client suddenly develops sharp pleuritic chest pain, dyspnea, anxiety, tachycardia, and an SpO₂ that drops to 86%. Which complication is most likely?',type:'single',opts:['Atelectasis','Pulmonary embolism','Pneumonia','Anxiety attack'],correct:1,rat:'The trap: anxiety and tachypnea can mimic a panic attack, and pneumonia also causes dyspnea — but those build gradually. The SUDDEN onset with hypoxia is the discriminator for a PE (a DVT that traveled). Never write off sudden dyspnea as anxiety.'},
@@ -937,7 +1000,12 @@ renderQuiz('quiz-resp',[
   {q:'Which statement by a client about deep breathing and coughing after surgery indicates a need for further teaching?',type:'single',opts:['"I should splint my incision with a pillow when I cough."','"I\'ll use my incentive spirometer about every hour while awake."','"I\'ll avoid coughing so I don\'t pop my stitches."','"Getting up to walk will help my lungs too."'],correct:2,rat:'"Needs further teaching" = find the wrong statement. Splinting, hourly spirometry, and early ambulation are correct. Avoiding coughing lets secretions pool and promotes atelectasis/pneumonia — coughing (splinted) is encouraged.'},
   {q:'A nurse is monitoring a client after chest-tube placement. Which finding is EXPECTED and requires no intervention?',type:'single',opts:['Continuous bubbling in the water-seal chamber','Tidaling (fluid rising and falling with respiration) in the water-seal chamber','Sudden absence of breath sounds on the affected side','Subcutaneous emphysema spreading up the neck'],correct:1,rat:'The trap: three options are abnormal (air leak, possible tension/blockage, spreading crepitus). Tidaling — fluid moving with respiration — reflects normal pressure changes and is expected.'},
   {q:'A client with pneumonia is receiving oxygen and antibiotics. Which finding BEST indicates the treatment is working?',type:'single',opts:['The client requests a different meal','Breath sounds clear and SpO₂ rises to 96% on room air','The chest x-ray is scheduled','The client is sleeping'],correct:1,rat:'The trap: meal requests, a scheduled test, and sleeping don\'t measure gas exchange. Clearing breath sounds and a rising SpO₂ on room air are objective evidence the pneumonia and oxygenation are improving.'},
-  {q:'A post-op client suddenly becomes restless and confused with an SpO₂ of 84%. What should the nurse do FIRST?',type:'single',opts:['Administer a sedative for the restlessness','Assess the airway and breathing and apply oxygen','Restrain the client for safety','Document the behavior change and continue rounds'],correct:1,rat:'The trap: restlessness/confusion look behavioral, and sedating or restraining a hypoxic client is dangerous. Restlessness is an early sign of HYPOXIA — assess airway/breathing and oxygenate first; the mental change is the clue, not the problem.'}
+  {q:'A post-op client suddenly becomes restless and confused with an SpO₂ of 84%. What should the nurse do FIRST?',type:'single',opts:['Administer a sedative for the restlessness','Assess the airway and breathing and apply oxygen','Restrain the client for safety','Document the behavior change and continue rounds'],correct:1,rat:'The trap: restlessness/confusion look behavioral, and sedating or restraining a hypoxic client is dangerous. Restlessness is an early sign of HYPOXIA — assess airway/breathing and oxygenate first; the mental change is the clue, not the problem.'},
+  {q:'A client on RIPE therapy for TB reports their urine and tears have turned orange. The nurse should:',type:'single',opts:['Hold all TB medications and notify the provider','Reassure the client this is a harmless effect of rifampin','Treat it as a sign of liver failure','Increase fluid intake to flush the "toxin"'],correct:1,rat:'The trap: orange/red body fluids look alarming but are an expected, harmless effect of rifampin. Holding therapy risks resistance. (Liver toxicity would show as jaundice, RUQ pain, or rising enzymes — a different picture.)'},
+  {q:'Which finding in a client on isoniazid (INH) requires the nurse to question the plan or intervene?',type:'single',opts:['The client is also prescribed vitamin B6 (pyridoxine)','The client reports numbness and tingling in the feet','The client\'s sputum is being collected monthly','The client takes the dose on an empty stomach'],correct:1,rat:'INH causes peripheral neuropathy; numbness/tingling signals it — B6 is given to prevent it, so its presence is appropriate. Report the neuropathy and watch for hepatotoxicity.'},
+  {q:'A client in status asthmaticus initially had a respiratory alkalosis on ABG. An hour later the ABG shows a normalizing then rising PaCO₂. The nurse recognizes this as:',type:'single',opts:['A reassuring sign the attack is resolving','A danger sign that the client is tiring and retaining CO₂','An expected finding that needs no action','Evidence of metabolic compensation'],correct:1,rat:'The trap: a "normal" CO₂ mid-attack looks reassuring but is ominous — the client who was blowing off CO₂ is now tiring and retaining it (moving toward respiratory acidosis). This signals impending respiratory failure; prepare for possible intubation.'},
+  {q:'The nurse is caring for a client with a new tracheostomy. Which item is most important to keep at the bedside?',type:'single',opts:['A second IV pump','The obturator and a spare trach tube','A padded tongue blade','An extra pillow'],correct:1,rat:'If the tube dislodges (an early emergency), the obturator and a spare tube are needed to re-establish the airway immediately. Airway safety drives the priority.'},
+  {q:'Which actions are part of preventing ventilator-associated pneumonia (VAP)? (Select all that apply)',type:'multi',opts:['Keep the head of bed elevated 30–45°','Provide oral care with chlorhexidine','Keep the client deeply sedated at all times','Perform daily sedation vacations / wean-readiness checks','Provide stress-ulcer and DVT prophylaxis'],correct:[0,1,3,4],rat:'The trap: keeping a client DEEPLY sedated works against the bundle — daily sedation vacations shorten ventilator time. HOB elevation, chlorhexidine oral care, sedation vacations, and ulcer/DVT prophylaxis are the bundle.'}
 ],'Respiratory Check');
 </script>
 
@@ -957,12 +1025,62 @@ document.getElementById('sec-acidbase').innerHTML=`
 <div class="card" style="border-color:var(--amber)"><h3>⚡ Electrolytes — what kills</h3>
   <table class="lab">
     <tr><th>Electrolyte</th><th>Normal</th><th>Key danger</th></tr>
-    <tr><td>Potassium</td><td>3.5–5.0</td><td><b>Hyper</b> → cardiac arrhythmia, peaked T waves · <b>Hypo</b> → flat T, U waves</td></tr>
-    <tr><td>Sodium</td><td>135–145</td><td><b>Hypo</b> → cerebral edema, seizures</td></tr>
-    <tr><td>Calcium</td><td>9.0–10.5</td><td><b>Hypo</b> → Trousseau's/Chvostek's, tetany</td></tr>
-    <tr><td>Magnesium</td><td>1.5–2.5</td><td><b>Hypo</b> → mirrors low calcium; hyperreflexia</td></tr>
+    <tr><td>Sodium (Na⁺)</td><td>135–145 mEq/L</td><td><b>Hypo</b> → cerebral edema, seizures · <b>Hyper</b> → thirst, neuro changes</td></tr>
+    <tr><td>Potassium (K⁺)</td><td>3.5–5.0 mEq/L</td><td><b>Hyper</b> → arrhythmia, peaked T waves · <b>Hypo</b> → flat T, U waves</td></tr>
+    <tr><td>Chloride (Cl⁻)</td><td>98–106 mEq/L</td><td>Follows sodium; shifts with acid–base balance</td></tr>
+    <tr><td>Calcium (total)</td><td>9.0–10.5 mg/dL</td><td><b>Hypo</b> → Trousseau's/Chvostek's, tetany · <b>Hyper</b> → weakness, stones</td></tr>
+    <tr><td>Magnesium (Mg²⁺)</td><td>1.5–2.5 mEq/L</td><td><b>Hypo</b> → mirrors low calcium; hyperreflexia · <b>Hyper</b> → ↓reflexes</td></tr>
+    <tr><td>Phosphorus (PO₄)</td><td>3.0–4.5 mg/dL</td><td><b>Inverse of calcium</b> — up when Ca is down</td></tr>
+    <tr><td>Bicarbonate (HCO₃⁻)</td><td>22–26 mEq/L</td><td>The metabolic acid–base value</td></tr>
   </table>
   <div class="hy">⭐ CKD: kidneys can't clear potassium → avoid high-K foods (bananas, oranges, potatoes, salt substitutes).</div></div>
+<div class="card" style="border-color:var(--purple)"><h3>🔬 Lab values to memorize — renal &amp; CBC</h3>
+  <table class="lab">
+    <tr><th>Renal</th><th>Normal</th><th>Meaning</th></tr>
+    <tr><td><b>BUN</b></td><td>10–20 mg/dL</td><td>↑ with dehydration, kidney injury, GI bleed, high protein</td></tr>
+    <tr><td><b>Creatinine</b></td><td>0.6–1.2 mg/dL</td><td>Best marker of kidney function (↑ = worse)</td></tr>
+    <tr><td>BUN : creatinine ratio</td><td>10:1 – 20:1</td><td>High ratio → dehydration/pre-renal</td></tr>
+    <tr><td>GFR</td><td>≥ 90 mL/min</td><td>&lt; 60 for 3+ months = chronic kidney disease</td></tr>
+  </table>
+  <table class="lab" style="margin-top:10px">
+    <tr><th>CBC</th><th>Normal</th><th>Meaning</th></tr>
+    <tr><td><b>WBC</b></td><td>5,000–10,000 /mm³</td><td>↑ infection · ↓ neutropenia (infection risk)</td></tr>
+    <tr><td><b>RBC</b></td><td>Men 4.7–6.1 · Women 4.2–5.4 million/mm³</td><td>↓ anemia · ↑ polycythemia</td></tr>
+    <tr><td>Hemoglobin (Hgb)</td><td>Men 14–18 · Women 12–16 g/dL</td><td>Oxygen-carrying capacity</td></tr>
+    <tr><td>Hematocrit (Hct)</td><td>Men 42–52% · Women 37–47%</td><td>≈ 3 × Hgb</td></tr>
+    <tr><td><b>Platelets</b> (= thrombocytes)</td><td>150,000–400,000 /mm³</td><td>&lt; 150k = thrombocytopenia (bleeding) · clotting cells</td></tr>
+  </table>
+  <p class="hy" style="margin:8px 0 0">⭐ "Platelets" and "thrombocytes" are the same cells — clotting. Below 150,000 → bleeding precautions (soft toothbrush, electric razor, no invasive procedures).</p>
+</div>
+<div class="card"><h3>🎯 Other high-yield numbers</h3>
+  <table class="lab">
+    <tr><th>Test</th><th>Normal</th></tr>
+    <tr><td>Arterial pH</td><td>7.35–7.45</td></tr>
+    <tr><td>PaCO₂ / HCO₃⁻</td><td>35–45 mmHg / 22–26 mEq/L</td></tr>
+    <tr><td>PaO₂ / SaO₂</td><td>80–100 mmHg / 95–100%</td></tr>
+    <tr><td>Fasting glucose</td><td>70–99 mg/dL</td></tr>
+    <tr><td>A1C</td><td>&lt; 5.7% normal · ≥ 6.5% diabetes</td></tr>
+    <tr><td>aPTT (heparin)</td><td>30–40 s normal · <b>therapeutic ~60–100 s</b></td></tr>
+    <tr><td>PT / INR (warfarin)</td><td>11–12.5 s / 0.8–1.1 · <b>therapeutic INR 2–3</b></td></tr>
+    <tr><td>Digoxin level</td><td>0.5–2.0 ng/mL</td></tr>
+  </table>
+</div>
+<div class="card" style="border-color:var(--blue)"><h3>💧 IV fluid tonicity — which fluid, and why</h3>
+  <table class="lab">
+    <tr><th>Type</th><th>What it does</th><th>Use / watch</th></tr>
+    <tr><td><b>Isotonic</b><br>(0.9% NS, LR)</td><td>Stays in the vessels → expands blood volume</td><td>Dehydration, hypotension, shock, blood loss. <b>NS is the ONLY fluid hung with blood.</b></td></tr>
+    <tr><td><b>Hypotonic</b><br>(0.45% NS)</td><td>Water shifts OUT of vessels INTO cells → cells plump up</td><td>Cellular dehydration, hypernatremia. <b>Watch: cerebral edema — avoid in head injury.</b></td></tr>
+    <tr><td><b>Hypertonic</b><br>(3% saline, D5NS)</td><td>Pulls water OUT of cells INTO vessels → expands volume</td><td>Severe hyponatremia, cerebral edema. <b>Watch: fluid overload/pulmonary edema — give slowly.</b></td></tr>
+  </table>
+  <p style="margin:8px 0 0"><b>Decision shortcut:</b> dry/low BP/shock → <b>isotonic</b> · cells dry → <b>hypotonic</b> · sodium dangerously low → <b>hypertonic</b>. <span class="hy">⭐ NS = "Needs Salt" · LR ≈ blood plasma. Any IV running → check lungs, BP, HR, urine output, edema.</span></p>
+</div>
+<div class="card"><h3>🔢 Anion gap — sub-typing metabolic acidosis</h3>
+  <ul class="clean">
+    <li><b>Normal gap (8–12):</b> a direct <b>loss of bicarbonate</b> — diarrhea, diuretics.</li>
+    <li><b>High gap:</b> <b>added acids</b> — lactic acidosis, <b>DKA</b>, renal failure.</li>
+    <li>In acidosis, K⁺ shifts <b>out</b> of cells → <b>hyperkalemia</b>; as you correct it, K⁺ can swing low. <b>Kussmaul</b> respirations = lungs blowing off CO₂ to compensate.</li>
+  </ul>
+</div>
 <div id="quiz-acidbase"></div>`;
 renderQuiz('quiz-acidbase',[
   {q:'A client in DKA has an ABG of pH 7.28, PaCO₂ 30, HCO₃ 14. How does the nurse interpret this?',type:'single',opts:['Uncompensated respiratory acidosis','Fully compensated metabolic alkalosis','Partially compensated metabolic acidosis','Uncompensated respiratory alkalosis'],correct:2,rat:'The trap: the low CO₂ tempts you toward a respiratory read. But low pH + low bicarb = metabolic acidosis (ketoacids); the low CO₂ is the lungs compensating (Kussmaul). Both values abnormal with pH still out of range = partially compensated.'},
@@ -980,7 +1098,15 @@ renderQuiz('quiz-acidbase',[
   {q:'A client with hypocalcemia is at risk for which finding? (Select all that apply)',type:'multi',opts:['Positive Chvostek\'s sign','Muscle twitching and tetany','Peaked T waves','Numbness and tingling around the mouth','Laryngospasm'],correct:[0,1,3,4],rat:'The trap: peaked T waves are a HYPERkalemia sign, not hypocalcemia. Low calcium increases neuromuscular excitability — Chvostek\'s, tetany, perioral tingling, and laryngospasm.'},
   {q:'A nurse reviews a client with a sodium of 118 mEq/L. Which is the priority nursing concern?',type:'single',opts:['Constipation','Seizure precautions for cerebral edema','Dry skin','Increased appetite'],correct:1,rat:'The trap: minor symptoms distract from the danger. Severe hyponatremia shifts water into brain cells → cerebral edema and seizures. Seizure precautions and neuro monitoring are the priority.'},
   {q:'A client\'s ABG is pH 7.37, PaCO₂ 60, HCO₃ 34. How is this best interpreted?',type:'single',opts:['Uncompensated respiratory acidosis','Fully compensated respiratory acidosis','Uncompensated metabolic alkalosis','Normal ABG'],correct:1,rat:'The trap: pH 7.37 looks "normal," so students pick normal. But both CO₂ and bicarb are abnormal while pH sits at the acidic end of normal — the kidneys fully compensated a respiratory acidosis (pH back in range, primary from the acidic-side pH + high CO₂).'},
-  {q:'Which lab value should the nurse report to the provider IMMEDIATELY?',type:'single',opts:['Potassium 6.8 mEq/L','Sodium 140 mEq/L','Calcium 9.4 mg/dL','Magnesium 2.1 mEq/L'],correct:0,rat:'The trap: three values are within normal limits. A potassium of 6.8 is critically high and can cause fatal dysrhythmias — report immediately and anticipate cardiac monitoring and treatment.'}
+  {q:'Which lab value should the nurse report to the provider IMMEDIATELY?',type:'single',opts:['Potassium 6.8 mEq/L','Sodium 140 mEq/L','Calcium 9.4 mg/dL','Magnesium 2.1 mEq/L'],correct:0,rat:'The trap: three values are within normal limits. A potassium of 6.8 is critically high and can cause fatal dysrhythmias — report immediately and anticipate cardiac monitoring and treatment.'},
+  {q:'A client with a head injury and cerebral edema is prescribed IV fluid. Which order should the nurse QUESTION?',type:'single',opts:['3% hypertonic saline','0.45% hypotonic saline','0.9% normal saline','Lactated Ringer\'s'],correct:1,rat:'The trap: hypotonic fluid shifts water INTO cells — dangerous in a brain that\'s already swelling. Avoid hypotonic solutions in head injury; hypertonic saline is actually used to pull fluid OUT of the swollen brain.'},
+  {q:'A client is in hypovolemic shock after blood loss. Which IV fluid is most appropriate to expand intravascular volume?',type:'single',opts:['0.45% NS (hypotonic)','0.9% NS or Lactated Ringer\'s (isotonic)','D10W (hypertonic)','Sterile water'],correct:1,rat:'Isotonic fluids stay in the vessels and expand blood volume — the goal in shock/blood loss. Hypotonic pulls fluid into cells; sterile water alone is never given IV (causes hemolysis).'},
+  {q:'A client is starting a blood transfusion. Which IV solution must be used to prime the line and run with the blood?',type:'single',opts:['0.45% normal saline','0.9% normal saline','Lactated Ringer\'s','D5W'],correct:1,rat:'Only 0.9% normal saline is compatible with blood. Solutions with calcium (LR) can cause clotting, and dextrose/hypotonic fluids cause hemolysis of the red cells.'},
+  {q:'A client with diarrhea for several days has a low pH, low bicarbonate, and a NORMAL anion gap. This best fits:',type:'single',opts:['High-anion-gap metabolic acidosis from added acids','Normal-anion-gap metabolic acidosis from bicarbonate loss','Respiratory acidosis','Metabolic alkalosis'],correct:1,rat:'The trap: DKA/lactic acidosis raise the anion gap (added acids). Diarrhea directly loses bicarbonate, producing a normal-gap metabolic acidosis. Match the mechanism to the gap.'},
+  {q:'Which value best reflects kidney function and is the more specific marker of the two?',type:'single',opts:['BUN','Creatinine','Sodium','Hematocrit'],correct:1,rat:'Both BUN (10–20) and creatinine (0.6–1.2) rise with kidney impairment, but creatinine is the more specific marker — BUN also rises with dehydration, GI bleeds, and high protein intake.'},
+  {q:'A client\'s platelet count is 90,000/mm³. Which nursing action is appropriate?',type:'single',opts:['No action — this is a normal value','Institute bleeding precautions (soft toothbrush, electric razor, no invasive procedures)','Place the client in protective isolation','Restrict potassium-rich foods'],correct:1,rat:'Normal platelets (thrombocytes) are 150,000–400,000. At 90,000 the client is thrombocytopenic and at risk for bleeding — use bleeding precautions. (Protective isolation is for neutropenia, a low WBC.)'},
+  {q:'Which lab result should prompt the nurse to place a client on neutropenic (protective) precautions?',type:'single',opts:['WBC 2,000/mm³','Platelets 250,000/mm³','Hemoglobin 14 g/dL','BUN 15 mg/dL'],correct:0,rat:'Normal WBC is 5,000–10,000. A WBC of 2,000 means neutropenia — the client can\'t fight infection, so protective precautions apply. The other values are within normal limits.'},
+  {q:'A client on a heparin drip has an aPTT of 95 seconds. How should the nurse interpret this?',type:'single',opts:['Dangerously low — increase the rate','Within the therapeutic range for heparin','Normal baseline — no anticoagulation yet','Indicates the antidote is needed immediately'],correct:1,rat:'Baseline aPTT is about 30–40 seconds; the therapeutic range on heparin is roughly 60–100 seconds (1.5–2× normal). 95 seconds is therapeutic — monitor and continue, watching for bleeding.'}
 ],'Acid–Base & Electrolytes Check');
 </script>
 
@@ -1017,6 +1143,16 @@ document.getElementById('sec-diabetes').innerHTML=`
 <div class="card" style="border-color:var(--amber)"><h3>🍬 Hypoglycemia & complications</h3>
   <p><b>Hypoglycemia (&lt;70):</b> conscious → <b>Rule of 15</b> (15 g fast carbs, recheck 15 min). Unconscious → <b>glucagon</b> IM/SubQ or D50 IV; never feed. "Cold & clammy — need candy."</p>
   <p style="margin:6px 0 0"><b>Complications:</b> macrovascular (MI, stroke, PAD); microvascular (retino-, neuro-, nephropathy). <b>Foot care:</b> inspect daily, no barefoot, no heating pads. Perioperative glucose target ≈140–180.</p></div>
+<div class="card" style="border-color:var(--purple)"><h3>⚠️ Metabolic syndrome + the other types (high-yield, often missed)</h3>
+  <p style="margin:0 0 6px"><b>Metabolic syndrome</b> = the "before you get diabetes" cluster that predicts Type 2 <em>and</em> heart disease/stroke. Diagnosed with <b>3 or more</b> of:</p>
+  <ul class="clean">
+    <li><b>Central (abdominal) obesity</b> — waist &gt;40 in (men), &gt;35 in (women); "apple-shaped."</li>
+    <li><b>Hypertension</b></li>
+    <li><b>Dyslipidemia</b> — low HDL + high LDL/triglycerides</li>
+    <li><b>Insulin resistance</b> with elevated fasting glucose (hyperinsulinemia)</li>
+  </ul>
+  <p style="margin:8px 0 0"><b>LADA</b> ("Type 1.5") = autoimmune beta-cell destruction like Type 1 but slower/adult-onset — often mis-labeled Type 2 at first; antibody testing distinguishes it. <b>Gestational</b> = develops in pregnancy, usually resolves after delivery but raises the mother's future Type 2 risk. <b>Prediabetes</b> = fasting 100–125 or A1C 5.7–6.4% — reversible with lifestyle change.</p>
+</div>
 <div id="quiz-diabetes"></div>`;
 renderQuiz('quiz-diabetes',[
   {q:'A client with type 1 diabetes calls the clinic with a stomach virus, is vomiting, and "hasn\'t taken any insulin because I can\'t keep food down." What is the nurse\'s BEST guidance?',type:'single',opts:['"That\'s correct — skip insulin until you can eat again."','"Continue your insulin, check your glucose and ketones every few hours, and sip fluids."','"Take double your insulin to cover the illness."','"Stop checking your glucose and rest until you feel better."'],correct:1,rat:'The trap: skipping insulin when not eating is a classic and dangerous misconception — illness raises glucose via stress hormones, so insulin is still needed and DKA can develop. The client keeps taking insulin, monitors glucose and ketones frequently, and stays hydrated. Doubling blindly or stopping monitoring are also unsafe.'},
@@ -1036,7 +1172,10 @@ renderQuiz('quiz-diabetes',[
   {q:'A client taking NPH insulin at 0700 is at greatest risk for hypoglycemia at which time?',type:'single',opts:['Immediately at 0700','Mid-to-late morning through early afternoon (its peak)','At bedtime','Only if they skip breakfast entirely'],correct:1,rat:'The trap: risk isn\'t at injection time. NPH peaks roughly 4–12 hours after the dose, so a 0700 dose puts the hypoglycemia window in the late morning to afternoon — the nurse ensures meals/snacks cover that peak.'},
   {q:'A client with diabetes is NPO for surgery in the morning. Which concern should the nurse prioritize regarding their diabetes?',type:'single',opts:['They will definitely develop DKA','Balancing insulin needs against NPO status to avoid hypoglycemia while controlling stress hyperglycemia','They should take their full usual insulin dose','Diabetes has no effect on surgery'],correct:1,rat:'The trap: the extremes (definite DKA, take full dose, no effect) are wrong. Surgery is a balancing act — NPO status risks hypoglycemia if usual insulin is given, while surgical stress raises glucose; insulin is adjusted and glucose monitored (target ≈140–180).'},
   {q:'A client with diabetes has a fruity odor to the breath and deep, rapid respirations. The nurse recognizes these as signs of:',type:'single',opts:['Hypoglycemia','Diabetic ketoacidosis','A resolved infection','Normal recovery'],correct:1,rat:'The trap: deep rapid breathing might be mistaken for anxiety. Fruity (acetone) breath and Kussmaul respirations are hallmark DKA findings — the lungs blowing off CO₂ to compensate for ketoacidosis.'},
-  {q:'Which client teaching about insulin storage and administration is correct? (Select all that apply)',type:'multi',opts:['Rotate injection sites within the same general area','Only regular insulin can be given intravenously','Never mix long-acting insulin (glargine) with other insulins','Roll cloudy NPH gently to mix; do not shake vigorously','Vigorously shake all insulin before drawing it up'],correct:[0,1,2,3],rat:'The trap: vigorous shaking causes foaming/bubbles and inaccurate dosing. Correct teaching: rotate sites, only regular goes IV, don\'t mix glargine, and gently roll NPH to mix.'}
+  {q:'Which client teaching about insulin storage and administration is correct? (Select all that apply)',type:'multi',opts:['Rotate injection sites within the same general area','Only regular insulin can be given intravenously','Never mix long-acting insulin (glargine) with other insulins','Roll cloudy NPH gently to mix; do not shake vigorously','Vigorously shake all insulin before drawing it up'],correct:[0,1,2,3],rat:'The trap: vigorous shaking causes foaming/bubbles and inaccurate dosing. Correct teaching: rotate sites, only regular goes IV, don\'t mix glargine, and gently roll NPH to mix.'},
+  {q:'Which findings, when clustered together, indicate metabolic syndrome? (Select all that apply)',type:'multi',opts:['Waist circumference 42 inches in a male client','Blood pressure consistently elevated','Low HDL with high triglycerides','Elevated fasting glucose with insulin resistance','A1C of 4.5%'],correct:[0,1,2,3],rat:'The trap: an A1C of 4.5% is normal/low and not part of the cluster. Metabolic syndrome = 3+ of central obesity, hypertension, dyslipidemia (low HDL/high triglycerides), and insulin resistance with elevated fasting glucose.'},
+  {q:'An adult is diagnosed with Type 2 diabetes but is thin, and standard oral agents fail to control glucose. Antibody testing is positive. This best fits:',type:'single',opts:['Gestational diabetes','LADA (latent autoimmune diabetes in adults)','Prediabetes','Metabolic syndrome'],correct:1,rat:'LADA ("Type 1.5") is slow-onset autoimmune beta-cell destruction in adults, often first mislabeled as Type 2. The positive antibodies and failure of oral agents point away from typical Type 2.'},
+  {q:'A client had gestational diabetes that resolved after delivery. Which statement shows correct understanding of the long-term implication?',type:'single',opts:['"I can never develop diabetes again since it went away."','"I have a significantly higher risk of developing Type 2 diabetes later."','"My baby is protected from all metabolic problems."','"I should start lifelong insulin now as a precaution."'],correct:1,rat:'Gestational diabetes usually resolves after delivery but markedly raises the mother\'s future Type 2 risk — so ongoing screening and lifestyle measures matter. It does not require lifelong insulin now.'}
 ],'Diabetes Check');
 </script>
 
@@ -1105,9 +1244,58 @@ document.getElementById('sec-cancer').innerHTML=`
     <tr><td>Lymphoma</td><td>Lymphatic tissue</td></tr>
   </table>
   <p style="margin:6px 0 0"><b>Malignant</b> = invades & metastasizes; <b>benign</b> = stays local. <b>CAUTION</b>: Change in bowel/bladder · A sore that won't heal · Unusual bleeding · Thickening/lump · Indigestion/dysphagia · Obvious mole change · Nagging cough.</p></div>
+<div class="card"><h3>📊 Staging &amp; grading — how bad, how far</h3>
+  <ul class="clean">
+    <li><b>TNM staging</b> — <b>T</b>umor size/extent · <b>N</b>odes involved · <b>M</b>etastasis. Higher numbers = more advanced.</li>
+    <li><b>Grade</b> — how abnormal the cells look under the microscope (differentiation). <b>Higher grade = less differentiated = more aggressive.</b></li>
+    <li><b>Stage 0</b> = in situ (local) → <b>Stage IV</b> = distant metastasis.</li>
+    <li>Staging guides treatment and prognosis; grading describes the cells themselves.</li>
+  </ul></div>
+<div class="card" style="border-color:var(--purple)"><h3>🧪 How cancer is tested for (high-yield)</h3>
+  <p style="margin:0 0 8px"><b>Biopsy is the ONLY definitive way to diagnose cancer</b> — it confirms malignancy and the exact cell type. Everything else screens, locates, or monitors.</p>
+  <table class="lab">
+    <tr><th>Method</th><th>What it does</th></tr>
+    <tr><td><b>Biopsy</b> (FNA, core, incisional, excisional)</td><td><b>Definitive diagnosis</b> — samples tissue for the pathologist. Bone marrow biopsy → leukemia/lymphoma</td></tr>
+    <tr><td><b>CT</b></td><td>Cross-sectional imaging — size, location, staging</td></tr>
+    <tr><td><b>MRI</b></td><td>Soft tissue detail — brain, spine, cord compression</td></tr>
+    <tr><td><b>PET scan</b></td><td>Metabolic activity — finds active/metastatic disease body-wide</td></tr>
+    <tr><td><b>Bone scan</b></td><td>Detects bone metastasis</td></tr>
+    <tr><td><b>Ultrasound</b></td><td>Solid vs. fluid-filled (cystic) masses</td></tr>
+    <tr><td><b>Endoscopy</b> (colonoscopy, bronchoscopy, cystoscopy)</td><td>Directly visualize AND biopsy internal tissue</td></tr>
+  </table></div>
+<div class="card"><h3>🩸 Tumor markers &amp; screening tests</h3>
+  <table class="lab">
+    <tr><th>Marker</th><th>Points toward</th></tr>
+    <tr><td><b>PSA</b></td><td>Prostate cancer</td></tr>
+    <tr><td><b>CA-125</b></td><td>Ovarian cancer</td></tr>
+    <tr><td><b>CEA</b></td><td>Colorectal (also GI) — monitors recurrence</td></tr>
+    <tr><td><b>AFP</b></td><td>Liver (hepatocellular) &amp; testicular</td></tr>
+    <tr><td><b>CA 19-9</b></td><td>Pancreatic cancer</td></tr>
+    <tr><td><b>CA 15-3 / 27-29</b></td><td>Breast cancer</td></tr>
+  </table>
+  <p style="margin:8px 0 0"><b>Screening by cancer:</b> Breast → <b>mammogram</b> · Cervical → <b>Pap smear + HPV</b> · Colorectal → <b>colonoscopy</b> (gold standard) or stool FOBT/FIT · Prostate → <b>PSA + DRE</b> · Skin → visual exam + <b>ABCDE</b> · Lung → <b>low-dose CT</b> for high-risk smokers.</p>
+  <p class="hy" style="margin:8px 0 0">⭐ Tumor markers are used to <b>monitor</b> treatment/recurrence and support diagnosis — they do NOT diagnose cancer alone. Only <b>biopsy</b> confirms it.</p></div>
 <div class="card" style="border-color:var(--red)"><h3>💉 Chemo effects & neutropenia</h3>
   <p>Chemo hits rapidly dividing cells: <b>bone marrow</b> (neutropenia/infection, thrombocytopenia/bleeding, anemia/fatigue), <b>GI mucosa</b> (nausea, stomatitis), <b>hair</b> (alopecia).</p>
   <div class="hy">⭐ <b>Fever in a neutropenic client = emergency</b> — infection signs are blunted. Neutropenic precautions: strict hand hygiene, private room, no fresh flowers or raw produce. Thrombocytopenia → bleeding precautions (soft toothbrush, electric razor).</div></div>
+<div class="card"><h3>☢️ Radiation therapy — skin care</h3>
+  <ul class="clean">
+    <li><b>Do NOT wash off the markings</b> (they guide the beam).</li>
+    <li>Wash gently with lukewarm water and mild soap; <b>pat dry</b>.</li>
+    <li><b>No lotions, powders, or deodorant</b> in the field unless approved; nothing with metal.</li>
+    <li>Protect the area from sun and extreme temperatures (no heating pads/ice).</li>
+    <li>Expect fatigue and localized skin changes; <b>internal radiation (brachytherapy)</b> → the client emits radiation, so apply time–distance–shielding precautions.</li>
+  </ul></div>
+<div class="card" style="border-color:var(--red)"><h3>🚨 Oncologic emergencies</h3>
+  <table class="lab">
+    <tr><th>Emergency</th><th>Recognize it</th></tr>
+    <tr><td><b>Febrile neutropenia</b></td><td>Fever + ANC &lt;500 → sepsis risk; cultures + antibiotics NOW</td></tr>
+    <tr><td><b>Tumor lysis syndrome</b></td><td>After chemo, cells burst → <b>↑K⁺, ↑phosphate, ↑uric acid, ↓calcium</b> → hydrate, monitor cardiac/renal</td></tr>
+    <tr><td><b>Spinal cord compression</b></td><td>New/worsening back pain + leg weakness/numbness → emergency imaging</td></tr>
+    <tr><td><b>SVC syndrome</b></td><td>Face/arm/neck swelling, distended neck veins (lung ca, lymphoma)</td></tr>
+    <tr><td><b>Hypercalcemia</b></td><td>Bone mets → weakness, confusion, arrhythmia → hydrate</td></tr>
+    <tr><td><b>SIADH</b></td><td>Small-cell lung cancer → water retention → <b>low sodium</b>, seizures</td></tr>
+  </table></div>
 <div class="card"><h3>🕊️ Palliative vs hospice</h3>
   <p style="margin:0"><b>Palliative:</b> comfort at any stage, can run alongside curative treatment. <b>Hospice:</b> comfort when cure is no longer the goal, limited life expectancy. Focus = comfort + patient's goals + cultural respect.</p></div>
 <div id="quiz-cancer"></div>`;
@@ -1126,8 +1314,214 @@ renderQuiz('quiz-cancer',[
   {q:'A client with terminal cancer states, "I don\'t want any more chemo — I just want to be comfortable at home." The nurse\'s BEST response is to:',type:'single',opts:['Tell the client they should keep fighting','Respect the client\'s wishes and discuss palliative/hospice options and comfort care','Insist the family override the decision','Report the client as noncompliant'],correct:1,rat:'The trap: pressuring the client, overriding autonomy, or labeling them noncompliant all violate the client\'s right to choose. The nurse supports the client\'s informed decision and explores comfort-focused care that matches their goals.'},
   {q:'The nurse is teaching a client about reducing cancer risk. Which statement indicates a need for further teaching?',type:'single',opts:['"I\'ll get recommended cancer screenings on schedule."','"I\'ll limit sun exposure and avoid tanning beds."','"Smoking only causes lung cancer, so my occasional cigar is fine."','"I\'ll eat more fruits and vegetables and limit processed meats."'],correct:2,rat:'"Needs further teaching" = find the wrong statement. Tobacco use is linked to many cancers (oral, throat, esophageal, bladder, and more), not just lung — the belief that occasional cigars are safe needs correction.'},
   {q:'A neutropenic client\'s family brings in a fruit basket and fresh flowers. What is the nurse\'s BEST action?',type:'single',opts:['Allow both since they lift the client\'s spirits','Explain that fresh flowers and raw/unwashed produce can carry organisms and should be avoided','Only remove the flowers','Allow the flowers but not the fruit'],correct:1,rat:'The trap: partial answers miss that BOTH pose a risk. Fresh flowers/standing water and raw or unwashed produce can harbor pathogens dangerous to a neutropenic client — the nurse explains why both are restricted.'},
-  {q:'A client with bone metastasis has a serum calcium of 12.5 mg/dL. The nurse recognizes this as:',type:'single',opts:['Expected and requiring no action','Hypercalcemia from bone breakdown, requiring intervention','Hypocalcemia needing calcium replacement','A normal calcium level'],correct:1,rat:'The trap: it\'s not normal or low. Cancer that destroys bone releases calcium into the blood → hypercalcemia (weakness, confusion, arrhythmias), which requires intervention such as hydration and monitoring.'}
+  {q:'A client with bone metastasis has a serum calcium of 12.5 mg/dL. The nurse recognizes this as:',type:'single',opts:['Expected and requiring no action','Hypercalcemia from bone breakdown, requiring intervention','Hypocalcemia needing calcium replacement','A normal calcium level'],correct:1,rat:'The trap: it\'s not normal or low. Cancer that destroys bone releases calcium into the blood → hypercalcemia (weakness, confusion, arrhythmias), which requires intervention such as hydration and monitoring.'},
+  {q:'Which test provides the DEFINITIVE diagnosis of cancer?',type:'single',opts:['CT scan','Elevated tumor marker','Biopsy','PET scan'],correct:2,rat:'The trap: imaging and tumor markers suggest, locate, or monitor cancer but cannot confirm it. Only a biopsy — sampling the tissue for the pathologist — definitively diagnoses cancer and identifies the cell type.'},
+  {q:'A provider wants to determine whether a client\'s cancer has spread throughout the body. Which imaging study is most useful for detecting metastatic activity body-wide?',type:'single',opts:['Plain X-ray','PET scan','Ultrasound','Pap smear'],correct:1,rat:'A PET scan highlights metabolically active tissue, making it especially useful for finding active or metastatic disease throughout the body. X-ray and ultrasound are limited/localized; a Pap smear screens for cervical cancer.'},
+  {q:'A nurse reviews tumor markers. Which marker is associated with prostate cancer?',type:'single',opts:['CA-125','CEA','PSA','AFP'],correct:2,rat:'PSA (prostate-specific antigen) is linked to prostate cancer. CA-125 → ovarian, CEA → colorectal, AFP → liver/testicular. Markers are used to support diagnosis and monitor treatment/recurrence, not to diagnose alone.'},
+  {q:'Match the screening test to the cancer it screens for. A Pap smear is used to screen for:',type:'single',opts:['Breast cancer','Cervical cancer','Colorectal cancer','Prostate cancer'],correct:1,rat:'The Pap smear (with HPV testing) screens for cervical cancer. Breast → mammogram, colorectal → colonoscopy/stool tests, prostate → PSA + DRE.'},
+  {q:'A client asks why the radiation therapist drew markings on their skin. The nurse explains that the client should:',type:'single',opts:['Wash the markings off daily with soap and a washcloth','Leave the markings in place because they guide the radiation beam','Cover them with lotion and powder','Scrub them gently to prevent infection'],correct:1,rat:'The trap: washing or scrubbing removes the alignment markings that direct the beam to the exact treatment site. Leave them intact, wash gently, pat dry, and avoid lotions/powders in the field.'},
+  {q:'Which skin-care instruction is correct for a client receiving external radiation therapy? (Select all that apply)',type:'multi',opts:['Wash gently with lukewarm water and mild soap','Do not remove the treatment field markings','Apply a heating pad to the site for comfort','Avoid lotions, powders, and deodorant in the field unless approved','Protect the area from direct sun'],correct:[0,1,3,4],rat:'The trap: heat sources (heating pads, hot water) damage the already-fragile irradiated skin. Gentle washing, keeping markings, avoiding products in the field, and sun protection are all correct.'},
+  {q:'Several days after starting chemotherapy for a large tumor, a client develops high potassium, high phosphate, high uric acid, and low calcium. The nurse suspects:',type:'single',opts:['Tumor lysis syndrome','SVC syndrome','SIADH','Neutropenia'],correct:0,rat:'When large numbers of cancer cells break down after chemo, their contents flood the blood → tumor lysis syndrome (↑K⁺, ↑phosphate, ↑uric acid, ↓calcium). Hydration and monitoring of cardiac and renal status are priorities.'},
+  {q:'A client with cancer reports new, worsening back pain with leg weakness and numbness. The nurse recognizes this as a possible:',type:'single',opts:['Expected effect of bed rest','Spinal cord compression — an oncologic emergency','Normal chemo side effect','Sign the tumor is shrinking'],correct:1,rat:'New or worsening back pain with neurologic changes (weakness, numbness, bowel/bladder changes) can signal spinal cord compression from metastasis — an emergency needing urgent imaging and treatment to prevent permanent paralysis.'},
+  {q:'A client with small-cell lung cancer develops a low serum sodium, confusion, and water retention. This paraneoplastic syndrome is:',type:'single',opts:['Tumor lysis syndrome','SIADH','Hypercalcemia','SVC syndrome'],correct:1,rat:'Small-cell lung cancer classically causes SIADH — excess ADH causes water retention and dilutional hyponatremia, leading to confusion and, if severe, seizures.'},
+  {q:'How does grading differ from staging of a tumor?',type:'single',opts:['Grading describes spread; staging describes cell appearance','Grading describes how abnormal the cells look; staging describes tumor size, nodes, and metastasis (TNM)','They are the same thing','Staging is only used for benign tumors'],correct:1,rat:'The trap: the two are swapped in the distractors. Grade = how differentiated/abnormal the cells appear (higher grade = more aggressive); stage (TNM) = how large and how far the cancer has spread.'},
+  {q:'A client is scheduled for a colonoscopy. Besides screening for colorectal cancer, what added advantage does endoscopy offer over imaging like CT?',type:'single',opts:['It exposes the client to more radiation','It allows direct visualization AND tissue biopsy','It measures tumor markers','It replaces the need for any pathology'],correct:1,rat:'Endoscopic procedures (colonoscopy, bronchoscopy, cystoscopy) let the provider directly see the tissue and take a biopsy in the same procedure — combining visualization with the definitive diagnostic step.'},
+  {q:'A client\'s CEA level, drawn after colon cancer surgery, begins rising over several months. The nurse understands this most likely indicates:',type:'single',opts:['The client is cured','Possible recurrence of the cancer','A normal expected finding','A lab error that can be ignored'],correct:1,rat:'CEA is used to monitor colorectal cancer after treatment. A rising trend suggests possible recurrence and warrants further evaluation — this is exactly what tumor markers are best used for.'},
+  {q:'Which statements about tumor markers are accurate? (Select all that apply)',type:'multi',opts:['They can support a diagnosis and monitor response to treatment','An elevated marker alone confirms cancer','They can signal recurrence when they rise after treatment','CA-125 is associated with ovarian cancer','Only a biopsy definitively confirms malignancy'],correct:[0,2,3,4],rat:'The trap: an elevated tumor marker alone does NOT confirm cancer — benign conditions can raise them. Markers support diagnosis, track treatment, and flag recurrence; biopsy remains the definitive confirmation.'}
 ],'Cancer & EOL Check');
+</script>
+
+<script>
+document.getElementById('sec-sensory').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">👁️</span> Sensory — Eyes &amp; Ears (EENT)</h2>
+<p class="intro-line">Casteel's favorite move here is the <b>contrast pair</b>: glaucoma vs. macular degeneration, conductive vs. sensorineural, open-angle vs. angle-closure. Learn each pair as an opposite and the distractors fall away.</p>
+
+<div class="card"><h3>👁️ How the eye focuses (the setup for everything)</h3>
+  <p style="margin:0 0 8px">The <b>lens</b> does three jobs: filters UV, <b>accommodates</b> (changes shape — rounder for near, flatter for far), and <b>refracts</b> (bends light to focus on the retina). With age the lens stiffens and can't accommodate → <b>presbyopia</b>.</p>
+  <table class="lab">
+    <tr><th>Refractive error</th><th>Where light focuses</th></tr>
+    <tr><td><b>Emmetropia</b></td><td>Normal — ON the retina (20/20)</td></tr>
+    <tr><td><b>Myopia</b> (nearsighted)</td><td>IN FRONT of retina — close clear, distance blurry</td></tr>
+    <tr><td><b>Hyperopia</b> (farsighted)</td><td>BEHIND the retina — distance clear, close blurry</td></tr>
+    <tr><td><b>Astigmatism</b></td><td>Irregular cornea/lens — blurry at ANY distance</td></tr>
+    <tr><td><b>Presbyopia</b></td><td>Age-related loss of accommodation (near focus fails)</td></tr>
+  </table>
+  <p style="margin:8px 0 0"><b>Snellen fraction</b> = [you stand 20 ft] / [distance a normal eye reads that line]. The <b>bottom number</b> changes: 20/40 means you must be at 20 ft to see what a normal eye sees at 40 ft — <b>bigger bottom number = worse vision.</b></p>
+  <p style="margin:8px 0 0"><b>Pupils:</b> <b>Direct</b> = light in one eye, THAT eye constricts. <b>Consensual</b> = light in one eye, the OTHER eye also constricts. <b>Miosis</b> = constriction (opioids, pilocarpine, bright light). <b>Mydriasis</b> = dilation (anticholinergics).</p>
+</div>
+
+<div class="card" style="border-color:var(--red)"><h3>👓 Glaucoma — pressure kills the optic nerve</h3>
+  <p style="margin:0 0 8px">Aqueous humor can't drain → <b>intraocular pressure (IOP) rises</b> → optic-nerve damage → vision lost from the <b>periphery inward (tunnel vision)</b>. Normal IOP = <b>10–21 mmHg</b>.</p>
+  <table class="lab">
+    <tr><th></th><th>Open-angle (common)</th><th>Angle-closure (emergency)</th></tr>
+    <tr><td><b>Onset</b></td><td>Gradual, painless</td><td><b>SUDDEN</b></td></tr>
+    <tr><td><b>Signs</b></td><td>Peripheral/tunnel loss, halos; often silent early</td><td>Severe eye pain, headache, halos, N/V, blurred vision, <b>rock-hard eye</b>, fixed pupil</td></tr>
+    <tr><td><b>Priority</b></td><td>Lifelong drops to lower IOP</td><td><b>MEDICAL EMERGENCY</b> — treat now to save sight</td></tr>
+  </table>
+  <p style="margin:8px 0 0">Drops lower IOP (β-blockers like <b>timolol</b>, prostaglandins, miotics). <b>Lost vision is permanent</b> — treatment prevents further loss, so drop <b>adherence is everything</b>.</p>
+  <p class="hy" style="margin:8px 0 0">⭐ Glaucoma = <b>peripheral</b> loss first. Macular degeneration = <b>central</b> loss. That contrast is a guaranteed question.</p>
+</div>
+
+<div class="grid2">
+  <div class="card"><h3>🌫️ Cataracts — cloudy lens</h3>
+    <p style="margin:0 0 6px">Lens becomes <b>opaque</b> → light can't pass clearly.</p>
+    <ul class="clean">
+      <li><b>Causes:</b> aging (#1), trauma, <b>diabetes</b>, long-term steroid/beta-blocker use.</li>
+      <li><b>Signs:</b> painless, gradual <b>blurry/hazy</b> vision, glare, <b>halos</b>, trouble at night, faded colors.</li>
+      <li><b>Fix:</b> surgical lens removal + intraocular lens implant (the only real fix).</li>
+      <li><b>Post-op:</b> avoid bending, lifting, straining, coughing (raises IOP); wear an <b>eye shield</b> (esp. at night); report sudden pain or vision change.</li>
+    </ul>
+  </div>
+  <div class="card"><h3>🎯 Macular degeneration (AMD)</h3>
+    <p style="margin:0 0 6px">Degeneration of the <b>macula</b> (central retina) → loss of <b>CENTRAL</b> vision; peripheral is preserved.</p>
+    <ul class="clean">
+      <li><b>Dry (~90%):</b> gradual thinning + drusen (yellow deposits).</li>
+      <li><b>Wet (~10%):</b> fragile vessels leak — faster, more severe.</li>
+      <li><b>Hallmark:</b> straight lines look <b>wavy/distorted</b> — monitored with an <b>Amsler grid</b> (report changes).</li>
+      <li>Leading cause of vision loss in older adults; <b>opposite pattern</b> of glaucoma.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="border-color:var(--red)"><h3>💥 Retinal detachment — flashes, floaters, and a curtain</h3>
+  <p style="margin:0">The retina tears and peels away from its blood supply. It tugs nerve fibers → <b>sudden flashes of light and floaters</b>; as it lifts, a <b>curtain/shadow moves across the visual field</b>. Detached retina loses its blood supply and <b>dies if not surgically reattached quickly</b> — a true <b>ophthalmic emergency</b>, not "wait and see."</p>
+</div>
+
+<div class="card" style="border-color:var(--purple)"><h3>🌀 Ménière's disease — the spinning triad</h3>
+  <p style="margin:0 0 6px">Too much <b>endolymph</b> builds up in the inner ear → pressure disrupts balance and hearing. Know the <b>TRIAD</b>:</p>
+  <ul class="clean">
+    <li><b>Episodic vertigo</b> — severe spinning (worst symptom), minutes to hours, often with N/V.</li>
+    <li><b>Tinnitus</b> — ringing/roaring.</li>
+    <li><b>Fluctuating sensorineural hearing loss</b> — comes and goes.</li>
+    <li>Plus ear <b>fullness/pressure</b>.</li>
+  </ul>
+  <p style="margin:8px 0 0"><b>Management:</b> <b>low-sodium diet (&lt;2000 mg/day) + diuretics</b> (reduce fluid — the mechanism key); meclizine/antiemetics for attacks; <b>safety</b>: lie still in a quiet dark room, move slowly, fall precautions.</p>
+  <p class="hy" style="margin:8px 0 0">⭐ "Ménière's = the spinning Triad (Vertigo + Tinnitus + Hearing loss) — fix it with LOW SALT."</p>
+</div>
+
+<div class="card"><h3>👂 Hearing loss — conductive vs. sensorineural</h3>
+  <table class="lab">
+    <tr><th></th><th>Conductive</th><th>Sensorineural</th></tr>
+    <tr><td><b>Problem</b></td><td>Sound can't get IN (outer/middle ear)</td><td>Nerve/cochlea damage (inner ear)</td></tr>
+    <tr><td><b>Causes</b></td><td>Earwax, fluid, otitis media, perforated drum</td><td>Aging (presbycusis), noise, ototoxic drugs, Ménière's</td></tr>
+    <tr><td><b>Reversible?</b></td><td><b>Often</b> — remove the blockage</td><td><b>Usually permanent</b></td></tr>
+  </table>
+  <ul class="clean" style="margin-top:8px">
+    <li><b>Presbycusis</b> — age-related sensorineural loss; <b>high-frequency sounds go first</b>.</li>
+    <li><b>Ototoxic drugs</b> (monitor for tinnitus/hearing change): <b>aminoglycosides, loop diuretics (furosemide), high-dose aspirin, some chemo</b>.</li>
+    <li><b>Otitis externa</b> ("swimmer's ear"): canal infection → pain <b>worse when the ear is tugged</b>, discharge, itching.</li>
+    <li><b>Communicating:</b> face the person, speak clearly at a normal-to-slightly-slower pace, cut background noise, <b>don't shout</b> (distorts), use gestures/writing. Never insert objects/swabs into the canal.</li>
+  </ul>
+</div>
+
+<div id="quiz-sensory"></div>`;
+
+renderQuiz('quiz-sensory',[
+  {q:'A client arrives with sudden severe eye pain, a headache, nausea, halos around lights, and an eye that feels rock-hard. Which is the priority understanding?',type:'single',opts:['This is chronic open-angle glaucoma; schedule routine drops','This is angle-closure glaucoma — a medical emergency to save sight','This is a cataract; reassure it progresses slowly','This is presbyopia; recommend reading glasses'],correct:1,rat:'The trap: open-angle is gradual and painless. SUDDEN pain, halos, N/V, and a rock-hard eye = acute angle-closure glaucoma, an emergency — rapid IOP lowering is needed to prevent permanent blindness.'},
+  {q:'A client reports gradually losing vision "around the edges," like looking through a tunnel, with no pain. This pattern points to:',type:'single',opts:['Macular degeneration','Open-angle glaucoma','Retinal detachment','Cataracts'],correct:1,rat:'The trap: macular degeneration also causes vision loss — but CENTRAL, not peripheral. Painless peripheral/tunnel loss is open-angle glaucoma. Casteel loves this exact contrast.'},
+  {q:'A client says straight lines on a grid look wavy and there is a blurry spot in the center of their vision, but side vision is fine. This is classic for:',type:'single',opts:['Glaucoma','Macular degeneration (AMD)','Conductive hearing loss','Angle-closure glaucoma'],correct:1,rat:'Wavy lines on an Amsler grid + central vision loss with preserved peripheral vision = macular degeneration — the exact opposite pattern from glaucoma.'},
+  {q:'After cataract surgery, which client statement indicates a need for further teaching?',type:'single',opts:['"I\'ll wear the eye shield at night."','"I\'ll bend over to tie my shoes and lift my groceries as usual."','"I\'ll report sudden eye pain or vision changes."','"I\'ll avoid straining and hard coughing."'],correct:1,rat:'"Needs further teaching" = the WRONG statement. Bending, lifting, and straining raise intraocular pressure and threaten the surgical site — they must be avoided. The others are correct post-op teaching.'},
+  {q:'A client suddenly sees flashes of light, then floaters, then describes "a curtain coming down" over part of their vision. The nurse recognizes this as:',type:'single',opts:['A migraine aura; provide a dark room','Retinal detachment; an ophthalmic emergency','Normal aging of the eye','Open-angle glaucoma'],correct:1,rat:'Flashes + floaters + a curtain/shadow across the field = retinal detachment. The retina is losing its blood supply and will die without prompt surgical reattachment — it is an emergency, not "wait and see."'},
+  {q:'A client has recurrent attacks of severe spinning vertigo lasting up to an hour, ringing in the ear, and hearing that worsens during attacks, plus ear fullness. Which dietary change is most directly aimed at the mechanism?',type:'single',opts:['High-protein diet','Low-sodium diet (<2000 mg/day)','High-potassium diet','Increased caffeine'],correct:1,rat:'This is Ménière\'s (vertigo + tinnitus + fluctuating sensorineural loss). The problem is excess inner-ear endolymph/pressure, so a low-sodium diet with diuretics reduces the fluid — the mechanism-based key.'},
+  {q:'During a Ménière\'s attack, the priority nursing action is to:',type:'single',opts:['Encourage the client to walk to reduce dizziness','Keep the client still in a quiet, dim room with fall precautions','Turn on bright lights to help orientation','Give a high-sodium sports drink'],correct:1,rat:'Vertigo attacks bring a high fall risk. Safety first: minimize movement and stimulation, dim the lights, and prevent falls. Walking or bright light worsens symptoms; sodium worsens the fluid problem.'},
+  {q:'Which type of hearing loss is MOST likely to be reversible?',type:'single',opts:['Sensorineural loss from long-term noise exposure','Presbycusis','Conductive loss from impacted cerumen (earwax)','Sensorineural loss from an aminoglycoside'],correct:2,rat:'The trap: sensorineural causes (noise, aging, ototoxic drugs) are usually permanent. Conductive loss from a blockage like earwax can often be reversed by removing the obstruction.'},
+  {q:'A client is started on an aminoglycoside antibiotic and also takes furosemide. The nurse monitors specifically for:',type:'single',opts:['New tinnitus or hearing changes','Improved night vision','Increased tear production','Pupil constriction'],correct:0,rat:'Both aminoglycosides and loop diuretics are ototoxic. New tinnitus or hearing changes can signal cochlear/nerve damage — a sensorineural, often permanent, loss.'},
+  {q:'A nurse shines a penlight into the client\'s RIGHT eye and the LEFT pupil also constricts. This is called the:',type:'single',opts:['Direct response','Consensual response','Accommodation reflex','Mydriatic response'],correct:1,rat:'Light in one eye causing the OTHER pupil to constrict is the consensual response (the two sides are neurologically linked). The direct response is the same eye constricting.'},
+  {q:'A client\'s vision is documented as 20/70. What does this mean?',type:'single',opts:['They see at 70 feet what a normal eye sees at 20 feet','They must be at 20 feet to see what a normal eye sees at 70 feet','Their vision is better than normal','They can only see at night'],correct:1,rat:'Snellen: the client stands 20 ft away; the bottom number is how far a normal eye could read that line. 20/70 means they must be closer (20 ft) to see what a normal eye sees from 70 ft — a larger bottom number means worse vision.'},
+  {q:'Which client should the nurse assess FIRST?',type:'single',opts:['A client with gradual, painless peripheral vision loss','A client reporting sudden eye pain, halos, and vomiting','A client with age-related farsightedness','A client with mild ringing in one ear'],correct:1,rat:'Gradual peripheral loss (open-angle), presbyopia, and mild tinnitus are non-urgent. Sudden eye pain + halos + vomiting suggests acute angle-closure glaucoma — an emergency threatening sight.'},
+  {q:'Which statements about refractive errors are correct? (Select all that apply)',type:'multi',opts:['Myopia means distant objects are blurry','Hyperopia means close objects are blurry','Presbyopia is age-related loss of accommodation','Astigmatism causes blurred vision at any distance','Emmetropia requires corrective lenses'],correct:[0,1,2,3],rat:'The trap: emmetropia is NORMAL vision (20/20) and needs no correction. The other four are accurate: myopia = distance blurry, hyperopia = near blurry, presbyopia = aging lens can\'t accommodate, astigmatism = blur at all distances.'},
+  {q:'A client with glaucoma asks whether the eye drops will restore the vision already lost. The nurse\'s best response is that the drops:',type:'single',opts:['Will gradually bring back lost peripheral vision','Prevent further vision loss but cannot restore what is gone','Cure the glaucoma so drops can be stopped once vision improves','Only treat the pain, not the pressure'],correct:1,rat:'Glaucoma damage to the optic nerve is permanent. Lowering IOP prevents FURTHER loss but does not restore lost vision — which is exactly why lifelong adherence to the drops matters.'},
+  {q:'A client has otitis externa. Which finding is most consistent with this diagnosis?',type:'single',opts:['Vertigo with hearing that fluctuates','Ear pain that worsens when the outer ear is pulled','Painless central vision loss','A rock-hard, painful eye'],correct:1,rat:'Otitis externa ("swimmer\'s ear") is a canal infection; pain classically worsens with manipulation/tugging of the ear. Fluctuating vertigo/hearing is Ménière\'s; the eye findings belong to other disorders.'}
+],'Sensory (EENT) Check');
+</script>
+
+<script>
+document.getElementById('sec-drugs').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">💊</span> Drug Guide — your Medication ALTs</h2>
+<p class="intro-line">Pulled straight from your Week 1–4 ATI Medication templates, grouped by week. Kept simple — the <b>class</b>, what it's <b>for</b>, and the <b>one thing to watch</b> Casteel tests.</p>
+
+<div class="card" style="border-color:var(--blue)"><h3>📕 Week 1 — Respiratory &amp; TB</h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Class / use</th><th>Watch for / key point</th></tr>
+    <tr><td><b>Rifampin</b></td><td>Antitubercular (TB)</td><td>Hepatotoxicity; <b>red-orange body fluids</b> (harmless)</td></tr>
+    <tr><td><b>Isoniazid (INH)</b></td><td>Antitubercular (TB/LTBI)</td><td><b>Peripheral neuropathy → give B6</b>; hepatotoxicity; avoid alcohol</td></tr>
+    <tr><td><b>Pyrazinamide</b></td><td>Antitubercular (first 2 mo)</td><td>Hepatotoxicity; <b>hyperuricemia/gout</b>; photosensitivity</td></tr>
+    <tr><td><b>Ipratropium</b></td><td>Anticholinergic bronchodilator (COPD)</td><td><b>Maintenance, NOT a rescue inhaler</b>; dry mouth, urinary retention</td></tr>
+    <tr><td><b>Benzonatate</b></td><td>Non-opioid antitussive (nonproductive cough)</td><td><b>SWALLOW WHOLE</b> — chewing numbs the mouth → choking/cardiac arrest; fatal in kids &lt;10</td></tr>
+    <tr><td><b>Propranolol</b></td><td>Nonselective beta-blocker (HTN, dysrhythmia, migraine, tremor, anxiety)</td><td>Bradycardia, hypotension, <b>bronchospasm</b>; <b>masks hypoglycemia</b>; don't stop abruptly</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--red)"><h3>📗 Week 2 — Cardiac</h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Class / use</th><th>Watch for / key point</th></tr>
+    <tr><td><b>Adenosine</b></td><td>Antiarrhythmic — first-line SVT</td><td><b>6 mg RAPID IV push + fast saline flush</b>; brief asystole is expected; continuous monitoring</td></tr>
+    <tr><td><b>Metoprolol</b></td><td>Cardioselective beta-1 blocker (HTN, angina, HF)</td><td><b>Hold for HR &lt;60 or SBP &lt;90</b>; check pulse before each dose</td></tr>
+    <tr><td><b>Digoxin</b></td><td>Cardiac glycoside / positive inotrope (HF, afib rate)</td><td><b>Toxicity: N/V first, yellow-green halos, bradycardia</b>; <b>hypokalemia ↑ toxicity</b>; check <b>apical pulse 1 min, hold &lt;60</b>; antidote Digibind</td></tr>
+    <tr><td><b>Atropine</b></td><td>Anticholinergic — <b>symptomatic bradycardia</b> (first-line)</td><td>Tachycardia, urinary retention; <b>low dose (&lt;0.5 mg) can paradoxically slow HR</b></td></tr>
+    <tr><td><b>Diltiazem</b></td><td>Calcium channel blocker (angina, HTN, rate control)</td><td>Bradycardia, AV block, hypotension, edema; <b>don't combine IV with a beta-blocker</b></td></tr>
+    <tr><td><b>Heparin</b> (infusion)</td><td>Anticoagulant</td><td><b>Bleeding, HIT</b>; monitor <b>aPTT</b>; antidote <b>protamine sulfate</b>; electric razor / soft toothbrush</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--purple)"><h3>📘 Week 3 — Diabetes</h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Class / timing</th><th>Watch for / key point</th></tr>
+    <tr><td><b>Aspart / Lispro</b></td><td>Rapid-acting insulin</td><td>Give <b>with food</b> — fastest onset</td></tr>
+    <tr><td><b>Regular</b> (Humulin/Novolin R)</td><td>Short-acting insulin</td><td><b>Only insulin given IV</b></td></tr>
+    <tr><td><b>NPH</b></td><td>Intermediate insulin (cloudy)</td><td><b>Peak = hypoglycemia window</b>; roll to mix</td></tr>
+    <tr><td><b>Glargine / Detemir</b></td><td>Long-acting basal insulin</td><td>No pronounced peak — <b>never mix</b></td></tr>
+    <tr><td><b>Metformin</b></td><td>Biguanide — first-line T2DM</td><td>Low hypoglycemia risk; GI upset; <b>hold 48 h around IV contrast</b> (lactic acidosis); take with food</td></tr>
+    <tr><td><b>Glimepiride</b></td><td>Sulfonylurea (oral)</td><td><b>HYPOGLYCEMIA</b>; take with breakfast</td></tr>
+    <tr><td><b>Glyburide</b></td><td>Sulfonylurea (longer-acting)</td><td><b>Prolonged/severe hypoglycemia</b>, esp. elderly</td></tr>
+    <tr><td><b>Glucagon</b></td><td>Raises glucose — <b>unconscious</b> hypoglycemia</td><td>IM/SubQ; <b>turn on side</b> (may vomit); give oral carbs once awake</td></tr>
+  </table>
+  <p class="hy" style="margin:8px 0 0">⭐ Mixing insulins: <b>clear before cloudy</b> (Regular before NPH). Conscious low sugar → Rule of 15; unconscious → glucagon.</p>
+</div>
+
+<div class="card" style="border-color:var(--amber)"><h3>📙 Week 4 — GI &amp; pain <span style="font-weight:600;font-size:.8rem;color:var(--muted)">(likely Unit 4 — included in case)</span></h3>
+  <table class="lab">
+    <tr><th>Drug</th><th>Class / use</th><th>Watch for / key point</th></tr>
+    <tr><td><b>Ondansetron</b></td><td>5-HT3 antagonist antiemetic (N/V)</td><td>Headache, constipation, <b>QT prolongation</b>; no sedation/EPS</td></tr>
+    <tr><td><b>Promethazine</b></td><td>Phenothiazine antiemetic/antihistamine</td><td><b>BLACK BOX: severe tissue injury/gangrene if IV extravasates</b> — prefer deep IM/PO; sedation, EPS; not &lt;2 yrs</td></tr>
+    <tr><td><b>Pantoprazole</b></td><td>Proton pump inhibitor (GERD, PUD)</td><td>Take <b>30–60 min before breakfast</b>; long-term: low Mg, B12, fracture risk</td></tr>
+    <tr><td><b>Famotidine</b></td><td>H2 blocker (GERD, PUD)</td><td>Fewer interactions than cimetidine; CNS effects in elderly/renal</td></tr>
+    <tr><td><b>Cimetidine</b></td><td>H2 blocker (older)</td><td><b>Strong CYP450 inhibitor</b> — raises levels of warfarin, phenytoin, etc.; anti-androgenic</td></tr>
+    <tr><td><b>Sucralfate</b></td><td>Mucosal protectant (ulcers)</td><td><b>Empty stomach, 1 h before meals</b>; <b>constipation</b>; separate from other drugs/antacids</td></tr>
+    <tr><td><b>Fentanyl</b></td><td>Opioid analgesic (Schedule II)</td><td><b>Respiratory depression</b> (fatal); antidote <b>naloxone</b>; patch not for opioid-naive</td></tr>
+  </table>
+</div>
+
+<div class="card"><h3>🚨 Highest-yield safety flags</h3>
+  <ul class="clean">
+    <li><b>Benzonatate</b> — swallow whole; never chew (oral anesthesia → choking/cardiac arrest).</li>
+    <li><b>Promethazine IV</b> — black-box tissue necrosis; deep IM or PO preferred.</li>
+    <li><b>Digoxin</b> — check apical pulse 1 full minute, hold if &lt;60; watch for N/V + yellow halos; hypokalemia worsens toxicity.</li>
+    <li><b>Adenosine</b> — 6 mg <b>rapid</b> IV push with immediate saline flush; expect a brief pause.</li>
+    <li><b>Heparin</b> — monitor aPTT; antidote is protamine sulfate; watch for HIT.</li>
+    <li><b>Isoniazid</b> — always pair with B6 (pyridoxine) to prevent neuropathy.</li>
+  </ul>
+</div>
+
+<div id="quiz-drugs"></div>`;
+
+renderQuiz('quiz-drugs',[
+  {q:'A client is prescribed benzonatate for a nonproductive cough. Which instruction is essential?',type:'single',opts:['Chew the capsule for faster relief','Swallow the capsule whole and never chew or crush it','Dissolve it under the tongue','Open the capsule and mix it in water'],correct:1,rat:'Chewing or crushing benzonatate releases the local anesthetic and numbs the mouth/throat — causing choking and even cardiac arrest. It must be swallowed whole (and kept away from children, in whom ingestion can be fatal).'},
+  {q:'The nurse is preparing to give IV adenosine for SVT. Which technique is correct?',type:'single',opts:['Slow IV push over 5 minutes','Rapid IV push followed immediately by a saline flush','Continuous slow infusion over 1 hour','Deep IM injection'],correct:1,rat:'Adenosine has an extremely short half-life, so it is given as a rapid IV push followed by a fast saline flush. A brief period of asystole afterward is expected and therapeutic; keep the client on continuous monitoring.'},
+  {q:'Before giving digoxin, the nurse counts an apical pulse of 54. The appropriate action is to:',type:'single',opts:['Give the dose as ordered','Hold the dose and notify the provider','Give half the dose','Recheck in 2 hours then give it'],correct:1,rat:'Hold digoxin for an apical pulse below 60 (counted for a full minute) and notify the provider. Giving it could worsen bradycardia; digoxin toxicity also presents with nausea/vomiting and yellow-green halos.'},
+  {q:'A client on digoxin also takes a loop diuretic. Which lab value most increases the risk of digoxin toxicity if it drops?',type:'single',opts:['Sodium','Potassium','Calcium','Chloride'],correct:1,rat:'Hypokalemia greatly increases digoxin toxicity. Loop diuretics waste potassium, so the nurse monitors potassium closely and watches for early toxicity (N/V, visual halos).'},
+  {q:'A client is on a heparin infusion. Which lab guides the dose, and what is the antidote?',type:'single',opts:['INR; vitamin K','aPTT; protamine sulfate','Platelets; naloxone','PT; flumazenil'],correct:1,rat:'Heparin is titrated to the aPTT, and its antidote is protamine sulfate. (INR/vitamin K go with warfarin.) Also monitor platelets for heparin-induced thrombocytopenia.'},
+  {q:'Which insulin can be administered intravenously?',type:'single',opts:['NPH','Glargine','Regular','Aspart'],correct:2,rat:'Only Regular (short-acting) insulin is given IV. NPH is intermediate/cloudy, glargine is long-acting and never mixed, and aspart is rapid-acting.'},
+  {q:'A client taking glyburide for type 2 diabetes is at greatest risk for which adverse effect?',type:'single',opts:['Hyperglycemia','Hypoglycemia','Lactic acidosis','Weight loss'],correct:1,rat:'Sulfonylureas (glyburide, glimepiride) stimulate insulin release and can cause hypoglycemia — glyburide especially, because of its long half-life and prolonged effect in the elderly.'},
+  {q:'A client is scheduled for a CT with IV contrast and takes metformin. The nurse anticipates the metformin will be:',type:'single',opts:['Increased before the scan','Held around the time of the contrast','Given IV instead','Replaced with a sulfonylurea permanently'],correct:1,rat:'Metformin is held around iodinated contrast because the combination raises lactic acidosis risk, especially if kidney function declines.'},
+  {q:'Promethazine is ordered for nausea. Which route carries a BLACK BOX warning for severe tissue injury?',type:'single',opts:['Oral','Deep intramuscular','Intravenous','Rectal'],correct:2,rat:'IV promethazine can cause severe tissue injury, including gangrene, if it extravasates — a black-box warning. Deep IM or oral routes are preferred; it is also contraindicated in children under 2.'},
+  {q:'A client is prescribed sucralfate for a peptic ulcer. Correct administration is:',type:'single',opts:['With meals and antacids','On an empty stomach, 1 hour before meals, separated from other drugs','Only at bedtime with milk','Crushed into tube feeding with a PPI'],correct:1,rat:'Sucralfate needs an acidic, empty stomach to form its protective barrier — give it 1 hour before meals and separate it from antacids, PPIs, and other drugs (it reduces their absorption). Its most common effect is constipation.'},
+  {q:'A client on IV fentanyl becomes difficult to arouse with a respiratory rate of 7. The priority action and antidote are:',type:'single',opts:['Give more fentanyl for comfort','Stimulate the client, support breathing, and give naloxone','Give flumazenil','Increase the IV fluids'],correct:1,rat:'Fentanyl\'s most dangerous effect is respiratory depression. Support ventilation and give naloxone, the opioid antidote. (Flumazenil reverses benzodiazepines, not opioids.)'},
+  {q:'A client with diabetes is also prescribed propranolol. Why does this require extra teaching?',type:'single',opts:['It raises blood glucose to dangerous levels','It can mask the usual warning signs of hypoglycemia','It causes hyperkalemia','It must be taken only with contrast dye'],correct:1,rat:'Nonselective beta-blockers like propranolol blunt the adrenergic warning signs of hypoglycemia (tachycardia, tremor), so a diabetic client may not feel a low coming on — teach them to monitor glucose closely.'},
+  {q:'Which client teaching about isoniazid (INH) is correct? (Select all that apply)',type:'multi',opts:['Take vitamin B6 (pyridoxine) daily to prevent nerve damage','Avoid alcohol during therapy','Report numbness/tingling in the hands or feet','Report yellow skin or dark urine','Stop the drug once you feel better'],correct:[0,1,2,3],rat:'The trap: never stop TB therapy early — the full course prevents resistance. The other four are correct: B6 prevents neuropathy, avoid alcohol (hepatotoxicity), and report neuropathy or signs of liver injury.'},
+  {q:'Which statements about the two H2 blockers are accurate? (Select all that apply)',type:'multi',opts:['Cimetidine is a strong CYP450 inhibitor that raises levels of drugs like warfarin and phenytoin','Famotidine has fewer drug interactions than cimetidine','Both increase stomach acid production','Cimetidine can have anti-androgenic effects','H2 blockers reduce acid by blocking histamine at the parietal cells'],correct:[0,1,3,4],rat:'The trap: H2 blockers DECREASE acid (block histamine H2 receptors), not increase it. Cimetidine\'s strong CYP450 inhibition and anti-androgenic effects are why famotidine is usually preferred.'},
+  {q:'A client\'s heart rate is 44 with dizziness and hypotension. Which medication is the first-line treatment for symptomatic bradycardia?',type:'single',opts:['Metoprolol','Adenosine','Atropine','Diltiazem'],correct:2,rat:'Atropine is first-line for symptomatic bradycardia — it blocks vagal tone to raise the heart rate. Metoprolol, adenosine, and diltiazem all LOWER heart rate and would worsen the situation.'}
+],'Drug Guide (Medication ALTs) Check');
 </script>
 
 <script>
@@ -1209,7 +1603,24 @@ const POOL=[
  {q:'Inserting an ordered catheter with sterile technique is which intervention type?',opts:['Independent','Dependent','Collaborative','Evaluative'],ans:1,rat:'It requires an order → dependent.',topic:'ADPIE'},
  {q:'After giving a PRN analgesic, the nurse\'s next step is to:',opts:['Chart it and move on','Reassess pain and response (evaluate)','Give another dose','Notify the provider'],ans:1,rat:'Evaluation = reassess after acting.',topic:'ADPIE'},
  {q:'Which is a correctly written, measurable outcome?',opts:['The nurse will teach spirometry','Client will use the spirometer 10×/hr while awake by end of shift','Client will have better lungs','Client will avoid complications'],ans:1,rat:'Patient-centered, specific, measurable, time-bound.',topic:'ADPIE'},
- {q:'A confused client pulls at the IV and climbs the rail — priority?',opts:['Document it','Assess for causes (O₂, glucose, pain, full bladder)','Apply restraints','Notify family'],ans:1,rat:'New confusion is a symptom — assess reversible causes first.',topic:'ADPIE'}
+ {q:'A confused client pulls at the IV and climbs the rail — priority?',opts:['Document it','Assess for causes (O₂, glucose, pain, full bladder)','Apply restraints','Notify family'],ans:1,rat:'New confusion is a symptom — assess reversible causes first.',topic:'ADPIE'},
+ {q:'Sudden severe eye pain, halos, nausea, and a rock-hard eye indicates:',opts:['Chronic open-angle glaucoma','Acute angle-closure glaucoma (emergency)','Cataract','Presbyopia'],ans:1,rat:'Sudden pain, halos, N/V, rock-hard eye = angle-closure glaucoma, an emergency to save sight.',topic:'Sensory'},
+ {q:'Painless, gradual loss of PERIPHERAL vision (tunnel vision) is characteristic of:',opts:['Macular degeneration','Open-angle glaucoma','Retinal detachment','Astigmatism'],ans:1,rat:'Peripheral/tunnel loss = open-angle glaucoma. Macular degeneration takes CENTRAL vision — the classic contrast.',topic:'Sensory'},
+ {q:'Straight lines appear wavy on an Amsler grid with a central blind spot but intact side vision. This is:',opts:['Glaucoma','Macular degeneration','Cataracts','Ménière\'s disease'],ans:1,rat:'Wavy lines + central loss + preserved periphery = macular degeneration (opposite of glaucoma).',topic:'Sensory'},
+ {q:'Sudden flashes of light, floaters, and a curtain moving across the visual field indicate:',opts:['Migraine aura','Retinal detachment (emergency)','Normal aging','Cataract'],ans:1,rat:'Flashes + floaters + a curtain = retinal detachment; the retina loses blood supply and needs urgent surgical reattachment.',topic:'Sensory'},
+ {q:'A client with vertigo, tinnitus, and fluctuating hearing loss has Ménière\'s disease. Which is the mechanism-based intervention?',opts:['High-sodium diet','Low-sodium diet plus diuretics','Increased caffeine','Bright lights during attacks'],ans:1,rat:'Excess inner-ear fluid drives it — low sodium + diuretics reduce the endolymph/pressure.',topic:'Sensory'},
+ {q:'Which hearing loss is most likely REVERSIBLE?',opts:['Presbycusis','Noise-induced sensorineural loss','Conductive loss from impacted earwax','Ototoxic loss from furosemide'],ans:2,rat:'Conductive loss from a removable blockage (earwax) is often reversible; sensorineural causes are usually permanent.',topic:'Sensory'},
+ {q:'A head-injured client with cerebral edema is prescribed IV fluid. Which order should the nurse QUESTION?',opts:['0.9% normal saline','0.45% hypotonic saline','Lactated Ringer\'s','3% hypertonic saline'],ans:1,rat:'Hypotonic fluid shifts water INTO cells — dangerous in a swelling brain. Avoid in head injury.',topic:'Fluids'},
+ {q:'Which IV solution is the only one compatible with a blood transfusion?',opts:['0.45% NS','0.9% normal saline','Lactated Ringer\'s','D5W'],ans:1,rat:'Only 0.9% NS is compatible; LR\'s calcium can clot and dextrose/hypotonic fluids hemolyze cells.',topic:'Fluids'},
+ {q:'A client on TB therapy reports orange-red urine and tears. The nurse should:',opts:['Hold all TB drugs','Reassure — a harmless effect of rifampin','Treat as liver failure','Give activated charcoal'],ans:1,rat:'Orange/red body fluids are an expected, harmless rifampin effect. Watch separately for hepatotoxicity.',topic:'Respiratory'},
+ {q:'Which drug in RIPE therapy requires the nurse to monitor for vision changes (optic neuritis)?',opts:['Rifampin','Isoniazid','Pyrazinamide','Ethambutol'],ans:3,rat:'Ethambutol → optic neuritis; report any vision change.',topic:'Respiratory'},
+ {q:'Which cluster indicates metabolic syndrome?',opts:['Central obesity, hypertension, low HDL/high triglycerides, insulin resistance','Fever, cough, and elevated WBC','Bradycardia and hypothermia','Low sodium and seizures'],ans:0,rat:'Metabolic syndrome = 3+ of central obesity, hypertension, dyslipidemia, and insulin resistance with elevated glucose.',topic:'Diabetes'},
+ {q:'Which test definitively diagnoses cancer?',opts:['CT scan','Biopsy','Elevated tumor marker','PET scan'],ans:1,rat:'Only a biopsy samples tissue to confirm malignancy and cell type. Imaging and markers screen, locate, or monitor.',topic:'Cancer'},
+ {q:'Which tumor marker is associated with ovarian cancer?',opts:['PSA','CEA','CA-125','AFP'],ans:2,rat:'CA-125 → ovarian. PSA → prostate, CEA → colorectal, AFP → liver/testicular.',topic:'Cancer'},
+ {q:'A client receiving external radiation asks about the skin markings. The nurse should teach the client to:',opts:['Wash them off daily','Leave them in place — they guide the beam','Cover them with powder','Scrub them gently'],ans:1,rat:'Markings align the radiation beam — do not wash or scrub them off; wash gently and avoid products in the field.',topic:'Cancer'},
+ {q:'Days after chemo for a large tumor, labs show high potassium, high phosphate, high uric acid, and low calcium. This is:',opts:['SIADH','Tumor lysis syndrome','SVC syndrome','Hypocalcemia from diet'],ans:1,rat:'Cell breakdown floods the blood with intracellular contents — tumor lysis syndrome. Hydrate and monitor cardiac/renal status.',topic:'Cancer'},
+ {q:'A cancer client reports new worsening back pain with leg weakness and numbness. The nurse suspects:',opts:['Normal bed-rest stiffness','Spinal cord compression (emergency)','A shrinking tumor','Constipation'],ans:1,rat:'New back pain with neuro changes can mean spinal cord compression from metastasis — an emergency to prevent paralysis.',topic:'Cancer'},
+ {q:'How does grading differ from staging?',opts:['Grade = cell appearance; stage (TNM) = size/nodes/spread','Grade = spread; stage = cell appearance','They are identical','Staging applies only to benign tumors'],ans:0,rat:'Grade describes how abnormal the cells look; stage (TNM) describes tumor size, node involvement, and metastasis.',topic:'Cancer'}
 ];
 
 /* ===== RAPID DRILL — fast recall bank (lab values, antidotes, quick associations) — its OWN style ===== */
@@ -1474,7 +1885,10 @@ const TRIAGE=[
  {badge:'WHO FIRST?',stem:'An 82-year-old post-op client is suddenly confused and pulling at lines. Priority?',opts:['Assume it is normal aging','Assess oxygenation and check for hypoxia','Restrain immediately','Give a sedative'],ans:1,rat:'New confusion in a post-op elder is hypoxia until proven otherwise — assess ABCs first.'},
  {badge:'WHAT FIRST?',stem:'A client\u2019s glucose reads 45 and they are shaky but awake and able to swallow. FIRST?',opts:['Give 15 g fast-acting oral carbohydrate','Call a rapid response','Give IV insulin','Recheck in one hour'],ans:0,rat:'Conscious + can swallow → 15 g fast carbs (rule of 15). IM glucagon/IV dextrose is for the unresponsive.'},
  {badge:'WHO FIRST?',stem:'Four clients are on your board. Who is the priority?',opts:['Asthmatic whose wheezing stopped and chest is now silent','Client with a stable A1C of 6.4','Client with a healed stage 1 area','Client requesting a snack'],ans:0,rat:'A "silent chest" in asthma means air is barely moving — impending respiratory failure.'},
- {badge:'WHAT FIRST?',stem:'Sodium is 116 and the client just had a seizure. FIRST priority?',opts:['Restrict all fluids and recheck later','Ensure safety/airway and notify provider for hypertonic saline','Encourage free water','Give a rapid sodium bolus by mouth'],ans:1,rat:'Severe hyponatremia with seizures is an emergency — protect the client and get provider orders; correct slowly to avoid brain injury.'}
+ {badge:'WHAT FIRST?',stem:'Sodium is 116 and the client just had a seizure. FIRST priority?',opts:['Restrict all fluids and recheck later','Ensure safety/airway and notify provider for hypertonic saline','Encourage free water','Give a rapid sodium bolus by mouth'],ans:1,rat:'Severe hyponatremia with seizures is an emergency — protect the client and get provider orders; correct slowly to avoid brain injury.'},
+ {badge:'WHO FIRST?',stem:'Which eye complaint do you prioritize?',opts:['Sudden severe eye pain with halos, vomiting, and a rock-hard eye','Gradual painless peripheral vision loss','Age-related trouble reading small print','Mild dry-eye irritation'],ans:0,rat:'Acute angle-closure glaucoma is an emergency that can cause permanent blindness within hours; the others are non-urgent.'},
+ {badge:'WHAT FIRST?',stem:'A client suddenly reports flashes of light, a shower of floaters, and "a curtain" coming down over one eye. Priority action?',opts:['Reassure and schedule a routine eye exam','Treat it as a retinal detachment emergency and get them seen immediately','Apply warm compresses and rest the eye','Give artificial tears'],ans:1,rat:'Flashes + floaters + a curtain = retinal detachment. The retina is losing blood supply — urgent reattachment saves the vision.'},
+ {badge:'WHAT FIRST?',stem:'A client is mid-blood-transfusion when they spike a fever, get chills, and report low back pain. FIRST action?',opts:['Slow the infusion and keep watching','STOP the transfusion','Give acetaminophen and continue','Notify the provider before touching the line'],ans:1,rat:'Suspected transfusion reaction has a defined first move — STOP the blood, then keep the line open with normal saline and notify.'}
 ];
 let triLives=3, triScore=0, triStreak=0, triBest=0, triQueue=[], triQi=0, triTimer=null, triTimeLeft=0, triAnswered=false;
 const TRI_TIME=15;
