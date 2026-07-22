@@ -649,7 +649,24 @@ const MATCH_GAMES = {
       {tier:1,a:'Colonoscopy',b:'Colorectal screening + biopsy'},
       {tier:3,a:'Tumor lysis syndrome',b:'↑K⁺, ↑phosphate, ↑uric acid, ↓calcium after chemo'},
       {tier:3,a:'SIADH in cancer',b:'Small-cell lung cancer → low sodium'},
-      {tier:3,a:'TNM staging',b:'Tumor size, Nodes, Metastasis'}
+      {tier:3,a:'TNM staging',b:'Tumor size, Nodes, Metastasis'},
+      {tier:2,a:'Lispro/Aspart profile',b:'Onset 10–20 min · peak 1–3 h · duration 3–5 h'},
+      {tier:2,a:'Regular insulin profile',b:'Onset 30–60 min · peak 2–4 h · duration 5–8 h'},
+      {tier:2,a:'NPH profile',b:'Onset 1–2 h · peak 4–12 h · duration 14–24 h'},
+      {tier:2,a:'Glargine profile',b:'Onset 1–2 h · peakless · ~24 h'},
+      {tier:1,a:'Give rapid-acting insulin',b:'0–15 min before the meal'},
+      {tier:1,a:'Give Regular insulin SQ',b:'30 min before the meal'},
+      {tier:3,a:'Somogyi effect',b:'LOW 2–3 a.m. glucose → decrease evening insulin'},
+      {tier:3,a:'Dawn phenomenon',b:'Normal/high 2–3 a.m. glucose → increase evening insulin'},
+      {tier:2,a:'Chest tube collection chamber',b:'Drainage collects and is measured'},
+      {tier:2,a:'Chest tube suction-control chamber',b:'Gentle bubbling here is EXPECTED'},
+      {tier:2,a:'Primary intention',b:'Clean edges approximated — minimal scar'},
+      {tier:2,a:'Secondary intention',b:'Left open to granulate from the base'},
+      {tier:3,a:'Tertiary intention',b:'Left open first, closed later'},
+      {tier:3,a:'Autolytic debridement',b:'Natural body enzymes under a moist dressing'},
+      {tier:3,a:'Inflammatory phase',b:'Days 1–4: redness, warmth, swelling (normal)'},
+      {tier:3,a:'Proliferative phase',b:'Days 4–21: granulation tissue forms'},
+      {tier:2,a:'Braden score 6–23',b:'Lower total = HIGHER pressure-injury risk'}
     ]
   }
 };
@@ -947,6 +964,7 @@ document.getElementById('sec-resp').innerHTML=`
 <div class="card" style="border-color:var(--teal)"><h3>🫁 Chest tubes & COPD</h3>
   <ul class="clean">
     <li>Chest tube purpose: re-establish negative pressure, re-expand the lung.</li>
+    <li><b>The 3 chambers:</b> <b>①  Collection</b> — drainage collects here; mark and record output (report &gt;100 mL/hr of bright red). <b>②  Water seal</b> — one-way valve; <b>gentle tidaling normal</b>, <b>continuous bubbling = AIR LEAK</b>. <b>③  Suction control</b> — <b>gentle continuous bubbling here IS expected</b> (or a dry dial).</li>
     <li>Gentle <b>tidaling</b> normal; <b>continuous water-seal bubbling = air leak</b>; spreading crepitus → report.</li>
     <li>Keep the system upright, below chest level; don't routinely clamp.</li>
     <li>COPD: <b>pursed-lip breathing</b>; accessory-muscle use = distress; O₂ target ~88–92%; smoking = #1 risk.</li>
@@ -1001,6 +1019,8 @@ renderQuiz('quiz-resp',[
   {q:'A nurse is monitoring a client after chest-tube placement. Which finding is EXPECTED and requires no intervention?',type:'single',opts:['Continuous bubbling in the water-seal chamber','Tidaling (fluid rising and falling with respiration) in the water-seal chamber','Sudden absence of breath sounds on the affected side','Subcutaneous emphysema spreading up the neck'],correct:1,rat:'The trap: three options are abnormal (air leak, possible tension/blockage, spreading crepitus). Tidaling — fluid moving with respiration — reflects normal pressure changes and is expected.'},
   {q:'A client with pneumonia is receiving oxygen and antibiotics. Which finding BEST indicates the treatment is working?',type:'single',opts:['The client requests a different meal','Breath sounds clear and SpO₂ rises to 96% on room air','The chest x-ray is scheduled','The client is sleeping'],correct:1,rat:'The trap: meal requests, a scheduled test, and sleeping don\'t measure gas exchange. Clearing breath sounds and a rising SpO₂ on room air are objective evidence the pneumonia and oxygenation are improving.'},
   {q:'A post-op client suddenly becomes restless and confused with an SpO₂ of 84%. What should the nurse do FIRST?',type:'single',opts:['Administer a sedative for the restlessness','Assess the airway and breathing and apply oxygen','Restrain the client for safety','Document the behavior change and continue rounds'],correct:1,rat:'The trap: restlessness/confusion look behavioral, and sedating or restraining a hypoxic client is dangerous. Restlessness is an early sign of HYPOXIA — assess airway/breathing and oxygenate first; the mental change is the clue, not the problem.'},
+  {q:'A nurse observes gentle continuous bubbling in the SUCTION-CONTROL chamber of a chest drainage system. What does this indicate?',type:'single',opts:['An air leak requiring immediate action','Expected functioning of the suction-control chamber','The lung has collapsed further','The tubing is obstructed'],correct:1,rat:'The trap: students learn "bubbling = air leak," but that rule applies to the WATER-SEAL chamber. Gentle continuous bubbling in the SUCTION-CONTROL chamber is expected and shows suction is working. Continuous bubbling in the water seal is the air leak.'},
+  {q:'Match each chest tube chamber to its function. Which pairings are correct? (Select all that apply)',type:'multi',opts:['Collection chamber — drainage collects and is measured here','Water-seal chamber — acts as a one-way valve; tidaling is normal','Suction-control chamber — regulates the amount of suction applied','Water-seal chamber — continuous bubbling here signals an air leak','Collection chamber — bubbling here is expected'],correct:[0,1,2,3],rat:'The trap: the collection chamber should never bubble — it simply collects drainage. The other four are correct descriptions of the three-chamber system.'},
   {q:'A client on RIPE therapy for TB reports their urine and tears have turned orange. The nurse should:',type:'single',opts:['Hold all TB medications and notify the provider','Reassure the client this is a harmless effect of rifampin','Treat it as a sign of liver failure','Increase fluid intake to flush the "toxin"'],correct:1,rat:'The trap: orange/red body fluids look alarming but are an expected, harmless effect of rifampin. Holding therapy risks resistance. (Liver toxicity would show as jaundice, RUQ pain, or rising enzymes — a different picture.)'},
   {q:'Which finding in a client on isoniazid (INH) requires the nurse to question the plan or intervene?',type:'single',opts:['The client is also prescribed vitamin B6 (pyridoxine)','The client reports numbness and tingling in the feet','The client\'s sputum is being collected monthly','The client takes the dose on an empty stomach'],correct:1,rat:'INH causes peripheral neuropathy; numbness/tingling signals it — B6 is given to prevent it, so its presence is appropriate. Report the neuropathy and watch for hepatotoxicity.'},
   {q:'A client in status asthmaticus initially had a respiratory alkalosis on ABG. An hour later the ABG shows a normalizing then rising PaCO₂. The nurse recognizes this as:',type:'single',opts:['A reassuring sign the attack is resolving','A danger sign that the client is tiring and retaining CO₂','An expected finding that needs no action','Evidence of metabolic compensation'],correct:1,rat:'The trap: a "normal" CO₂ mid-attack looks reassuring but is ominous — the client who was blowing off CO₂ is now tiring and retaining it (moving toward respiratory acidosis). This signals impending respiratory failure; prepare for possible intubation.'},
@@ -1123,11 +1143,11 @@ document.getElementById('sec-diabetes').innerHTML=`
   <p style="margin:6px 0 0">Diagnostic: fasting BG ≥126 or <b>A1C ≥6.5%</b> (~3-month average). Goal A1C <b>&lt;7%</b>. The 3 P's: polyuria, polydipsia, polyphagia.</p></div>
 <div class="card"><h3>💉 Insulin essentials</h3>
   <table class="lab">
-    <tr><th>Type</th><th>Example</th><th>Peak</th><th>Key point</th></tr>
-    <tr><td>Rapid</td><td>Lispro, Aspart</td><td>1–2 h</td><td>Feed immediately after giving</td></tr>
-    <tr><td>Short/Regular</td><td>Humulin R</td><td>2–3 h</td><td><b>Only insulin given IV</b></td></tr>
-    <tr><td>Intermediate</td><td>NPH (cloudy)</td><td>4–12 h</td><td>Peak = hypoglycemia window</td></tr>
-    <tr><td>Long/Basal</td><td>Glargine, Detemir</td><td>no peak</td><td>Do not mix</td></tr>
+    <tr><th>Type</th><th>Example</th><th>Onset</th><th>Peak</th><th>Duration</th><th>Key point</th></tr>
+    <tr><td>Rapid</td><td>Lispro, Aspart</td><td><b>10–20 min</b></td><td>1–3 h</td><td>3–5 h</td><td>Give 0–15 min before meals — <b>food must be there</b></td></tr>
+    <tr><td>Short/Regular</td><td>Humulin R</td><td><b>30–60 min</b></td><td>2–4 h</td><td>5–8 h</td><td>Give <b>30 min before</b> meals · <b>only insulin given IV</b></td></tr>
+    <tr><td>Intermediate</td><td>NPH (cloudy)</td><td><b>1–2 h</b></td><td>4–12 h</td><td>14–24 h</td><td>Peak = hypoglycemia window · roll to mix</td></tr>
+    <tr><td>Long/Basal</td><td>Glargine, Detemir</td><td><b>1–2 h</b></td><td><b>no peak</b></td><td>~24 h (detemir 12–24)</td><td>SQ only, never IV · <b>do not mix</b></td></tr>
   </table>
   <div class="mnem"><div class="tag">Mixing</div><div class="big">Clear before cloudy — Regular before NPH ("RN")</div></div>
   <div class="hy">⭐ Metformin: hold around IV contrast (~48 h) — lactic acidosis risk.</div></div>
@@ -1140,6 +1160,14 @@ document.getElementById('sec-diabetes').innerHTML=`
     <li>Ketones form because <b>without enough insulin the body burns fat</b>, producing ketoacids → the acidosis of DKA (fruity breath, Kussmaul breathing).</li>
     <li>DKA/HHS treatment order: <b>IV fluids → regular insulin → monitor & replace potassium → add dextrose</b> near glucose 200.</li>
   </ul></div>
+<div class="card"><h3>🌙 Morning hyperglycemia — Somogyi vs. dawn</h3>
+  <table class="lab">
+    <tr><th></th><th>Somogyi effect</th><th>Dawn phenomenon</th></tr>
+    <tr><td><b>Cause</b></td><td>Nighttime <b>hypo</b>glycemia → rebound release of counter-regulatory hormones</td><td>Early-morning surge of growth hormone/cortisol</td></tr>
+    <tr><td><b>2–3 a.m. glucose</b></td><td><b>LOW</b></td><td><b>Normal or high</b></td></tr>
+    <tr><td><b>Fix</b></td><td><b>DECREASE</b> evening insulin (or add a bedtime snack)</td><td><b>INCREASE</b> evening insulin / adjust timing</td></tr>
+  </table>
+  <p class="hy" style="margin:8px 0 0">⭐ Both show high morning glucose — the <b>2–3 a.m. check tells them apart</b>, and the treatments are opposite. Classic trick question.</p></div>
 <div class="card" style="border-color:var(--amber)"><h3>🍬 Hypoglycemia & complications</h3>
   <p><b>Hypoglycemia (&lt;70):</b> conscious → <b>Rule of 15</b> (15 g fast carbs, recheck 15 min). Unconscious → <b>glucagon</b> IM/SubQ or D50 IV; never feed. "Cold & clammy — need candy."</p>
   <p style="margin:6px 0 0"><b>Complications:</b> macrovascular (MI, stroke, PAD); microvascular (retino-, neuro-, nephropathy). <b>Foot care:</b> inspect daily, no barefoot, no heating pads. Perioperative glucose target ≈140–180.</p></div>
@@ -1175,7 +1203,9 @@ renderQuiz('quiz-diabetes',[
   {q:'Which client teaching about insulin storage and administration is correct? (Select all that apply)',type:'multi',opts:['Rotate injection sites within the same general area','Only regular insulin can be given intravenously','Never mix long-acting insulin (glargine) with other insulins','Roll cloudy NPH gently to mix; do not shake vigorously','Vigorously shake all insulin before drawing it up'],correct:[0,1,2,3],rat:'The trap: vigorous shaking causes foaming/bubbles and inaccurate dosing. Correct teaching: rotate sites, only regular goes IV, don\'t mix glargine, and gently roll NPH to mix.'},
   {q:'Which findings, when clustered together, indicate metabolic syndrome? (Select all that apply)',type:'multi',opts:['Waist circumference 42 inches in a male client','Blood pressure consistently elevated','Low HDL with high triglycerides','Elevated fasting glucose with insulin resistance','A1C of 4.5%'],correct:[0,1,2,3],rat:'The trap: an A1C of 4.5% is normal/low and not part of the cluster. Metabolic syndrome = 3+ of central obesity, hypertension, dyslipidemia (low HDL/high triglycerides), and insulin resistance with elevated fasting glucose.'},
   {q:'An adult is diagnosed with Type 2 diabetes but is thin, and standard oral agents fail to control glucose. Antibody testing is positive. This best fits:',type:'single',opts:['Gestational diabetes','LADA (latent autoimmune diabetes in adults)','Prediabetes','Metabolic syndrome'],correct:1,rat:'LADA ("Type 1.5") is slow-onset autoimmune beta-cell destruction in adults, often first mislabeled as Type 2. The positive antibodies and failure of oral agents point away from typical Type 2.'},
-  {q:'A client had gestational diabetes that resolved after delivery. Which statement shows correct understanding of the long-term implication?',type:'single',opts:['"I can never develop diabetes again since it went away."','"I have a significantly higher risk of developing Type 2 diabetes later."','"My baby is protected from all metabolic problems."','"I should start lifelong insulin now as a precaution."'],correct:1,rat:'Gestational diabetes usually resolves after delivery but markedly raises the mother\'s future Type 2 risk — so ongoing screening and lifestyle measures matter. It does not require lifelong insulin now.'}
+  {q:'A client had gestational diabetes that resolved after delivery. Which statement shows correct understanding of the long-term implication?',type:'single',opts:['"I can never develop diabetes again since it went away."','"I have a significantly higher risk of developing Type 2 diabetes later."','"My baby is protected from all metabolic problems."','"I should start lifelong insulin now as a precaution."'],correct:1,rat:'Gestational diabetes usually resolves after delivery but markedly raises the mother\'s future Type 2 risk — so ongoing screening and lifestyle measures matter. It does not require lifelong insulin now.'},
+  {q:'A client has high morning glucose. A 2–3 a.m. check shows a glucose of 48. The nurse recognizes this pattern as:',type:'single',opts:['Dawn phenomenon — increase the evening insulin','Somogyi effect — decrease the evening insulin or add a bedtime snack','Normal overnight variation — no change','HHS — start IV fluids'],correct:1,rat:'The trap: both Somogyi and dawn phenomenon produce HIGH morning glucose, so students reflexively add insulin. A LOW 2–3 a.m. glucose means rebound (Somogyi) — the fix is to DECREASE evening insulin, not increase it.'},
+  {q:'A client has elevated morning glucose, and the 2–3 a.m. glucose is normal-to-high. This indicates:',type:'single',opts:['Somogyi effect — reduce evening insulin','Dawn phenomenon — related to an early-morning hormone surge','Insulin overdose overnight','Hypoglycemia unawareness'],correct:1,rat:'A normal or high 2–3 a.m. glucose rules out rebound. Dawn phenomenon results from an early-morning surge of growth hormone and cortisol, so the evening insulin is typically increased or its timing adjusted — the opposite of the Somogyi fix.'}
 ],'Diabetes Check');
 </script>
 
@@ -1211,6 +1241,41 @@ document.getElementById('sec-skin').innerHTML=`
     <tr><td>Serosanguineous</td><td>Pink, watery</td><td>Expected post-op</td></tr>
     <tr><td><b>Purulent</b></td><td>Thick yellow/green</td><td><b>Infection</b></td></tr>
   </table></div>
+<div class="card" style="border-color:var(--purple)"><h3>📋 Braden Scale — all 6 subscales</h3>
+  <table class="lab">
+    <tr><th>Subscale</th><th>What it rates</th></tr>
+    <tr><td>Sensory perception</td><td>Ability to feel and respond to pressure/discomfort</td></tr>
+    <tr><td>Moisture</td><td>How wet the skin stays (incontinence, drainage, sweat)</td></tr>
+    <tr><td>Activity</td><td>Level of physical activity (bedfast → walks frequently)</td></tr>
+    <tr><td>Mobility</td><td>Ability to change and control body position</td></tr>
+    <tr><td>Nutrition</td><td>Usual food/protein intake</td></tr>
+    <tr><td>Friction &amp; shear</td><td>Sliding/dragging against surfaces during moves</td></tr>
+  </table>
+  <p style="margin:8px 0 0">Each is scored <b>1–4</b> except friction/shear (<b>1–3</b>) → total <b>6–23</b>. <b>Lower total = HIGHER risk</b> (≤9 very high · 10–12 high · 13–14 moderate · 15–18 mild · 19–23 minimal).</p>
+  <p class="hy" style="margin:8px 0 0">⭐ Reversed scale — low score, high risk. It predicts risk (prevention), not the depth of an existing wound.</p></div>
+<div class="card"><h3>🩹 Wound healing — phases &amp; closure</h3>
+  <table class="lab">
+    <tr><th>Phase</th><th>What happens</th></tr>
+    <tr><td>1. <b>Hemostasis</b></td><td>Immediate — vasoconstriction, platelets, clot forms</td></tr>
+    <tr><td>2. <b>Inflammatory</b></td><td>~1–4 days — redness, warmth, swelling, WBCs clean the wound (expected, not infection)</td></tr>
+    <tr><td>3. <b>Proliferative</b></td><td>~4–21 days — <b>granulation tissue</b> (red, moist), new vessels, epithelialization</td></tr>
+    <tr><td>4. <b>Maturation/remodeling</b></td><td>21 days → up to 1–2 years — collagen remodels, scar strengthens/fades</td></tr>
+  </table>
+  <table class="lab" style="margin-top:10px">
+    <tr><th>Closure</th><th>Description</th></tr>
+    <tr><td><b>Primary intention</b></td><td>Clean edges approximated (sutures/staples) — minimal scar, fastest</td></tr>
+    <tr><td><b>Secondary intention</b></td><td>Left open to granulate in from the base (pressure injuries, infected wounds) — more scarring</td></tr>
+    <tr><td><b>Tertiary (delayed primary)</b></td><td>Left open first (contamination/edema), closed later</td></tr>
+  </table></div>
+<div class="card"><h3>🧹 Debridement — removing nonviable tissue</h3>
+  <table class="lab">
+    <tr><th>Type</th><th>How it works</th></tr>
+    <tr><td><b>Sharp/surgical</b></td><td>Scalpel/scissors — fastest, for extensive necrosis or infection</td></tr>
+    <tr><td><b>Mechanical</b></td><td>Wet-to-dry dressings, irrigation — nonselective, can harm healthy tissue</td></tr>
+    <tr><td><b>Enzymatic/chemical</b></td><td>Topical enzyme ointment dissolves dead tissue — selective, slower</td></tr>
+    <tr><td><b>Autolytic</b></td><td>Body's own enzymes under a moisture-retentive dressing — most selective, slowest, least painful</td></tr>
+  </table>
+  <p class="hy" style="margin:8px 0 0">⭐ Never debride <b>stable, dry, intact eschar on a heel</b> — it acts as a natural barrier. Healthy red granulation tissue is protected, not removed.</p></div>
 <div id="quiz-skin"></div>`;
 renderQuiz('quiz-skin',[
   {q:'A nurse assesses a reddened area over a bedbound client\'s sacrum. The skin is intact and the redness does not blanch (turn white) with fingertip pressure. How should the nurse stage this?',type:'single',opts:['Stage 2','Stage 3','Stage 1','Deep tissue injury'],correct:2,rat:'The trap: non-blanchable redness sounds severe, but the defining line is whether the skin is open. Intact skin with non-blanchable erythema is Stage 1; staging only advances once the skin breaks. Deep tissue injury is purple/maroon, not simply red.'},
@@ -1227,7 +1292,14 @@ renderQuiz('quiz-skin',[
   {q:'A nurse is caring for a client with a Stage 3 pressure injury with red, moist granulation tissue in the wound bed. Which is the appropriate goal?',type:'single',opts:['Debride the healthy red tissue','Protect the granulation tissue and maintain a moist wound environment','Let the wound dry out completely','Massage the wound bed to stimulate growth'],correct:1,rat:'The trap: debriding or drying out healthy granulation tissue harms healing, and massaging a wound bed is inappropriate. Red granulation tissue is healthy — protect it and keep the bed appropriately moist to support healing.'},
   {q:'A client reports a mole that has changed: it is now asymmetric, has irregular borders, contains several colors, and has grown. What is the nurse\'s BEST action?',type:'single',opts:['Reassure the client that moles normally change','Advise the client to have it evaluated by a provider promptly','Tell the client to apply an over-the-counter cream','Recommend the client cover it and monitor for a year'],correct:1,rat:'The trap: reassurance, creams, or a year of watching delay diagnosis of a possible melanoma. Multiple ABCDE changes warrant prompt provider evaluation — early detection is critical because melanoma metastasizes early.'},
   {q:'Which findings would the nurse expect with an infected surgical wound? (Select all that apply)',type:'multi',opts:['Purulent drainage','Increasing erythema and warmth around the incision','Fever','Decreasing pain and clean, approximated edges','Foul odor'],correct:[0,1,2,4],rat:'The trap: decreasing pain with clean, approximated edges describes NORMAL healing, not infection. Purulent drainage, spreading redness/warmth, fever, and odor are the signs of wound infection.'},
-  {q:'A nurse is prioritizing skin care for four clients. Which requires attention FIRST?',type:'single',opts:['A client with intact skin and a Stage 1 area needing repositioning','A client whose wound has new purulent drainage and a fever','A client with a healing surgical incision and pink drainage','A client requesting lotion for dry skin'],correct:1,rat:'The trap: three situations are routine or expected. New purulent drainage with fever signals an active wound infection — a systemic concern — making that client the priority over prevention, normal healing, and comfort measures.'}
+  {q:'A nurse is prioritizing skin care for four clients. Which requires attention FIRST?',type:'single',opts:['A client with intact skin and a Stage 1 area needing repositioning','A client whose wound has new purulent drainage and a fever','A client with a healing surgical incision and pink drainage','A client requesting lotion for dry skin'],correct:1,rat:'The trap: three situations are routine or expected. New purulent drainage with fever signals an active wound infection — a systemic concern — making that client the priority over prevention, normal healing, and comfort measures.'},
+  {q:'Which are subscales of the Braden Scale? (Select all that apply)',type:'multi',opts:['Sensory perception','Moisture','Mobility','Friction and shear','Wound depth'],correct:[0,1,2,3],rat:'The trap: wound depth is NOT a Braden subscale — Braden predicts RISK before a wound forms. The six subscales are sensory perception, moisture, activity, mobility, nutrition, and friction/shear.'},
+  {q:'A client\'s Braden Scale total is 11. How should the nurse interpret this?',type:'single',opts:['Minimal risk — routine care is sufficient','High risk for pressure injury — implement aggressive prevention','The wound is Stage 3','No risk because the skin is intact'],correct:1,rat:'The Braden total ranges 6–23 and is reversed: LOWER = higher risk. A score of 11 falls in the high-risk range, so aggressive prevention (q2h repositioning, moisture control, nutrition, support surfaces) is indicated.'},
+  {q:'A post-op wound is red, warm, and slightly swollen on day 2 with no purulent drainage or fever. The nurse recognizes this as:',type:'single',opts:['An infection requiring antibiotics','The expected inflammatory phase of healing','The maturation phase','Evidence of dehiscence'],correct:1,rat:'The trap: redness, warmth, and swelling look like infection but are the normal inflammatory phase (about days 1–4). Infection would add purulent drainage, fever, and increasing pain.'},
+  {q:'Place the phases of wound healing in order. Which sequence is correct?',type:'single',opts:['Inflammatory → hemostasis → proliferative → maturation','Hemostasis → inflammatory → proliferative → maturation','Proliferative → hemostasis → inflammatory → maturation','Hemostasis → proliferative → inflammatory → maturation'],correct:1,rat:'Healing runs hemostasis (clot) → inflammatory (cleanup, days 1–4) → proliferative (granulation, days 4–21) → maturation/remodeling (21 days up to 1–2 years).'},
+  {q:'A deep pressure injury is left open to heal by granulating in from the base. This is healing by:',type:'single',opts:['Primary intention','Secondary intention','Tertiary intention','Autolytic intention'],correct:1,rat:'The trap: primary intention is a clean, sutured wound with edges approximated. A wound left open to fill in with granulation tissue heals by secondary intention, with more scarring and a longer course.'},
+  {q:'Which debridement method uses the body\'s own enzymes under a moisture-retentive dressing?',type:'single',opts:['Sharp/surgical','Mechanical','Enzymatic','Autolytic'],correct:3,rat:'Autolytic debridement lets the body\'s own enzymes soften and liquefy necrotic tissue under an occlusive/moisture-retentive dressing — the most selective and least painful, but the slowest.'},
+  {q:'A client has stable, dry, intact eschar on the heel. What is the appropriate nursing action?',type:'single',opts:['Debride it immediately','Leave it intact and protect it, monitoring for signs of infection','Apply a wet-to-dry dressing to soften it','Massage the area to increase circulation'],correct:1,rat:'The trap: eschar usually needs removal, BUT stable, dry, intact heel eschar acts as a natural biological cover and should be left in place and protected. Debride only if it becomes unstable, boggy, draining, or infected.'}
 ],'Skin Check');
 </script>
 
@@ -1466,11 +1538,14 @@ document.getElementById('sec-drugs').innerHTML=`
 
 <div class="card" style="border-color:var(--purple)"><h3>📘 Week 3 — Diabetes</h3>
   <table class="lab">
-    <tr><th>Drug</th><th>Class / timing</th><th>Watch for / key point</th></tr>
-    <tr><td><b>Aspart / Lispro</b></td><td>Rapid-acting insulin</td><td>Give <b>with food</b> — fastest onset</td></tr>
-    <tr><td><b>Regular</b> (Humulin/Novolin R)</td><td>Short-acting insulin</td><td><b>Only insulin given IV</b></td></tr>
-    <tr><td><b>NPH</b></td><td>Intermediate insulin (cloudy)</td><td><b>Peak = hypoglycemia window</b>; roll to mix</td></tr>
-    <tr><td><b>Glargine / Detemir</b></td><td>Long-acting basal insulin</td><td>No pronounced peak — <b>never mix</b></td></tr>
+    <tr><th>Insulin</th><th>Onset</th><th>Peak</th><th>Duration</th><th>Key point</th></tr>
+    <tr><td><b>Aspart / Lispro</b><br><span style="font-size:.78rem;color:var(--muted)">rapid-acting</span></td><td><b>10–20 min</b></td><td>1–3 h</td><td>3–5 h</td><td>Inject <b>0–15 min before</b> meals — verify food is coming</td></tr>
+    <tr><td><b>Regular</b> (Humulin/Novolin R)<br><span style="font-size:.78rem;color:var(--muted)">short-acting, CLEAR</span></td><td><b>30–60 min</b></td><td>2–4 h</td><td>5–8 h</td><td>Inject <b>30 min before</b> meals · <b>only insulin given IV</b> (DKA, hyperkalemia)</td></tr>
+    <tr><td><b>NPH</b><br><span style="font-size:.78rem;color:var(--muted)">intermediate, CLOUDY</span></td><td><b>1–2 h</b></td><td>4–12 h</td><td>14–24 h</td><td>Gently <b>roll</b> to mix · <b>peak = hypoglycemia window</b></td></tr>
+    <tr><td><b>Glargine / Detemir</b><br><span style="font-size:.78rem;color:var(--muted)">long-acting basal</span></td><td><b>1–2 h</b></td><td><b>peakless</b></td><td>~24 h<br>(detemir 12–24 h)</td><td><b>SQ only — NEVER IV</b> · <b>never mix</b> with another insulin</td></tr>
+  </table>
+  <table class="lab" style="margin-top:10px">
+    <tr><th>Oral / other</th><th>Class</th><th>Watch for / key point</th></tr>
     <tr><td><b>Metformin</b></td><td>Biguanide — first-line T2DM</td><td>Low hypoglycemia risk; GI upset; <b>hold 48 h around IV contrast</b> (lactic acidosis); take with food</td></tr>
     <tr><td><b>Glimepiride</b></td><td>Sulfonylurea (oral)</td><td><b>HYPOGLYCEMIA</b>; take with breakfast</td></tr>
     <tr><td><b>Glyburide</b></td><td>Sulfonylurea (longer-acting)</td><td><b>Prolonged/severe hypoglycemia</b>, esp. elderly</td></tr>
@@ -1512,6 +1587,11 @@ renderQuiz('quiz-drugs',[
   {q:'A client on digoxin also takes a loop diuretic. Which lab value most increases the risk of digoxin toxicity if it drops?',type:'single',opts:['Sodium','Potassium','Calcium','Chloride'],correct:1,rat:'Hypokalemia greatly increases digoxin toxicity. Loop diuretics waste potassium, so the nurse monitors potassium closely and watches for early toxicity (N/V, visual halos).'},
   {q:'A client is on a heparin infusion. Which lab guides the dose, and what is the antidote?',type:'single',opts:['INR; vitamin K','aPTT; protamine sulfate','Platelets; naloxone','PT; flumazenil'],correct:1,rat:'Heparin is titrated to the aPTT, and its antidote is protamine sulfate. (INR/vitamin K go with warfarin.) Also monitor platelets for heparin-induced thrombocytopenia.'},
   {q:'Which insulin can be administered intravenously?',type:'single',opts:['NPH','Glargine','Regular','Aspart'],correct:2,rat:'Only Regular (short-acting) insulin is given IV. NPH is intermediate/cloudy, glargine is long-acting and never mixed, and aspart is rapid-acting.'},
+  {q:'A nurse is giving lispro insulin. When should the client\'s meal tray arrive?',type:'single',opts:['Within 0–15 minutes of the injection','About 1 hour after the injection','2 hours after the injection','Whenever convenient — timing does not matter'],correct:0,rat:'Lispro/aspart have an onset of only 10–20 minutes, so food must be available almost immediately (give 0–15 min before the meal). Delaying the tray after a rapid-acting insulin is a classic cause of hypoglycemia.'},
+  {q:'Regular insulin is ordered subcutaneously before breakfast. The nurse should administer it:',type:'single',opts:['Immediately as the tray arrives','30 minutes before the meal','1 hour after the meal','At bedtime'],correct:1,rat:'Regular insulin\'s onset is 30–60 minutes, so it is given about 30 minutes before eating to match its action with glucose absorption. Giving it at the tray or after the meal misses the window.'},
+  {q:'A client receives NPH insulin at 0700. The nurse should watch most closely for hypoglycemia at which time?',type:'single',opts:['0715–0730','Between 1100 and 1900 (4–12 hours later)','Immediately at 0700','24 hours later only'],correct:1,rat:'NPH has an onset of 1–2 hours and peaks at 4–12 hours, so the highest hypoglycemia risk after a 0700 dose is roughly late morning through evening. The peak is always the danger window.'},
+  {q:'Which insulin has NO pronounced peak and provides roughly 24-hour basal coverage?',type:'single',opts:['Regular','NPH','Glargine','Lispro'],correct:2,rat:'Glargine is peakless with about 24-hour duration (detemir 12–24 hours), which is why it carries a lower hypoglycemia risk than NPH — and why it is given SQ only and never mixed with another insulin.'},
+  {q:'Match each insulin to its correct action profile. Which pairings are accurate? (Select all that apply)',type:'multi',opts:['Lispro/aspart — onset 10–20 min, peak 1–3 h, duration 3–5 h','Regular — onset 30–60 min, peak 2–4 h, duration 5–8 h','NPH — onset 1–2 h, peak 4–12 h, duration 14–24 h','Glargine — peakless, about 24 hours','NPH — peakless, given IV in DKA'],correct:[0,1,2,3],rat:'The trap: NPH definitely has a peak (4–12 h) and is never given IV — only Regular insulin goes IV. The other four profiles are correct.'},
   {q:'A client taking glyburide for type 2 diabetes is at greatest risk for which adverse effect?',type:'single',opts:['Hyperglycemia','Hypoglycemia','Lactic acidosis','Weight loss'],correct:1,rat:'Sulfonylureas (glyburide, glimepiride) stimulate insulin release and can cause hypoglycemia — glyburide especially, because of its long half-life and prolonged effect in the elderly.'},
   {q:'A client is scheduled for a CT with IV contrast and takes metformin. The nurse anticipates the metformin will be:',type:'single',opts:['Increased before the scan','Held around the time of the contrast','Given IV instead','Replaced with a sulfonylurea permanently'],correct:1,rat:'Metformin is held around iodinated contrast because the combination raises lactic acidosis risk, especially if kidney function declines.'},
   {q:'Promethazine is ordered for nausea. Which route carries a BLACK BOX warning for severe tissue injury?',type:'single',opts:['Oral','Deep intramuscular','Intravenous','Rectal'],correct:2,rat:'IV promethazine can cause severe tissue injury, including gangrene, if it extravasates — a black-box warning. Deep IM or oral routes are preferred; it is also contraindicated in children under 2.'},
@@ -1620,7 +1700,17 @@ const POOL=[
  {q:'A client receiving external radiation asks about the skin markings. The nurse should teach the client to:',opts:['Wash them off daily','Leave them in place — they guide the beam','Cover them with powder','Scrub them gently'],ans:1,rat:'Markings align the radiation beam — do not wash or scrub them off; wash gently and avoid products in the field.',topic:'Cancer'},
  {q:'Days after chemo for a large tumor, labs show high potassium, high phosphate, high uric acid, and low calcium. This is:',opts:['SIADH','Tumor lysis syndrome','SVC syndrome','Hypocalcemia from diet'],ans:1,rat:'Cell breakdown floods the blood with intracellular contents — tumor lysis syndrome. Hydrate and monitor cardiac/renal status.',topic:'Cancer'},
  {q:'A cancer client reports new worsening back pain with leg weakness and numbness. The nurse suspects:',opts:['Normal bed-rest stiffness','Spinal cord compression (emergency)','A shrinking tumor','Constipation'],ans:1,rat:'New back pain with neuro changes can mean spinal cord compression from metastasis — an emergency to prevent paralysis.',topic:'Cancer'},
- {q:'How does grading differ from staging?',opts:['Grade = cell appearance; stage (TNM) = size/nodes/spread','Grade = spread; stage = cell appearance','They are identical','Staging applies only to benign tumors'],ans:0,rat:'Grade describes how abnormal the cells look; stage (TNM) describes tumor size, node involvement, and metastasis.',topic:'Cancer'}
+ {q:'How does grading differ from staging?',opts:['Grade = cell appearance; stage (TNM) = size/nodes/spread','Grade = spread; stage = cell appearance','They are identical','Staging applies only to benign tumors'],ans:0,rat:'Grade describes how abnormal the cells look; stage (TNM) describes tumor size, node involvement, and metastasis.',topic:'Cancer'},
+ {q:'A nurse gives lispro insulin. When should the meal tray arrive?',opts:['Within 0–15 minutes','1 hour later','2 hours later','Timing does not matter'],ans:0,rat:'Rapid-acting insulin onsets in 10–20 min — food must be there almost immediately or the client goes hypoglycemic.',topic:'Diabetes'},
+ {q:'Regular insulin SQ before breakfast should be given:',opts:['As the tray arrives','30 minutes before the meal','1 hour after the meal','At bedtime'],ans:1,rat:'Regular insulin onsets in 30–60 min, so it is given about 30 minutes before eating.',topic:'Diabetes'},
+ {q:'A client receives NPH at 0700. Hypoglycemia risk is highest:',opts:['Within 15 minutes','4–12 hours later','Immediately','Only after 24 hours'],ans:1,rat:'NPH peaks 4–12 hours after the dose — the peak is always the hypoglycemia danger window.',topic:'Diabetes'},
+ {q:'Which insulin is peakless with about 24-hour duration?',opts:['Regular','NPH','Glargine','Aspart'],ans:2,rat:'Glargine provides steady, peakless ~24-hour basal coverage; SQ only and never mixed.',topic:'Diabetes'},
+ {q:'A client has high morning glucose and a 2–3 a.m. glucose of 48. This is:',opts:['Dawn phenomenon — increase evening insulin','Somogyi effect — decrease evening insulin','Normal variation','HHS'],ans:1,rat:'A LOW 2–3 a.m. glucose means rebound hyperglycemia (Somogyi) — decrease evening insulin. Dawn phenomenon has a normal/high 2–3 a.m. value.',topic:'Diabetes'},
+ {q:'Gentle continuous bubbling in the SUCTION-CONTROL chamber of a chest drainage system means:',opts:['An air leak','Expected normal functioning','The lung collapsed','Tubing obstruction'],ans:1,rat:'Bubbling is expected in the suction-control chamber. Continuous bubbling in the WATER-SEAL chamber is the air leak.',topic:'Respiratory'},
+ {q:'A Braden Scale total of 11 indicates:',opts:['Minimal risk','High risk for pressure injury','A Stage 3 wound','No risk'],ans:1,rat:'Braden runs 6–23 and is reversed — lower = higher risk. 11 is high risk; start aggressive prevention.',topic:'Skin'},
+ {q:'A wound left open to granulate in from the base heals by:',opts:['Primary intention','Secondary intention','Tertiary intention','Autolytic intention'],ans:1,rat:'Secondary intention — more granulation, more scarring, longer healing.',topic:'Skin'},
+ {q:'Which debridement method uses natural body enzymes under a moisture-retentive dressing?',opts:['Sharp','Mechanical','Enzymatic','Autolytic'],ans:3,rat:'Autolytic — most selective and least painful, but slowest.',topic:'Skin'},
+ {q:'A post-op wound is red, warm, and slightly swollen on day 2 with no fever or purulent drainage. This is:',opts:['Infection','The expected inflammatory phase','The maturation phase','Dehiscence'],ans:1,rat:'Inflammatory phase (days ~1–4) is normal. Infection adds purulent drainage, fever, and increasing pain.',topic:'Skin'}
 ];
 
 /* ===== RAPID DRILL — fast recall bank (lab values, antidotes, quick associations) — its OWN style ===== */
@@ -1654,7 +1744,14 @@ const DRILL_Q=[
  {q:'Fever in a neutropenic client is?',opts:['Expected','A medical emergency','Treated with flowers removed only','Ignored if < 101°F'],ans:1,rat:'Emergency — infection signs are blunted.'},
  {q:'Metformin should be held around IV contrast because of?',opts:['Kidney stones','Lactic acidosis risk','Hyperkalemia','Allergy'],ans:1,rat:'Contrast + metformin raises lactic acidosis risk.'},
  {q:'Continuous bubbling in the water-seal chamber means?',opts:['Normal function','An air leak','Lung re-expanded','Suction too low'],ans:1,rat:'Continuous bubbling = air leak; investigate.'},
- {q:'Pink, watery post-op drainage is called?',opts:['Purulent','Serosanguineous','Sanguineous','Serous'],ans:1,rat:'Serosanguineous — expected early post-op.'}
+ {q:'Pink, watery post-op drainage is called?',opts:['Purulent','Serosanguineous','Sanguineous','Serous'],ans:1,rat:'Serosanguineous — expected early post-op.'},
+ {q:'Onset of rapid-acting insulin (lispro/aspart)?',opts:['10–20 minutes','30–60 minutes','1–2 hours','4 hours'],ans:0,rat:'10–20 min — give 0–15 min before the meal.'},
+ {q:'Onset of Regular insulin?',opts:['10–20 minutes','30–60 minutes','1–2 hours','4–12 hours'],ans:1,rat:'30–60 min — give 30 min before meals.'},
+ {q:'Peak of NPH insulin?',opts:['1–3 hours','2–4 hours','4–12 hours','No peak'],ans:2,rat:'4–12 hours — the hypoglycemia danger window.'},
+ {q:'Duration of NPH insulin?',opts:['3–5 hours','5–8 hours','14–24 hours','About 4 hours'],ans:2,rat:'14–24 hours.'},
+ {q:'Peak of glargine (Lantus)?',opts:['1–3 hours','4–12 hours','No peak (peakless)','30 minutes'],ans:2,rat:'Peakless, ~24-hour basal coverage.'},
+ {q:'Duration of rapid-acting insulin?',opts:['3–5 hours','5–8 hours','14–24 hours','24 hours'],ans:0,rat:'3–5 hours.'},
+ {q:'Peak of Regular insulin?',opts:['1–3 hours','2–4 hours','4–12 hours','No peak'],ans:1,rat:'2–4 hours.'}
 ];
 /* ===== MILLIONAIRE — escalating single-best-answer ladder — its OWN style ===== */
 const MILLION_Q=[
