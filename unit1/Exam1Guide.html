@@ -324,9 +324,6 @@ const SECTIONS=[
   {id:'notes',label:'✍️ Class Notes'},
   {id:'aging',label:'🧓 Aging Head-to-Toe'},
   {id:'chronic',label:'♾️ Chronic Illness'},
-  {id:'fluids',label:'💧 Fluids & IV Therapy'},
-  {id:'lytes',label:'⚡ Electrolytes'},
-  {id:'abg',label:'🫁 Acid-Base & ABGs'},
   {id:'cancer',label:'🎗️ Cancer'},
   {id:'oncoemerg',label:'🚨 Oncologic Emergencies'},
   {id:'pre',label:'🔵 Preoperative'},
@@ -661,100 +658,36 @@ const EXAM=[
 {topic:'post',hot:true,q:'A patient is 8 hours post-op from an open cholecystectomy. Findings: RR 26 and shallow, SpO2 89% on room air, temperature 100.4F, refusing to cough because of pain, diminished breath sounds at both bases. Which actions are appropriate? Select all that apply.',o:['Assist the patient to splint the incision while coughing','Apply supplemental oxygen and reposition to high-Fowler','Have the patient use the incentive spirometer hourly while awake','Withhold opioids because the respiratory rate is elevated','Restrict ambulation until the oxygen saturation is above 95%','Medicate for pain before pulmonary hygiene'],c:[0,1,2,5],t:'multi',r:'This is <b>atelectasis</b>, the most common cause of a low-grade fever in the first 24 to 48 hours. The chain: pain blocks deep breathing, alveoli collapse, shunt develops, saturation falls, fever follows. Treat the pain <b>so that</b> pulmonary hygiene is possible. Withholding opioids and restricting ambulation both worsen the exact mechanism causing the problem.'},
 {topic:'aging',hot:false,q:'A home health nurse visits an 80-year-old cared for by an exhausted adult daughter. Findings: 14-pound weight loss in two months, a stage 2 sacral pressure injury, three expired prescriptions, a strong urine odor in the home, and the daughter saying \'I cannot do this anymore.\' Which actions should the nurse take? Select all that apply.',o:['Assess the patient separately from the caregiver','Report the suspected neglect according to state requirements','Confront the daughter about failing to provide adequate care','Wait for a second visit to confirm the pattern before reporting','Evaluate caregiver strain and offer respite resources','Document objective findings using direct quotations'],c:[0,1,4,5],t:'multi',r:'This picture is <b>neglect</b>: failure to provide necessities, whether or not it is intentional. Reporting is a legal duty and does <b>not</b> require proof or a second visit. Interview the patient alone, assess caregiver strain (the leading risk factor), and document objectively. Confronting the caregiver risks escalation and further isolation of the patient. Note that reporting and supporting the caregiver are not in conflict.'},
 
-/* ===== Ch 10: Fluid, Electrolyte, Acid-Base, IV Therapy (moved from Unit 2) ===== */
-{topic:'fluids',hot:true,q:'A post-op patient has BP 88/56, HR 118, dry mucous membranes, and urine output of 18 mL/hr. Which IV fluid does the nurse anticipate FIRST?',o:['0.45% Normal Saline','3% Saline','D5W','0.9% Normal Saline'],c:3,t:'single',r:'This is hypovolemia/hypotension. The first-line fluid is an <b>isotonic crystalloid (0.9% NS or LR)</b> to expand intravascular volume. Hypotonic (0.45%, D5W) would worsen low BP; 3% is hypertonic and reserved for severe hyponatremia.'},
-{topic:'fluids',hot:false,q:'The nurse is monitoring a patient with heart failure. Which findings indicate FLUID VOLUME EXCESS? (Select all that apply)',o:['Bounding pulse','Crackles in the lungs','Jugular vein distention','Poor skin turgor','Weight gain of 2 kg overnight'],c:[0,1,2,4],t:'multi',r:'JVD, crackles, bounding pulse, and rapid weight gain are all "WET" signs of <b>hypervolemia</b>. Poor skin turgor is a "DRY" sign of <b>deficit</b>, not excess.'},
-{topic:'fluids',hot:true,q:'Which assessment is the BEST indicator of a patient\'s daily fluid status?',o:['Urine color','Daily weight','Blood pressure','Skin turgor'],c:1,t:'single',r:'<b>Daily weight</b> is the single most reliable indicator of fluid status — a gain or loss of 1 kg equals roughly 1 liter of fluid. Take it at the same time, same scale, same clothing.'},
-{topic:'lytes',hot:true,q:'A patient with chronic kidney disease has a potassium of 6.8 mEq/L and peaked T waves on the monitor. Which medication should the nurse prepare FIRST?',o:['Sodium bicarbonate','Potassium chloride','Calcium gluconate','Furosemide (Lasix)'],c:2,t:'single',r:'<b>Calcium gluconate</b> is given first to stabilize/protect the cardiac membrane from the dysrhythmia risk. It does NOT lower potassium — insulin+D50, bicarb, and dialysis do that — but protecting the heart is the immediate priority.'},
-{topic:'lytes',hot:false,q:'Which clinical findings would the nurse expect in a patient with HYPOcalcemia? (Select all that apply)',o:['Positive Trousseau sign','Constipation','Tetany','Kidney stones','Positive Chvostek sign'],c:[0,2,4],t:'multi',r:'Hypocalcemia causes neuromuscular irritability: positive <b>Trousseau</b> (hand spasm with BP cuff), positive <b>Chvostek</b> (facial twitch), and <b>tetany</b>. Constipation and kidney stones are signs of HYPERcalcemia.'},
-{topic:'lytes',hot:true,q:'A patient is admitted with a sodium level of 122 mEq/L. Which is the priority nursing intervention?',o:['Encourage extra free water','Restrict potassium intake','Apply warm compresses','Institute seizure precautions'],c:3,t:'single',r:'Severe hyponatremia causes the brain to swell, leading to confusion and <b>seizures</b>. Seizure precautions and neuro checks are the priority. Adding free water would dilute sodium further and worsen it.'},
-{topic:'lytes',hot:false,q:'A patient on a loop diuretic reports muscle weakness and leg cramps. The nurse notes a flattened T wave and a U wave on the ECG. Which electrolyte imbalance is most likely?',o:['Hypermagnesemia','Hypocalcemia','Hyperkalemia','Hypokalemia'],c:3,t:'single',r:'Loop diuretics waste potassium. <b>Hypokalemia</b> classically shows weakness, cramps, a <b>flat T wave and a U wave</b>. Peaked T waves would indicate hyperkalemia.'},
-{topic:'fluids',hot:true,q:'A patient with severe hyponatremia (Na 118) and seizure activity is prescribed 3% saline. Which is the priority nursing assessment during infusion?',o:['Pupil size and reactivity to light every hour','Lung sounds for signs of fluid overload','Blood glucose before and after the infusion','Bowel sounds in all four abdominal quadrants'],c:1,t:'single',r:'3% saline is <b>hypertonic</b> — it pulls water into the vasculature and can rapidly cause <b>fluid overload and pulmonary edema</b>. Monitor lung sounds closely and infuse slowly.'},
-{topic:'fluids',hot:false,q:'Which IV solutions are ISOTONIC? (Select all that apply)',o:['0.9% Normal Saline','D5W (in the bag, before metabolism)','0.45% Normal Saline','3% Saline','Lactated Ringer\'s'],c:[0,4],t:'multi',r:'<b>0.9% NS and Lactated Ringer\'s</b> are isotonic. 0.45% is hypotonic, 3% is hypertonic. D5W is isotonic in the bag but acts hypotonic once dextrose is metabolized — for exam "match the classic answer," NS and LR are the safest isotonic choices.'},
-{topic:'fluids',hot:false,q:'A nurse is preparing to administer a blood transfusion. Which IV fluid must be used to prime the line?',o:['0.9% Normal Saline','0.45% Normal Saline','Lactated Ringer\'s','D5W'],c:0,t:'single',r:'<b>Only 0.9% Normal Saline</b> is compatible with blood. LR contains calcium which can cause clotting; dextrose solutions cause hemolysis (RBCs swell and burst).'},
-{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 24. How does the nurse interpret this?',o:['Metabolic acidosis','Metabolic alkalosis, compensated','Respiratory acidosis, uncompensated','Respiratory alkalosis'],c:2,t:'single',r:'pH is low (acidosis). CO₂ is high and moves OPPOSITE the pH → respiratory. HCO₃ is normal → no compensation yet. = <b>uncompensated respiratory acidosis</b> (think COPD, opioids).'},
-{topic:'abg',hot:false,q:'ABG: pH 7.50, PaCO₂ 40, HCO₃ 30. Which conditions could cause this? (Select all that apply)',o:['Nasogastric suction','Prolonged vomiting','Excessive antacid use','Diabetic ketoacidosis','Diarrhea'],c:[0,1,2],t:'multi',r:'pH high + HCO₃ high (same direction) = <b>metabolic alkalosis</b>. Vomiting, NG suction (losing stomach acid) and antacids all cause it. Diarrhea and DKA cause metabolic ACIDosis.'},
-{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 30, HCO₃ 17. This represents:',o:['Uncompensated respiratory alkalosis','Partially compensated respiratory acidosis','Normal ABG','Fully compensated metabolic acidosis'],c:3,t:'single',r:'pH is normal but on the <b>acidic side</b> (7.37). HCO₃ is low (metabolic acidosis) and the lungs have blown off CO₂ (low CO₂) to compensate. Both abnormal + normal pH = <b>fully compensated metabolic acidosis</b>.'},
-{topic:'abg',hot:false,q:'A patient with vomiting for 3 days has ABG pH 7.49, PaCO₂ 41, HCO₃ 30. Interpretation?',o:['Metabolic alkalosis','Respiratory alkalosis','Respiratory acidosis','Metabolic acidosis'],c:0,t:'single',r:'pH high + HCO₃ high (same direction) = metabolic alkalosis. Vomiting loses stomach acid.'},
-{topic:'lytes',hot:true,q:'Which is the priority for a patient with potassium of 6.9?',o:['Restrict fluids','Prepare calcium gluconate','Encourage bananas','Give a potassium supplement'],c:1,t:'single',r:'Calcium gluconate protects the heart in hyperkalemia. Never add more potassium.'},
-{topic:'lytes',hot:false,q:'Which is the only IV fluid compatible with blood?',o:['D5W','0.9% NS','LR','0.45% NS'],c:1,t:'single',r:'Only 0.9% Normal Saline — LR has calcium (clots), dextrose hemolyzes RBCs.'},
-{topic:'fluids',hot:false,q:'Best indicator of a patient\'s daily fluid status?',o:['Daily weight','BP','Skin turgor','Heart rate'],c:0,t:'single',r:'Daily weight — 1 kg ≈ 1 L of fluid.'},
-{topic:'abg',hot:true,q:'An ABG shows pH 7.30, PaCO₂ 58, HCO₃ 26 in a patient with a COPD exacerbation. Which intervention is the priority?',o:['Administer high-flow 100% oxygen by non-rebreather','Encourage the patient to breathe into a paper bag','Give IV sodium bicarbonate','Improve ventilation'],c:3,t:'single',r:'This is respiratory acidosis from hypoventilation. The fix is improving ventilation and giving controlled oxygen (target 88–92% in COPD). Slamming 100% O₂ can blunt the hypoxic drive; bicarb and rebreathing don\'t address the trapped CO₂.'},
-{topic:'lytes',hot:false,q:'A patient with a potassium of 6.9 mEq/L has peaked T waves on the monitor. Which prescribed order should the nurse question/clarify?',o:['IV calcium gluconate','IV insulin with dextrose','Prepare for possible dialysis','A potassium-sparing diuretic'],c:3,t:'single',r:'In hyperkalemia you want to lower potassium. A potassium-SPARING diuretic would make it worse and should be questioned. Calcium gluconate (heart protection), insulin+dextrose (shifts K into cells), and dialysis are all appropriate.'},
-{topic:'lytes',hot:true,q:'A nurse is starting an IV potassium infusion and the patient reports burning at the site. The nurse should FIRST:',o:['Stop the infusion and assess the site for infiltration','Apply a warm compress to the site and keep the infusion going','Document the complaint and reassess the site in one hour','Slow the rate by half and continue while watching the site'],c:0,t:'single',r:'Potassium is a vesicant — burning suggests infiltration/extravasation, which can cause tissue damage. Stop the infusion and assess the site immediately. Never IV-push potassium, and never keep running a painful vesicant.'},
-{topic:'fluids',hot:false,q:'A patient with fluid volume deficit is RECEIVING IV fluid replacement. Which finding tells the nurse the patient is responding to the treatment? (Remember: deficit itself LOWERS urine — a rise means the fluids are working.)',o:['Heart rate increases from 90 to 120','Urine specific gravity rises to 1.035','Blood pressure drops further when standing','Urine output increases from 15 mL/hr to 40 mL/hr'],c:3,t:'single',r:'Key word = RESPONDING TO TREATMENT. Hypovolemia by itself DECREASES urine (the body conserves water → output <30 mL/hr, concentrated, high specific gravity). But because this patient is getting IV fluids, urine climbing 15→40 mL/hr means perfusion is restored — the treatment is working. Rising specific gravity, climbing HR, and a worsening orthostatic drop would all mean the deficit is continuing.'},
-{topic:'abg',hot:false,q:'A patient with severe asthma has been working hard to breathe. The latest ABG shows the PaCO₂ has risen from 28 to 41 (now "normal"). How should the nurse interpret this?',o:['The patient has developed a metabolic alkalosis','No action is needed since the value is now normal','The patient is improving as the CO2 normalizes','The patient is tiring and heading toward failure'],c:3,t:'single',r:'In a tiring asthmatic who was hyperventilating (low CO₂), a "normalizing" or rising CO₂ is an ominous sign of fatigue and impending respiratory failure — escalate, don\'t relax.'},
-{topic:'abg',hot:false,q:'A patient with metabolic acidosis from DKA is breathing deeply and rapidly (Kussmaul respirations). What does the nurse understand about this finding?',o:['It is the body compensating by blowing off CO₂','It is a sign the patient is panicking and needs sedation','It indicates respiratory alkalosis','It should be suppressed with oxygen'],c:0,t:'single',r:'Kussmaul respirations are a compensatory response — the lungs blow off CO₂ (acid) to raise the pH. Suppressing or sedating this would worsen the acidosis. Treat the underlying DKA.'},
-{topic:'lytes',hot:true,q:'A patient with hypocalcemia has a positive Trousseau sign and reports tingling around the mouth. What is the priority nursing concern?',o:['Constipation and abdominal distension from slowed motility','Airway compromise from laryngospasm and seizure risk','Kidney stones from calcium precipitating in the tubules','Hypertension from increased vascular smooth muscle tone'],c:1,t:'single',r:'Hypocalcemia increases neuromuscular excitability — the priority is airway (laryngospasm) and seizure risk. Institute seizure precautions and monitor the airway. Stones/constipation are HYPERcalcemia.'},
-{topic:'lytes',hot:false,q:'A nurse is about to hang blood and sees the only available IV fluid running is D5½NS. What should the nurse do?',o:['Use lactated Ringer\'s instead','Use the D5½NS to prime the line','Obtain 0.9% normal saline','Run the blood without any priming fluid'],c:2,t:'single',r:'Only 0.9% normal saline is hung with blood. Dextrose solutions hemolyze RBCs and LR\'s calcium can promote clotting. Get NS before proceeding.'},
-{topic:'fluids',hot:false,q:'A patient receiving IV fluids for dehydration develops a cough, dyspnea, and crackles. After slowing the infusion and sitting the patient up, what should the nurse do NEXT?',o:['Resume the original infusion rate and document the episode','Discontinue all IV access and hold the remaining fluid orders','Lay the patient flat to redistribute the excess fluid volume','Notify the provider and continue monitoring respiratory status'],c:3,t:'single',r:'After the immediate actions (slow infusion, high-Fowler), notify the provider and keep monitoring. Resuming the rate or lying flat would worsen overload; pulling all access is unnecessary.'},
-{topic:'lytes',hot:false,q:'A nurse reviews orders for a patient with fluid volume EXCESS from heart failure. Which order should the nurse question?',o:['Sodium restriction','Daily weights','Administer the prescribed loop diuretic','Infuse 1 L of 0.9% normal saline over 1 hour'],c:3,t:'single',r:'A patient already fluid-overloaded should not get a rapid isotonic bolus — that would worsen the overload. Daily weights, sodium restriction, and diuretics are all appropriate; question the saline bolus.'},
-{topic:'abg',hot:false,q:'A patient\'s ABG: pH 7.34, PaCO₂ 60, HCO₃ 31. The nurse recognizes this as which state, and what does it tell you about the patient?',o:['Fully compensated respiratory acidosis, likely chronic COPD','Metabolic alkalosis from vomiting or diuretic therapy','Respiratory alkalosis from anxiety-driven hyperventilation','Uncompensated respiratory acidosis from an acute event'],c:0,t:'single',r:'pH is near-normal but on the acidic side, with BOTH CO₂ and HCO₃ elevated — the kidneys have retained bicarb to compensate. This pattern fits a chronic CO₂ retainer (COPD) rather than an acute crisis.'},
-{topic:'fluids',hot:true,q:'Which of the following is NOT a sign of fluid volume deficit?',o:['Poor skin turgor and dry lips','Concentrated, low-volume urine','Tachycardia with hypotension','Bounding pulse with crackles'],c:3,t:'single',r:'Trap: A, B, and D are all TRUE signs of deficit, so they feel right. The impostor is C — a bounding pulse with crackles is fluid volume EXCESS. When you see "NOT," hunt the one that does not belong.'},
-{topic:'fluids',hot:true,q:'All of the following IV fluids are isotonic EXCEPT:',o:['D5W (in the bag)','0.9% Normal Saline','Lactated Ringer\'s','0.45% Normal Saline'],c:3,t:'single',r:'"EXCEPT" = find the odd one out. NS, LR, and in-bag D5W are isotonic; 0.45% NS is HYPOtonic. Three belong together — the loner is your answer.'},
-{topic:'lytes',hot:false,q:'Which statement about potassium administration is correct?',o:['Potassium is NEVER given by IV push','Oral potassium should be given on an empty stomach','Potassium may be given by rapid IV push in an emergency','Potassium-sparing diuretics are safe in hyperkalemia'],c:0,t:'single',r:'"Never" is a true absolute here: IV-push potassium can cause fatal arrhythmias. The trap is that absolutes are often false — but this one is a hard safety rule. A, C, and D are all dangerous/false.'},
-{topic:'lytes',hot:true,q:'A nurse is caring for a patient with hyperkalemia. Which action is the BEST FIRST priority?',o:['Give insulin with dextrose','Teach the patient about low-potassium foods','Administer IV calcium gluconate','Restrict dietary potassium'],c:2,t:'single',r:'Several answers are correct things to do — but "best first" = address the biggest threat. Calcium gluconate protects the heart NOW (it doesn\'t lower K, but it stabilizes the myocardium). Insulin+dextrose comes next; teaching/diet are low priority.'},
-{topic:'fluids',hot:true,q:'Which is the BEST indicator of a patient\'s fluid status?',o:['Blood pressure','Daily weight','Thirst','Skin turgor'],c:1,t:'single',r:'"Best indicator" = most reliable/specific. Daily weight is the gold standard (1 kg ≈ 1 L). The others are useful but less precise — classic "they\'re all assessments, pick the strongest" trap.'},
-{topic:'lytes',hot:true,q:'All of the following are signs of hypocalcemia EXCEPT:',o:['Positive Trousseau sign','Constipation and kidney stones','Tingling around the mouth','Positive Chvostek sign'],c:1,t:'single',r:'Chvostek, Trousseau, and perioral tingling are hypoCALCEMIA (excitable). "Stones, bones, groans" (constipation, stones) is HYPERcalcemia — the EXCEPT impostor.'},
-{topic:'fluids',hot:true,q:'Which is the MOST reliable indicator that a patient with fluid volume DEFICIT is improving?',o:['Urine output rising toward 30+ mL/hr','Heart rate is unchanged','Skin looks slightly less dry','The patient reports feeling less thirsty'],c:0,t:'single',r:'"Most reliable" = the objective, measurable one. Improving urine output reflects restored perfusion. Thirst and skin appearance are softer/subjective; an unchanged HR shows no improvement.'},
-{topic:'abg',hot:true,q:'A patient with metabolic alkalosis from vomiting is breathing slowly. Which statement BEST explains this?',o:['The lungs are slowing to RETAIN CO₂ and lower the pH','This is an abnormal, dangerous response that must be stopped','The patient is having a respiratory arrest','The kidneys are dumping bicarb'],c:0,t:'single',r:'Slow breathing here is compensation — retaining CO₂ (acid) to pull the alkalotic pH back down. The "BEST explains" framing rewards understanding the mechanism, not memorizing a fact.'},
-{topic:'abg',hot:true,q:'Which is NOT a function regulated by the respiratory system?',o:['Acid–base balance (CO₂ regulation)','Oxygen transport','Gas exchange','Bicarbonate regulation'],c:3,t:'single',r:'The lungs handle O₂, gas exchange, and CO₂ (acid). Bicarbonate is regulated by the KIDNEYS — the impostor in a "NOT" question that lists three lung jobs and one kidney job.'},
-{topic:'fluids',hot:false,q:'A nurse auscultates crackles in a patient receiving IV fluids. Which step of the nursing process is this?',o:['Assessment','Diagnosis','Implementation','Evaluation'],c:0,t:'single',r:'Auscultating (collecting objective data) is ASSESSMENT. Naming "fluid overload" would be diagnosis; slowing the IV would be implementation; rechecking the lungs afterward would be evaluation.'},
-{topic:'lytes',hot:false,q:'A nurse reassesses a patient\'s potassium level after treating hyperkalemia to see if it dropped. This is which step?',o:['Assessment','Planning','Evaluation','Implementation'],c:2,t:'single',r:'Checking a result against the expected outcome after an intervention is EVALUATION. The trap is that it "looks like" assessment — but its purpose is judging effectiveness.'},
-{topic:'fluids',hot:false,q:'Which action belongs to the ASSESSMENT step for a patient with suspected fluid volume deficit?',o:['Set a measurable goal for adequate hydration within 24 hours','Check skin turgor, mucous membranes, and urine specific gravity','Document that the hydration goal was met by the end of shift','Administer the prescribed isotonic IV fluid at the ordered rate'],c:1,t:'single',r:'Collecting data — skin turgor, mucous membranes, specific gravity — is ASSESSMENT. The others are implementation, planning, and evaluation respectively.'},
-{topic:'lytes',hot:false,q:'A patient with hypocalcemia has a positive Trousseau sign. Instituting seizure precautions and monitoring the airway are which step?',o:['Diagnosis','Assessment','Implementation','Planning'],c:2,t:'single',r:'Putting safety measures in place (seizure precautions, airway monitoring setup) is IMPLEMENTATION. Eliciting the Trousseau sign was the assessment that identified the risk.'},
-{topic:'abg',hot:false,q:'After teaching, the nurse asks the patient to demonstrate using the incentive spirometer correctly. This "teach-back" is which step?',o:['Assessment','Planning','Evaluation','Implementation'],c:2,t:'single',r:'Checking whether teaching was effective (can the patient do it right?) is EVALUATION. The teaching itself was implementation; the return-demonstration evaluates the outcome.'},
-{topic:'abg',hot:false,q:'PUTTING IT TOGETHER — A patient with COPD is admitted with increased dyspnea. Using cause→manifest→treatment, which ABG and O₂ plan fit?',o:['Metabolic acidosis; give sodium bicarbonate and recheck the gas','Compensated respiratory acidosis; controlled O2 to keep SpO2 88-92%','Respiratory alkalosis; apply 100% oxygen by non-rebreather mask','Metabolic alkalosis; restrict fluids and hold the diuretic dose'],c:1,t:'single',r:'COPD cause = chronic CO₂ retention → compensated respiratory acidosis. Treatment = controlled O₂ (88–92%), not 100%. The framework links the three together.'},
-{topic:'fluids',hot:true,q:'CAUSE — Fluid volume deficit is BEST described as resulting from:',o:['Excess dietary sodium pulling water into the vascular space','Too much IV fluid infused faster than the kidneys clear it','Fluid retention from heart failure backing up into tissue','Loss of fluid from vomiting, diarrhea, or poor intake'],c:3,t:'single',r:'Deficit = loss or inadequate intake. That cause explains the manifestations (↑HR, ↓BP, concentrated urine) and the treatment (isotonic fluids).'},
-{topic:'lytes',hot:true,q:'MANIFESTS → TREATMENT — A patient with hyperkalemia shows peaked T waves. What is given FIRST and why?',o:['Insulin with dextrose, to shift K into cells','A potassium supplement','Calcium gluconate, to protect/stabilize the heart','A beta blocker'],c:2,t:'single',r:'Peaked T waves = cardiac threat. Calcium gluconate stabilizes the myocardium FIRST (it doesn\'t lower K). Insulin+dextrose then shifts K into cells. Manifestation drives the priority treatment.'},
-{topic:'lytes',hot:false,q:'A patient is admitted with severe dehydration. Which IV fluid does the nurse anticipate administering first?',o:['D5W with 20 mEq KCl','0.45% Normal Saline','0.9% Normal Saline','D10W by slow infusion'],c:2,t:'single',r:'Isotonic 0.9% NS expands intravascular volume first-line for hypovolemia.'},
-{topic:'lytes',hot:false,q:'Which ion is the most abundant in the intracellular fluid?',o:['Calcium','Potassium','Sodium','Chloride'],c:1,t:'single',r:'Potassium is the principal ICF cation; sodium dominates the ECF.'},
-{topic:'lytes',hot:true,q:'A nurse identifies which finding as the BEST indicator of fluid balance?',o:['Daily weight','Urine color','Blood pressure','Skin turgor'],c:0,t:'single',r:'Daily weight is most reliable; 1 kg ≈ 1 L of fluid.'},
-{topic:'lytes',hot:false,q:'A patient with a BUN:creatinine ratio of 25:1, increased hematocrit, and dry mucous membranes most likely has:',o:['Metabolic alkalosis','Fluid volume deficit','Hyperkalemia','Fluid volume excess'],c:1,t:'single',r:'A ratio >20:1 with hemoconcentration indicates fluid volume deficit.'},
-{topic:'lytes',hot:false,q:'Which signs indicate fluid volume EXCESS? (Select all that apply)',o:['Poor skin turgor','Crackles','JVD','Bounding pulse','Weight gain'],c:[1,2,3,4],t:'multi',r:'Crackles, JVD, bounding pulse, and weight gain are "WET" signs. Poor turgor = deficit.'},
-{topic:'lytes',hot:false,q:'Albumin, a colloid produced by the liver, primarily functions to:',o:['Buffer metabolic acids in the bloodstream','Excrete excess potassium via the kidneys','Pull water into the intravascular space','Move sodium from the blood into the cells'],c:2,t:'single',r:'Albumin exerts oncotic pressure pulling water into vessels; low albumin → edema.'},
-{topic:'lytes',hot:true,q:'A potassium level of 6.8 mEq/L with peaked T waves requires which FIRST intervention?',o:['Potassium chloride','Encourage bananas','Calcium gluconate','Furosemide'],c:2,t:'single',r:'Calcium gluconate stabilizes the cardiac membrane immediately.'},
-{topic:'lytes',hot:false,q:'Which interventions are correct for hyperkalemia? (Select all that apply)',o:['Sodium bicarbonate','Calcium gluconate','Salt substitutes','Insulin with dextrose','Dialysis if severe'],c:[0,1,3,4],t:'multi',r:'Insulin+dextrose drives K into cells, calcium protects the heart, bicarb shifts K, dialysis removes it. Salt substitutes CONTAIN potassium — avoid.'},
-{topic:'lytes',hot:false,q:'A patient with a sodium of 121 mEq/L is at greatest risk for:',o:['Hypertension','Constipation','Kidney stones','Seizures'],c:3,t:'single',r:',o:['},
-{topic:'lytes',hot:false,q:'A nurse notes a positive Trousseau sign. This indicates:',o:['Hyperkalemia','Hypocalcemia','Hypercalcemia','Hypernatremia'],c:1,t:'single',r:'Carpal spasm with BP cuff (Trousseau) signals hypocalcemia/tetany.'},
-{topic:'lytes',hot:false,q:'Which foods should the nurse recommend to a patient with hypokalemia? (Select all that apply)',o:['Bananas','Potatoes','Oranges','Avocados','White rice'],c:[0,1,2,3],t:'multi',r:'Bananas, potatoes, oranges, and avocados are potassium-rich.'},
-{topic:'lytes',hot:false,q:'A magnesium level of 1.0 mEq/L would most likely produce:',o:['Respiratory depression','Hyporeflexia','Bradycardia','Tremors and seizures'],c:3,t:'single',r:'LOW magnesium causes HYPER-excitability: tremors, hyperreflexia, seizures.'},
-{topic:'lytes',hot:false,q:'Which IV solution would the nurse use cautiously in a patient with heart failure due to fluid overload risk?',o:['0.225% NS','3% Saline','D5W','0.45% NS'],c:1,t:'single',r:'Hypertonic 3% saline pulls fluid into vessels and can overload the heart.'},
-{topic:'lytes',hot:false,q:'A hypotonic solution such as 0.45% NS causes water to move:',o:['Into cells','Out of the body','Into the vasculature only','Out of cells'],c:0,t:'single',r:'Hypotonic fluids shift water INTO cells (raisins → grapes). Watch for cerebral edema.'},
-{topic:'lytes',hot:false,q:'Which assessment finding indicates hypernatremia?',o:['Seizures caused by cerebral swelling','Peaked T waves on the cardiac monitor','Carpopedal spasm on cuff inflation','Intense thirst with dry mucous membranes'],c:3,t:'single',r:'Hypernatremia draws water out of cells → thirst, dry membranes, agitation.'},
-{topic:'lytes',hot:false,q:'Why must potassium NEVER be administered by IV push?',o:['It causes a sudden drop in the blood glucose','It can cause fatal cardiac dysrhythmias','It is too viscous to push through a small IV','It permanently stains the surrounding skin'],c:1,t:'single',r:'Rapid IV potassium can cause cardiac arrest; always dilute and infuse slowly.'},
-{topic:'lytes',hot:false,q:'Which hormone is released in response to low blood pressure and causes sodium/water retention?',o:['ANP','Calcitonin','Aldosterone','BNP'],c:2,t:'single',r:'Aldosterone ("Save Salt") retains Na and water and excretes K.'},
-{topic:'lytes',hot:false,q:'A high BNP level most likely indicates:',o:['Respiratory alkalosis from anxiety','Dehydration with hemoconcentration','Fluid overload or heart failure','Hypokalemia from diuretic use'],c:2,t:'single',r:'BNP rises when the heart is stretched by excess volume (CHF).'},
-{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 55, HCO₃ 24. The interpretation is:',o:['Partly compensated metabolic acidosis','Partly compensated metabolic alkalosis','Uncompensated respiratory alkalosis','Uncompensated respiratory acidosis'],c:3,t:'single',r:'Low pH, high CO₂ (opposite), normal HCO₃ = uncompensated respiratory acidosis.'},
-{topic:'abg',hot:false,q:'ABG: pH 7.50, PaCO₂ 30, HCO₃ 24. This represents:',o:['Respiratory acidosis','Respiratory alkalosis','Metabolic alkalosis','Metabolic acidosis'],c:1,t:'single',r:'High pH, low CO₂ (opposite) = respiratory alkalosis (hyperventilation/anxiety).'},
-{topic:'abg',hot:false,q:'ABG: pH 7.29, PaCO₂ 38, HCO₃ 16. This indicates:',o:['Metabolic alkalosis','Metabolic acidosis','Respiratory acidosis','Respiratory alkalosis'],c:1,t:'single',r:'Low pH matches low HCO₃ (same direction) = metabolic acidosis (DKA, diarrhea).'},
-{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 55, HCO₃ 31. This represents:',o:['Fully compensated respiratory acidosis','Uncompensated respiratory acidosis','Metabolic alkalosis','Normal'],c:0,t:'single',r:'Normal pH on the acidic side with both CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis.'},
-{topic:'abg',hot:false,q:'Which conditions cause metabolic acidosis? (Select all that apply)',o:['Vomiting','Renal failure','Diarrhea','NG suction','Diabetic ketoacidosis'],c:[1,2,4],t:'multi',r:'DKA, diarrhea, and renal failure cause metabolic acidosis. Vomiting and NG suction cause metabolic ALKalosis.'},
-{topic:'abg',hot:false,q:'The ROME mnemonic stands for:',o:['Respiratory Only, Metabolic Even','Reverse Oxygen, Match Electrolytes','Renal Opposite, Metabolic Equal','Respiratory Opposite, Metabolic Equal'],c:3,t:'single',r:',o:['},
-{topic:'abg',hot:false,q:'Kussmaul respirations are a compensatory response to:',o:['Metabolic acidosis','Respiratory acidosis','Metabolic alkalosis','Respiratory alkalosis'],c:0,t:'single',r:'Deep rapid Kussmaul breathing blows off CO₂ to compensate for metabolic acidosis.'},
-{topic:'abg',hot:false,q:'In the body, PaCO₂ is regulated by the ____ and HCO₃ is regulated by the ____.',o:['heart / liver','lungs / kidneys','brain / spleen','kidneys / lungs'],c:1,t:'single',r:'Lungs control CO₂ (acid); kidneys control bicarbonate.'},
-{topic:'abg',hot:false,q:'A patient hyperventilating from anxiety would develop which acid-base imbalance?',o:['Metabolic alkalosis','Respiratory acidosis','Respiratory alkalosis','Metabolic acidosis'],c:2,t:'single',r:'Blowing off CO₂ raises pH → respiratory alkalosis.'},
-{topic:'abg',hot:false,q:'Which is the criterion for acute respiratory failure?',o:['PaCO2 below 35 with a pH above 7.45 and normal oxygenation','A pH of 7.40 with PaCO2 and bicarbonate both within range','PaO2 above 100 with a normal pH and a rising bicarbonate','PaO2 below 60 and/or PaCO2 above 50 with a pH under 7.35'],c:3,t:'single',r:'PaO₂ <60 and/or PaCO₂ >50 with acidosis defines acute respiratory failure.'},
-{topic:'abg',hot:false,q:'A normal pH but abnormal CO₂ and HCO₃ indicates:',o:['No imbalance','Fully compensated','Partially compensated','Uncompensated'],c:1,t:'single',r:'Normal pH with both systems abnormal = fully compensated.'},
-{topic:'fluids',hot:false,q:'An older adult presents with poor skin turgor, dry mucous membranes, postural hypotension, and a urine specific gravity of 1.035. The nurse recognizes this as:',o:['Hyponatremia','Fluid volume excess','SIADH','Fluid volume deficit'],c:3,t:'single',r:'Concentrated urine (high specific gravity) + hypotension + dry membranes = fluid volume deficit.'},
-{topic:'fluids',hot:false,q:'Which assessment findings indicate fluid volume EXCESS? (Select all that apply)',o:['Weight gain','Dry, sticky mucous membranes','Bounding pulse','Jugular vein distention','Crackles in the lungs'],c:[0,2,3,4],t:'multi',r:'FVE = bounding pulse, JVD, crackles, edema, and weight gain. Dry sticky membranes point to deficit, not excess.'},
-{topic:'fluids',hot:true,q:'A patient receiving IV fluids develops a new cough, dyspnea, and crackles. The nurse should FIRST:',o:['Give the next scheduled dose of the ordered antibiotic','Slow or stop the infusion and raise the head of the bed','Lay the patient flat and apply a warm blanket','Increase the IV rate to push the fluid through faster'],c:1,t:'single',r:'These are signs of fluid overload/pulmonary edema — slow the infusion and sit the patient up to ease breathing.'},
-{topic:'fluids',hot:false,q:'Which patient is at highest risk for hypernatremia?',o:['Drinking large amounts of plain water','Diagnosed with SIADH last admission','Following a low-sodium cardiac diet','Watery diarrhea with no fluid intake'],c:3,t:'single',r:'Loss of water (diarrhea) without replacement concentrates sodium → hypernatremia.'},
-{topic:'fluids',hot:false,q:'A nurse reviews labs: Na 122 mEq/L. Which findings does the nurse expect? (Select all that apply)',o:['Extreme thirst with flushed skin','Muscle cramps','Headache','Seizures if severe','Confusion'],c:[1,2,3,4],t:'multi',r:'Hyponatremia causes neuro changes: confusion, cramps, headache, seizures. Flushed skin + extreme thirst is hypernatremia.'},
-{topic:'lytes',hot:true,q:'A patient with a serum potassium of 6.8 mEq/L shows peaked T waves on the monitor. After calcium gluconate, which is the next priority intervention?',o:['Hold all IV fluids','Encourage high-potassium foods','Give a potassium supplement','Administer IV insulin with dextrose'],c:3,t:'single',r:'After stabilizing the heart with calcium, insulin+dextrose drives potassium back into the cells.'},
-{topic:'lytes',hot:false,q:'Which signs are associated with HYPOcalcemia? (Select all that apply)',o:['Positive Trousseau sign','Positive Chvostek sign','Muscle twitching','Numbness/tingling around the mouth','Constipation and kidney stones'],c:[0,1,2,3],t:'multi',r:'Hypocalcemia = increased excitability: Trousseau, Chvostek, perioral tingling, twitching, tetany. Stones/constipation are HYPERcalcemia.'},
-{topic:'lytes',hot:false,q:'A patient with chronic alcohol use disorder is admitted. The nurse anticipates a deficiency of which electrolyte that can cause torsades de pointes?',o:['Phosphorus','Magnesium','Chloride','Sodium'],c:1,t:'single',r:'Hypomagnesemia is common in alcohol use and predisposes to torsades de pointes.'},
-{topic:'lytes',hot:true,q:'Which food choice is BEST for a patient who needs to increase potassium?',o:['Banana and spinach','Egg whites and toast','White rice and pasta','Cheese and yogurt'],c:0,t:'single',r:'Bananas and leafy greens are potassium-rich. Useful for patients on potassium-wasting diuretics.'},
-{topic:'fluids',hot:false,q:'A patient with cerebral edema is ordered a hypertonic solution. Which is hypertonic?',o:['Lactated Ringer\'s','0.9% Normal Saline','0.45% Normal Saline','3% Saline'],c:3,t:'single',r:'3% saline is hypertonic — it pulls fluid out of swollen cells, useful for cerebral edema. Monitor closely.'},
-{topic:'fluids',hot:false,q:'A hypotonic solution like 0.45% NS will cause fluid to:',o:['Stay in the vessels','Have no effect','Move INTO the cells','Pull OUT of the cells'],c:2,t:'single',r:'Hypotonic fluids shift water into cells (cells swell) — think rehydrating a dehydrated cell.'},
-{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 25. Interpret:',o:['Metabolic alkalosis, fully compensated','Metabolic acidosis, partly compensated','Respiratory alkalosis, uncompensated','Respiratory acidosis, uncompensated'],c:3,t:'single',r:'pH low + CO₂ high (opposite directions = respiratory) + HCO₃ normal = uncompensated respiratory acidosis.'},
-{topic:'abg',hot:false,q:'ABG: pH 7.49, PaCO₂ 40, HCO₃ 30. Interpret:',o:['Respiratory alkalosis, fully compensated','Respiratory acidosis, uncompensated','Metabolic acidosis, partly compensated','Metabolic alkalosis, uncompensated'],c:3,t:'single',r:'pH high + HCO₃ high (same direction = metabolic) + CO₂ normal = uncompensated metabolic alkalosis. Think vomiting/NG suction.'},
-{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 58, HCO₃ 32. Interpret:',o:['Uncompensated respiratory acidosis','Metabolic alkalosis','Fully compensated respiratory acidosis','Respiratory alkalosis'],c:2,t:'single',r:'pH normal but on the acidic side, with BOTH CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis (kidneys retained bicarb to fix it).'},
-{topic:'abg',hot:false,q:'A patient with a severe asthma attack has been working hard to breathe for hours. ABG shows a rising PaCO₂ toward normal after being low. This change most likely indicates:',o:['The patient is improving','Metabolic compensation','Respiratory alkalosis worsening','Impending respiratory failure/fatigue'],c:3,t:'single',r:'A "normalizing" or rising CO₂ in a tiring asthmatic is an ominous sign of fatigue and impending respiratory failure — not improvement.'},
-{topic:'abg',hot:true,q:'A patient with end-stage kidney disease has an arterial blood gas drawn. Before reading the values, the nurse anticipates which type of imbalance?',o:['Metabolic, because the kidneys regulate bicarbonate','Respiratory, because the kidneys regulate carbon dioxide','Respiratory, because uremia depresses the respiratory drive','Mixed, because kidney disease affects both systems equally'],c:0,t:'single',r:'The organ names the type. <b>Kidneys regulate bicarbonate, the base, so a kidney problem is metabolic.</b> Lungs regulate CO2, the acid, so a lung problem is respiratory. In failure the kidney cannot excrete hydrogen ions or regenerate bicarbonate, so the expected gas is <b>metabolic acidosis</b>.'},
-{topic:'abg',hot:true,q:'A patient with chronic kidney disease has a pH of 7.28. Which additional laboratory value should the nurse check first?',o:['Potassium','Magnesium','Total calcium','Serum albumin'],c:0,t:'single',r:'Renal metabolic acidosis travels with <b>hyperkalemia</b> from two causes stacking: acidosis shifts potassium out of the cells, and the failing kidney cannot excrete it. Potassium is the value that can produce a fatal dysrhythmia, so it is checked first. The others matter but none of them kills in minutes.'},
-{topic:'abg',hot:false,q:'A patient with COPD also has advanced kidney disease. Compared with a COPD patient who has normal kidneys, what should the nurse expect on the arterial blood gas?',o:['Less compensation, because the kidneys cannot retain bicarbonate','Faster compensation, because two systems are now involved','Complete compensation within a few hours instead of days','No difference, since compensation is entirely a lung function'],c:0,t:'single',r:'The <b>kidneys are the compensator for a respiratory problem</b>, retaining bicarbonate over hours to days. If they are failing they cannot do that job, so the gas reads <b>uncompensated or only partially compensated</b> rather than the fully compensated picture a stable COPD patient usually shows.'},
-{topic:'abg',hot:false,q:'Which patient situation should lead the nurse to anticipate a respiratory rather than a metabolic acid-base disturbance?',o:['Oversedation from an opioid, which slows ventilation','Prolonged diarrhea with significant bicarbonate loss','Acute kidney injury with a rising creatinine level','Diabetic ketoacidosis with ketones in the urine'],c:0,t:'single',r:'Lungs own CO2, so anything that changes ventilation is <b>respiratory</b>. Oversedation causes hypoventilation, CO2 is retained, and the result is respiratory acidosis. Diarrhea loses bicarbonate, kidney injury retains acid, and DKA produces fixed acid \u2014 all three are <b>metabolic</b>.'},
+/* ===== From Casteel lecture notes (Ch 7 & 8) ===== */
+{topic:'aging',hot:false,q:'Which cellular change accumulates with aging and reflects declining cellular efficiency?',o:['Excess collagen synthesis','Lipofuscin pigment','Increased elastin production','Accelerated red blood cell formation'],c:1,t:'single',r:'<b>Lipofuscin</b> accumulates inside aging cells. Aging also brings <b>degradation of elastin and collagen</b> and hematopoietic changes that reduce RBC production, which is why <b>rates of anemia increase</b> with age.'},
+{topic:'aging',hot:true,q:'An older adult\'s laboratory work shows a low hemoglobin. Which age-related change best explains the increased incidence of anemia?',o:['Increased gastric motility causes iron loss','Elastin production accelerates in the marrow','Kidney mass increases, raising erythropoietin','Hematopoietic changes reduce red blood cell production'],c:3,t:'single',r:'Aging alters the <b>hematopoietic system</b>, lowering RBC production. Kidney mass <b>decreases</b> with age, which also reduces erythropoietin. Gastric motility <b>slows</b>, it does not increase.'},
+{topic:'aging',hot:false,q:'Which cardiovascular changes are expected with normal aging?',o:['Reduced calcium deposits and improved valve motion','Increased pacemaker cells and more elastic vessels','Stenosis of valves and fewer pacemaker cells','Decreased arterial resistance and thinner ventricle walls'],c:2,t:'single',r:'Aging brings <b>valve stenosis, fewer pacemaker cells, increased arterial resistance, calcium and fat deposits in arterial walls, and myocardial hypertrophy</b> that affects left ventricular function. All of it reduces heart efficiency and reserve.'},
+{topic:'aging',hot:false,q:'Which respiratory change is expected in an older adult?',o:['Improved aerobic capacity with age','Decreased residual volume with stronger muscles','Increased residual volume with a weaker chest wall','Increased lung mass and elasticity'],c:2,t:'single',r:'Aging causes <b>calcification and weakening of the chest wall muscles</b>, <b>decreased lung mass</b>, and <b>increased residual volume</b>. Aerobic capacity falls roughly 10% per decade.'},
+{topic:'aging',hot:true,q:'An older adult is admitted for a hip fracture. Which integumentary change most increases the risk of injury during care?',o:['Thinner dermis with reduced elastic fibers and less subcutaneous fat','Increased subcutaneous fat improving padding','Accelerated epidermal proliferation and faster healing','Thicker epidermis with increased collagen elasticity'],c:0,t:'single',r:'Aging skin has <b>decreased epidermal proliferation, a thinner dermis, reduced elastic fibers, stiffer collagen, and less subcutaneous fat</b>. That means impaired <b>temperature regulation</b> and greater susceptibility to <b>burns, injury, and infection</b>.'},
+{topic:'aging',hot:false,q:'Which teaching addresses the gastrointestinal changes of aging?',o:['Avoiding dental visits unless pain occurs','High-fiber diet, adequate fluids, and regular dental care','Lying flat after meals to aid digestion','Low-fiber diet with restricted fluids'],c:1,t:'single',r:'<b>Gastric motility slows</b>, reducing nutrient absorption and raising the risk of <b>constipation and aspiration</b>. Health promotion is regular dental care, high fiber, and adequate fluid intake.'},
+{topic:'aging',hot:true,q:'An 80-year-old asks the nurse about sexual activity. What is the most accurate response?',o:['Sexual activity remains important; decline usually relates to partner loss or health issues','Sexual concerns are not appropriate to discuss at this age','Sexual activity naturally ends in the eighth decade','Physical changes make sexual activity unsafe for older adults'],c:0,t:'single',r:'<b>Sexual activity remains important in older adulthood.</b> Decline is generally tied to <b>loss of a partner or health problems</b>, not to age itself. Female changes include thinning of the vaginal wall, decreased secretions, and uterine atrophy; male changes include less firm testes and decreased testosterone.'},
+{topic:'aging',hot:false,q:'Which nervous system change most directly increases fall risk in older adults?',o:['Thicker myelin improving conduction speed','Increased number of nerve cells in the cerebellum','Slower reaction times from fewer nerve cells and less neurotransmitter synthesis','Increased neurotransmitter synthesis speeding reflexes'],c:2,t:'single',r:'Aging affects the nervous system\'s <b>structure, chemistry, and function</b>. Fewer nerve cells and reduced neurotransmitter synthesis produce <b>slower reaction times and increased fall risk</b>.'},
+{topic:'aging',hot:false,q:'Which nutrient does the nurse emphasize to support mental function in an older adult?',o:['Vitamin D only','Vitamin K','Sodium','Vitamin B12'],c:3,t:'single',r:'<b>Vitamin B12</b> intake supports mental function, and deficiency can mimic dementia. Proper nutrition generally protects cognition, and mental function may also be <b>threatened by stress</b>.'},
+{topic:'aging',hot:false,q:'Which intervention supports well-being in an older adult with sensory losses?',o:['Limit environmental stimulation to prevent overload','Provide sensory stimulation through colors, textures, tastes, and sounds','Reduce lighting to decrease glare and confusion','Discourage hearing aid use to promote adaptation'],c:1,t:'single',r:'Sensory losses affect <b>quality of life</b>. Assistive devices compensate for loss and improve functional ability, and <b>sensory stimulation</b> — colors, textures, tastes, sounds — enhances well-being. It is an intervention, not decoration.'},
+{topic:'aging',hot:false,q:'Which findings represent normal age-related changes rather than problems requiring workup? Select all that apply.',o:['Slower reaction time','Sudden onset of confusion over two days','Decreased bone density','Unintentional 12-pound weight loss in three months','Increased residual lung volume','Thinning of the vaginal wall'],c:[0,2,4,5],t:'multi',r:'Normal aging: increased residual volume, decreased bone density and muscle mass, reproductive tissue changes, and slower reaction times. <b>Sudden confusion and unintentional weight loss are never normal aging</b> — both require assessment and reporting.'},
+{topic:'chronic',hot:true,q:'Which statement best defines a chronic illness?',o:['A condition lasting 3 months or more with no cure, requiring ongoing management','Any condition that cannot be treated surgically','A condition lasting under 6 weeks that resolves with treatment','Any condition requiring daily medication'],c:0,t:'single',r:'Chronic means <b>3 months or more, no cure, management only</b>. It affects well-being and function over years, with an <b>episodic, continuous, or progressive</b> impact.'},
+{topic:'chronic',hot:false,q:'Which symptoms are commonly shared across chronic conditions?',o:['Pain, fatigue, and sleep disturbances','Acute chest pain and diaphoresis','Fever, chills, and rigors','Sudden weight gain and hives'],c:0,t:'single',r:'<b>Pain, fatigue, and sleep disturbances</b> cut across chronic conditions regardless of the underlying diagnosis, which is why symptom management is part of every chronic care plan.'},
+{topic:'chronic',hot:true,q:'Which phrasing reflects appropriate person-first language?',o:['A wheelchair-bound person','The handicapped patient','A disabled person','A person with a disability'],c:3,t:'single',r:'<b>Person-first language</b> names the person before the condition. The disability is something they <b>have</b>, not what they <b>are</b>. This is a stated expectation, not a stylistic preference.'},
+{topic:'chronic',hot:true,q:'A patient who uses a wheelchair is admitted for pneumonia. What should the nurse\'s assessment include?',o:['A limited exam that omits the pelvic examination','A comprehensive assessment including a complete physical examination','An assessment focused exclusively on the disability','Only the respiratory system, since that is the admitting problem'],c:1,t:'single',r:'<b>The disability should not be the exclusive focus.</b> Patients with disabilities need the same comprehensive care as anyone else, including a complete physical examination with a pelvic exam where indicated. <b>Health promotion and disease prevention are neglected in this population.</b>'},
+{topic:'chronic',hot:false,q:'Which are structural barriers to health care for people with disabilities?',o:['Stairs, lack of ramps, narrow doorways, inaccessible restrooms','Limited appointment availability','Insurance copayments and deductibles','Provider attitudes and assumptions'],c:0,t:'single',r:'<b>Structural barriers</b> are physical features of the environment: stairs, no ramps, narrow doorways, inaccessible restroom facilities, and exam tables that do not lower. Attitudinal and financial barriers are real too, but they are separate categories.'},
+{topic:'chronic',hot:true,q:'Which risk factors for chronic disease are modifiable?',o:['Ethnicity and genetic predisposition','Age, sex, and family history','Age at menarche and blood type','Tobacco use, high sodium intake, and physical inactivity'],c:3,t:'single',r:'<b>Modifiable:</b> tobacco use, second-hand smoke exposure, diets low in fruits and vegetables, diets high in sodium, lack of physical activity, and excessive alcohol use. Age, sex, family history, and ethnicity are <b>non-modifiable</b>.'},
+{topic:'chronic',hot:false,q:'A male veteran age 68 is admitted. Which chronic conditions should the nurse anticipate screening for?',o:['Multiple sclerosis and lupus','Coronary artery disease and cancer','Type 1 diabetes and cystic fibrosis','Sickle cell disease and hemophilia'],c:1,t:'single',r:'Veterans have a <b>higher prevalence of multiple chronic conditions</b>. Male veterans commonly have hypertension, arthritis, and COPD; those <b>65 and older</b> add <b>coronary artery disease and cancer</b>. Female veterans commonly have arthritis, hypertension, and asthma.'},
+{topic:'chronic',hot:false,q:'Approximately how many Americans live with multiple chronic conditions?',o:['Fewer than five percent','About three quarters','About one tenth','About one third'],c:3,t:'single',r:'<b>One third of Americans have multiple chronic conditions.</b> MCCs carry the risk of <b>conflicting medical advice</b> from different specialists and <b>preventable hospitalizations</b>.'},
+{topic:'chronic',hot:true,q:'A patient is newly diagnosed with a chronic illness. What should the nurse do before beginning teaching?',o:['Assess what the diagnosis means to this patient','Provide the standard printed education packet','Schedule follow-up appointments with each specialist','Teach the full medication regimen immediately'],c:0,t:'single',r:'<b>Assess the impact of the new diagnosis first</b>, then <b>tailor the education to the patient\'s needs</b>. A standard packet ignores literacy, language, sensory ability, and readiness, and teaching before assessing may address the wrong thing entirely.'},
+{topic:'chronic',hot:false,q:'Which health promotion measure is a priority for an older adult with chronic illness?',o:['Influenza and pneumococcal vaccination','Avoiding routine dental care','Limiting fluid intake to reduce urination','Restricting all physical activity'],c:0,t:'single',r:'Older adults have an <b>increased risk of death from influenza and pneumonia</b>, and <b>effective vaccines exist</b>. Vaccination is a frontline health promotion intervention, not an optional extra.'},
+{topic:'chronic',hot:false,q:'Which are demands that chronic illness places on patients and families? Select all that apply.',o:['Daily management of the condition','A one-time treatment plan that requires no adjustment','Time, social, and financial resources','Collaboration with health care professionals','Monitoring health and making lifestyle decisions','Care that is entirely directed by the provider'],c:[0,2,3,4],t:'multi',r:'Chronic illness demands <b>daily management</b>, real <b>time, social, and financial resources</b>, ongoing <b>collaboration</b>, adherence to treatment guidelines, and continuous <b>monitoring and lifestyle decisions</b> — while managing physical, psychological, and social well-being. The patient drives it, not the provider.'},
+{topic:'aging',hot:true,q:'Which three findings make up the geriatric triad?',o:['Constipation, dry skin, and hearing loss','Weight loss, anemia, and fatigue','Hypertension, arthritis, and COPD','Changes in cognitive status, falls, and incontinence'],c:3,t:'single',r:'The <b>geriatric triad</b> is <b>cognitive status change, falls, and urinary incontinence</b>. They cluster and feed each other — confusion causes falls, incontinence causes rushing to the bathroom, and so on. If a stem names one, look for the other two.'},
+{topic:'aging',hot:true,q:'Why do geriatric syndromes require a multidisciplinary approach?',o:['They resolve without intervention in most cases','They are caused by a single treatable organ failure','They only occur in patients over age 90','They have multiple contributing causes across body systems'],c:3,t:'single',r:'Geriatric syndromes do not map to one organ system. Because the causes are <b>multifactorial</b>, they need a <b>multidisciplinary and comprehensive assessment</b> — nursing, PT, OT, dietitian, pharmacy, social work. Sending the patient to one specialist and stopping there is incomplete.'},
+{topic:'aging',hot:true,q:'An 84-year-old is admitted for pneumonia. Which nursing focus best addresses geriatric syndrome risk?',o:['Prevention measures throughout the hospitalization','Deferring assessment until the pneumonia resolves','Limiting mobility to prevent any falls','Treating each syndrome only after it appears'],c:0,t:'single',r:'The emphasis is <b>prevention during hospitalization</b>. Hospitalization itself is the risk factor — unfamiliar environment, new medications, immobility, disrupted sleep. Immobilizing the patient to prevent falls causes deconditioning, pressure injury, and delirium.'},
+{topic:'aging',hot:false,q:'Which of the following is an example of a geriatric syndrome?',o:['Urinary incontinence','A laceration requiring sutures','A fractured femur from a motor vehicle crash','Acute appendicitis'],c:0,t:'single',r:'Geriatric syndromes include <b>skin impairment, poor nutrition, falls, urinary incontinence, cognitive impairment, and sleep disturbances</b>. They are multifactorial conditions common in older adults, not single-cause acute injuries or illnesses.'},
+{topic:'aging',hot:true,q:'A daughter says her 79-year-old mother\'s new incontinence is \'just part of getting older.\' What is the nurse\'s best response?',o:['Nothing can be done other than scheduled toileting','Incontinence is expected once mobility declines','Incontinence is not a normal age change and should be evaluated','She is correct, and it will likely continue to worsen'],c:2,t:'single',r:'<b>Incontinence is never normal aging.</b> It is a geriatric syndrome with multiple contributing causes — medications, mobility, infection, cognition, environment — and it is <b>preventable or treatable</b>. Accepting it as inevitable is the trap.'},
+{topic:'aging',hot:false,q:'Which conditions are considered geriatric syndromes? Select all that apply.',o:['Sleep disturbances','A surgical wound infection','Poor nutrition','Cognitive impairment','Falls','Skin impairment'],c:[0,2,3,4,5],t:'multi',r:'The named geriatric syndromes are <b>skin impairment, poor nutrition, falls, urinary incontinence, cognitive impairment, and sleep disturbances</b>. A surgical wound infection has a single identifiable cause and is not a syndrome in this sense.'},
+{topic:'aging',hot:true,q:'Which interventions help prevent geriatric syndromes during hospitalization? Select all that apply.',o:['Keep the bed low with the call light within reach','Use a sedative-hypnotic nightly to ensure rest','Reposition on a schedule and assess skin','Review the medication list for Beers-criteria drugs','Insert a urinary catheter to manage incontinence','Cluster care to protect sleep at night'],c:[0,2,3,5],t:'multi',r:'Prevention targets the <b>modifiable hospital risks</b>: fall precautions, protected sleep, medication review, and skin care. <b>Sedative-hypnotics worsen confusion and falls</b>, and an unnecessary <b>catheter</b> causes infection and immobility — both create the syndromes you are trying to prevent.'},
 ];
 
 </script>
@@ -763,17 +696,17 @@ document.getElementById('sec-home').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🏠</span> Unit 1 Study Lab</h2>
 <p class="intro-line">Aging • Chronic Illness • Cancer • Perioperative • End-of-Life — rebuilt for the retake in the same layout as your Unit 3 lab: mechanism-first, Casteel's cause → manifests → treatment, and his trick-question style.</p>
 
-<div class="card" style="border-color:var(--red);background:var(--red-soft)">
-  <h3>✅ Matched to your Cohort 0527E calendar</h3>
-  <p><b>Unit 1 exam: Wednesday 9/9.</b> Per the calendar this exam covers <b>Ch 7, 8, 10, 12, 13, 14, 15, 16</b> — and Ch 10 (Fluid, Electrolytes, Acid-Base, IV Therapy) has now been moved into this guide from Unit 2, where it did not belong.</p>
+<div class="card" style="border-color:var(--teal)">
+  <h3>✅ Unit scope is unchanged</h3>
+  <p><b>Unit 1 exam: Wednesday 9/9.</b> The units did not shift this term — Casteel is <b>stacking chapters</b> around the Labor Day holiday, so more get taught per night. Unit 1 covers what it always has.</p>
   <ul class="clean">
-    <li><b>Ch 7</b> Disability and Chronic Illness → Chronic Illness section</li>
-    <li><b>Ch 8</b> Management of the Older Adult Patient → Aging section</li>
-    <li><b>Ch 10</b> Fluid and Electrolytes → <b>Fluids & IV Therapy, Electrolytes, Acid-Base & ABGs</b> (new)</li>
+    <li><b>Ch 7</b> Disability and Chronic Illness → Chronic Illness</li>
+    <li><b>Ch 8</b> Management of the Older Adult Patient → Aging</li>
     <li><b>Ch 12</b> Oncologic Disorders → Cancer + Oncologic Emergencies</li>
-    <li><b>Ch 13</b> Palliative and End-of-Life Care → End-of-Life section</li>
+    <li><b>Ch 13</b> Palliative and End-of-Life Care → End-of-Life</li>
     <li><b>Ch 14/15/16</b> Pre / Intra / Postoperative → the three perioperative sections</li>
   </ul>
+  <p style="margin-bottom:0;font-size:.9rem;color:var(--muted)"><b>Ch 10 (Fluid and Electrolytes)</b> is taught 9/2 because of the stacking but is graded on <b>Unit 2</b>. It lives in the Unit 2 guide — deliberately not here.</p>
 </div>
 
 <div class="card" style="border-color:var(--red)">
@@ -786,17 +719,30 @@ document.getElementById('sec-home').innerHTML=`
   </ul>
 </div>
 
+<div class="card" style="border-color:var(--amber);background:var(--amber-soft)">
+  <h3>⭐ Where the exam weight actually is</h3>
+  <p>Casteel said the Unit 1 exam is <b>mostly Chronic Illness, Aging, and Cancer / Palliative Care</b>. Perioperative is on it, but it is the smaller slice.</p>
+  <table class="lab">
+    <tr><th>Priority</th><th>Sections</th><th>Questions in the bank</th></tr>
+    <tr><td><b>1 — Heaviest</b></td><td>♾️ Chronic Illness · 🧓 Aging</td><td>56</td></tr>
+    <tr><td><b>2 — Heavy</b></td><td>🎗️ Cancer · 🚨 Oncologic Emergencies · ⚫ End-of-Life</td><td>41</td></tr>
+    <tr><td><b>3 — Lighter</b></td><td>🔵 Preop · 🟢 Intraop · 🟣 Postop · 💊 Meds</td><td>69</td></tr>
+  </table>
+  <div class="hy"><span class="tag">How to use the picker</span>On the 📝 Exam tab, select <b>Chronic + Aging + Cancer</b> as your three topics and run 50. That is the closest thing to a practice version of his actual exam. Save perioperative for a separate pass.</div>
+  <div class="trap"><span class="tag">Do not skip perioperative</span>"Smaller slice" is not "not on it." Those sections still carry MH, evisceration, and the PACU priority questions, which are the kind he writes traps around. Just study them second.</div>
+</div>
+
 <div class="card">
   <h3>🎯 How to run this</h3>
   <ul class="clean">
     <li><b>🧠 Why Engine</b> — start here. Casteel tests the <i>because</i>, not the fact. Walk each chain out loud.</li>
     <li><b>✍️ Class Notes</b> — type keywords during lecture. Star only what he flags. Delete the rest weekly.</li>
-    <li><b>Content sections</b> — Aging, Chronic, <b>Fluids & IV</b>, <b>Electrolytes</b>, <b>Acid-Base</b>, Cancer, Perioperative, End-of-Life. Each ends with a <b>"How he tricks you"</b> card and its own quiz.</li>
+    <li><b>Content sections</b> — Aging, Chronic, Cancer, Oncologic Emergencies, Pre/Intra/Postoperative, End-of-Life. Each ends with a <b>"How he tricks you"</b> card and its own quiz.</li>
     <li><b>🩺 Priority Decoder</b> — the finding-to-meaning table his priority stems are built on.</li>
     <li><b>🎯 Trick Questions</b> — the specific traps he sets, with the reasoning that defuses them.</li>
     <li><b>🗄️ Wrong Answer Vault</b> — anything you miss anywhere lands here automatically. Get it right once and it clears.</li>
     <li><b>🎮 Flash / 🔗 Match / ⚡ Drill</b> — three different question styles, three separate banks. No recycling.</li>
-    <li><b>📝 Exam</b> — 233 questions with a topic and length picker. Study Mode for feedback, Test Mode scrambled like the real thing.</li>
+    <li><b>📝 Exam</b> — 144 questions with a topic and length picker. Study Mode for feedback, Test Mode scrambled like the real thing.</li>
   </ul>
 </div>
 
@@ -804,10 +750,8 @@ document.getElementById('sec-home').innerHTML=`
   <h3>📌 What to nail for this exam</h3>
   <ul class="clean">
     <li><b>Aging = loss of physiologic reserve.</b> Every geriatric answer traces back to this one line.</li>
-    <li><b>Water follows solute.</b> Isotonic stays, hypotonic goes into cells, hypertonic pulls out.</li>
-    <li><b>Potassium 3.5-5.0</b> and the protect → shift → remove sequence for hyperkalemia.</li>
-    <li><b>Low calcium makes things fire. High calcium makes things slow.</b></li>
-    <li><b>ROME.</b> Respiratory Opposite, Metabolic Equal. pH names it, the matching value locates it.</li>
+    <li><b>Geriatric triad:</b> cognitive change, falls, incontinence. None of the three is normal aging.</li>
+    <li><b>Chronic = 3 months or more, no cure, management only.</b> And it is <b>a person with a disability</b>, never a disabled person.</li>
     <li><b>Chronic = incurable, managed.</b> Any option promising cure is wrong by definition.</li>
     <li><b>Chemo/radiation kill rapidly dividing cells.</b> Marrow, GI lining, hair follicles. Derive every side effect from that.</li>
     <li><b>Neutropenia hides infection.</b> Absence of redness and pus is expected, not reassuring.</li>
@@ -890,68 +834,15 @@ document.getElementById('sec-why').innerHTML=`
 </div>
 
 
-<div class="card">
-  <h3>💧 Why tonicity decides where the water goes</h3>
-  <ol class="chainlist">
-    <li><b>1.</b> Water always moves toward the <b>higher solute concentration</b>. That is the only rule.</li>
-    <li><b>2.</b> <b>Isotonic</b> fluid matches serum, so no gradient forms and it <b>stays in the vessel</b> → expands volume.</li>
-    <li><b>3.</b> <b>Hypotonic</b> fluid is more dilute, so water moves <b>into cells</b> → cells swell → danger is <b>cerebral edema</b>.</li>
-    <li><b>4.</b> <b>Hypertonic</b> fluid is more concentrated, so water is pulled <b>out of cells</b> → danger is <b>overload and phlebitis</b>.</li>
-    <li><b>5.</b> So the fluid you pick is decided by <b>where the patient needs water to go</b>, not by the diagnosis label.</li>
-  </ol>
-  <div class="trap"><span class="tag">Where he turns the screw</span>He gives you a hypotensive dehydrated patient and offers 0.45% saline, which sounds like "replacing water." It pulls water into cells and drops the BP further. Isotonic is the answer any time the problem is <b>intravascular volume</b>.</div>
-</div>
 
-<div class="card">
-  <h3>🫧 Why a third-spacing patient is swollen and dry at the same time</h3>
-  <ol class="chainlist">
-    <li><b>1.</b> The liver makes <b>albumin</b>, which generates <b>plasma oncotic pressure</b> — the force holding water inside the vessel.</li>
-    <li><b>2.</b> Liver disease, malnutrition, burns, or sepsis drops albumin or damages the capillary wall.</li>
-    <li><b>3.</b> Oncotic pressure falls, hydrostatic pressure wins, and water leaves the vessel for the interstitium.</li>
-    <li><b>4.</b> The visible result is <b>edema and ascites</b>. The invisible result is <b>falling intravascular volume</b>.</li>
-    <li><b>5.</b> So the patient is <b>edematous outside and hypovolemic inside</b>, and diuresing the swelling worsens the shock.</li>
-  </ol>
-  <div class="trap"><span class="tag">Where he turns the screw</span>A swollen patient with a BP of 90/56 and a heart rate of 118. Every instinct says diurese. Look at the perfusion numbers, not the ankles.</div>
-</div>
 
-<div class="card">
-  <h3>⚡ Why potassium is the electrolyte that kills</h3>
-  <ol class="chainlist">
-    <li><b>1.</b> Potassium sets the <b>resting membrane potential</b> of every excitable cell, including cardiac muscle.</li>
-    <li><b>2.</b> The normal range is narrow — <b>3.5 to 5.0</b> — because small shifts change how easily the heart depolarizes.</li>
-    <li><b>3.</b> <b>High</b> K makes the membrane easier to depolarize but harder to reset → <b>peaked T waves → wide QRS → asystole</b>.</li>
-    <li><b>4.</b> <b>Low</b> K makes it harder to depolarize → <b>flat T waves, U wave</b>, muscle weakness, ileus.</li>
-    <li><b>5.</b> Because the effect is on the myocardium, treatment order is <b>protect (calcium gluconate) → shift (insulin/dextrose, albuterol) → remove (kayexalate, dialysis)</b>.</li>
-    <li><b>6.</b> IV push is fatal <b>because</b> a sudden bolus reaches the heart before it can distribute.</li>
-  </ol>
-  <div class="hy"><span class="tag">Connect it</span>You cannot fix hypokalemia until magnesium is replaced, because magnesium is required for the cell to hold onto potassium. That is why he pairs the two.</div>
-</div>
 
-<div class="card">
-  <h3>🦴 Why hypocalcemia is an airway problem</h3>
-  <ol class="chainlist">
-    <li><b>1.</b> Calcium <b>stabilizes the nerve membrane</b>, raising the threshold a nerve needs to fire.</li>
-    <li><b>2.</b> Low calcium lowers that threshold, so nerves fire on their own.</li>
-    <li><b>3.</b> Spontaneous firing produces <b>tingling, twitching, and tetany</b> — hence Chvostek and Trousseau.</li>
-    <li><b>4.</b> If the muscle that spasms is the <b>larynx</b>, the airway closes.</li>
-    <li><b>5.</b> So the priority in symptomatic hypocalcemia is <b>airway and seizure precautions</b>, not the constipation-and-bones list.</li>
-  </ol>
-  <div class="trap"><span class="tag">Where he turns the screw</span>He hands you the hypercalcemia symptom list as distractors. <b>Low calcium = things fire. High calcium = things slow down.</b></div>
-</div>
 
-<div class="card">
-  <h3>🫁 Why ROME works</h3>
-  <ol class="chainlist">
-    <li><b>1.</b> <b>CO₂ is an acid</b> controlled by the <b>lungs</b>. <b>Bicarbonate is a base</b> controlled by the <b>kidneys</b>.</li>
-    <li><b>2.</b> If the lungs cause the problem, CO₂ rises and pH falls — <b>opposite</b> directions. Respiratory Opposite.</li>
-    <li><b>3.</b> If the kidneys cause it, bicarb falls and pH falls — the <b>same</b> direction. Metabolic Equal.</li>
-    <li><b>4.</b> The system that is NOT the cause tries to correct it, which is <b>compensation</b>.</li>
-    <li><b>5.</b> Lungs compensate in <b>minutes</b> by changing the rate; kidneys in <b>hours to days</b> by retaining or dumping bicarb.</li>
-    <li><b>6.</b> So the pH names it, the matching value locates it, and the third value tells you how long it has been going on.</li>
-  </ol>
-  <div class="hy"><span class="tag">Compensation shortcut</span>pH abnormal + one system abnormal = <b>uncompensated</b>. pH abnormal + both abnormal = <b>partially</b>. pH <b>normal</b> + both abnormal = <b>fully compensated</b>, which almost always means chronic.</div>
-  <div class="mnem" style="border-color:var(--gold)"><div class="tag">⭐ He asks this out loud</div><div class="big">Kidney problem → automatically METABOLIC. Lung problem → automatically RESPIRATORY.</div><div class="exp">Kidneys own bicarbonate, lungs own CO₂. And a failing kidney cannot compensate for a lung problem, so expect an uncompensated gas when both are involved.</div></div>
-</div>
+
+
+
+
+
 
 <div class="card">
   <h3>🎗️ Why chemo and radiation cause the exact symptoms they cause</h3>
@@ -1086,9 +977,10 @@ renderFilteredQuiz('whyQuiz', secQ(EXAM.filter(q=>q.topic==='chronic')), 'Why En
 <script>
 /* ===== CLASS NOTES ===== */
 let notesList=[], noteTopic='other', noteFilter='keep';
-const NOTE_TOPICS=['aging','chronic','fluids','lytes','abg','cancer','pre','intra','post','eol','meds','other'];
-const NOTE_LABEL={aging:'Aging',chronic:'Chronic',fluids:'Fluids/IV',lytes:'Electrolytes',abg:'Acid-Base',cancer:'Cancer',pre:'Preop',intra:'Intraop',post:'Postop',eol:'End-of-life',meds:'Meds',other:'Other'};
+const NOTE_TOPICS=['aging','chronic','cancer','pre','intra','post','eol','meds','other'];
+const NOTE_LABEL={aging:'Aging',chronic:'Chronic',cancer:'Cancer',pre:'Preop',intra:'Intraop',post:'Postop',eol:'End-of-life',meds:'Meds',other:'Other'};
 (function restoreNotes(){ try{ const r=localStorage.getItem('nur256u1_notes'); if(r) notesList=JSON.parse(r); }catch(e){} })();
+const NOTES_STORAGE_KEY='nur256u1_notes';
 function saveNotes(){ try{ localStorage.setItem('nur256u1_notes', JSON.stringify(notesList)); }catch(e){} }
 function escN(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 let noteDraft='', noteDraftStar=false;
@@ -1126,6 +1018,76 @@ function fallbackCopy(txt,cb){
   try{ document.execCommand('copy'); cb(); }catch(e){ toast('Copy failed'); }
   document.body.removeChild(ta);
 }
+/* ---- notes backup: export / import / copy-all ---- */
+function notesKey(){ return NOTES_STORAGE_KEY; }
+function exportNotes(){
+  if(!notesList.length){ toast('No notes to export'); return; }
+  const payload=JSON.stringify({v:1,key:notesKey(),saved:new Date().toISOString(),notes:notesList});
+  showNotesBox('\u{1F4E6} Backup code', payload,
+    'Copy this whole block and keep it somewhere safe \u2014 a note on your phone, an email to yourself, or paste it to Claude. Paste it into Import on any device to restore.');
+}
+function copyAllNotes(){
+  if(!notesList.length){ toast('No notes yet'); return; }
+  const txt=notesList.map(n=>(n.star?'\u2605 ':'\u25CB ')+'['+(NOTE_LABEL[n.topic]||n.topic)+'] '+n.t).join('\n');
+  showNotesBox('\u{1F4CB} All notes as text', txt,
+    'Readable format \u2014 good for pasting to Claude or into a document. \u2605 means starred.');
+}
+function showNotesBox(title, content, hint){
+  const host=document.getElementById('notesBox'); if(!host)return;
+  host.innerHTML=`<div class="card" style="border-color:var(--purple)">
+    <h3>${title}</h3>
+    <p style="font-size:.86rem;color:var(--muted);margin-top:0">${hint}</p>
+    <textarea id="notesOut" class="noteinput" rows="7" readonly>${content.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>
+    <div class="chiprow" style="margin-top:10px">
+      <button class="mini" onclick="copyBoxText()">Copy to clipboard</button>
+      <button class="mini" onclick="document.getElementById('notesBox').innerHTML=''">Close</button>
+    </div>
+  </div>`;
+  const ta=document.getElementById('notesOut'); if(ta){ ta.focus(); ta.select(); ta.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function copyBoxText(){
+  const ta=document.getElementById('notesOut'); if(!ta)return;
+  const done=()=>toast('Copied');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();try{document.execCommand('copy');done();}catch(e){toast('Select and copy manually');}}); }
+  else { ta.select(); try{document.execCommand('copy'); done();}catch(e){ toast('Select and copy manually'); } }
+}
+function openImport(){
+  const host=document.getElementById('notesBox'); if(!host)return;
+  host.innerHTML=`<div class="card" style="border-color:var(--teal)">
+    <h3>\u{1F4E5} Import notes</h3>
+    <p style="font-size:.86rem;color:var(--muted);margin-top:0">Paste a backup code below. Existing notes are <b>kept</b> \u2014 this merges rather than replacing, and skips anything already here.</p>
+    <textarea id="notesIn" class="noteinput" rows="6" placeholder="Paste your backup code here"></textarea>
+    <div class="chiprow" style="margin-top:10px">
+      <button class="mini on" onclick="doImport()">Import</button>
+      <button class="mini" onclick="document.getElementById('notesBox').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+  const ta=document.getElementById('notesIn'); if(ta){ ta.focus(); ta.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function doImport(){
+  const ta=document.getElementById('notesIn'); if(!ta)return;
+  const raw=(ta.value||'').trim();
+  if(!raw){ toast('Paste a backup code first'); return; }
+  let data;
+  try{ data=JSON.parse(raw); }catch(e){ toast('That does not look like a backup code'); return; }
+  const incoming = Array.isArray(data)?data:(data&&Array.isArray(data.notes)?data.notes:null);
+  if(!incoming){ toast('No notes found in that code'); return; }
+  const have=new Set(notesList.map(n=>n.id));
+  const seen=new Set(notesList.map(n=>(n.t||'').trim()));
+  let added=0, skipped=0;
+  incoming.forEach(n=>{
+    if(!n||typeof n.t!=='string'||!n.t.trim()) return;
+    if(have.has(n.id) || seen.has(n.t.trim())){ skipped++; return; }
+    notesList.push({ id: n.id || (Date.now()+''+Math.floor(Math.random()*999)),
+      t: n.t, topic: (NOTE_LABEL[n.topic]?n.topic:'other'), star: !!n.star, ts: n.ts || Date.now() });
+    have.add(n.id); seen.add(n.t.trim()); added++;
+  });
+  notesList.sort((a,b)=>(b.ts||0)-(a.ts||0));
+  saveNotes();
+  document.getElementById('notesBox').innerHTML='';
+  renderNotes();
+  toast(added+' note'+(added===1?'':'s')+' imported'+(skipped?', '+skipped+' already here':''));
+}
 function renderNotes(){
   const host=document.getElementById('sec-notes'); if(!host)return;
   const keep=notesList.filter(n=>n.star), inbox=notesList.filter(n=>!n.star);
@@ -1161,8 +1123,14 @@ function renderNotes(){
     </div>
     ${keep.length>25&&noteFilter==='keep'?`<div class="trap"><span class="tag">Getting heavy</span>You have ${keep.length} starred notes. Past about 25 you are collecting, not studying. Reread them and unstar anything you already know cold.</div>`:''}
     ${rows}
+    <div class="hy"><span class="tag">Keeping your notes safe</span>
+  Notes are stored by your <b>browser, for this website address</b>. Replacing the file at the same GitHub Pages URL <b>keeps them</b>. They will NOT follow you to a different browser, a different device, a private/incognito window, or a copy opened from your Downloads folder. Use <b>📦 Export backup</b> to move them anywhere — or to send them to Claude.</div>
+  <div id="notesBox"></div>
     <div class="chiprow" style="margin-top:12px">
-      <button class="mini" onclick="copyNotes()">Copy starred notes</button>
+      <button class="mini" onclick="copyNotes()">Copy starred</button>
+      <button class="mini" onclick="copyAllNotes()">Copy all as text</button>
+      <button class="mini" onclick="exportNotes()">\u{1F4E6} Export backup</button>
+      <button class="mini" onclick="openImport()">\u{1F4E5} Import</button>
       <button class="mini danger" onclick="clearInbox()">Clear inbox</button>
     </div>
   </div>`;
@@ -1181,18 +1149,42 @@ document.getElementById('sec-aging').innerHTML=`
 </div>
 
 <div class="card">
-  <h3>Normal age changes by system</h3>
+  <h3>Normal age changes by system — head to toe</h3>
   <table class="lab">
-    <tr><th>System</th><th>Normal change</th><th>Why it matters</th></tr>
-    <tr><td><b>Cardiovascular</b></td><td>↓ heart efficiency, stiffer vessels, ↑ BP</td><td>Low reserve; symptoms may be atypical (dyspnea, confusion)</td></tr>
-    <tr><td><b>Respiratory</b></td><td>↓ aerobic capacity ~10% per decade, weaker chest wall, ↑ residual volume</td><td>Less able to compensate; smoking cessation is key</td></tr>
-    <tr><td><b>Integumentary</b></td><td>Thinner dermis, ↓ elasticity, ↓ subcutaneous fat</td><td>↑ injury, infection, temperature dysregulation; turgor unreliable</td></tr>
-    <tr><td><b>Genitourinary</b></td><td>↓ kidney mass and GFR, ↑ incontinence and UTI</td><td>Drugs clear slower; UTI often shows as confusion</td></tr>
-    <tr><td><b>Gastrointestinal</b></td><td>↓ taste and smell, slower motility, dry mouth</td><td>Constipation, aspiration risk, poor nutrition</td></tr>
-    <tr><td><b>Musculoskeletal</b></td><td>↓ bone density and muscle mass</td><td>Fall and fracture risk; weight-bearing exercise helps</td></tr>
-    <tr><td><b>Nervous / Sensory</b></td><td>↓ nerve cells, slower reactions, ↓ vision and hearing</td><td>Falls; new confusion is NOT normal</td></tr>
+    <tr><th>System</th><th>Age-related change</th><th>Why it matters</th></tr>
+    <tr><td><b>Cellular / extracellular</b></td><td>Accumulation of <b>lipofuscin</b> pigment; degradation of <b>elastin and collagen</b>; hematopoietic changes reduce RBC production</td><td>Homeostasis and organ efficiency fall. <b>Increased rates of anemia</b></td></tr>
+    <tr><td><b>Cardiovascular</b></td><td><b>Stenosis of valves</b>, <b>fewer pacemaker cells</b>, ↑arterial resistance, calcium and fat deposits in arterial walls, <b>myocardial hypertrophy</b> affecting left ventricular function</td><td>Reduced heart efficiency and low reserve. Symptoms are often atypical — dyspnea or confusion instead of chest pain</td></tr>
+    <tr><td><b>Respiratory</b></td><td><b>Calcification and weakening of chest wall muscles</b>, ↓lung mass, <b>↑residual volume</b>, ↓aerobic capacity ~10% per decade</td><td>Less able to compensate under stress. Smoking cessation is key</td></tr>
+    <tr><td><b>Nervous</b></td><td>Aging affects <b>structure, chemistry, and function</b>. ↓nerve cells and ↓neurotransmitter synthesis</td><td><b>Slower reaction times → fall risk.</b> Mental function may be threatened by stress. <b>Sudden confusion signals an underlying problem</b></td></tr>
+    <tr><td><b>Sensory</b></td><td>↓visual acuity and hearing ability</td><td>Sensory losses affect <b>quality of life</b>. Assistive devices compensate and improve functional ability</td></tr>
+    <tr><td><b>Musculoskeletal</b></td><td>↓bone density and ↓muscle mass</td><td><b>Osteoarthritis and osteoporosis</b> are common. Weight-bearing exercise and calcium recommended</td></tr>
+    <tr><td><b>Gastrointestinal</b></td><td><b>Gastric motility slows</b>, affecting nutrient absorption</td><td>↑<b>constipation and aspiration</b> risk. Promote dental care, high fiber, adequate fluids</td></tr>
+    <tr><td><b>Integumentary</b></td><td>↓epidermal proliferation, <b>thinner dermis</b>, reduced elastic fibers, <b>stiffer collagen</b>, ↓subcutaneous fat</td><td>Impaired <b>temperature regulation</b>. ↑susceptibility to <b>burns, injury, and infection</b>. Turgor unreliable</td></tr>
+    <tr><td><b>Genitourinary</b></td><td>↓kidney mass and GFR, ↑incontinence and UTI</td><td>Drugs clear slower; UTI often presents as confusion</td></tr>
+    <tr><td><b>Reproductive</b></td><td><b>Female:</b> thinning vaginal wall, ↓secretions, uterine atrophy. <b>Male:</b> less firm testes, ↓testosterone production</td><td><b>Sexual activity remains important.</b> Decline is usually tied to loss of a partner or health issues, not age itself</td></tr>
   </table>
+  <div class="hy"><span class="tag">Sensory stimulation</span>Beyond assistive devices, <b>sensory stimulation enhances well-being</b> — colors, textures, tastes, and sounds. This is an intervention, not a nicety.</div>
+  <div class="hy"><span class="tag">Nutrition and the nervous system</span>Proper nutrition and <b>vitamin B12</b> intake matter for mental function. A B12 deficiency can look like dementia.</div>
   <div class="trap"><span class="tag">Don't get tricked</span><b>Sudden confusion, severe memory loss, and big mood swings are NOT normal aging.</b> Suspect delirium, infection, drug toxicity, or electrolyte change. Assess and report.</div>
+</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🧓 Geriatric Syndromes</h3>
+  <p class="why-chain">Conditions that do not fit one organ system, have <b>multiple contributing causes</b>, and show up disproportionately in older adults. Because the causes are multifactorial, they require a <b>multidisciplinary and comprehensive assessment</b> — not a single specialist and not a single test.</p>
+  <table class="lab">
+    <tr><th>Syndrome</th><th>What to watch for</th><th>Prevention during hospitalization</th></tr>
+    <tr><td><b>Skin impairment</b></td><td>Pressure injury over bony prominences; thin dermis tears easily</td><td>Reposition on a schedule, Braden scale, moisture control, offload pressure</td></tr>
+    <tr><td><b>Poor nutrition</b></td><td>Unintentional weight loss, low albumin/prealbumin, poor intake</td><td>Track intake, dental care, high-protein options, assist at meals</td></tr>
+    <tr><td><b>Falls</b></td><td>Slower reaction time, weakness, polypharmacy, unfamiliar environment</td><td>Fall risk screen, bed low and locked, call light in reach, non-skid footwear, review Beers-criteria drugs</td></tr>
+    <tr><td><b>Urinary incontinence</b></td><td>New or worsening; often multifactorial, not "just aging"</td><td>Toileting schedule, clear path to the bathroom, avoid unnecessary catheters</td></tr>
+    <tr><td><b>Cognitive impairment</b></td><td>Any acute change — delirium, dementia, or depression</td><td>Orient, familiar objects, sleep-wake routine, minimize anticholinergics and sedatives</td></tr>
+    <tr><td><b>Sleep disturbances</b></td><td>Fragmented sleep worsens confusion and fall risk</td><td>Cluster care, reduce night noise and lights, avoid sedative-hypnotics</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ The geriatric triad</div><div class="big">Cognitive status change · Falls · Incontinence</div><div class="exp">These three cluster together, feed each other, and are the ones he names. If a stem gives you one, look for the other two.</div></div>
+  <div class="hy"><span class="tag">The exam angle</span>The emphasis is <b>prevention during hospitalization</b>. Hospitalization itself is the risk — unfamiliar environment, new drugs, immobility, and disrupted sleep. Answers that <b>prevent</b> beat answers that treat after the fact.</div>
+  <div class="trap"><span class="tag">Where he turns the screw</span>Any option calling a geriatric syndrome an <b>expected part of aging</b> — "incontinence is normal at her age," "confusion is expected," "some falling is inevitable." None of these are normal aging. Each is multifactorial and each is <b>preventable or treatable</b>.</div>
+  <div class="trap"><span class="tag">Second trap</span>A single-discipline answer. These syndromes need <b>multidisciplinary</b> assessment — PT, OT, dietitian, pharmacy, social work. An option that sends the patient to one specialist and stops there is incomplete.</div>
 </div>
 
 <div class="card">
@@ -1253,18 +1245,62 @@ renderFilteredQuiz('agingQuiz', secQ(EXAM.filter(q=>q.topic==='aging')), 'Aging 
 
 document.getElementById('sec-chronic').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">♾️</span> Chronic Illness & Disability</h2>
-<p class="intro-line">Chronic means permanent. The goal is control, and control is a daily patient behavior.</p>
+<p class="intro-line">Chapter 7. Chronic means permanent. The goal is control, and control is a daily patient behavior.</p>
 
 <div class="card" style="border-color:var(--teal)">
-  <h3>Acute vs. Chronic</h3>
+  <h3>What makes an illness chronic</h3>
+  <div class="mnem"><div class="tag">His definition</div><div class="big">3 months or more · no cure · management only</div></div>
+  <ul class="clean">
+    <li>Affects <b>well-being and function over many years</b>.</li>
+    <li>Impact is <b>episodic, continuous, or progressive</b>.</li>
+    <li>Common symptoms across conditions: <b>pain, fatigue, sleep disturbances</b>.</li>
+    <li><b>Chronic diseases are a leading cause of death and disability in the US.</b></li>
+    <li><b>One third of Americans have multiple chronic conditions (MCCs).</b></li>
+  </ul>
   <table class="lab">
     <tr><th></th><th>Acute</th><th>Chronic</th></tr>
     <tr><td><b>Onset</b></td><td>Sudden</td><td>Gradual</td></tr>
-    <tr><td><b>Duration</b></td><td>Short, self-limiting</td><td>Ongoing, often lifelong</td></tr>
+    <tr><td><b>Duration</b></td><td>Short, self-limiting</td><td>3 months or more, often lifelong</td></tr>
     <tr><td><b>Goal</b></td><td>Cure</td><td>Manage, prevent complications, maximize function</td></tr>
     <tr><td><b>Who drives it</b></td><td>The provider</td><td><b>The patient, daily</b></td></tr>
   </table>
-  <div class="trap"><span class="tag">Automatic wrong answer</span>Any option that promises cure, resolution, or "once the labs normalize this goes away." Chronic is incurable by definition.</div>
+  <div class="trap"><span class="tag">Automatic wrong answer</span>Any option promising cure, resolution, or "once the labs normalize this goes away." Chronic is incurable by definition.</div>
+</div>
+
+<div class="card">
+  <h3>Multiple chronic conditions — and veterans</h3>
+  <ul class="clean">
+    <li>MCCs bring the risk of <b>conflicting medical advice</b> and <b>preventable hospitalizations</b>.</li>
+    <li><b>Higher prevalence of MCCs among U.S. veterans.</b></li>
+    <li><b>Male veterans:</b> hypertension, arthritis, COPD. <b>Male veterans 65 and older:</b> coronary artery disease, cancer.</li>
+    <li><b>Female veterans:</b> arthritis, hypertension, asthma.</li>
+  </ul>
+  <div class="hy"><span class="tag">Why this is on the exam</span>He is pointing at a population you will actually care for. Expect a stem naming a veteran and asking which conditions to anticipate or screen for.</div>
+</div>
+
+<div class="card">
+  <h3>Modifiable risk factors</h3>
+  <ul class="clean">
+    <li><b>Tobacco use</b></li>
+    <li><b>Second-hand smoke exposure</b></li>
+    <li>Diets <b>low in fruits and vegetables</b></li>
+    <li>Diets <b>high in sodium</b></li>
+    <li><b>Lack of physical activity</b></li>
+    <li><b>Excessive alcohol use</b></li>
+  </ul>
+  <div class="trap"><span class="tag">The distinction he tests</span>These are all <b>modifiable</b>. Age, sex, family history, and ethnicity are <b>non-modifiable</b>. A question asking what the nurse can influence is asking for this list.</div>
+</div>
+
+<div class="card">
+  <h3>Impact on patients and families</h3>
+  <ul class="clean">
+    <li><b>Daily management</b> of the condition falls on the patient and family.</li>
+    <li>Requires <b>time, social, and financial resources</b>.</li>
+    <li>Collaboration with health care professionals and following treatment guidelines.</li>
+    <li>Monitoring health and making ongoing lifestyle decisions.</li>
+    <li>Managing <b>physical, psychological, and social well-being</b> together.</li>
+  </ul>
+  <div class="hy"><span class="tag">Nursing implication</span>Because the patient runs the plan, <b>self-management teaching is the highest-value intervention</b>. Also reconcile medications across every specialist — no one prescriber sees the whole list.</div>
 </div>
 
 <div class="card">
@@ -1282,16 +1318,45 @@ document.getElementById('sec-chronic').innerHTML=`
   </ul>
 </div>
 
-<div class="card">
-  <h3>Nursing role in chronic care</h3>
+<div class="card" style="border-color:var(--purple)">
+  <h3>♿ Disability</h3>
+  <div class="mnem"><div class="tag">Language matters — he said this out loud</div><div class="big">A person with a disability. Never "a disabled person."</div><div class="exp">Person-first language. The disability is something they have, not what they are.</div></div>
   <ul class="clean">
-    <li><b>Self-management teaching</b> is the highest-value intervention, because the patient runs the plan.</li>
-    <li><b>Medication reconciliation</b> across every specialist. No one prescriber sees the whole list.</li>
-    <li><b>Assess the barrier before you intervene</b> — cost, cognition, side effects, or complexity all look identical from the outside.</li>
-    <li>Watch for depression, social isolation, and caregiver strain.</li>
-    <li>Identity and role loss are real outcomes, not soft ones.</li>
+    <li>There are <b>levels of disability</b> — it is not all-or-nothing.</li>
+    <li>Know the patient's <b>limitations and how to help them maintain</b> function and independence.</li>
+    <li><b>Healthy People 2030 goal:</b> promote health and well-being <b>for all</b>.</li>
   </ul>
-  <div class="hy"><span class="tag">Red flag for the plan</span>A patient who can name their medications but not what each one treats is following the regimen by rote. That collapses the first time something changes.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>Disability in med-surg practice</h3>
+  <ul class="clean">
+    <li><b>The disability should not be the exclusive focus</b> of care. The patient still needs everything every other patient needs.</li>
+    <li>Perform a <b>comprehensive health assessment</b> — including a <b>complete physical examination with a pelvic exam</b> where indicated.</li>
+    <li><b>Health promotion and disease prevention are neglected</b> in people with disabilities.</li>
+    <li>Contributing cause: <b>lack of exposure to health information</b>.</li>
+  </ul>
+  <div class="trap"><span class="tag">The trap</span>Any option that <b>skips, defers, or modifies away</b> a routine screening because of a disability is wrong. Individualize the approach; do not omit the care.</div>
+</div>
+
+<div class="card">
+  <h3>Barriers to health care</h3>
+  <ul class="clean">
+    <li>People with disabilities encounter barriers in <b>daily life and in health care access</b>.</li>
+    <li><b>Structural barriers:</b> stairs, lack of ramps, narrow doorways, inaccessible restroom facilities.</li>
+    <li>Also: exam tables that do not lower, no accessible transport, and staff who assume rather than ask.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Education and health promotion</h3>
+  <ul class="clean">
+    <li><b>Promote healthy lifestyles</b> as part of every chronic illness plan.</li>
+    <li><b>Patient AND family education</b> — the family often carries the daily management.</li>
+    <li><b>Assess the impact of a new diagnosis</b> before teaching. What it means to this patient shapes everything after.</li>
+    <li><b>Tailor education to the patient's needs</b> — literacy, language, sensory ability, and readiness.</li>
+  </ul>
+  <div class="hy"><span class="tag">Geriatric note</span>Older adults face an <b>increased risk of death from influenza and pneumonia</b>, and <b>effective vaccines exist</b>. Vaccination is a health promotion answer, not an afterthought.</div>
 </div>
 
 <div class="card">
@@ -1307,265 +1372,17 @@ document.getElementById('sec-chronic').innerHTML=`
   <div class="mnem"><div class="tag">Nursing process</div><div class="big">ADPIE — Assessment · Diagnosis · Planning · Implementation · Evaluation</div><div class="exp">If a priority stem offers a good intervention and a good assessment, assessment usually wins — unless the patient is unstable, in which case you act.</div></div>
 </div>
 
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on this topic</h3>
+  <div class="trap"><span class="tag">Trap 1 — the cure option</span>Any answer promising resolution. Chronic means <b>3 months or more with no cure</b>.</div>
+  <div class="trap"><span class="tag">Trap 2 — "disabled person"</span>Person-first language. The correct option says <b>a person with a disability</b>.</div>
+  <div class="trap"><span class="tag">Trap 3 — omitting care because of disability</span>Skipping a pelvic exam, a screening, or a full assessment. <b>Individualize, do not omit.</b></div>
+  <div class="trap"><span class="tag">Trap 4 — modifiable vs non-modifiable</span>He mixes age and family history into a list of things the nurse can change. Those are <b>non-modifiable</b>.</div>
+  <div class="trap"><span class="tag">Trap 5 — teaching before assessing</span>Assess the <b>impact of the new diagnosis</b> and the patient's needs first, then tailor the teaching.</div>
+</div>
+
 <div id="chronicQuiz"></div>`;
 renderFilteredQuiz('chronicQuiz', secQ(EXAM.filter(q=>q.topic==='chronic')), 'Chronic illness practice', 'Chronic');
-
-</script>
-<script>
-document.getElementById('sec-fluids').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">💧</span> Fluid Balance & IV Therapy</h2>
-<p class="intro-line">Chapter 10, first half. Water follows solute. Every fluid answer on this exam traces back to that one sentence.</p>
-
-<div class="card" style="border-color:var(--teal)">
-  <h3>The compartments</h3>
-  <ul class="clean">
-    <li>Total body water is about <b>60% of body weight</b> in an adult, lower in older adults and in obesity.</li>
-    <li><b>Intracellular (ICF)</b> ≈ two thirds. Principal cation is <b>potassium</b>.</li>
-    <li><b>Extracellular (ECF)</b> ≈ one third, split into interstitial and intravascular. Principal cation is <b>sodium</b>.</li>
-    <li><b>Osmosis</b> moves water toward the higher solute concentration. <b>Diffusion</b> moves solute from high to low. <b>Filtration</b> is driven by hydrostatic pressure.</li>
-    <li><b>Oncotic pressure</b> comes from albumin and holds water inside the vessel. <b>Hydrostatic pressure</b> pushes it out.</li>
-  </ul>
-</div>
-
-<div class="card">
-  <h3>Who regulates fluid</h3>
-  <table class="lab">
-    <tr><th>Organ / hormone</th><th>What it does</th></tr>
-    <tr><td><b>Kidneys</b></td><td>Regulate ECF volume and osmolality, excrete waste, activate vitamin D, balance acid-base</td></tr>
-    <tr><td><b>Heart and vessels</b></td><td>Pump blood to the kidney so filtration can happen; baroreceptors sense pressure</td></tr>
-    <tr><td><b>Lungs</b></td><td>Remove about 300 mL of water daily as vapor; regulate CO₂ (acid)</td></tr>
-    <tr><td><b>ADH (pituitary)</b></td><td>Retains <b>water</b>. Released when osmolality rises or volume falls. "Anti-diuretic = hold water."</td></tr>
-    <tr><td><b>Aldosterone (adrenal)</b></td><td>Retains <b>sodium and water</b>, excretes potassium</td></tr>
-    <tr><td><b>RAAS</b></td><td>Low BP → renin → angiotensin II (vasoconstriction) → aldosterone → volume up</td></tr>
-    <tr><td><b>Natriuretic peptides (ANP/BNP)</b></td><td>Released when the heart stretches. Promote sodium and water <b>loss</b> — the body's counter to RAAS. High BNP suggests overload or heart failure.</td></tr>
-    <tr><td><b>PTH (parathyroid)</b></td><td>Raises serum calcium, lowers phosphorus</td></tr>
-  </table>
-  <div class="mnem"><div class="tag">Fast recall</div><div class="big">ADH holds Water. Aldosterone holds Salt and water. Natriuretic peptides dump both.</div></div>
-</div>
-
-<div class="card">
-  <h3>Fluid volume deficit vs. excess</h3>
-  <table class="lab">
-    <tr><th></th><th>Deficit (hypovolemia)</th><th>Excess (hypervolemia)</th></tr>
-    <tr><td><b>Cause</b></td><td>Vomiting, diarrhea, hemorrhage, diuresis, third spacing, poor intake</td><td>Heart failure, kidney failure, cirrhosis, excess sodium or IV fluid</td></tr>
-    <tr><td><b>Vitals</b></td><td>↑HR, ↓BP, orthostatic drop, weak thready pulse</td><td>Bounding pulse, ↑BP, ↑CVP</td></tr>
-    <tr><td><b>Exam</b></td><td>Poor turgor, dry mucous membranes, flat neck veins, ↓urine output</td><td>Crackles, edema, JVD, dyspnea</td></tr>
-    <tr><td><b>Labs</b></td><td>↑BUN:creatinine ratio, ↑hematocrit, ↑urine specific gravity</td><td>↓hematocrit and ↓BUN from dilution, ↓urine specific gravity</td></tr>
-    <tr><td><b>Weight</b></td><td>Rapid loss</td><td>Rapid gain</td></tr>
-    <tr><td><b>Treatment</b></td><td>Isotonic IV fluid, treat the cause, oral rehydration if tolerated</td><td>Diuretics, sodium and fluid restriction, daily weights, semi-Fowler</td></tr>
-  </table>
-  <div class="hy"><span class="tag">Best indicator</span><b>Daily weight on the same scale, same time, same clothing.</b> 1 kg ≈ 1 L. It beats intake and output because I&O misses insensible losses and charting gaps.</div>
-</div>
-
-<div class="card">
-  <h3>Third spacing</h3>
-  <p class="why-chain">Low albumin or a damaged capillary wall drops oncotic pressure → hydrostatic pressure wins → fluid leaves the vessel for the interstitium or a body cavity. The patient looks <b>edematous</b> and is simultaneously <b>intravascularly dry</b>.</p>
-  <ul class="clean">
-    <li>Seen in burns, sepsis, liver failure, hypoalbuminemia, major surgery, ascites.</li>
-    <li>Watch the perfusion numbers, not the ankles: falling BP, rising heart rate, falling urine output.</li>
-    <li>The fluid returns to the vasculature later — watch for <b>overload during the mobilization phase</b>.</li>
-  </ul>
-</div>
-
-<div class="card" style="border-color:var(--teal)">
-  <h3>IV solutions by tonicity</h3>
-  <table class="lab">
-    <tr><th>Type</th><th>Examples</th><th>Where water goes</th><th>Used for / risk</th></tr>
-    <tr><td><b>Isotonic</b></td><td>0.9% NS, lactated Ringer, D5W (in the bag)</td><td>Stays in the vessel</td><td>Hypovolemia, blood loss. Risk: fluid overload</td></tr>
-    <tr><td><b>Hypotonic</b></td><td>0.45% NS, 0.33% NS, D5W (once dextrose is metabolized)</td><td>Moves INTO cells</td><td>Cellular dehydration, hypernatremia. Risk: <b>cerebral edema</b>, ↓BP</td></tr>
-    <tr><td><b>Hypertonic</b></td><td>3% NS, 5% NS, D10W, D5NS, D5LR</td><td>Pulls water OUT of cells</td><td>Severe symptomatic hyponatremia, cerebral edema. Risk: overload, phlebitis</td></tr>
-  </table>
-  <ul class="clean">
-    <li><b>D5W is isotonic in the bag and hypotonic in the patient.</b> Both descriptions are true and both appear as options.</li>
-    <li><b>Lactated Ringer contains calcium and potassium.</b> Avoid in liver failure (can't metabolize lactate) and never hang it with blood.</li>
-    <li><b>3% saline is high-alert.</b> Correct sodium slowly — too fast causes osmotic demyelination. Monitor lung sounds and neuro status.</li>
-  </ul>
-</div>
-
-<div class="card">
-  <h3>IV complications</h3>
-  <table class="lab">
-    <tr><th>Complication</th><th>Signs</th><th>Action</th></tr>
-    <tr><td><b>Infiltration</b></td><td><b>Cool</b>, swollen, pale, taut; slowed rate</td><td>Stop, remove catheter, elevate, warm or cool compress per policy</td></tr>
-    <tr><td><b>Extravasation</b></td><td>Same, but with a <b>vesicant</b> — tissue necrosis risk</td><td>Stop, leave catheter, aspirate residual, notify provider</td></tr>
-    <tr><td><b>Phlebitis</b></td><td><b>Warm</b>, red, tender, palpable cord</td><td>Discontinue, restart in a new site, warm compress</td></tr>
-    <tr><td><b>Fluid overload</b></td><td>Crackles, dyspnea, cough, JVD, ↑BP</td><td><b>Slow or stop</b>, raise the head of the bed, oxygen, notify provider</td></tr>
-    <tr><td><b>Air embolism</b></td><td>Sudden dyspnea, chest pain, hypotension, altered LOC</td><td>Clamp the line, <b>left side with head down</b>, oxygen, notify provider</td></tr>
-    <tr><td><b>Infection</b></td><td>Redness and drainage at the site, fever, chills</td><td>Discontinue, culture, aseptic technique on restart</td></tr>
-  </table>
-  <div class="mnem"><div class="tag">Cool vs warm</div><div class="big">Infiltration is COOL. Phlebitis is WARM.</div><div class="exp">That one word separates them in almost every stem he writes.</div></div>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>🎯 How he tricks you on this topic</h3>
-  <div class="trap"><span class="tag">Trap 1 — hypotonic fluid to "replace water"</span>A hypotensive dehydrated patient with <b>0.45% saline</b> offered. It sounds like replacing water. It moves water into cells and drops the BP further. An <b>intravascular volume</b> problem takes <b>isotonic</b> fluid.</div>
-  <div class="trap"><span class="tag">Trap 2 — edema read as overload</span>A swollen patient with a falling BP and rising heart rate. That is <b>third spacing</b>, so the vessel is dry. Diuresing them makes it worse.</div>
-  <div class="trap"><span class="tag">Trap 3 — the "best indicator" question</span>Blood pressure, skin turgor, and urine color all appear and all are real assessments. <b>Daily weight</b> wins because it is the most reliable and quantifiable.</div>
-  <div class="trap"><span class="tag">Trap 4 — the burning or aching IV site</span>"Slow the rate and continue" and "apply a warm compress" both sound caring. <b>Stop the infusion</b> and assess first.</div>
-  <div class="trap"><span class="tag">Trap 5 — turgor in an older adult</span>Age-related loss of skin elasticity makes forearm turgor unreliable. Check the <b>sternum or forehead</b>, plus mucous membranes and urine concentration.</div>
-</div>
-
-<div id="q-fluids"></div>`;
-renderFilteredQuiz('q-fluids', secQ(EXAM.filter(q=>q.topic==='fluids')), 'Fluids & IV practice', 'Fluids');
-
-
-document.getElementById('sec-lytes').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">⚡</span> Electrolytes</h2>
-<p class="intro-line">Chapter 10, second half. Learn the normal range, the ECG or neuro sign, and the one intervention that kills if you get it wrong.</p>
-
-<div class="card" style="border-color:var(--teal)">
-  <h3>Normal ranges — memorize these cold</h3>
-  <table class="lab">
-    <tr><th>Electrolyte</th><th>Normal range</th></tr>
-    <tr><td><b>Sodium</b></td><td>135 – 145 mEq/L</td></tr>
-    <tr><td><b>Potassium</b></td><td>3.5 – 5.0 mEq/L</td></tr>
-    <tr><td><b>Calcium (total)</b></td><td>8.6 – 10.2 mg/dL</td></tr>
-    <tr><td><b>Magnesium</b></td><td>1.3 – 2.3 mg/dL</td></tr>
-    <tr><td><b>Phosphorus</b></td><td>2.5 – 4.5 mg/dL</td></tr>
-    <tr><td><b>Chloride</b></td><td>97 – 107 mEq/L</td></tr>
-  </table>
-</div>
-
-<div class="card">
-  <h3>Sodium — the water electrolyte</h3>
-  <table class="lab">
-    <tr><th></th><th>Hyponatremia (&lt;135)</th><th>Hypernatremia (&gt;145)</th></tr>
-    <tr><td><b>Causes</b></td><td>Vomiting, diarrhea, diuretics, SIADH, excess water intake, adrenal insufficiency</td><td>Water loss, poor intake, diabetes insipidus, hypertonic feeds, excess sodium</td></tr>
-    <tr><td><b>Cells</b></td><td>Water moves IN → cells <b>swell</b></td><td>Water moves OUT → cells <b>shrink</b></td></tr>
-    <tr><td><b>Signs</b></td><td>Headache, confusion, lethargy, muscle cramps, <b>seizures from cerebral edema</b></td><td><b>Intense thirst</b>, dry sticky mucous membranes, restlessness, weakness, seizures if severe</td></tr>
-    <tr><td><b>Treatment</b></td><td>Fluid restriction; hypertonic saline only if severe and symptomatic, corrected <b>slowly</b></td><td>Hypotonic fluid or D5W slowly, free water, treat the cause</td></tr>
-  </table>
-  <div class="trap"><span class="tag">Why "slowly" matters both ways</span>Correcting sodium too fast causes <b>osmotic demyelination</b> going up and <b>cerebral edema</b> coming down. "Rapidly normalize the sodium" is never the answer.</div>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>Potassium — the one that kills</h3>
-  <table class="lab">
-    <tr><th></th><th>Hypokalemia (&lt;3.5)</th><th>Hyperkalemia (&gt;5.0)</th></tr>
-    <tr><td><b>Causes</b></td><td>Diuretics, vomiting, NG suction, diarrhea, insulin, alkalosis, poor intake</td><td>Kidney failure, ACE inhibitors/ARBs, spironolactone, acidosis, cell lysis, over-replacement</td></tr>
-    <tr><td><b>ECG</b></td><td><b>Flat T waves, U wave</b>, ST depression</td><td><b>Peaked narrow T waves</b> → widened QRS → asystole</td></tr>
-    <tr><td><b>Other signs</b></td><td>Muscle weakness, leg cramps, <b>ileus</b>, shallow respirations, digoxin toxicity risk</td><td>Muscle weakness, paresthesias, <b>abdominal cramping and diarrhea</b>, dysrhythmias</td></tr>
-    <tr><td><b>Treatment</b></td><td>Oral or diluted IV potassium <b>on a pump</b>; replace <b>magnesium</b> too; potassium-rich foods</td><td><b>Calcium gluconate</b> → insulin+dextrose and albuterol → kayexalate or dialysis</td></tr>
-  </table>
-  <div class="mnem"><div class="tag">Hyperkalemia sequence</div><div class="big">PROTECT → SHIFT → REMOVE</div><div class="exp">Calcium gluconate protects the myocardium. Insulin/dextrose and albuterol shift K into cells. Kayexalate or dialysis actually removes it.</div></div>
-  <div class="trap"><span class="tag">Never</span><b>IV push potassium is fatal.</b> Always dilute and infuse on a pump. Never give it to a patient with no urine output. Never exceed the ordered rate to "catch up."</div>
-  <div class="hy"><span class="tag">Potassium-rich foods</span>Banana, spinach, potato, avocado, orange, tomato, cantaloupe, dried fruit, legumes.</div>
-</div>
-
-<div class="card">
-  <h3>Calcium — the nerve stabilizer</h3>
-  <table class="lab">
-    <tr><th></th><th>Hypocalcemia (&lt;8.6)</th><th>Hypercalcemia (&gt;10.2)</th></tr>
-    <tr><td><b>Causes</b></td><td>Thyroid/parathyroid surgery, vitamin D deficiency, pancreatitis, massive transfusion, alkalosis</td><td>Malignancy with bone metastasis, hyperparathyroidism, immobility, thiazides, excess vitamin D</td></tr>
-    <tr><td><b>Direction</b></td><td>Things <b>FIRE</b></td><td>Things <b>SLOW DOWN</b></td></tr>
-    <tr><td><b>Signs</b></td><td><b>Chvostek</b> (tap the facial nerve, cheek twitches), <b>Trousseau</b> (BP cuff, hand spasms), perioral tingling, tetany, <b>laryngospasm</b>, seizures</td><td>Lethargy, confusion, <b>constipation</b>, muscle weakness, bone pain, kidney stones, polyuria</td></tr>
-    <tr><td><b>Treatment</b></td><td>Calcium gluconate IV for severe; oral calcium with vitamin D; <b>seizure and airway precautions</b></td><td><b>Isotonic saline</b> to promote urinary excretion, then a <b>bisphosphonate</b>; mobilize; increase fluids</td></tr>
-  </table>
-  <div class="mnem"><div class="tag">Keep them straight</div><div class="big">LOW calcium = things fire. HIGH calcium = things slow.</div><div class="exp">"Stones, bones, groans, and psychiatric overtones" is the HIGH side.</div></div>
-</div>
-
-<div class="card">
-  <h3>Magnesium and phosphorus</h3>
-  <table class="lab">
-    <tr><th></th><th>Low</th><th>High</th></tr>
-    <tr><td><b>Magnesium</b></td><td>Alcohol use, malabsorption, diuretics. Signs mirror <b>hypocalcemia</b>: tremor, tetany, positive Chvostek/Trousseau, dysrhythmias. Give IV magnesium slowly.</td><td>Kidney failure, magnesium-containing antacids/laxatives. <b>Loss of deep tendon reflexes</b>, hypotension, bradycardia, respiratory depression. Antidote: <b>calcium gluconate</b>.</td></tr>
-    <tr><td><b>Phosphorus</b></td><td>Refeeding syndrome, alcohol use, antacids. Muscle weakness, confusion, respiratory failure.</td><td>Kidney failure, tumor lysis. Symptoms are mostly from the resulting <b>hypocalcemia</b>. Phosphate binders with meals.</td></tr>
-  </table>
-  <div class="hy"><span class="tag">The pairings that get tested</span><b>Calcium and phosphorus move opposite.</b> <b>Magnesium and calcium move together</b> in their signs. And <b>you cannot correct hypokalemia until magnesium is replaced</b>, because magnesium is required for the cell to hold potassium.</div>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>🎯 How he tricks you on this topic</h3>
-  <div class="trap"><span class="tag">Trap 1 — the hyperkalemia order</span>All four options are real hyperkalemia treatments. The question is the <b>sequence</b>. Calcium gluconate first, because it protects the heart while the other drugs take time to work.</div>
-  <div class="trap"><span class="tag">Trap 2 — the calcium lists swapped</span>Hypocalcemia stems offered with "constipation, kidney stones, lethargy." That is the <b>hyper</b> list. Low calcium fires: tetany, tingling, laryngospasm, seizures.</div>
-  <div class="trap"><span class="tag">Trap 3 — the stubborn potassium</span>A hypokalemia that will not correct despite replacement. The answer is not more potassium, it is <b>replacing magnesium first</b>.</div>
-  <div class="trap"><span class="tag">Trap 4 — potassium and urine output</span>Any option giving potassium to a patient with poor urine output is wrong, no matter how low the level is. Check the output first.</div>
-  <div class="trap"><span class="tag">Trap 5 — priority among four abnormal labs</span>He gives you four out-of-range electrolytes. Rank by <b>what kills fastest</b>: potassium (dysrhythmia) and calcium (laryngospasm) beat sodium drift and phosphorus every time.</div>
-</div>
-
-<div id="q-lytes"></div>`;
-renderFilteredQuiz('q-lytes', secQ(EXAM.filter(q=>q.topic==='lytes')), 'Electrolyte practice', 'Electrolytes');
-
-
-document.getElementById('sec-abg').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🫁</span> Acid-Base & ABGs</h2>
-<p class="intro-line">Chapter 10, final section. Three numbers, one rule, and you can name any gas he writes.</p>
-
-<div class="card" style="border-color:var(--teal)">
-  <h3>The three numbers</h3>
-  <table class="lab">
-    <tr><th>Value</th><th>Normal</th><th>Controlled by</th></tr>
-    <tr><td><b>pH</b></td><td>7.35 – 7.45</td><td>The net result</td></tr>
-    <tr><td><b>PaCO₂</b> (the acid)</td><td>35 – 45 mmHg</td><td><b>Lungs</b> — minutes</td></tr>
-    <tr><td><b>HCO₃</b> (the base)</td><td>22 – 26 mEq/L</td><td><b>Kidneys</b> — hours to days</td></tr>
-    <tr><td>PaO₂</td><td>80 – 100 mmHg</td><td>Oxygenation, not acid-base</td></tr>
-  </table>
-  <div class="mnem"><div class="tag">The whole method</div><div class="big">ROME — Respiratory Opposite, Metabolic Equal</div><div class="exp">pH and CO₂ moving in <b>opposite</b> directions = respiratory. pH and bicarb moving in the <b>same</b> direction = metabolic.</div></div>
-  <div class="mnem" style="border-color:var(--gold)"><div class="tag">⭐ He asks this out loud</div><div class="big">Kidney problem → automatically METABOLIC. Lung problem → automatically RESPIRATORY.</div><div class="exp">The kidneys own bicarbonate and the lungs own CO₂. Name the broken organ and you have already named half the gas.</div></div>
-</div>
-
-<div class="card" style="border-color:var(--gold)">
-  <h3>⭐ The organ shortcut</h3>
-  <p class="why-chain">If the stem tells you which organ is failing, you do not have to derive the type — the organ names it. <b>Kidneys regulate bicarbonate (the base), so a kidney problem is metabolic. Lungs regulate CO₂ (the acid), so a lung problem is respiratory.</b></p>
-  <ol class="chainlist">
-    <li><b>1.</b> Healthy kidneys excrete hydrogen ions and regenerate bicarbonate, which is how the body dumps fixed acid.</li>
-    <li><b>2.</b> In kidney failure both jobs stop. Acid accumulates and bicarbonate falls.</li>
-    <li><b>3.</b> pH down + bicarb down = same direction = <b>metabolic acidosis</b>. That is the default gas for a renal patient.</li>
-    <li><b>4.</b> The kidneys are also the <b>compensator</b> for respiratory problems. If they are failing, they cannot compensate — so expect an <b>uncompensated or only partially compensated</b> respiratory gas in a patient with renal disease.</li>
-    <li><b>5.</b> And renal metabolic acidosis travels with <b>hyperkalemia</b>: acidosis shifts potassium out of cells, and the failing kidney cannot excrete it either. Low pH in a renal patient → check the potassium and the ECG.</li>
-  </ol>
-  <div class="hy"><span class="tag">Same logic, other direction</span>Chronic <b>lung</b> disease → respiratory acidosis, and the healthy kidney compensates by retaining bicarbonate over days. That is why a stable COPD gas reads <b>fully compensated respiratory acidosis</b> — pH normal on the acid side, CO₂ high, bicarb high.</div>
-  <div class="trap"><span class="tag">Where he turns the screw</span>A dialysis or CKD patient with a low pH and options offering respiratory causes. The organ already told you the answer. Equally, do not force "metabolic" onto a patient whose only problem is hypoventilation — the shortcut runs organ → type, not backwards.</div>
-</div>
-
-<div class="card">
-  <h3>Read it in three steps</h3>
-  <ul class="clean">
-    <li><b>0. Check whether the stem names a failing organ.</b> Kidneys = metabolic. Lungs = respiratory. If it does, you already know the type.</li>
-    <li><b>1. Look at the pH.</b> Below 7.35 = acidosis. Above 7.45 = alkalosis. If it is 7.35–7.45, it is normal or fully compensated.</li>
-    <li><b>2. Find the culprit.</b> Which value moved the way that explains the pH? CO₂ opposite = respiratory. Bicarb same = metabolic.</li>
-    <li><b>3. Check compensation.</b> pH abnormal + one value abnormal = <b>uncompensated</b>. pH abnormal + both abnormal = <b>partially compensated</b>. pH <b>normal</b> + both abnormal = <b>fully compensated</b>.</li>
-  </ul>
-  <div class="hy"><span class="tag">Which side of normal</span>In full compensation the pH tells you the original problem. <b>7.35–7.39 = the acid side.</b> <b>7.41–7.45 = the alkalotic side.</b> That is how you name a gas whose pH looks normal.</div>
-</div>
-
-<div class="card">
-  <h3>Causes by type</h3>
-  <table class="lab">
-    <tr><th>Disorder</th><th>Causes</th><th>Signs</th></tr>
-    <tr><td><b>Respiratory acidosis</b><br>↓pH ↑CO₂</td><td>Anything that retains CO₂: COPD, oversedation, opioid overdose, atelectasis, pneumonia, chest trauma, neuromuscular weakness</td><td>Drowsiness, headache, confusion, ↑HR, dysrhythmias</td></tr>
-    <tr><td><b>Respiratory alkalosis</b><br>↑pH ↓CO₂</td><td>Hyperventilation: anxiety, pain, fever, early PE, high altitude, over-ventilation</td><td>Lightheaded, <b>tingling of fingers and around the mouth</b>, dizziness, tetany</td></tr>
-    <tr><td><b>Metabolic acidosis</b><br>↓pH ↓HCO₃</td><td>DKA, kidney failure, lactic acidosis from shock, prolonged diarrhea (loses bicarbonate)</td><td><b>Kussmaul respirations</b> (deep and rapid to blow off acid), headache, confusion, hyperkalemia</td></tr>
-    <tr><td><b>Metabolic alkalosis</b><br>↑pH ↑HCO₃</td><td>Vomiting or NG suction (loses acid), excess antacids, diuretics, hypokalemia</td><td>Tingling, dizziness, <b>hypoventilation</b> to retain CO₂, hypokalemia</td></tr>
-  </table>
-</div>
-
-<div class="card">
-  <h3>Practice reading</h3>
-  <table class="lab">
-    <tr><th>pH</th><th>PaCO₂</th><th>HCO₃</th><th>Interpretation</th></tr>
-    <tr><td>7.30</td><td>52</td><td>24</td><td>Uncompensated <b>respiratory acidosis</b></td></tr>
-    <tr><td>7.49</td><td>40</td><td>30</td><td>Uncompensated <b>metabolic alkalosis</b></td></tr>
-    <tr><td>7.25</td><td>36</td><td>16</td><td>Uncompensated <b>metabolic acidosis</b></td></tr>
-    <tr><td>7.52</td><td>28</td><td>23</td><td>Uncompensated <b>respiratory alkalosis</b></td></tr>
-    <tr><td>7.32</td><td>58</td><td>30</td><td>Partially compensated <b>respiratory acidosis</b></td></tr>
-    <tr><td>7.37</td><td>58</td><td>32</td><td><b>Fully compensated respiratory acidosis</b> — classic chronic COPD</td></tr>
-    <tr><td>7.43</td><td>30</td><td>20</td><td><b>Fully compensated respiratory alkalosis</b></td></tr>
-  </table>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>🎯 How he tricks you on this topic</h3>
-  <div class="trap"><span class="tag">Trap 1 — a normal pH that is not normal</span>Fully compensated means <b>pH normal, both systems abnormal</b>. Stop at the pH and you will call a chronic COPD gas "normal."</div>
-  <div class="trap"><span class="tag">Trap 2 — which side of 7.40</span>In full compensation, 7.37 is the <b>acid</b> side and 7.43 is the <b>alkalotic</b> side. That single digit names the disorder.</div>
-  <div class="trap"><span class="tag">Trap 3 — treating the number</span>"Give sodium bicarbonate" and "apply 100% oxygen" get offered as fixes. Treat the <b>cause</b>: ventilation, perfusion, or the metabolic problem driving it.</div>
-  <div class="trap"><span class="tag">Trap 4 — vomiting vs diarrhea</span><b>Vomiting and NG suction lose acid</b> → metabolic <b>alkalosis</b>. <b>Diarrhea loses bicarbonate</b> → metabolic <b>acidosis</b>. He puts both in the same question.</div>
-  <div class="trap"><span class="tag">Trap 5 — ignoring the organ he handed you</span>A renal failure or dialysis patient with an abnormal pH, and respiratory options mixed in. <b>Kidneys = metabolic.</b> He tells you the organ precisely so he can see who uses it.</div>
-  <div class="trap"><span class="tag">Trap 6 — hyperventilation assumed to be anxiety</span>Respiratory alkalosis from hyperventilation can be anxiety, but it can also be an early <b>PE</b>, sepsis, or fever. Sedating that patient is how you miss the emergency.</div>
-</div>
-
-<div id="q-abg"></div>`;
-renderFilteredQuiz('q-abg', secQ(EXAM.filter(q=>q.topic==='abg')), 'ABG practice', 'Acid-Base');
 
 </script>
 <script>
@@ -2559,7 +2376,36 @@ const FLASH_DECK=[
 {topic:'peri',front:'AORN safe hand-off communication',back:'<b>SBAR + read-back</b>, one speaker at a time, one patient, minimal distractions, documentation, questions. Tools: SURPASS checklist.'},
 {topic:'peri',front:'Latex allergy — at-risk groups',back:'Spina bifida, multiple surgeries, urogenital/spinal cord issues, allergies/asthma, health care workers. S&S → up to circulatory collapse & death.'},
 {topic:'peri',front:'Preop renal disease — which labs?',back:'<b>BUN, creatinine, electrolytes.</b> Kidneys clear drugs/anesthetics & balance fluids.'},
+{topic:'aging',front:'Which pigment accumulates in aging cells?',back:'Lipofuscin. Aging also degrades elastin and collagen, and hematopoietic changes raise anemia rates.'},
+{topic:'aging',front:'Cardiovascular changes of aging?',back:'Valve stenosis, fewer pacemaker cells, increased arterial resistance, calcium and fat deposits, myocardial hypertrophy affecting the left ventricle.'},
+{topic:'aging',front:'Respiratory changes of aging?',back:'Calcification and weakening of chest wall muscles, decreased lung mass, INCREASED residual volume.'},
+{topic:'aging',front:'Integumentary changes of aging?',back:'Decreased epidermal proliferation, thinner dermis, fewer elastic fibers, stiffer collagen, less subcutaneous fat. Impaired temperature regulation, more burns and infection.'},
+{topic:'aging',front:'Female reproductive changes of aging?',back:'Thinning of the vaginal wall, decreased secretions, uterine atrophy.'},
+{topic:'aging',front:'Male reproductive changes of aging?',back:'Less firm testes, decreased testosterone production.'},
+{topic:'aging',front:'Is sexual activity expected to stop with age?',back:'No. It remains important. Decline usually relates to loss of a partner or health issues, not age.'},
+{topic:'aging',front:'Which vitamin supports mental function in older adults?',back:'Vitamin B12. Deficiency can look like dementia.'},
+{topic:'aging',front:'How does sensory stimulation help older adults?',back:'Colors, textures, tastes, and sounds enhance well-being. Assistive devices improve functional ability.'},
+{topic:'aging',front:'GI changes of aging and the teaching?',back:'Gastric motility slows, so constipation and aspiration risk rise. Teach high fiber, adequate fluids, regular dental care.'},
+
+{topic:'chronic',front:'Definition of chronic illness?',back:'3 months or more, no cure, management only. Episodic, continuous, or progressive.'},
+{topic:'chronic',front:'Symptoms common across chronic conditions?',back:'Pain, fatigue, and sleep disturbances.'},
+{topic:'chronic',front:'Correct disability language?',back:'A PERSON WITH A DISABILITY. Never a disabled person. Person-first.'},
+{topic:'chronic',front:'Should the disability be the focus of care?',back:'No. Comprehensive assessment including a complete physical exam. Health promotion is neglected in this population.'},
+{topic:'chronic',front:'Structural barriers to health care?',back:'Stairs, lack of ramps, narrow doorways, inaccessible restrooms.'},
+{topic:'chronic',front:'Modifiable risk factors for chronic disease?',back:'Tobacco, second-hand smoke, low fruit and vegetable intake, high sodium, inactivity, excessive alcohol.'},
+{topic:'chronic',front:'What fraction of Americans have multiple chronic conditions?',back:'One third. MCCs risk conflicting medical advice and preventable hospitalizations.'},
+{topic:'chronic',front:'Common chronic conditions in male veterans?',back:'Hypertension, arthritis, COPD. Ages 65+ add coronary artery disease and cancer.'},
+{topic:'chronic',front:'Common chronic conditions in female veterans?',back:'Arthritis, hypertension, asthma.'},
+{topic:'chronic',front:'What comes before teaching a newly diagnosed patient?',back:'Assess the impact of the diagnosis on THIS patient, then tailor the education to their needs.'},
+{topic:'chronic',front:'Healthy People 2030 goal?',back:'Promote health and well-being for all.'},
+{topic:'aging',front:'What is the geriatric triad?',back:'Changes in cognitive status, falls, and incontinence. They cluster and feed each other.'},
+{topic:'aging',front:'Name the geriatric syndromes',back:'Skin impairment, poor nutrition, falls, urinary incontinence, cognitive impairment, sleep disturbances.'},
+{topic:'aging',front:'Why do geriatric syndromes need a multidisciplinary approach?',back:'They have multiple contributing causes across body systems. No single specialist or test covers them.'},
+{topic:'aging',front:'What is the nursing emphasis for geriatric syndromes in the hospital?',back:'PREVENTION during hospitalization. The hospital itself is the risk: new drugs, immobility, unfamiliar setting, disrupted sleep.'},
+{topic:'aging',front:'Is new incontinence a normal age change?',back:'No. It is a geriatric syndrome with multiple causes and it is preventable or treatable. Never accept it as inevitable.'},
 ];
+
+
 
 let flashMastered=new Set();
 (function restoreFlash(){ try{ const r=localStorage.getItem('nur256u1_flashmastered'); if(r) JSON.parse(r).forEach(i=>flashMastered.add(i)); }catch(e){} })();
@@ -2576,7 +2422,7 @@ function updateFlashFilterBtn(){
   b.textContent = flashOnlyUnmastered ? '📚 Studying: Unmastered Only' : '📚 Studying: Full Deck (incl. mastered)';
   const t=document.getElementById('flashTopicBtn'); if(t)t.textContent=flashTopicLabel();
 }
-const FLASH_ORDER=['all','aging','chronic','fluids','iv','lytes','abg','cancer','peri','mh','post','eol','meds'];
+const FLASH_ORDER=['all','aging','chronic','cancer','peri','mh','post','eol','meds'];
 const FLASH_LABELS={all:'All Topics',aging:'Aging',chronic:'Chronic & Process',cancer:'Cancer',peri:'Perioperative',mh:'Malignant Hyperthermia',post:'Postoperative',eol:'End-of-Life',meds:'Meds ↔ Disease'};
 function flashTopicLabel(){ return '🎯 '+(FLASH_LABELS[flashTopic]||'All Topics'); }
 function cycleFlashTopic(){
@@ -2663,7 +2509,6 @@ const DRILL_POOL=[
 {topic:'aging',q:'Elder abuse risk peaks when?',o:['Caregiver stress is overwhelming','The patient is wealthy','The patient lives alone','The patient has Medicare'],c:0,r:'Caregiver strain is the leading modifiable risk factor.'},
 {topic:'aging',q:'Bruises in different stages of healing on both upper arms suggest?',o:['Grip-pattern abuse injury','Normal age-related fragility','Anticoagulant effect only','A fall from standing'],c:0,r:'Pattern plus location plus varying age equals suspected abuse. Report.'},
 {topic:'aging',q:'Which drug class is the classic Beers-criteria fall risk?',o:['Anticholinergics like diphenhydramine','Stool softeners','Acetaminophen','Vitamin D'],c:0,r:'Sedation, confusion, urinary retention, falls.'},
-
 {topic:'chronic',q:'Chronic illness is defined by?',o:['Permanent change requiring management','A course over six weeks','Needing daily medication','Being incurable by surgery'],c:0,r:'Permanent structural or functional change. Goal is control, not cure.'},
 {topic:'chronic',q:'Highest-value nurse action in fragmented specialist care?',o:['Medication reconciliation','Scheduling appointments','Choosing one specialist','Adding a reminder app'],c:0,r:'No one prescriber sees the whole list. Reconcile and communicate.'},
 {topic:'chronic',q:'A prescribing cascade is?',o:['Treating a drug side effect with another drug','Stopping several drugs at once','Doubling a dose','Switching to generics'],c:0,r:'The adverse effect gets mistaken for a new disease.'},
@@ -2672,7 +2517,6 @@ const DRILL_POOL=[
 {topic:'chronic',q:'Atherosclerosis hallmark?',o:['Lipid plaque in the lumen','Loss of elastic recoil','Widened pulse pressure','Medial wall thickening'],c:0,r:'Atheroma. The fatty plaque is what makes it atherosclerosis.'},
 {topic:'chronic',q:'Order of the nursing process?',o:['ADPIE','APDIE','ADIPE','PADIE'],c:0,r:'Assessment, Diagnosis, Planning, Implementation, Evaluation.'},
 {topic:'chronic',q:'Maslow: which need is always addressed first?',o:['Physiologic','Safety','Love and belonging','Self-esteem'],c:0,r:'Airway, breathing, circulation, food, fluid, elimination.'},
-
 {topic:'cancer',q:'Chemo and radiation kill which cells?',o:['Rapidly dividing cells','Only cancer cells','Only surface cells','Slow-dividing cells'],c:0,r:'They cannot tell cancer from normal. Fast dividers die first.'},
 {topic:'cancer',q:'Three normal tissues hit hardest by chemo?',o:['Marrow, GI lining, hair follicles','Muscle, brain, bone','Tendon, cartilage, nerve','Liver, spleen, thyroid'],c:0,r:'The fastest-dividing normal tissues.'},
 {topic:'cancer',q:'Low RBC from chemo produces?',o:['Anemia and fatigue','Bleeding risk','Infection risk','Alopecia'],c:0,r:'RBC anemia, WBC infection, platelets bleeding.'},
@@ -2688,14 +2532,12 @@ const DRILL_POOL=[
 {topic:'cancer',q:'Tertiary prevention is?',o:['Monitoring for recurrence','Vaccination','Screening','Diet counseling'],c:0,r:'After a known cancer, watching for return or second primary.'},
 {topic:'cancer',q:'Grading describes?',o:['Cell differentiation','Tumor size','Spread to nodes','Distant metastasis'],c:0,r:'Grading is the cells. Staging is the spread.'},
 {topic:'cancer',q:'Benign tumors are typically?',o:['Encapsulated and well-differentiated','Invasive','Metastatic','Undifferentiated'],c:0,r:'They displace tissue rather than invading it.'},
-
 {topic:'pre',q:'Clear liquids may be allowed until how long before surgery?',o:['2 hours','6 hours','8 hours','Midnight'],c:0,r:'Clear 2, light meal 6, fatty meal 8.'},
 {topic:'pre',q:'Whose job is it to obtain informed consent?',o:['The surgeon','The nurse','The anesthesiologist','The unit clerk'],c:0,r:'The nurse witnesses the signature and verifies understanding.'},
 {topic:'pre',q:'Patient says they no longer want surgery after signing. Nurse does what?',o:['Stop and notify the surgeon','Proceed and document','Explain the risks of cancelling','Call the family'],c:0,r:'Consent is revocable at any time.'},
 {topic:'pre',q:'Latex-allergic patient is scheduled?',o:['First case of the day','Last case of the day','Any time','Only in the afternoon'],c:0,r:'First, so airborne latex particles have cleared.'},
 {topic:'pre',q:'Preop renal disease means checking?',o:['BUN, creatinine, electrolytes','A1c and lipids','PT/INR only','LFTs only'],c:0,r:'Kidneys clear anesthetics and balance fluid.'},
 {topic:'pre',q:'Warfarin is typically held how long before surgery?',o:['About 5 days','24 hours','2 weeks','It is never held'],c:0,r:'Long half-life. Herbals stop about 2 weeks out.'},
-
 {topic:'intra',q:'Earliest sign of malignant hyperthermia?',o:['Rising end-tidal CO2','Temperature spike','Bradycardia','Hypotension'],c:0,r:'Hypermetabolism makes CO2 faster than ventilation clears it.'},
 {topic:'intra',q:'Antidote for malignant hyperthermia?',o:['Dantrolene','Flumazenil','Naloxone','Protamine'],c:0,r:'Blocks calcium release from the sarcoplasmic reticulum.'},
 {topic:'intra',q:'Two classic MH triggers?',o:['Succinylcholine and volatile anesthetics','Propofol and fentanyl','Midazolam and morphine','Lidocaine and ketamine'],c:0,r:'Stop them immediately if MH is suspected.'},
@@ -2703,7 +2545,6 @@ const DRILL_POOL=[
 {topic:'intra',q:'Incorrect surgical count means?',o:['Retained item until proven otherwise','Recount after closing','Document and move on','Report at shift change'],c:0,r:'Notify surgeon, recount, image before the patient leaves.'},
 {topic:'intra',q:'Fire triangle in the OR?',o:['Oxidizer, ignition source, fuel','Heat, friction, static','Oxygen, water, drapes','Alcohol, metal, gas'],c:0,r:'Fuel is drapes, alcohol prep, and gases.'},
 {topic:'intra',q:'Circulating nurse is responsible for?',o:['Room coordination, counts, positioning','Passing instruments','Titrating anesthesia','Closing the incision'],c:0,r:'The scrub nurse handles the sterile field.'},
-
 {topic:'post',q:'First PACU priority?',o:['Airway','Pain','Dressing','Urine output'],c:0,r:'ABC is a time-to-death ranking, not a slogan.'},
 {topic:'post',q:'Most common postop respiratory complication?',o:['Atelectasis','Pneumonia','PE','ARDS'],c:0,r:'Prevent with spirometry, deep breathing, ambulation.'},
 {topic:'post',q:'Low-grade fever in the first 24 to 48 hours usually means?',o:['Atelectasis','Wound infection','UTI','DVT'],c:0,r:'Infection fevers arrive later, usually after day 3.'},
@@ -2716,7 +2557,6 @@ const DRILL_POOL=[
 {topic:'post',q:'Antiembolism stockings work by?',o:['Forcing blood into deep veins','Warming the leg','Elevating the limb','Encouraging walking'],c:0,r:'Superficial to deep venous shunting reduces stasis.'},
 {topic:'post',q:'Postop VTE prophylaxis drug class?',o:['Anticoagulants','Antiplatelets','Thrombolytics','Vasodilators'],c:0,r:'Enoxaparin or low-dose heparin, plus ambulation and SCDs.'},
 {topic:'post',q:'Which task can be delegated to UAP?',o:['Reapplying antiembolism stockings','Teaching spirometry','Assessing an incision','Evaluating PCA effect'],c:0,r:'Teaching, assessing, and evaluating stay with the nurse.'},
-
 {topic:'eol',q:'Palliative care can begin when?',o:['At diagnosis, alongside curative care','Only in the last 6 months','After a DNR is signed','Only in hospice'],c:0,r:'Palliative is defined by goal. Hospice is defined by prognosis.'},
 {topic:'eol',q:'A DNR order withholds?',o:['Resuscitation only','All treatment','Comfort measures','Nutrition'],c:0,r:'Everything else continues.'},
 {topic:'eol',q:'Which is a portable provider-signed order set?',o:['POLST','Living will','Durable power of attorney','Admission packet'],c:0,r:'A living will states preferences but is not an actionable order.'},
@@ -2724,7 +2564,6 @@ const DRILL_POOL=[
 {topic:'eol',q:'Death rattle management?',o:['Reposition and reduce fluids','Deep suction','Increase oxygen','Nothing can be done'],c:0,r:'Deep suctioning is traumatic and increases secretions.'},
 {topic:'eol',q:'How is hope best supported?',o:['Pain control plus achievable short-term goals','Promising a cure','Avoiding the topic','Encouraging family optimism'],c:0,r:'False reassurance sets a goal that will fail.'},
 {topic:'eol',q:'FICA assesses?',o:['Spiritual needs','Fall risk','Pain','Nutrition'],c:0,r:'Faith, Importance, Community, Address in care.'},
-
 {topic:'meds',q:'Reversal agent for midazolam?',o:['Flumazenil','Naloxone','Dantrolene','Protamine'],c:0,r:'Naloxone is for opioids only. Classic distractor.'},
 {topic:'meds',q:'Reversal agent for opioids?',o:['Naloxone','Flumazenil','Acetylcysteine','Vitamin K'],c:0,r:'Short half-life, may need repeat dosing.'},
 {topic:'meds',q:'Versed provides?',o:['Sedation and amnesia, no analgesia','Analgesia only','Paralysis','Antiemesis'],c:0,r:'Watch for respiratory depression.'},
@@ -2735,13 +2574,30 @@ const DRILL_POOL=[
 {topic:'meds',q:'Hypercalcemia of malignancy is treated with?',o:['Isotonic fluids then a bisphosphonate','Calcium supplements','Fluid restriction','Calcium gluconate push'],c:0,r:'Volume expansion promotes urinary calcium excretion.'},
 {topic:'meds',q:'Red man syndrome from vancomycin is?',o:['Rate-related histamine release','IgE anaphylaxis','A drug allergy','Sepsis'],c:0,r:'Stop and restart slower. Not epinephrine.'},
 {topic:'meds',q:'NSAIDs in an older adult with CKD and heart failure?',o:['Question the order','Give as prescribed','Double the dose','Give with food only'],c:0,r:'Renal vasoconstriction, fluid retention, GI bleed risk.'},
+{topic:'aging',q:'Which pigment accumulates in aging cells?',o:['Lipofuscin','Melanin','Bilirubin','Hemosiderin'],c:0,r:'Also elastin and collagen degrade, and anemia rates rise.'},
+{topic:'aging',q:'Residual volume with aging does what?',o:['Increases','Decreases','Stays the same','Doubles'],c:0,r:'Chest wall muscles weaken and calcify, lung mass falls.'},
+{topic:'aging',q:'Female reproductive change with aging?',o:['Thinning vaginal wall','Thickening vaginal wall','Increased secretions','Uterine enlargement'],c:0,r:'Plus decreased secretions and uterine atrophy.'},
+{topic:'aging',q:'Which vitamin supports mental function in aging?',o:['B12','K','C','E'],c:0,r:'Deficiency can mimic dementia.'},
+{topic:'aging',q:'Cardiac conduction change with aging?',o:['Fewer pacemaker cells','More pacemaker cells','Faster conduction','No change'],c:0,r:'Plus valve stenosis and myocardial hypertrophy.'},
+{topic:'chronic',q:'How long must a condition last to be chronic?',o:['3 months or more','2 weeks','6 weeks','1 year'],c:0,r:'No cure, management only.'},
+{topic:'chronic',q:'Correct disability language?',o:['Person with a disability','Disabled person','The handicapped','Wheelchair-bound person'],c:0,r:'Person-first. The disability is what they have, not what they are.'},
+{topic:'chronic',q:'Structural barrier example?',o:['Narrow doorways','Insurance copays','Provider bias','Long wait times'],c:0,r:'Also stairs, no ramps, inaccessible restrooms.'},
+{topic:'chronic',q:'Which is a MODIFIABLE risk factor?',o:['High sodium diet','Family history','Age','Ethnicity'],c:0,r:'Also tobacco, secondhand smoke, low produce, inactivity, alcohol.'},
+{topic:'chronic',q:'Fraction of Americans with multiple chronic conditions?',o:['One third','One tenth','Three quarters','Half'],c:0,r:'Risks conflicting advice and preventable hospitalizations.'},
+{topic:'chronic',q:'Chronic conditions common in female veterans?',o:['Arthritis, hypertension, asthma','Cystic fibrosis and lupus','Sickle cell and hemophilia','Type 1 diabetes and MS'],c:0,r:'Male veterans: HTN, arthritis, COPD; 65+ adds CAD and cancer.'},
+{topic:'aging',q:'The geriatric triad is?',o:['Cognitive change, falls, incontinence','HTN, arthritis, COPD','Weight loss, anemia, fatigue','Dry skin, constipation, hearing loss'],c:0,r:'They cluster and worsen each other.'},
+{topic:'aging',q:'Geriatric syndromes require what kind of assessment?',o:['Multidisciplinary and comprehensive','A single specialist referral','One diagnostic test','Watchful waiting only'],c:0,r:'The causes are multifactorial.'},
+{topic:'aging',q:'Main nursing focus for geriatric syndromes in hospital?',o:['Prevention','Treatment after onset','Restricting mobility','Deferring assessment'],c:0,r:'Hospitalization itself is the risk factor.'},
+{topic:'aging',q:'Which is NOT a geriatric syndrome?',o:['Surgical wound infection','Falls','Poor nutrition','Sleep disturbance'],c:0,r:'Syndromes are multifactorial, not single-cause.'},
 ];
+
+
 
 
 let drillList=[], drillIdx=0, drillScore=0, drillStreak=0, drillBest=0, drillAnswered=false;
 const DRILL_ROUND=20;
 function startDrill(){
-  const pool = hotOnlyGlobal ? DRILL_POOL.filter(q=>['aging','cancer','post','intra','lytes','abg'].includes(q.topic)) : DRILL_POOL;
+  const pool = hotOnlyGlobal ? DRILL_POOL.filter(q=>['aging','cancer','post','intra'].includes(q.topic)) : DRILL_POOL;
   drillList=shuffle(pool.slice()).slice(0,Math.min(DRILL_ROUND,pool.length));
   drillIdx=0; drillScore=0; drillStreak=0; drillAnswered=false;
   renderDrillQ();
@@ -2808,9 +2664,6 @@ let quizSet=[], examShuffleMap={};
 const EXAM_TOPICS=[
   {id:'aging',   label:'\uD83E\uDDD3 Aging'},
   {id:'chronic', label:'\u267E\uFE0F Chronic'},
-  {id:'fluids',  label:'\uD83D\uDCA7 Fluids & IV'},
-  {id:'lytes',   label:'\u26A1 Electrolytes'},
-  {id:'abg',     label:'\uD83E\uDEC1 Acid-Base'},
   {id:'cancer',  label:'\uD83C\uDF97\uFE0F Cancer'},
   {id:'pre',     label:'\uD83D\uDD35 Preop'},
   {id:'intra',   label:'\uD83D\uDFE2 Intraop'},
