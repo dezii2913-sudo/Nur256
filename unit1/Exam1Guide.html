@@ -329,6 +329,7 @@ const SECTIONS=[
   {id:'oncoemerg',label:'🚨 Oncologic Emergencies'},
   {id:'resp',label:'🫁 Respiratory'},
   {id:'pre',label:'🔵 Preoperative'},
+  {id:'case',label:'🧩 Case: Mr. Egan'},
   {id:'intra',label:'🟢 Intraoperative + MH'},
   {id:'post',label:'🟣 Postoperative'},
   {id:'eol',label:'⚫ End-of-Life'},
@@ -769,6 +770,26 @@ const EXAM=[
 {topic:'resp',hot:true,q:'Which of the following is NOT part of the VAP bundle?',o:['Daily oral care with chlorhexidine','Elevate the head of the bed 30–45°','Keep the patient flat to promote rest','Daily sedation interruption / readiness-to-wean'],c:2,t:'single',r:'Three are real VAP-bundle elements. The impostor is B — keeping the patient flat INCREASES aspiration risk and is the opposite of the bundle. "NOT" questions hide one false action among true ones.'},
 {topic:'cancer',hot:true,q:'A patient is receiving chemotherapy with a platelet count of 22,000/mm3. Which nursing actions are indicated? Select all that apply.',o:['Avoid rectal temperatures, suppositories, and enemas','Use an electric razor rather than a blade for shaving','Encourage vigorous nose blowing to clear congestion','Administer prescribed aspirin for a reported headache','Hold pressure on venipuncture sites for at least 5 minutes','Provide a soft-bristled toothbrush and skip flossing'],c:[0,1,4,5],t:'multi',r:'Thrombocytopenia precautions prevent <b>any breach of mucosa or skin</b>. Aspirin is contraindicated because it inhibits platelet aggregation on top of an already low count. Vigorous nose blowing provokes epistaxis. The others are standard bleeding precautions. Watch that the incorrect options are both things a patient would plausibly ask for.'},
 {topic:'resp',hot:false,q:'Which statement about a permanent tracheostomy after total laryngectomy is accurate?',o:['Swimming is safe as long as the head stays above water','The patient can still breathe normally through the nose','The stoma will close on its own within several months','Air no longer passes through the nose, so it must be humidified'],c:3,t:'single',r:'The airway is <b>permanently rerouted to the neck stoma</b>. The nose no longer warms, filters, or humidifies air, so external humidification and stoma protection are essential. <b>These patients can never swim.</b>'},
+{topic:'pre',hot:true,q:'A patient scheduled for a below-the-knee amputation takes aspirin 325 mg daily and cilostazol 100 mg twice daily. What is the nurse\'s primary concern?',o:['Neither drug affects the perioperative period','The combination will raise the blood pressure intraoperatively','Cilostazol counteracts the effect of aspirin','Two antiplatelet agents together increase surgical bleeding risk'],c:3,t:'single',r:'<b>Aspirin and cilostazol are both antiplatelet agents.</b> Stacked, they markedly increase bleeding risk. Aspirin inhibits platelets irreversibly for their 7 to 10 day lifespan. Read a medication list as a whole, not one line at a time.'},
+{topic:'pre',hot:true,q:'A patient with type 1 diabetes is NPO for surgery at 10:00. The order reads insulin 6 units regular with 15 units NPH subcutaneously every morning. What should the nurse do?',o:['Hold both doses without notifying anyone','Give only the NPH and hold the regular','Clarify the perioperative insulin plan with the provider','Administer the full dose as ordered'],c:2,t:'single',r:'A <b>full mealtime dose with no intake causes hypoglycemia under anesthesia</b>, where the adrenergic warning signs are masked. The dose is usually adjusted, but the nurse <b>clarifies rather than unilaterally holding or modifying</b>.'},
+{topic:'pre',hot:true,q:'A patient is scheduled for surgery and has an order for lorazepam on call to the OR. The consent has not yet been signed. What should the nurse do?',o:['Give the lorazepam then obtain the signature','Give the drug and document consent as implied','Have a family member sign in his place','Ensure consent is signed before giving the sedative'],c:3,t:'single',r:'<b>A sedated patient cannot give informed consent.</b> Consent must be obtained <b>before</b> premedication. A signature taken after sedation is not valid, and family cannot consent for a competent adult.'},
+{topic:'pre',hot:false,q:'Which finding during preoperative screening suggests a possible latex allergy?',o:['Wheezing during cold weather','Itching and swelling after eating bananas, avocado, or kiwi','Nausea after receiving general anesthesia','A rash after taking penicillin as a child'],c:1,t:'single',r:'<b>Banana, avocado, kiwi, and chestnut cross-react with latex.</b> Also ask about reactions to gloves, balloons, condoms, adhesive tape, and elastic. <b>NKDA does not mean no latex allergy</b> — it is screened separately.'},
+{topic:'pre',hot:true,q:'A patient with a documented latex allergy is scheduled for surgery. How should the case be scheduled?',o:['Any time, with latex-free gloves only','First case of the day','Only after the room is terminally cleaned mid-day','Last case of the day'],c:1,t:'single',r:'<b>Latex-allergic patients go FIRST</b> so airborne latex particles from earlier cases have settled and cleared. Scheduling <b>last</b> is correct for <b>infection</b> isolation, and transferring that rule here is the trap.'},
+{topic:'pre',hot:false,q:'A patient with an advance directive is going to surgery. What is the nurse\'s responsibility?',o:['Ensure resuscitation wishes are reviewed and documented before surgery','Assume the directive is suspended during the procedure','Ask the family to revoke it for the operative period','Remove the directive from the chart until after surgery'],c:0,t:'single',r:'An advance directive is <b>not automatically suspended</b> in the OR, and it is <b>not automatically a DNR</b>. Any resuscitation limits require <b>reconsideration, explicit discussion, documentation, and communication to the whole team</b> before the procedure.'},
+{topic:'pre',hot:false,q:'Which preoperative teaching is most important for a patient with a 40 pack-year smoking history?',o:['Avoid pain medication so breathing is not suppressed','Remain flat in bed for the first 24 hours','Turn, cough, deep breathe and use the incentive spirometer','Limit fluids after surgery to reduce secretions'],c:2,t:'single',r:'A heavy smoking history is the single largest risk for <b>atelectasis and pneumonia</b>. Teaching happens <b>before</b> surgery, while he is alert and not sedated. Restricting fluids thickens secretions, and withholding analgesia prevents the deep breathing that keeps alveoli open.'},
+{topic:'pre',hot:false,q:'Which preoperative assessments are essential for a patient with diabetes, CAD, and PVD undergoing amputation? Select all that apply.',o:['Neurovascular check of both lower extremities','Pulmonary function testing on every patient','Coagulation studies and type and screen','ECG and cardiac clearance','Bone density scan','Blood glucose and A1C'],c:[0,2,3,5],t:'multi',r:'Assessment is driven by <b>his specific risk list</b>: diabetes needs glucose and A1C, CAD needs an ECG and clearance, PVD means checking <b>both</b> legs since the remaining limb is also at risk, and dual antiplatelet therapy needs coagulation studies and a type and screen.'},
+{topic:'intra',hot:true,q:'What is verified during the surgical time-out?',o:['The anesthesiologist\'s credentials','Correct patient, correct procedure, correct site','The patient\'s insurance authorization','The instrument and sponge counts'],c:1,t:'single',r:'The <b>Time-Out</b> happens immediately before incision with the entire team stopped, and verifies <b>correct patient, correct procedure, correct site</b>. Counts and equipment checks are part of the broader safety checklist but are not the time-out itself.'},
+{topic:'intra',hot:false,q:'During handoff to the holding area nurse, which SBAR element includes the patient\'s last insulin dose and NPO time?',o:['Recommendation','Situation','Assessment','Background'],c:2,t:'single',r:'<b>Assessment</b> carries the current clinical data: vital signs, last glucose, NPO time, medications held and given, and checklist status. <b>Situation</b> is why he is here, <b>Background</b> is his history, and <b>Recommendation</b> is what the receiving nurse should watch for.'},
+{topic:'intra',hot:false,q:'A patient is being transferred to the OR holding area. What makes the handoff safe?',o:['A written note left in the chart','A verbal summary given while walking away','Reporting only the surgical site and allergies','Face-to-face report with opportunity to ask questions and read back'],c:3,t:'single',r:'A safe handoff is <b>face to face, uninterrupted, and two-directional</b>, with a chance to ask questions and confirm understanding. A one-directional report is not a handoff.'},
+{topic:'post',hot:true,q:'Four hours after a below-the-knee amputation the nurse finds sanguineous drainage saturating the dressing. What is the priority action?',o:['Reinforce the dressing, apply pressure, and notify the surgeon','Document the finding and recheck in one hour','Remove the dressing to inspect the incision','Apply ice and elevate the limb without notifying anyone'],c:0,t:'single',r:'<b>Reinforce, do not remove</b> — the first dressing after an amputation is changed by the surgeon. Assess vital signs, <b>mark the saturation edge with the time</b> so change is measurable, apply pressure, and notify. This patient is on <b>two antiplatelet drugs</b>. Keep a <b>tourniquet at the bedside</b>.'},
+{topic:'post',hot:true,q:'Which postoperative complication is this patient at highest risk for: 53-year-old, 40 pack-year smoker, s/p general anesthesia for BKA?',o:['Atelectasis and pneumonia','Wound dehiscence of the abdomen','Malignant hyperthermia','Hypoglycemia from the anesthetic agent'],c:0,t:'single',r:'A <b>40 pack-year history plus general anesthesia plus immobility</b> makes <b>atelectasis and pneumonia</b> the leading risk. Malignant hyperthermia is an intraoperative reaction to specific triggers, and abdominal dehiscence does not apply to a leg amputation.'},
+{topic:'post',hot:false,q:'Which leg exercises should the nurse teach after a below-the-knee amputation to prevent venous stasis?',o:['Vigorous exercise of both legs immediately','No movement of either leg for 48 hours','Dorsiflexion and ankle rotation on the non-operative side','Only passive range of motion by staff'],c:2,t:'single',r:'Teach <b>dorsiflexion and ankle rotation on the non-operative side</b>, get him <b>out of bed to a chair early and often</b>, and change position frequently while on bed rest. Immobility is what causes the DVT.'},
+{topic:'post',hot:false,q:'A patient refuses to use the incentive spirometer after surgery because of incisional pain. What should the nurse do first?',o:['Document the refusal and try again next shift','Explain that pain medication will suppress his breathing','Medicate for pain, then assist with splinted deep breathing','Notify the provider that the patient is noncompliant'],c:2,t:'single',r:'<b>Pain control is a respiratory intervention.</b> He will not breathe deeply, cough, or ambulate if it hurts too much, and shallow breathing plus immobility is exactly how atelectasis develops. Medicate first, then do the pulmonary hygiene with splinting.'},
+{topic:'post',hot:true,q:'Which complications should the nurse anticipate after a below-the-knee amputation? Select all that apply.',o:['Malignant hyperthermia','Body image disturbance','Hemorrhage','Hip flexion contracture','Increased intracranial pressure','Phantom limb pain'],c:[1,2,3,5],t:'multi',r:'Amputation-specific risks are <b>hemorrhage</b> (keep a tourniquet at the bedside), <b>phantom limb pain</b> (real pain, treat it), <b>contracture</b> from prolonged hip flexion, and <b>body image disturbance</b>. MH is an intraoperative anesthetic reaction and ICP is unrelated.'},
+{topic:'meds',hot:true,q:'Which analgesic class is NOT anti-inflammatory?',o:['Ibuprofen','Acetaminophen','Aspirin','Naproxen'],c:1,t:'single',r:'<b>Acetaminophen inhibits prostaglandin synthesis in the CNS</b>, so it reduces pain and fever but has <b>no anti-inflammatory effect</b>. NSAIDs and aspirin inhibit COX peripherally and do reduce inflammation.'},
+{topic:'meds',hot:true,q:'A patient takes ibuprofen regularly. Which laboratory values should the nurse monitor?',o:['Amylase and lipase','TSH and free T4','BUN and creatinine','AST and ALT'],c:2,t:'single',r:'<b>NSAIDs are nephrotoxic</b> — monitor <b>BUN and creatinine</b>. <b>Acetaminophen is hepatotoxic</b> — that is the one requiring <b>AST and ALT</b>. He swaps the organ and the lab.'},
+{topic:'meds',hot:false,q:'A parent asks about giving aspirin to a child with influenza. What is the nurse\'s response?',o:['Aspirin is safe if given with food','Aspirin should be given only at bedtime','Aspirin is avoided in children with viral infections due to Reye syndrome','Aspirin is preferred over acetaminophen for children'],c:2,t:'single',r:'<b>Reye syndrome</b> is why aspirin is avoided in children with a viral illness. Other aspirin-specific effects are <b>tinnitus</b> as an early toxicity sign and bleeding from <b>irreversible</b> platelet inhibition.'},
+{topic:'meds',hot:false,q:'Which nursing intervention is essential for a patient on scheduled opioids?',o:['Encourage fluid and fiber intake to prevent constipation','Withhold the dose if the patient is sleeping comfortably','Restrict fluids to reduce sedation','Administer only after pain reaches 8 out of 10'],c:0,t:'single',r:'<b>Constipation is the opioid effect that never resolves with tolerance</b>, so fluids, fiber, and a bowel regimen start with the first dose. Also monitor respiratory rate and <b>hold if under 12/min</b>.'},
 ];
 
 </script>
@@ -2296,6 +2317,154 @@ renderFilteredQuiz('intraQuiz', secSample(SEC_POOLS['intraQuiz'].mapped, SECTION
 
 </script>
 <script>
+document.getElementById('sec-case').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🧩</span> Unfolding Case: Mr. Egan</h2>
+<p class="intro-line">The perioperative case study from your materials, worked all the way through. Case-based items are where he hides the "question inside the question" — one patient, and every phase asks something different.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>The patient</h3>
+  <p><b>John Egan, 53.</b> History of <b>type 1 diabetes</b>, <b>40 pack-year</b> smoking history, <b>CAD</b>, and <b>PVD</b>.</p>
+  <p>Six weeks ago he developed a <b>left heel wound</b>, 4 cm × 2 cm. Despite IV antibiotics and chemical debridement it developed a <b>gangrenous infection</b>. He is scheduled for a <b>left BKA tomorrow at 10:00</b>.</p>
+  <p><b>Medications:</b> daily insulin, <b>aspirin 325 mg/day</b>, <b>Pletal (cilostazol) 100 mg BID</b>. He has an <b>advance directive</b> and <b>NKDA</b>.</p>
+  <div class="hy"><span class="tag">Read the history as a risk list</span>Every item in that paragraph is a testable risk. <b>T1DM</b> → poor healing, infection, glucose swings while NPO. <b>40 pack-years</b> → the single biggest respiratory complication risk. <b>CAD</b> → cardiac events under anesthesia. <b>PVD</b> → why the wound never healed and why the other leg is also at risk.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>⭐ Medication reconciliation — which orders concern you?</h3>
+  <table class="lab">
+    <tr><th>Order</th><th>Concern</th></tr>
+    <tr><td><b>Insulin 6 u regular with 15 u NPH subcut q AM</b></td><td>He will be <b>NPO</b>. A full morning dose with no breakfast causes <b>hypoglycemia under anesthesia</b>, where the warning signs are masked. Clarify the perioperative insulin plan</td></tr>
+    <tr><td><b>Aspirin 325 mg PO daily</b></td><td><b>Antiplatelet</b> — irreversibly inhibits platelets for their 7–10 day lifespan. Raises surgical bleeding risk. Should have been addressed days ago</td></tr>
+    <tr><td><b>Cilostazol (Pletal) 100 mg PO BID</b></td><td>Also <b>antiplatelet</b> plus vasodilator, used for PVD claudication. <b>Second bleeding risk stacked on the first</b></td></tr>
+    <tr><td><b>Lorazepam 0.5 mg IVP on call to OR</b></td><td>Reasonable as a preop anxiolytic — but once given, <b>the side rails go up and he does not get out of bed</b>. Consent must be signed <b>before</b> sedation</td></tr>
+  </table>
+  <div class="trap"><span class="tag">The question inside the question</span>"Which order causes concern?" is really <b>which order will harm THIS patient given what I just told you about him.</b> Two antiplatelets before surgery and a full insulin dose in an NPO diabetic. The lorazepam is fine as a drug — the concern is <b>sequence</b>.</div>
+</div>
+
+<div class="card">
+  <h3>Preoperative — what has to happen before he can go safely</h3>
+  <ul class="clean">
+    <li><b>Labs:</b> CBC, electrolytes, BUN/creatinine, glucose and A1C, coagulation studies, type and screen.</li>
+    <li><b>Cardiac:</b> ECG and cardiac clearance given CAD. Chest x-ray given 40 pack-years.</li>
+    <li><b>Baseline:</b> vital signs, oxygen saturation, <b>neurovascular checks of both legs</b>, weight, skin.</li>
+    <li><b>NPO status</b> confirmed and the insulin plan clarified.</li>
+    <li><b>Consent, site marking, and the advance directive</b> addressed.</li>
+    <li><b>Teaching before sedation:</b> turn-cough-deep-breathe, incentive spirometer, splinting, leg exercises, pain plan, what he will wake up to.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Informed consent — who does what</h3>
+  <ul class="clean">
+    <li><b>The surgeon</b> explains the procedure, risks, benefits, and alternatives. <b>Dr. Damon</b> obtains consent for the BKA; <b>Dr. Riley</b> discusses anesthesia.</li>
+    <li><b>The nurse witnesses the signature and verifies understanding</b> — that he is voluntarily consenting, is not sedated, and can explain the procedure in his own words.</li>
+    <li>He must consent to <b>the specific procedure and site</b> — left BKA — and separately to <b>anesthesia</b>.</li>
+    <li>If he cannot explain what is being done, <b>stop and call the surgeon back</b>. Do not fill in the explanation yourself.</li>
+    <li><b>Consent is revocable at any time</b>, right up to the incision.</li>
+  </ul>
+  <div class="trap"><span class="tag">Sequence trap</span>Consent <b>before</b> the lorazepam. A sedated patient cannot give informed consent, and a signature obtained after premedication is not valid.</div>
+</div>
+
+<div class="card">
+  <h3>The advance directive</h3>
+  <ul class="clean">
+    <li>It documents <b>his wishes</b> for care if he cannot speak for himself, and may name a health care proxy.</li>
+    <li><b>An advance directive is not automatically a DNR</b>, and a DNR is <b>not automatically suspended</b> in the OR.</li>
+    <li>If he has resuscitation limits, they must be <b>reviewed and explicitly addressed before surgery</b> — required reconsideration. Anesthesia routinely does things that look like resuscitation.</li>
+    <li>The decision is <b>documented</b> and communicated to the whole surgical team.</li>
+  </ul>
+  <div class="hy"><span class="tag">Why he asks this</span>Students assume the directive gets set aside for surgery. It does not. It gets <b>discussed and clarified</b>, and whatever is decided is written down and handed off.</div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>Latex allergy screening</h3>
+  <p class="why-chain">Latex is everywhere in an OR — gloves, catheters, tourniquets, tubing, blood pressure cuffs. An unrecognized latex allergy can produce <b>intraoperative anaphylaxis</b> in a patient who cannot report symptoms.</p>
+  <ul class="clean">
+    <li><b>Ask about:</b> reactions to gloves, balloons, condoms, dental dams, rubber bands, adhesive tape, elastic in clothing.</li>
+    <li><b>Cross-reactive foods:</b> <b>banana, avocado, kiwi, chestnut</b>, papaya, tomato, potato.</li>
+    <li><b>Symptoms to ask about:</b> contact dermatitis, itching, hives, rhinitis, watery eyes, wheezing, swelling of lips or tongue.</li>
+    <li>Also screen occupational exposure — health care and rubber industry workers have higher rates.</li>
+    <li><b>NKDA does not mean no latex allergy.</b> Latex sensitivity is asked about separately.</li>
+  </ul>
+  <div class="trap"><span class="tag">⭐ Scheduling</span>A latex-allergic patient is scheduled <b>FIRST case of the day</b>, so airborne latex particles from prior cases have settled and cleared. He counts on you transferring the "infection isolation goes last" rule and getting it backwards.</div>
+</div>
+
+<div class="card">
+  <h3>Handoff to the holding area — SBAR</h3>
+  <table class="lab">
+    <tr><td><b>S — Situation</b></td><td>John Egan, 53, here for a left BKA. Consent signed, site marked left lower extremity</td></tr>
+    <tr><td><b>B — Background</b></td><td>Type 1 diabetes, 40 pack-year smoker, CAD, PVD. Six-week gangrenous left heel wound. Advance directive on chart, resuscitation status addressed. NKDA, latex screening negative</td></tr>
+    <tr><td><b>A — Assessment</b></td><td>Current vitals, last glucose and time, NPO since when, insulin held, last aspirin and Pletal doses, pedal pulses, preop checklist complete, lorazepam given at what time</td></tr>
+    <tr><td><b>R — Recommendation</b></td><td>Monitor glucose intraoperatively, watch for bleeding given dual antiplatelet therapy, confirm the advance directive plan with the team</td></tr>
+  </table>
+  <div class="hy"><span class="tag">What makes a handoff safe</span><b>Face to face, uninterrupted, with a chance to ask questions and read back.</b> A handoff that is one-directional is not a handoff.</div>
+</div>
+
+<div class="card">
+  <h3>Final safety checks in the holding area</h3>
+  <ul class="clean">
+    <li><b>Two patient identifiers</b> — name and date of birth.</li>
+    <li><b>Site marking by the surgeon</b>, visible after prep and draping, confirmed with the patient while awake.</li>
+    <li><b>Consent verified</b> — correct procedure, correct side, signed and witnessed.</li>
+    <li><b>The Time-Out</b> immediately before incision, with the whole team stopped: <b>correct patient, correct procedure, correct site</b>.</li>
+    <li>Allergies, NPO status, antibiotic prophylaxis timing, implants and equipment available.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>Postoperative — the saturated dressing</h3>
+  <p><i>Checking the surgical site, the nurse notices sanguineous drainage saturating the dressing. What now?</i></p>
+  <ol class="chainlist">
+    <li><b>1.</b> <b>Assess</b> — vital signs, the amount and rate of drainage, and mark the edge of the saturation with the time so change is measurable.</li>
+    <li><b>2.</b> <b>Reinforce the dressing.</b> Do not remove the original — the first dressing is changed by the surgeon after an amputation.</li>
+    <li><b>3.</b> <b>Apply pressure</b> and elevate the residual limb per order.</li>
+    <li><b>4.</b> <b>Notify the surgeon</b> — this patient is on <b>two antiplatelet drugs</b>.</li>
+    <li><b>5.</b> Keep a <b>tourniquet at the bedside</b> after an amputation in case of hemorrhage.</li>
+    <li><b>6.</b> Monitor for hypovolemic shock: rising heart rate, falling BP, <b>restlessness</b>, cool clammy skin, falling urine output.</li>
+  </ol>
+  <div class="trap"><span class="tag">The trap here</span>"Remove the dressing to inspect the wound" and "document and recheck in an hour." Neither is right. <b>Reinforce, assess, notify.</b> And sanguineous drainage that is <b>saturating</b> is not the expected small amount.</div>
+</div>
+
+<div class="card">
+  <h3>Complications to anticipate — read his history back</h3>
+  <table class="lab">
+    <tr><th>Risk factor</th><th>What it sets him up for</th></tr>
+    <tr><td><b>40 pack-year smoker</b></td><td><b>Atelectasis, pneumonia,</b> retained secretions, delayed healing</td></tr>
+    <tr><td><b>CAD</b></td><td>Myocardial ischemia or infarction, dysrhythmia</td></tr>
+    <tr><td><b>Type 1 diabetes</b></td><td><b>Hypo- and hyperglycemia, poor wound healing, infection</b></td></tr>
+    <tr><td><b>PVD</b></td><td>Poor perfusion to the residual limb, <b>risk to the remaining leg</b>, delayed healing</td></tr>
+    <tr><td><b>Immobility + amputation</b></td><td><b>DVT and PE</b>, pressure injury, contractures</td></tr>
+    <tr><td><b>General anesthesia</b></td><td>Airway compromise, hypoventilation, ileus, urinary retention</td></tr>
+    <tr><td><b>Amputation specifically</b></td><td><b>Hemorrhage, phantom limb pain, contracture</b> (hip flexion), body image disturbance</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Preventing respiratory and DVT complications</h3>
+  <table class="lab">
+    <tr><th>Respiratory</th><th>DVT</th></tr>
+    <tr><td><b>Turn, cough, deep breathe</b> every 1–2 hours \u00b7 <b>incentive spirometer</b> \u00b7 splint with a pillow \u00b7 <b>early ambulation</b> \u00b7 adequate pain control so he will actually do it \u00b7 hydration to thin secretions \u00b7 head of bed elevated</td><td><b>Leg exercises</b> to prevent venous stasis \u00b7 <b>out of bed to chair early and often</b> \u00b7 change position frequently on bed rest \u00b7 <b>exercises on the non-operative side: dorsiflex, rotate the ankle</b> \u00b7 SCDs \u00b7 prophylactic anticoagulation \u00b7 hydration</td></tr>
+  </table>
+  <div class="hy"><span class="tag">The connection he wants</span>Pain control is a <b>respiratory</b> intervention. He will not deep breathe, cough, or get out of bed if it hurts too much — and shallow breathing plus immobility is exactly how you get atelectasis and DVT. <b>Medicate first, then do the pulmonary hygiene.</b></div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on case studies</h3>
+  <div class="trap"><span class="tag">Trap 1 — ignoring the history</span>The history paragraph is not scenery. Every complication question is answered from it. Smoker → respiratory. CAD → cardiac. Diabetic → glucose and healing.</div>
+  <div class="trap"><span class="tag">Trap 2 — one drug at a time</span>Aspirin alone is a concern. Aspirin <b>plus Pletal</b> is two antiplatelets stacked. Read the med list as a whole, not line by line.</div>
+  <div class="trap"><span class="tag">Trap 3 — consent after sedation</span>Order matters. Consent, then premedicate, then side rails up.</div>
+  <div class="trap"><span class="tag">Trap 4 — latex scheduled last</span><b>First case of the day.</b> The opposite of infection isolation.</div>
+  <div class="trap"><span class="tag">Trap 5 — NKDA read as no latex allergy</span>They are screened <b>separately</b>. Ask about bananas, avocado, kiwi, and chestnut.</div>
+  <div class="trap"><span class="tag">Trap 6 — removing the first dressing</span>After an amputation the <b>surgeon</b> does the first change. Reinforce and notify.</div>
+  <div class="trap"><span class="tag">Trap 7 — the advance directive assumed suspended</span>It is <b>reviewed and clarified</b> before surgery, not set aside.</div>
+</div>
+
+<div id="caseQuiz"></div>`;
+SEC_POOLS['caseQuiz']={mapped:secMap(EXAM.filter(q=>q.topic==='pre'||q.topic==='intra'||q.topic==='post')),cap:SECTION_QUIZ_SIZE,title:'Perioperative case practice',source:'Case Study'};
+renderFilteredQuiz('caseQuiz', secSample(SEC_POOLS['caseQuiz'].mapped, SECTION_QUIZ_SIZE), 'Perioperative case practice', 'Case Study', SEC_POOLS['caseQuiz'].mapped.length);
+
+</script>
+<script>
 document.getElementById('sec-post').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🟣</span> Postoperative — PACU to Discharge</h2>
 <p class="intro-line">Rank every finding by how fast it kills. That is what ABC actually means.</p>
@@ -2358,18 +2527,6 @@ document.getElementById('sec-post').innerHTML=`
   <div class="mnem"><div class="tag">Shortcut</div><div class="big">The verb tells you the answer.</div><div class="exp">Assess, teach, evaluate, plan → nurse. Assist, reapply, transport, measure → UAP.</div></div>
 </div>
 
-<div class="card" style="border-color:var(--purple)">
-  <h3>Hospice — what it actually is</h3>
-  <ul class="clean">
-    <li>A <b>comprehensive interdisciplinary specialty program</b>.</li>
-    <li><b>Focus on quality of life</b> and <b>palliation of symptoms</b>.</li>
-    <li><b>Physical, psychosocial, and spiritual support</b> — all three, for patient and family.</li>
-    <li><b>Coordination of specialty services</b> across <b>hospitals, home care programs, and the community</b>.</li>
-    <li><b>Timely referral matters.</b> Late referral is the most common problem — patients get days of benefit from a program designed for months.</li>
-    <li>Addresses <b>complex patient and family needs</b>, including bereavement follow-up after the death.</li>
-  </ul>
-</div>
-
 <div class="card" style="border-color:var(--amber)">
   <h3>Caring for patients with advanced cancer</h3>
   <table class="lab">
@@ -2411,6 +2568,32 @@ renderFilteredQuiz('postQuiz', secSample(SEC_POOLS['postQuiz'].mapped, SECTION_Q
 document.getElementById('sec-eol').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">⚫</span> Palliative & End-of-Life Care</h2>
 <p class="intro-line">Definitions matter here more than interventions. He tests the boundary between the terms.</p>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>⭐ Palliative vs. Hospice — side by side</h3>
+  <table class="lab">
+    <tr><th></th><th>Palliative Care</th><th>Hospice Care</th></tr>
+    <tr><td><b>Purpose</b></td><td>Easing <b>pain and discomfort</b>, reducing stress, and helping people have the <b>highest quality of life possible</b></td><td>Quality of life <b>when a cure is no longer possible</b></td></tr>
+    <tr><td><b>Who can receive it</b></td><td><b>Anyone living with a serious illness</b></td><td>If doctors think they have <b>fewer than six months to live</b></td></tr>
+    <tr><td><b>Can I still get treatment for my illness?</b></td><td><b>Yes</b> — palliative care runs <b>alongside curative and therapeutic care</b></td><td><b>No curative treatment</b>, but medicine that enhances quality of life — such as treatment for high blood pressure or anxiety</td></tr>
+    <tr><td><b>What does it include?</b></td><td>Pain and symptom management, care coordination, help developing the plan of care, help with insurance forms and options for care and housing, help with advance directives, spiritual care</td><td>Pain and symptom management, emotional support, medications and medical supplies, coaching for caregivers, grief support. <b>Short-term inpatient care</b> when symptoms are too difficult to manage at home or caregivers need <b>respite</b></td></tr>
+  </table>
+  <div class="mnem"><div class="tag">The two-line version</div><div class="big">Palliative is defined by the GOAL. Hospice is defined by the PROGNOSIS.</div><div class="exp">Palliative can start at diagnosis and run alongside chemo. Hospice requires a prognosis under six months and stopping curative treatment.</div></div>
+  <div class="trap"><span class="tag">The third thing people confuse in</span>A <b>DNR is neither.</b> It is an order about <b>resuscitation only</b> — every other treatment continues. A patient can be full code and on hospice, or DNR and receiving aggressive curative care.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>Hospice — what it actually is</h3>
+  <ul class="clean">
+    <li>A <b>comprehensive interdisciplinary specialty program</b>.</li>
+    <li><b>Focus on quality of life</b> and <b>palliation of symptoms</b>.</li>
+    <li><b>Physical, psychosocial, and spiritual support</b> — all three, for patient and family.</li>
+    <li><b>Coordination of specialty services</b> across <b>hospitals, home care programs, and the community</b>.</li>
+    <li><b>Timely referral matters.</b> Late referral is the most common problem — patients get days of benefit from a program designed for months.</li>
+    <li>Addresses <b>complex patient and family needs</b>, including bereavement follow-up after the death.</li>
+  </ul>
+</div>
+
 
 <div class="card" style="border-color:var(--teal)">
   <h3>Palliative vs. Hospice vs. DNR</h3>
@@ -2636,6 +2819,20 @@ document.getElementById('sec-meds').innerHTML=`
     <tr><td><b>Watch for</b></td><td>Renal function; with IV hydration</td></tr>
     <tr><td><b>Reversal</b></td><td>—</td></tr>
   </table>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>💊 The four pain classes — mechanism drives everything</h3>
+  <table class="lab">
+    <tr><th>Class</th><th>Mechanism of action</th><th>Side effects</th><th>Nursing</th></tr>
+    <tr><td><b>NSAIDs</b><br><span class="stem">-profen, -oxen</span><br>ibuprofen, naproxen</td><td>Inhibit <b>COX-1 and COX-2</b>, reducing prostaglandin synthesis → <b>lowers inflammation, pain, and fever</b></td><td><b>Gastric irritation, GI bleeding, nephrotoxic</b></td><td><b>Give with food or milk.</b> Monitor <b>BUN and creatinine</b>. Assess for signs of bleeding</td></tr>
+    <tr><td><b>Aspirin</b><br>acetylsalicylic acid</td><td><b>Irreversibly</b> inhibits COX-1 and COX-2 → reduces pain, inflammation, fever, <b>and platelet aggregation</b></td><td><b>Reye syndrome in children</b>, <b>tinnitus</b>, bleeding</td><td>Monitor for <b>bleeding</b>. <b>Avoid in children with viral infections</b></td></tr>
+    <tr><td><b>Acetaminophen</b></td><td>Inhibits prostaglandin synthesis <b>in the CNS</b> → reduces pain and fever. <b>NOT anti-inflammatory</b></td><td><b>Hepatotoxic</b>, nausea, allergic reaction</td><td><b>Do not exceed 4 g (4000 mg) per day.</b> Monitor <b>AST and ALT</b></td></tr>
+    <tr><td><b>Opioids</b><br><span class="stem">-done, -one</span><br>oxycodone, morphine</td><td>Bind <b>opioid receptors in the brain and spinal cord</b> → <b>block pain perception and response</b></td><td><b>Respiratory depression</b>, constipation, drowsiness</td><td><b>Monitor RR — hold if under 12/min.</b> <b>Encourage fluid and fiber</b> to prevent constipation</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">The distinction he tests</div><div class="big">Acetaminophen is NOT anti-inflammatory. NSAIDs and aspirin are.</div><div class="exp">Acetaminophen works centrally, in the CNS. That is why it lowers pain and fever but does nothing for swelling or inflammation.</div></div>
+  <div class="trap"><span class="tag">Toxicity by organ</span><b>NSAIDs → kidney</b> (nephrotoxic, check BUN/creatinine). <b>Acetaminophen → liver</b> (hepatotoxic, check AST/ALT, max 4 g). He swaps the organ and the lab.</div>
+  <div class="trap"><span class="tag">Two aspirin-only facts</span><b>Tinnitus</b> is an early salicylate toxicity sign, and <b>Reye syndrome</b> is why aspirin is avoided in children with a viral illness. Neither applies to the other three classes.</div>
 </div>
 
 <div id="medsQuiz"></div>`;
