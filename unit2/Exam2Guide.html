@@ -322,7 +322,11 @@ function updateProg(){
 const SECTIONS=[
   {id:'home',label:'🏠 Start'},
   {id:'why',label:'🧠 Why Engine'},
+  {id:'hooks',label:'🪝 Memory Hooks'},
   {id:'notes',label:'✍️ Class Notes'},
+  {id:'fluids',label:'💧 Fluids & IV Therapy'},
+  {id:'lytes',label:'⚡ Electrolytes'},
+  {id:'abg',label:'🫁 Acid-Base & ABGs'},
   {id:'upper',label:'👃 Upper Respiratory'},
   {id:'resp-assess',label:'🔍 Resp Assessment'},
   {id:'acute',label:'🚨 Acute Respiratory'},
@@ -466,7 +470,46 @@ function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).ma
 let hotOnlyGlobal=false;
 let quizFilterState={};
 (function restoreVisionOnly(){ try{ if(localStorage.getItem('nur256u2_hotonly')==='1') hotOnlyGlobal=true; }catch(e){} })();
+const SECTION_QUIZ_CAP = 18;
+const SEC_FULL = {};
+function secSampleCap(pool, cap){
+  if(pool.length <= cap) return pool.slice();
+  const hot  = shuffle(pool.filter(q=>q.hot));
+  const rest = shuffle(pool.filter(q=>!q.hot));
+  const hotWant = Math.min(hot.length, Math.max(1, Math.round(cap*0.6)));
+  let out = hot.slice(0, hotWant).concat(rest.slice(0, cap - hotWant));
+  if(out.length < cap){
+    const used = new Set(out);
+    out = out.concat(hot.concat(rest).filter(q=>!used.has(q)).slice(0, cap-out.length));
+  }
+  return shuffle(out);
+}
+function refreshSecQuiz(id){
+  const p = SEC_FULL[id];
+  if(!p) return;
+  const note = document.getElementById(id+'-poolnote');
+  if(note) note.remove();
+  renderFilteredQuiz(id, p.pool, p.title, p.source);
+  const host = document.getElementById(id);
+  if(host) host.scrollIntoView({behavior:'smooth', block:'start'});
+  if(typeof toast==='function') toast('Fresh set of '+Math.min(SECTION_QUIZ_CAP, p.pool.length));
+}
 function renderFilteredQuiz(containerId, allQuestions, title, source){
+  SEC_FULL[containerId] = {pool: allQuestions, title: title, source: source};
+  const total = allQuestions.length;
+  const shown = secSampleCap(allQuestions, SECTION_QUIZ_CAP);
+  const host0 = document.getElementById(containerId);
+  const old = document.getElementById(containerId+'-poolnote');
+  if(old) old.remove();
+  if(host0 && total > shown.length){
+    const note=document.createElement('div');
+    note.className='tipbar'; note.id=containerId+'-poolnote';
+    note.innerHTML='\uD83D\uDCDD <b>'+shown.length+' questions</b>, freshly drawn from a pool of <b>'+total+'</b> on this topic. '
+      + '<button class="mini" style="margin-left:6px" onclick="refreshSecQuiz(\''+containerId+'\')">\uD83D\uDD04 New '+shown.length+'</button>'
+      + '<br><span style="font-size:.85em">Each draw mixes high-yield items with ones you may not have seen yet.</span>';
+    host0.parentNode.insertBefore(note, host0);
+  }
+  allQuestions = shown;
   quizFilterState[containerId]={allQuestions,title,source};
   applyQuizFilter(containerId);
 }
@@ -709,30 +752,143 @@ const EXAM=[
 {topic:'upper',hot:false,q:'A patient with a peritonsillar abscess has a muffled voice, drooling, and difficulty opening the mouth. What is the nurse\'s priority?',o:['Obtain a throat culture before treatment','Encourage cold fluids for comfort','Apply a warm compress to the jaw','Assess and protect the airway'],c:3,t:'single',r:'A peritonsillar abscess can <b>obstruct the airway</b>. The muffled hot-potato voice, drooling, and trismus signal significant swelling. Airway assessment and readiness come first; drainage and antibiotics follow.'},
 {topic:'upper',hot:false,q:'Which instructions should the nurse give a patient after an episode of epistaxis? Select all that apply.',o:['Avoid heavy lifting and straining','Blow the nose to clear remaining clots','Use a humidifier at home','Avoid blowing the nose forcefully','Avoid aspirin and NSAIDs unless approved','Tilt the head back if bleeding recurs'],c:[0,2,3,4],t:'multi',r:'After epistaxis, avoid anything that raises pressure or disrupts the clot: <b>no forceful blowing, no straining or heavy lifting</b>, and no aspirin or NSAIDs. Humidification prevents drying and recurrence. Tilting back is always wrong.'},
 {topic:'upper',hot:true,q:'Which findings in a patient with obstructive sleep apnea should the nurse expect? Select all that apply.',o:['Bradycardia during the day','Excessive daytime sleepiness','Weight loss over recent months','Loud snoring with witnessed apneic periods','Morning headache','Difficulty staying asleep at night'],c:[1,3,4,5],t:'multi',r:'Repeated airway collapse causes <b>snoring, apnea, fragmented sleep, morning headache from CO2 retention, and daytime sleepiness</b>. Untreated OSA leads to hypertension and dysrhythmias, not daytime bradycardia. Obesity is a risk factor, so weight gain is more typical than loss.'},
+
+/* ===== Ch 10: Fluid, Electrolyte, Acid-Base, IV Therapy ===== */
+{topic:'fluids',hot:true,q:'A post-op patient has BP 88/56, HR 118, dry mucous membranes, and urine output of 18 mL/hr. Which IV fluid does the nurse anticipate FIRST?',o:['0.45% Normal Saline','3% Saline','D5W','0.9% Normal Saline'],c:3,t:'single',r:'This is hypovolemia/hypotension. The first-line fluid is an <b>isotonic crystalloid (0.9% NS or LR)</b> to expand intravascular volume. Hypotonic (0.45%, D5W) would worsen low BP; 3% is hypertonic and reserved for severe hyponatremia.'},
+{topic:'fluids',hot:false,q:'The nurse is monitoring a patient with heart failure. Which findings indicate FLUID VOLUME EXCESS? (Select all that apply)',o:['Bounding pulse','Crackles in the lungs','Jugular vein distention','Poor skin turgor','Weight gain of 2 kg overnight'],c:[0,1,2,4],t:'multi',r:'JVD, crackles, bounding pulse, and rapid weight gain are all "WET" signs of <b>hypervolemia</b>. Poor skin turgor is a "DRY" sign of <b>deficit</b>, not excess.'},
+{topic:'fluids',hot:true,q:'Which assessment is the BEST indicator of a patient\'s daily fluid status?',o:['Urine color','Daily weight','Blood pressure','Skin turgor'],c:1,t:'single',r:'<b>Daily weight</b> is the single most reliable indicator of fluid status — a gain or loss of 1 kg equals roughly 1 liter of fluid. Take it at the same time, same scale, same clothing.'},
+{topic:'lytes',hot:true,q:'A patient with chronic kidney disease has a potassium of 6.8 mEq/L and peaked T waves on the monitor. Which medication should the nurse prepare FIRST?',o:['Sodium bicarbonate','Potassium chloride','Calcium gluconate','Furosemide (Lasix)'],c:2,t:'single',r:'<b>Calcium gluconate</b> is given first to stabilize/protect the cardiac membrane from the dysrhythmia risk. It does NOT lower potassium — insulin+D50, bicarb, and dialysis do that — but protecting the heart is the immediate priority.'},
+{topic:'lytes',hot:false,q:'Which clinical findings would the nurse expect in a patient with HYPOcalcemia? (Select all that apply)',o:['Positive Trousseau sign','Constipation','Tetany','Kidney stones','Positive Chvostek sign'],c:[0,2,4],t:'multi',r:'Hypocalcemia causes neuromuscular irritability: positive <b>Trousseau</b> (hand spasm with BP cuff), positive <b>Chvostek</b> (facial twitch), and <b>tetany</b>. Constipation and kidney stones are signs of HYPERcalcemia.'},
+{topic:'lytes',hot:true,q:'A patient is admitted with a sodium level of 122 mEq/L. Which is the priority nursing intervention?',o:['Encourage extra free water','Restrict potassium intake','Apply warm compresses','Institute seizure precautions'],c:3,t:'single',r:'Severe hyponatremia causes the brain to swell, leading to confusion and <b>seizures</b>. Seizure precautions and neuro checks are the priority. Adding free water would dilute sodium further and worsen it.'},
+{topic:'lytes',hot:false,q:'A patient on a loop diuretic reports muscle weakness and leg cramps. The nurse notes a flattened T wave and a U wave on the ECG. Which electrolyte imbalance is most likely?',o:['Hypermagnesemia','Hypocalcemia','Hyperkalemia','Hypokalemia'],c:3,t:'single',r:'Loop diuretics waste potassium. <b>Hypokalemia</b> classically shows weakness, cramps, a <b>flat T wave and a U wave</b>. Peaked T waves would indicate hyperkalemia.'},
+{topic:'fluids',hot:true,q:'A patient with severe hyponatremia (Na 118) and seizure activity is prescribed 3% saline. Which is the priority nursing assessment during infusion?',o:['Pupil size and reactivity to light every hour','Lung sounds for signs of fluid overload','Blood glucose before and after the infusion','Bowel sounds in all four abdominal quadrants'],c:1,t:'single',r:'3% saline is <b>hypertonic</b> — it pulls water into the vasculature and can rapidly cause <b>fluid overload and pulmonary edema</b>. Monitor lung sounds closely and infuse slowly.'},
+{topic:'fluids',hot:false,q:'Which IV solutions are ISOTONIC? (Select all that apply)',o:['0.9% Normal Saline','D5W (in the bag, before metabolism)','0.45% Normal Saline','3% Saline','Lactated Ringer\'s'],c:[0,4],t:'multi',r:'<b>0.9% NS and Lactated Ringer\'s</b> are isotonic. 0.45% is hypotonic, 3% is hypertonic. D5W is isotonic in the bag but acts hypotonic once dextrose is metabolized — for exam "match the classic answer," NS and LR are the safest isotonic choices.'},
+{topic:'fluids',hot:false,q:'A nurse is preparing to administer a blood transfusion. Which IV fluid must be used to prime the line?',o:['0.9% Normal Saline','0.45% Normal Saline','Lactated Ringer\'s','D5W'],c:0,t:'single',r:'<b>Only 0.9% Normal Saline</b> is compatible with blood. LR contains calcium which can cause clotting; dextrose solutions cause hemolysis (RBCs swell and burst).'},
+{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 24. How does the nurse interpret this?',o:['Metabolic acidosis','Metabolic alkalosis, compensated','Respiratory acidosis, uncompensated','Respiratory alkalosis'],c:2,t:'single',r:'pH is low (acidosis). CO₂ is high and moves OPPOSITE the pH → respiratory. HCO₃ is normal → no compensation yet. = <b>uncompensated respiratory acidosis</b> (think COPD, opioids).'},
+{topic:'abg',hot:false,q:'ABG: pH 7.50, PaCO₂ 40, HCO₃ 30. Which conditions could cause this? (Select all that apply)',o:['Nasogastric suction','Prolonged vomiting','Excessive antacid use','Diabetic ketoacidosis','Diarrhea'],c:[0,1,2],t:'multi',r:'pH high + HCO₃ high (same direction) = <b>metabolic alkalosis</b>. Vomiting, NG suction (losing stomach acid) and antacids all cause it. Diarrhea and DKA cause metabolic ACIDosis.'},
+{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 30, HCO₃ 17. This represents:',o:['Uncompensated respiratory alkalosis','Partially compensated respiratory acidosis','Normal ABG','Fully compensated metabolic acidosis'],c:3,t:'single',r:'pH is normal but on the <b>acidic side</b> (7.37). HCO₃ is low (metabolic acidosis) and the lungs have blown off CO₂ (low CO₂) to compensate. Both abnormal + normal pH = <b>fully compensated metabolic acidosis</b>.'},
+{topic:'abg',hot:false,q:'A patient with vomiting for 3 days has ABG pH 7.49, PaCO₂ 41, HCO₃ 30. Interpretation?',o:['Metabolic alkalosis','Respiratory alkalosis','Respiratory acidosis','Metabolic acidosis'],c:0,t:'single',r:'pH high + HCO₃ high (same direction) = metabolic alkalosis. Vomiting loses stomach acid.'},
+{topic:'lytes',hot:true,q:'Which is the priority for a patient with potassium of 6.9?',o:['Restrict fluids','Prepare calcium gluconate','Encourage bananas','Give a potassium supplement'],c:1,t:'single',r:'Calcium gluconate protects the heart in hyperkalemia. Never add more potassium.'},
+{topic:'lytes',hot:false,q:'Which is the only IV fluid compatible with blood?',o:['D5W','0.9% NS','LR','0.45% NS'],c:1,t:'single',r:'Only 0.9% Normal Saline — LR has calcium (clots), dextrose hemolyzes RBCs.'},
+{topic:'fluids',hot:false,q:'Best indicator of a patient\'s daily fluid status?',o:['Daily weight','BP','Skin turgor','Heart rate'],c:0,t:'single',r:'Daily weight — 1 kg ≈ 1 L of fluid.'},
+{topic:'abg',hot:true,q:'An ABG shows pH 7.30, PaCO₂ 58, HCO₃ 26 in a patient with a COPD exacerbation. Which intervention is the priority?',o:['Administer high-flow 100% oxygen by non-rebreather','Encourage the patient to breathe into a paper bag','Give IV sodium bicarbonate','Improve ventilation'],c:3,t:'single',r:'This is respiratory acidosis from hypoventilation. The fix is improving ventilation and giving controlled oxygen (target 88–92% in COPD). Slamming 100% O₂ can blunt the hypoxic drive; bicarb and rebreathing don\'t address the trapped CO₂.'},
+{topic:'lytes',hot:false,q:'A patient with a potassium of 6.9 mEq/L has peaked T waves on the monitor. Which prescribed order should the nurse question/clarify?',o:['IV calcium gluconate','IV insulin with dextrose','Prepare for possible dialysis','A potassium-sparing diuretic'],c:3,t:'single',r:'In hyperkalemia you want to lower potassium. A potassium-SPARING diuretic would make it worse and should be questioned. Calcium gluconate (heart protection), insulin+dextrose (shifts K into cells), and dialysis are all appropriate.'},
+{topic:'lytes',hot:true,q:'A nurse is starting an IV potassium infusion and the patient reports burning at the site. The nurse should FIRST:',o:['Stop the infusion and assess the site for infiltration','Apply a warm compress to the site and keep the infusion going','Document the complaint and reassess the site in one hour','Slow the rate by half and continue while watching the site'],c:0,t:'single',r:'Potassium is a vesicant — burning suggests infiltration/extravasation, which can cause tissue damage. Stop the infusion and assess the site immediately. Never IV-push potassium, and never keep running a painful vesicant.'},
+{topic:'fluids',hot:false,q:'A patient with fluid volume deficit is RECEIVING IV fluid replacement. Which finding tells the nurse the patient is responding to the treatment? (Remember: deficit itself LOWERS urine — a rise means the fluids are working.)',o:['Heart rate increases from 90 to 120','Urine specific gravity rises to 1.035','Blood pressure drops further when standing','Urine output increases from 15 mL/hr to 40 mL/hr'],c:3,t:'single',r:'Key word = RESPONDING TO TREATMENT. Hypovolemia by itself DECREASES urine (the body conserves water → output <30 mL/hr, concentrated, high specific gravity). But because this patient is getting IV fluids, urine climbing 15→40 mL/hr means perfusion is restored — the treatment is working. Rising specific gravity, climbing HR, and a worsening orthostatic drop would all mean the deficit is continuing.'},
+{topic:'abg',hot:false,q:'A patient with severe asthma has been working hard to breathe. The latest ABG shows the PaCO₂ has risen from 28 to 41 (now "normal"). How should the nurse interpret this?',o:['The patient has developed a metabolic alkalosis','No action is needed since the value is now normal','The patient is improving as the CO2 normalizes','The patient is tiring and heading toward failure'],c:3,t:'single',r:'In a tiring asthmatic who was hyperventilating (low CO₂), a "normalizing" or rising CO₂ is an ominous sign of fatigue and impending respiratory failure — escalate, don\'t relax.'},
+{topic:'abg',hot:false,q:'A patient with metabolic acidosis from DKA is breathing deeply and rapidly (Kussmaul respirations). What does the nurse understand about this finding?',o:['It is the body compensating by blowing off CO₂','It is a sign the patient is panicking and needs sedation','It indicates respiratory alkalosis','It should be suppressed with oxygen'],c:0,t:'single',r:'Kussmaul respirations are a compensatory response — the lungs blow off CO₂ (acid) to raise the pH. Suppressing or sedating this would worsen the acidosis. Treat the underlying DKA.'},
+{topic:'lytes',hot:true,q:'A patient with hypocalcemia has a positive Trousseau sign and reports tingling around the mouth. What is the priority nursing concern?',o:['Constipation and abdominal distension from slowed motility','Airway compromise from laryngospasm and seizure risk','Kidney stones from calcium precipitating in the tubules','Hypertension from increased vascular smooth muscle tone'],c:1,t:'single',r:'Hypocalcemia increases neuromuscular excitability — the priority is airway (laryngospasm) and seizure risk. Institute seizure precautions and monitor the airway. Stones/constipation are HYPERcalcemia.'},
+{topic:'lytes',hot:false,q:'A nurse is about to hang blood and sees the only available IV fluid running is D5½NS. What should the nurse do?',o:['Use lactated Ringer\'s instead','Use the D5½NS to prime the line','Obtain 0.9% normal saline','Run the blood without any priming fluid'],c:2,t:'single',r:'Only 0.9% normal saline is hung with blood. Dextrose solutions hemolyze RBCs and LR\'s calcium can promote clotting. Get NS before proceeding.'},
+{topic:'fluids',hot:false,q:'A patient receiving IV fluids for dehydration develops a cough, dyspnea, and crackles. After slowing the infusion and sitting the patient up, what should the nurse do NEXT?',o:['Resume the original infusion rate and document the episode','Discontinue all IV access and hold the remaining fluid orders','Lay the patient flat to redistribute the excess fluid volume','Notify the provider and continue monitoring respiratory status'],c:3,t:'single',r:'After the immediate actions (slow infusion, high-Fowler), notify the provider and keep monitoring. Resuming the rate or lying flat would worsen overload; pulling all access is unnecessary.'},
+{topic:'lytes',hot:false,q:'A nurse reviews orders for a patient with fluid volume EXCESS from heart failure. Which order should the nurse question?',o:['Sodium restriction','Daily weights','Administer the prescribed loop diuretic','Infuse 1 L of 0.9% normal saline over 1 hour'],c:3,t:'single',r:'A patient already fluid-overloaded should not get a rapid isotonic bolus — that would worsen the overload. Daily weights, sodium restriction, and diuretics are all appropriate; question the saline bolus.'},
+{topic:'abg',hot:false,q:'A patient\'s ABG: pH 7.34, PaCO₂ 60, HCO₃ 31. The nurse recognizes this as which state, and what does it tell you about the patient?',o:['Fully compensated respiratory acidosis, likely chronic COPD','Metabolic alkalosis from vomiting or diuretic therapy','Respiratory alkalosis from anxiety-driven hyperventilation','Uncompensated respiratory acidosis from an acute event'],c:0,t:'single',r:'pH is near-normal but on the acidic side, with BOTH CO₂ and HCO₃ elevated — the kidneys have retained bicarb to compensate. This pattern fits a chronic CO₂ retainer (COPD) rather than an acute crisis.'},
+{topic:'fluids',hot:true,q:'Which of the following is NOT a sign of fluid volume deficit?',o:['Poor skin turgor and dry lips','Concentrated, low-volume urine','Tachycardia with hypotension','Bounding pulse with crackles'],c:3,t:'single',r:'Trap: A, B, and D are all TRUE signs of deficit, so they feel right. The impostor is C — a bounding pulse with crackles is fluid volume EXCESS. When you see "NOT," hunt the one that does not belong.'},
+{topic:'fluids',hot:true,q:'All of the following IV fluids are isotonic EXCEPT:',o:['D5W (in the bag)','0.9% Normal Saline','Lactated Ringer\'s','0.45% Normal Saline'],c:3,t:'single',r:'"EXCEPT" = find the odd one out. NS, LR, and in-bag D5W are isotonic; 0.45% NS is HYPOtonic. Three belong together — the loner is your answer.'},
+{topic:'lytes',hot:false,q:'Which statement about potassium administration is correct?',o:['Potassium is NEVER given by IV push','Oral potassium should be given on an empty stomach','Potassium may be given by rapid IV push in an emergency','Potassium-sparing diuretics are safe in hyperkalemia'],c:0,t:'single',r:'"Never" is a true absolute here: IV-push potassium can cause fatal arrhythmias. The trap is that absolutes are often false — but this one is a hard safety rule. A, C, and D are all dangerous/false.'},
+{topic:'lytes',hot:true,q:'A nurse is caring for a patient with hyperkalemia. Which action is the BEST FIRST priority?',o:['Give insulin with dextrose','Teach the patient about low-potassium foods','Administer IV calcium gluconate','Restrict dietary potassium'],c:2,t:'single',r:'Several answers are correct things to do — but "best first" = address the biggest threat. Calcium gluconate protects the heart NOW (it doesn\'t lower K, but it stabilizes the myocardium). Insulin+dextrose comes next; teaching/diet are low priority.'},
+{topic:'fluids',hot:true,q:'Which is the BEST indicator of a patient\'s fluid status?',o:['Blood pressure','Daily weight','Thirst','Skin turgor'],c:1,t:'single',r:'"Best indicator" = most reliable/specific. Daily weight is the gold standard (1 kg ≈ 1 L). The others are useful but less precise — classic "they\'re all assessments, pick the strongest" trap.'},
+{topic:'lytes',hot:true,q:'All of the following are signs of hypocalcemia EXCEPT:',o:['Positive Trousseau sign','Constipation and kidney stones','Tingling around the mouth','Positive Chvostek sign'],c:1,t:'single',r:'Chvostek, Trousseau, and perioral tingling are hypoCALCEMIA (excitable). "Stones, bones, groans" (constipation, stones) is HYPERcalcemia — the EXCEPT impostor.'},
+{topic:'fluids',hot:true,q:'Which is the MOST reliable indicator that a patient with fluid volume DEFICIT is improving?',o:['Urine output rising toward 30+ mL/hr','Heart rate is unchanged','Skin looks slightly less dry','The patient reports feeling less thirsty'],c:0,t:'single',r:'"Most reliable" = the objective, measurable one. Improving urine output reflects restored perfusion. Thirst and skin appearance are softer/subjective; an unchanged HR shows no improvement.'},
+{topic:'abg',hot:true,q:'A patient with metabolic alkalosis from vomiting is breathing slowly. Which statement BEST explains this?',o:['The lungs are slowing to RETAIN CO₂ and lower the pH','This is an abnormal, dangerous response that must be stopped','The patient is having a respiratory arrest','The kidneys are dumping bicarb'],c:0,t:'single',r:'Slow breathing here is compensation — retaining CO₂ (acid) to pull the alkalotic pH back down. The "BEST explains" framing rewards understanding the mechanism, not memorizing a fact.'},
+{topic:'abg',hot:true,q:'Which is NOT a function regulated by the respiratory system?',o:['Acid–base balance (CO₂ regulation)','Oxygen transport','Gas exchange','Bicarbonate regulation'],c:3,t:'single',r:'The lungs handle O₂, gas exchange, and CO₂ (acid). Bicarbonate is regulated by the KIDNEYS — the impostor in a "NOT" question that lists three lung jobs and one kidney job.'},
+{topic:'fluids',hot:false,q:'A nurse auscultates crackles in a patient receiving IV fluids. Which step of the nursing process is this?',o:['Assessment','Diagnosis','Implementation','Evaluation'],c:0,t:'single',r:'Auscultating (collecting objective data) is ASSESSMENT. Naming "fluid overload" would be diagnosis; slowing the IV would be implementation; rechecking the lungs afterward would be evaluation.'},
+{topic:'lytes',hot:false,q:'A nurse reassesses a patient\'s potassium level after treating hyperkalemia to see if it dropped. This is which step?',o:['Assessment','Planning','Evaluation','Implementation'],c:2,t:'single',r:'Checking a result against the expected outcome after an intervention is EVALUATION. The trap is that it "looks like" assessment — but its purpose is judging effectiveness.'},
+{topic:'fluids',hot:false,q:'Which action belongs to the ASSESSMENT step for a patient with suspected fluid volume deficit?',o:['Set a measurable goal for adequate hydration within 24 hours','Check skin turgor, mucous membranes, and urine specific gravity','Document that the hydration goal was met by the end of shift','Administer the prescribed isotonic IV fluid at the ordered rate'],c:1,t:'single',r:'Collecting data — skin turgor, mucous membranes, specific gravity — is ASSESSMENT. The others are implementation, planning, and evaluation respectively.'},
+{topic:'lytes',hot:false,q:'A patient with hypocalcemia has a positive Trousseau sign. Instituting seizure precautions and monitoring the airway are which step?',o:['Diagnosis','Assessment','Implementation','Planning'],c:2,t:'single',r:'Putting safety measures in place (seizure precautions, airway monitoring setup) is IMPLEMENTATION. Eliciting the Trousseau sign was the assessment that identified the risk.'},
+{topic:'abg',hot:false,q:'After teaching, the nurse asks the patient to demonstrate using the incentive spirometer correctly. This "teach-back" is which step?',o:['Assessment','Planning','Evaluation','Implementation'],c:2,t:'single',r:'Checking whether teaching was effective (can the patient do it right?) is EVALUATION. The teaching itself was implementation; the return-demonstration evaluates the outcome.'},
+{topic:'abg',hot:false,q:'PUTTING IT TOGETHER — A patient with COPD is admitted with increased dyspnea. Using cause→manifest→treatment, which ABG and O₂ plan fit?',o:['Metabolic acidosis; give sodium bicarbonate and recheck the gas','Compensated respiratory acidosis; controlled O2 to keep SpO2 88-92%','Respiratory alkalosis; apply 100% oxygen by non-rebreather mask','Metabolic alkalosis; restrict fluids and hold the diuretic dose'],c:1,t:'single',r:'COPD cause = chronic CO₂ retention → compensated respiratory acidosis. Treatment = controlled O₂ (88–92%), not 100%. The framework links the three together.'},
+{topic:'fluids',hot:true,q:'CAUSE — Fluid volume deficit is BEST described as resulting from:',o:['Excess dietary sodium pulling water into the vascular space','Too much IV fluid infused faster than the kidneys clear it','Fluid retention from heart failure backing up into tissue','Loss of fluid from vomiting, diarrhea, or poor intake'],c:3,t:'single',r:'Deficit = loss or inadequate intake. That cause explains the manifestations (↑HR, ↓BP, concentrated urine) and the treatment (isotonic fluids).'},
+{topic:'lytes',hot:true,q:'MANIFESTS → TREATMENT — A patient with hyperkalemia shows peaked T waves. What is given FIRST and why?',o:['Insulin with dextrose, to shift K into cells','A potassium supplement','Calcium gluconate, to protect/stabilize the heart','A beta blocker'],c:2,t:'single',r:'Peaked T waves = cardiac threat. Calcium gluconate stabilizes the myocardium FIRST (it doesn\'t lower K). Insulin+dextrose then shifts K into cells. Manifestation drives the priority treatment.'},
+{topic:'lytes',hot:false,q:'A patient is admitted with severe dehydration. Which IV fluid does the nurse anticipate administering first?',o:['D5W with 20 mEq KCl','0.45% Normal Saline','0.9% Normal Saline','D10W by slow infusion'],c:2,t:'single',r:'Isotonic 0.9% NS expands intravascular volume first-line for hypovolemia.'},
+{topic:'lytes',hot:false,q:'Which ion is the most abundant in the intracellular fluid?',o:['Calcium','Potassium','Sodium','Chloride'],c:1,t:'single',r:'Potassium is the principal ICF cation; sodium dominates the ECF.'},
+{topic:'lytes',hot:true,q:'A nurse identifies which finding as the BEST indicator of fluid balance?',o:['Daily weight','Urine color','Blood pressure','Skin turgor'],c:0,t:'single',r:'Daily weight is most reliable; 1 kg ≈ 1 L of fluid.'},
+{topic:'lytes',hot:false,q:'A patient with a BUN:creatinine ratio of 25:1, increased hematocrit, and dry mucous membranes most likely has:',o:['Metabolic alkalosis','Fluid volume deficit','Hyperkalemia','Fluid volume excess'],c:1,t:'single',r:'A ratio >20:1 with hemoconcentration indicates fluid volume deficit.'},
+{topic:'lytes',hot:false,q:'Which signs indicate fluid volume EXCESS? (Select all that apply)',o:['Poor skin turgor','Crackles','JVD','Bounding pulse','Weight gain'],c:[1,2,3,4],t:'multi',r:'Crackles, JVD, bounding pulse, and weight gain are "WET" signs. Poor turgor = deficit.'},
+{topic:'lytes',hot:false,q:'Albumin, a colloid produced by the liver, primarily functions to:',o:['Buffer metabolic acids in the bloodstream','Excrete excess potassium via the kidneys','Pull water into the intravascular space','Move sodium from the blood into the cells'],c:2,t:'single',r:'Albumin exerts oncotic pressure pulling water into vessels; low albumin → edema.'},
+{topic:'lytes',hot:true,q:'A potassium level of 6.8 mEq/L with peaked T waves requires which FIRST intervention?',o:['Potassium chloride','Encourage bananas','Calcium gluconate','Furosemide'],c:2,t:'single',r:'Calcium gluconate stabilizes the cardiac membrane immediately.'},
+{topic:'lytes',hot:false,q:'Which interventions are correct for hyperkalemia? (Select all that apply)',o:['Sodium bicarbonate','Calcium gluconate','Salt substitutes','Insulin with dextrose','Dialysis if severe'],c:[0,1,3,4],t:'multi',r:'Insulin+dextrose drives K into cells, calcium protects the heart, bicarb shifts K, dialysis removes it. Salt substitutes CONTAIN potassium — avoid.'},
+{topic:'lytes',hot:false,q:'A patient with a sodium of 121 mEq/L is at greatest risk for:',o:['Hypertension','Constipation','Kidney stones','Seizures'],c:3,t:'single',r:',o:['},
+{topic:'lytes',hot:false,q:'A nurse notes a positive Trousseau sign. This indicates:',o:['Hyperkalemia','Hypocalcemia','Hypercalcemia','Hypernatremia'],c:1,t:'single',r:'Carpal spasm with BP cuff (Trousseau) signals hypocalcemia/tetany.'},
+{topic:'lytes',hot:false,q:'Which foods should the nurse recommend to a patient with hypokalemia? (Select all that apply)',o:['Bananas','Potatoes','Oranges','Avocados','White rice'],c:[0,1,2,3],t:'multi',r:'Bananas, potatoes, oranges, and avocados are potassium-rich.'},
+{topic:'lytes',hot:false,q:'A magnesium level of 1.0 mEq/L would most likely produce:',o:['Respiratory depression','Hyporeflexia','Bradycardia','Tremors and seizures'],c:3,t:'single',r:'LOW magnesium causes HYPER-excitability: tremors, hyperreflexia, seizures.'},
+{topic:'lytes',hot:false,q:'Which IV solution would the nurse use cautiously in a patient with heart failure due to fluid overload risk?',o:['0.225% NS','3% Saline','D5W','0.45% NS'],c:1,t:'single',r:'Hypertonic 3% saline pulls fluid into vessels and can overload the heart.'},
+{topic:'lytes',hot:false,q:'A hypotonic solution such as 0.45% NS causes water to move:',o:['Into cells','Out of the body','Into the vasculature only','Out of cells'],c:0,t:'single',r:'Hypotonic fluids shift water INTO cells (raisins → grapes). Watch for cerebral edema.'},
+{topic:'lytes',hot:false,q:'Which assessment finding indicates hypernatremia?',o:['Seizures caused by cerebral swelling','Peaked T waves on the cardiac monitor','Carpopedal spasm on cuff inflation','Intense thirst with dry mucous membranes'],c:3,t:'single',r:'Hypernatremia draws water out of cells → thirst, dry membranes, agitation.'},
+{topic:'lytes',hot:false,q:'Why must potassium NEVER be administered by IV push?',o:['It causes a sudden drop in the blood glucose','It can cause fatal cardiac dysrhythmias','It is too viscous to push through a small IV','It permanently stains the surrounding skin'],c:1,t:'single',r:'Rapid IV potassium can cause cardiac arrest; always dilute and infuse slowly.'},
+{topic:'lytes',hot:false,q:'Which hormone is released in response to low blood pressure and causes sodium/water retention?',o:['ANP','Calcitonin','Aldosterone','BNP'],c:2,t:'single',r:'Aldosterone ("Save Salt") retains Na and water and excretes K.'},
+{topic:'lytes',hot:false,q:'A high BNP level most likely indicates:',o:['Respiratory alkalosis from anxiety','Dehydration with hemoconcentration','Fluid overload or heart failure','Hypokalemia from diuretic use'],c:2,t:'single',r:'BNP rises when the heart is stretched by excess volume (CHF).'},
+{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 55, HCO₃ 24. The interpretation is:',o:['Partly compensated metabolic acidosis','Partly compensated metabolic alkalosis','Uncompensated respiratory alkalosis','Uncompensated respiratory acidosis'],c:3,t:'single',r:'Low pH, high CO₂ (opposite), normal HCO₃ = uncompensated respiratory acidosis.'},
+{topic:'abg',hot:false,q:'ABG: pH 7.50, PaCO₂ 30, HCO₃ 24. This represents:',o:['Respiratory acidosis','Respiratory alkalosis','Metabolic alkalosis','Metabolic acidosis'],c:1,t:'single',r:'High pH, low CO₂ (opposite) = respiratory alkalosis (hyperventilation/anxiety).'},
+{topic:'abg',hot:false,q:'ABG: pH 7.29, PaCO₂ 38, HCO₃ 16. This indicates:',o:['Metabolic alkalosis','Metabolic acidosis','Respiratory acidosis','Respiratory alkalosis'],c:1,t:'single',r:'Low pH matches low HCO₃ (same direction) = metabolic acidosis (DKA, diarrhea).'},
+{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 55, HCO₃ 31. This represents:',o:['Fully compensated respiratory acidosis','Uncompensated respiratory acidosis','Metabolic alkalosis','Normal'],c:0,t:'single',r:'Normal pH on the acidic side with both CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis.'},
+{topic:'abg',hot:false,q:'Which conditions cause metabolic acidosis? (Select all that apply)',o:['Vomiting','Renal failure','Diarrhea','NG suction','Diabetic ketoacidosis'],c:[1,2,4],t:'multi',r:'DKA, diarrhea, and renal failure cause metabolic acidosis. Vomiting and NG suction cause metabolic ALKalosis.'},
+{topic:'abg',hot:false,q:'The ROME mnemonic stands for:',o:['Respiratory Only, Metabolic Even','Reverse Oxygen, Match Electrolytes','Renal Opposite, Metabolic Equal','Respiratory Opposite, Metabolic Equal'],c:3,t:'single',r:',o:['},
+{topic:'abg',hot:false,q:'Kussmaul respirations are a compensatory response to:',o:['Metabolic acidosis','Respiratory acidosis','Metabolic alkalosis','Respiratory alkalosis'],c:0,t:'single',r:'Deep rapid Kussmaul breathing blows off CO₂ to compensate for metabolic acidosis.'},
+{topic:'abg',hot:false,q:'In the body, PaCO₂ is regulated by the ____ and HCO₃ is regulated by the ____.',o:['heart / liver','lungs / kidneys','brain / spleen','kidneys / lungs'],c:1,t:'single',r:'Lungs control CO₂ (acid); kidneys control bicarbonate.'},
+{topic:'abg',hot:false,q:'A patient hyperventilating from anxiety would develop which acid-base imbalance?',o:['Metabolic alkalosis','Respiratory acidosis','Respiratory alkalosis','Metabolic acidosis'],c:2,t:'single',r:'Blowing off CO₂ raises pH → respiratory alkalosis.'},
+{topic:'abg',hot:false,q:'Which is the criterion for acute respiratory failure?',o:['PaCO2 below 35 with a pH above 7.45 and normal oxygenation','A pH of 7.40 with PaCO2 and bicarbonate both within range','PaO2 above 100 with a normal pH and a rising bicarbonate','PaO2 below 60 and/or PaCO2 above 50 with a pH under 7.35'],c:3,t:'single',r:'PaO₂ <60 and/or PaCO₂ >50 with acidosis defines acute respiratory failure.'},
+{topic:'abg',hot:false,q:'A normal pH but abnormal CO₂ and HCO₃ indicates:',o:['No imbalance','Fully compensated','Partially compensated','Uncompensated'],c:1,t:'single',r:'Normal pH with both systems abnormal = fully compensated.'},
+{topic:'fluids',hot:false,q:'An older adult presents with poor skin turgor, dry mucous membranes, postural hypotension, and a urine specific gravity of 1.035. The nurse recognizes this as:',o:['Hyponatremia','Fluid volume excess','SIADH','Fluid volume deficit'],c:3,t:'single',r:'Concentrated urine (high specific gravity) + hypotension + dry membranes = fluid volume deficit.'},
+{topic:'fluids',hot:false,q:'Which assessment findings indicate fluid volume EXCESS? (Select all that apply)',o:['Weight gain','Dry, sticky mucous membranes','Bounding pulse','Jugular vein distention','Crackles in the lungs'],c:[0,2,3,4],t:'multi',r:'FVE = bounding pulse, JVD, crackles, edema, and weight gain. Dry sticky membranes point to deficit, not excess.'},
+{topic:'fluids',hot:true,q:'A patient receiving IV fluids develops a new cough, dyspnea, and crackles. The nurse should FIRST:',o:['Give the next scheduled dose of the ordered antibiotic','Slow or stop the infusion and raise the head of the bed','Lay the patient flat and apply a warm blanket','Increase the IV rate to push the fluid through faster'],c:1,t:'single',r:'These are signs of fluid overload/pulmonary edema — slow the infusion and sit the patient up to ease breathing.'},
+{topic:'fluids',hot:false,q:'Which patient is at highest risk for hypernatremia?',o:['Drinking large amounts of plain water','Diagnosed with SIADH last admission','Following a low-sodium cardiac diet','Watery diarrhea with no fluid intake'],c:3,t:'single',r:'Loss of water (diarrhea) without replacement concentrates sodium → hypernatremia.'},
+{topic:'fluids',hot:false,q:'A nurse reviews labs: Na 122 mEq/L. Which findings does the nurse expect? (Select all that apply)',o:['Extreme thirst with flushed skin','Muscle cramps','Headache','Seizures if severe','Confusion'],c:[1,2,3,4],t:'multi',r:'Hyponatremia causes neuro changes: confusion, cramps, headache, seizures. Flushed skin + extreme thirst is hypernatremia.'},
+{topic:'lytes',hot:true,q:'A patient with a serum potassium of 6.8 mEq/L shows peaked T waves on the monitor. After calcium gluconate, which is the next priority intervention?',o:['Hold all IV fluids','Encourage high-potassium foods','Give a potassium supplement','Administer IV insulin with dextrose'],c:3,t:'single',r:'After stabilizing the heart with calcium, insulin+dextrose drives potassium back into the cells.'},
+{topic:'lytes',hot:false,q:'Which signs are associated with HYPOcalcemia? (Select all that apply)',o:['Positive Trousseau sign','Positive Chvostek sign','Muscle twitching','Numbness/tingling around the mouth','Constipation and kidney stones'],c:[0,1,2,3],t:'multi',r:'Hypocalcemia = increased excitability: Trousseau, Chvostek, perioral tingling, twitching, tetany. Stones/constipation are HYPERcalcemia.'},
+{topic:'lytes',hot:false,q:'A patient with chronic alcohol use disorder is admitted. The nurse anticipates a deficiency of which electrolyte that can cause torsades de pointes?',o:['Phosphorus','Magnesium','Chloride','Sodium'],c:1,t:'single',r:'Hypomagnesemia is common in alcohol use and predisposes to torsades de pointes.'},
+{topic:'lytes',hot:true,q:'Which food choice is BEST for a patient who needs to increase potassium?',o:['Banana and spinach','Egg whites and toast','White rice and pasta','Cheese and yogurt'],c:0,t:'single',r:'Bananas and leafy greens are potassium-rich. Useful for patients on potassium-wasting diuretics.'},
+{topic:'fluids',hot:false,q:'A patient with cerebral edema is ordered a hypertonic solution. Which is hypertonic?',o:['Lactated Ringer\'s','0.9% Normal Saline','0.45% Normal Saline','3% Saline'],c:3,t:'single',r:'3% saline is hypertonic — it pulls fluid out of swollen cells, useful for cerebral edema. Monitor closely.'},
+{topic:'fluids',hot:false,q:'A hypotonic solution like 0.45% NS will cause fluid to:',o:['Stay in the vessels','Have no effect','Move INTO the cells','Pull OUT of the cells'],c:2,t:'single',r:'Hypotonic fluids shift water into cells (cells swell) — think rehydrating a dehydrated cell.'},
+{topic:'abg',hot:false,q:'ABG: pH 7.30, PaCO₂ 52, HCO₃ 25. Interpret:',o:['Metabolic alkalosis, fully compensated','Metabolic acidosis, partly compensated','Respiratory alkalosis, uncompensated','Respiratory acidosis, uncompensated'],c:3,t:'single',r:'pH low + CO₂ high (opposite directions = respiratory) + HCO₃ normal = uncompensated respiratory acidosis.'},
+{topic:'abg',hot:false,q:'ABG: pH 7.49, PaCO₂ 40, HCO₃ 30. Interpret:',o:['Respiratory alkalosis, fully compensated','Respiratory acidosis, uncompensated','Metabolic acidosis, partly compensated','Metabolic alkalosis, uncompensated'],c:3,t:'single',r:'pH high + HCO₃ high (same direction = metabolic) + CO₂ normal = uncompensated metabolic alkalosis. Think vomiting/NG suction.'},
+{topic:'abg',hot:false,q:'ABG: pH 7.37, PaCO₂ 58, HCO₃ 32. Interpret:',o:['Uncompensated respiratory acidosis','Metabolic alkalosis','Fully compensated respiratory acidosis','Respiratory alkalosis'],c:2,t:'single',r:'pH normal but on the acidic side, with BOTH CO₂ and HCO₃ abnormal = fully compensated respiratory acidosis (kidneys retained bicarb to fix it).'},
+{topic:'abg',hot:false,q:'A patient with a severe asthma attack has been working hard to breathe for hours. ABG shows a rising PaCO₂ toward normal after being low. This change most likely indicates:',o:['The patient is improving','Metabolic compensation','Respiratory alkalosis worsening','Impending respiratory failure/fatigue'],c:3,t:'single',r:'A "normalizing" or rising CO₂ in a tiring asthmatic is an ominous sign of fatigue and impending respiratory failure — not improvement.'},
+{topic:'abg',hot:true,q:'A patient with end-stage kidney disease has an arterial blood gas drawn. Before reading the values, the nurse anticipates which type of imbalance?',o:['Metabolic, because the kidneys regulate bicarbonate','Respiratory, because the kidneys regulate carbon dioxide','Respiratory, because uremia depresses the respiratory drive','Mixed, because kidney disease affects both systems equally'],c:0,t:'single',r:'The organ names the type. <b>Kidneys regulate bicarbonate, the base, so a kidney problem is metabolic.</b> Lungs regulate CO2, the acid, so a lung problem is respiratory. In failure the kidney cannot excrete hydrogen ions or regenerate bicarbonate, so the expected gas is <b>metabolic acidosis</b>.'},
+{topic:'abg',hot:true,q:'A patient with chronic kidney disease has a pH of 7.28. Which additional laboratory value should the nurse check first?',o:['Potassium','Magnesium','Total calcium','Serum albumin'],c:0,t:'single',r:'Renal metabolic acidosis travels with <b>hyperkalemia</b> from two causes stacking: acidosis shifts potassium out of the cells, and the failing kidney cannot excrete it. Potassium is the value that can produce a fatal dysrhythmia, so it is checked first. The others matter but none of them kills in minutes.'},
+{topic:'abg',hot:false,q:'A patient with COPD also has advanced kidney disease. Compared with a COPD patient who has normal kidneys, what should the nurse expect on the arterial blood gas?',o:['Less compensation, because the kidneys cannot retain bicarbonate','Faster compensation, because two systems are now involved','Complete compensation within a few hours instead of days','No difference, since compensation is entirely a lung function'],c:0,t:'single',r:'The <b>kidneys are the compensator for a respiratory problem</b>, retaining bicarbonate over hours to days. If they are failing they cannot do that job, so the gas reads <b>uncompensated or only partially compensated</b> rather than the fully compensated picture a stable COPD patient usually shows.'},
+{topic:'abg',hot:false,q:'Which patient situation should lead the nurse to anticipate a respiratory rather than a metabolic acid-base disturbance?',o:['Oversedation from an opioid, which slows ventilation','Prolonged diarrhea with significant bicarbonate loss','Acute kidney injury with a rising creatinine level','Diabetic ketoacidosis with ketones in the urine'],c:0,t:'single',r:'Lungs own CO2, so anything that changes ventilation is <b>respiratory</b>. Oversedation causes hypoventilation, CO2 is retained, and the result is respiratory acidosis. Diarrhea loses bicarbonate, kidney injury retains acid, and DKA produces fixed acid \u2014 all three are <b>metabolic</b>.'},
+{topic:'fluids',hot:true,q:'A patient with a traumatic head injury requires IV fluid. Which solution is appropriate?',o:['0.9% normal saline','0.45% normal saline','D5W','Sterile water'],c:0,t:'single',r:'<b>Isotonic 0.9% NS</b> maintains cerebral perfusion without shifting water into brain cells. <b>Hypotonic fluids and D5W (hypotonic once the dextrose is metabolized) worsen cerebral edema and raise ICP</b> \u2014 they are contraindicated in head injury.'},
+{topic:'fluids',hot:true,q:'Which IV solution may be hung with a blood transfusion?',o:['0.9% normal saline only','D5W','Lactated Ringer','0.45% normal saline'],c:0,t:'single',r:'<b>Only 0.9% NS.</b> Dextrose solutions cause <b>hemolysis</b> of the red cells, and <b>lactated Ringer contains calcium</b>, which promotes clotting in the tubing.'},
+{topic:'fluids',hot:false,q:'A patient with major burns requires fluid resuscitation. Which solution is used with the Parkland formula?',o:['Lactated Ringer','0.9% normal saline','D5W','3% saline'],c:0,t:'single',r:'<b>Lactated Ringer</b> is the burn resuscitation fluid. It restores perfusion and its lactate helps correct the <b>metabolic acidosis</b> of major burns.'},
+{topic:'fluids',hot:false,q:'Which fluid is appropriate for a patient in liver failure needing free water replacement?',o:['D5W','Lactated Ringer','3% saline','0.45% NS with potassium'],c:0,t:'single',r:'<b>D5W</b> provides calories, prevents hypoglycemia, and supplies free water. <b>Lactated Ringer is avoided in liver failure</b> because the failing liver cannot metabolize lactate.'},
+{topic:'fluids',hot:false,q:'A patient in diabetic ketoacidosis is started on IV fluids. Which is given initially?',o:['0.9% normal saline','D5W','Lactated Ringer','3% saline'],c:0,t:'single',r:'<b>0.9% NS initially</b> to expand intravascular volume. Subsequent fluid choice depends on the <b>sodium level and glucose</b>, and dextrose is added once glucose falls to about 200 to prevent a rapid drop.'},
+{topic:'fluids',hot:true,q:'An IV of 0.9% NS is infusing at 125 mL/hr. The patient develops crackles and dyspnea. What should the nurse do?',o:['Discontinue the IV and remove the catheter','Slow the infusion to a keep-open rate and notify the provider','Increase the rate to improve perfusion','Change the fluid to 0.45% NS'],c:1,t:'single',r:'IV fluids are a <b>medication</b>. The nurse may <b>slow or stop an infusion for patient safety</b>, but <b>cannot adjust the rate or change the fluid type without an order</b>. Raise the head of the bed, assess, and notify the provider.'},
+{topic:'fluids',hot:true,q:'What is the normal range for serum osmolality?',o:['270 to 300 mOsm/kg','3.5 to 5.0 mOsm/kg','350 to 400 mOsm/kg','135 to 145 mOsm/kg'],c:0,t:'single',r:'<b>270 to 300 mOsm/kg.</b> Below 270 is hypo-osmolar and suggests <b>fluid overload with dilution</b>. Above 300 is hyper-osmolar and suggests <b>fluid volume deficit with concentration</b>.'},
+{topic:'fluids',hot:true,q:'Which laboratory pattern is consistent with fluid volume deficit?',o:['Decreased sodium with an elevated albumin','Normal labs with an elevated white count','Increased hematocrit, BUN, and sodium with osmolality above 300','Decreased hematocrit, BUN, and sodium with osmolality below 270'],c:2,t:'single',r:'Deficit <b>concentrates</b> the blood: ↑Hct, ↑Hgb, ↑BUN, ↑Na, <b>osmolality over 300</b>, and <b>specific gravity over 1.030</b>. Overload does the mirror image — <b>everything dilutes</b>.'},
+{topic:'fluids',hot:false,q:'A patient has lost 5% of body weight from vomiting and diarrhea. Which findings does the nurse expect?',o:['Bounding pulse and jugular venous distention','Serum osmolality below 270','Extreme thirst, dry mucous membranes, urine under 25 mL/hr','Moist crackles and rapid weight gain'],c:2,t:'single',r:'At <b>5% weight loss (marked deficit)</b> expect extreme thirst, ↑temp, ↑HR and RR, ↓BP, dry mucous membranes, poor turgor, <b>urine output under 25 mL/hr</b>, and specific gravity over 1.030. Bounding pulse, JVD, and crackles are <b>overload</b>.'},
+{topic:'fluids',hot:false,q:'Which finding indicates severe fluid volume deficit at approximately 8% weight loss?',o:['Systolic blood pressure below 60 with disorientation','Rapid weight gain with edema','Thirst alone','Serum sodium of 138'],c:0,t:'single',r:'<b>Severe deficit (8%)</b> adds flushed skin, <b>systolic BP under 60</b>, <b>restlessness, irritability, and disorientation</b>, and metabolic acidosis on top of the marked findings. Mild (2%) is thirst alone.'},
+{topic:'fluids',hot:true,q:'Which is the best indicator of fluid volume change in a patient?',o:['Skin turgor','Urine color','Daily weight','Intake and output totals'],c:2,t:'single',r:'<b>Changes in weight are the best indicator of fluid volume change.</b> One kilogram equals about one liter. I&amp;O and clinical signs are considered alongside it, but weight is the most reliable and quantifiable.'},
+{topic:'fluids',hot:true,q:'A patient with a suspected head injury has an order for 0.45% NS. What should the nurse do?',o:['Administer it as ordered on a pump','Administer it slowly over 8 hours','Question the order because hypotonic fluid can raise intracranial pressure','Change it to D5W instead'],c:2,t:'single',r:'<b>Hypotonic fluids are contraindicated with increased ICP, suspected head injury, hypotension, burns, and liver dysfunction.</b> Water moves into cells and worsens cerebral edema. D5W behaves hypotonically in the body, so it is no better.'},
+{topic:'fluids',hot:false,q:'Why is lactated Ringer avoided as an everyday maintenance fluid?',o:['It cannot be given through a peripheral line','It is reserved for trauma, surgery, and acute blood loss','It is hypotonic and causes cell swelling','It contains no electrolytes'],c:1,t:'single',r:'LR closely matches plasma electrolytes and is used <b>following trauma or surgery and in acute blood loss</b>, but <b>not for everyday maintenance</b>. Avoid it with renal or liver dysfunction, burns, metabolic alkalosis, hyperkalemia, and hyperlactemia.'},
+{topic:'fluids',hot:false,q:'A patient in DKA has a glucose of 210 mg/dL on an insulin infusion. Which fluid change does the nurse anticipate?',o:['Adding dextrose to the IV fluid','Changing to lactated Ringer','Switching to 0.45% NS alone','Stopping all IV fluids'],c:0,t:'single',r:'Once glucose falls to about <b>250 mg/dL or below</b>, a <b>dextrose-containing solution such as D5½NS</b> is added so insulin can keep clearing ketones without dropping the glucose too fast. Rapid overcorrection risks cerebral edema.'},
+{topic:'fluids',hot:false,q:'Which statement about dextrose in IV solutions is accurate?',o:['It is contraindicated in all diabetic patients','It provides calories then metabolizes, leaving an isotonic or hypotonic solution','It replaces sodium and chloride losses','It remains hypertonic in the body indefinitely'],c:1,t:'single',r:'<b>Dextrose provides energy and assists with protein breakdown, then metabolizes quickly and disappears.</b> So a solution that is hypertonic in the bag becomes <b>isotonic or hypotonic in the patient</b>. Both descriptions are true, which is why he offers both.'},
+{topic:'fluids',hot:true,q:'Which findings indicate fluid volume overload? Select all that apply.',o:['Specific gravity above 1.030','Rapid weight gain','Jugular venous distention','Increased hematocrit and BUN','Serum osmolality below 270','Moist crackles and increased work of breathing'],c:[1,2,4,5],t:'multi',r:'Overload <b>dilutes</b>: osmolality under 270, dilutional hyponatremia, and <b>decreased</b> protein, albumin, BUN, Hgb, and Hct from hemodilution. High specific gravity and rising Hct/BUN are <b>deficit</b> findings.'},
+{topic:'lytes',hot:true,q:'A patient\'s potassium remains low despite repeated replacement. Which electrolyte should the nurse check?',o:['Magnesium','Bicarbonate','Chloride','Phosphorus'],c:0,t:'single',r:'<b>Hypomagnesemia is associated with hypokalemia.</b> Magnesium is required for the cell to hold onto potassium, so potassium will not correct until magnesium is replaced. This is the classic stubborn-potassium stem.'},
+{topic:'lytes',hot:false,q:'Which finding differentiates hypokalemia from hyperkalemia, since both cause weakness, cramping, and arrhythmias?',o:['Only hyperkalemia causes muscle weakness','Neither affects the gastrointestinal system','Only hypokalemia causes arrhythmias','Constipation suggests low potassium; abdominal pain and diarrhea suggest high'],c:3,t:'single',r:'The muscular and cardiac signs overlap almost completely. The <b>GI clue separates them</b>: <b>low potassium slows the gut (constipation, ileus)</b>, <b>high potassium causes abdominal pain and diarrhea</b>.'},
+{topic:'lytes',hot:true,q:'Which assessment finding is the hallmark of hypermagnesemia?',o:['Muscle tetany','Hyperactive reflexes','Positive Chvostek sign','Absence of deep tendon reflexes'],c:3,t:'single',r:'<b>Loss of deep tendon reflexes is the first and defining sign of hypermagnesemia</b>, along with decreased consciousness, confusion, muscle weakness, hypotension, and bradycardia. The antidote is <b>calcium gluconate</b>. Chvostek and tetany belong to <b>hypo</b>calcemia and hypomagnesemia.'},
+{topic:'lytes',hot:false,q:'A patient with severe hyponatremia is corrected too rapidly. Which complication does the nurse monitor for?',o:['Deep vein thrombosis','Metabolic alkalosis','Osmotic demyelination syndrome','Hyperkalemia'],c:2,t:'single',r:'Correcting sodium <b>too quickly</b> causes <b>osmotic demyelination syndrome</b>. Correcting hypernatremia too quickly causes <b>cerebral edema</b>. Either direction, the rule is the same: <b>correct slowly</b>.'},
+{topic:'fluids',hot:true,q:'A patient with a serum sodium of 116 mEq/L is having seizures. Which IV solution does the nurse anticipate?',o:['3% normal saline','0.45% normal saline','D5W','Lactated Ringer'],c:0,t:'single',r:'<b>3% NS is hypertonic</b> and is reserved for <b>severe symptomatic hyponatremia and cerebral edema</b>. It pulls water out of swollen cells. Hypotonic fluids and D5W would drive more water into the cells and worsen the seizures.'},
+{topic:'fluids',hot:true,q:'A patient is receiving 3% normal saline. Which nursing action is essential?',o:['Recheck the sodium every 4 to 6 hours and monitor neuro status','Infuse it rapidly by gravity to correct the sodium quickly','Discontinue cardiac and respiratory monitoring','Give it only if the patient is hypotensive'],c:0,t:'single',r:'3% NS is a <b>high-alert</b> fluid given <b>on a pump in a monitored setting</b>. <b>Correcting sodium too fast causes osmotic demyelination</b>, so recheck the sodium every 4 to 6 hours and follow neuro status and lung sounds. Watch for fluid overload and phlebitis.'},
+{topic:'fluids',hot:false,q:'Why does 3% NS remain hypertonic in the body while D5NS does not?',o:['3% NS contains no dextrose to metabolize','3% NS is metabolized more slowly by the liver','3% NS contains potassium instead of sodium','Both solutions become isotonic at the same rate'],c:0,t:'single',r:'<b>Dextrose metabolizes quickly and disappears</b>, so a dextrose-containing hypertonic solution ends up isotonic or hypotonic in the patient. <b>3% and 5% NS have no dextrose</b>, so they stay hypertonic \u2014 which is exactly why they can pull water out of a swollen brain.'},
 ];
 
 </script>
 <script>
 document.getElementById('sec-home').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🏠</span> Unit 2 Study Lab</h2>
-<p class="intro-line">Respiratory, start to finish — upper tract through chronic pulmonary disease. Rebuilt to match the Cohort 0527E calendar.</p>
+<p class="intro-line">Fluids, electrolytes, acid-base, and respiratory start to finish. Rebuilt for the Cohort 0527E retake.</p>
 
 <div class="card" style="border-color:var(--teal)">
-  <h3>✅ Matched to your calendar</h3>
-  <p><b>Unit 2 exam: Monday 9/14.</b> Per the calendar this exam covers <b>Ch 17–21</b>, which is respiratory only.</p>
+  <h3>✅ Unit scope is unchanged</h3>
+  <p><b>Unit 2 exam: Monday 9/14.</b> The units did not shift this term — Casteel is <b>stacking chapters</b> around the Labor Day holiday, so several get taught on the same night. The exam content is the same as always.</p>
   <ul class="clean">
+    <li><b>Ch 10</b> Fluid and Electrolytes → Fluids & IV Therapy, Electrolytes, Acid-Base & ABGs. <i>Taught 9/2 because of the stacking, but tested here.</i></li>
     <li><b>Ch 17</b> Assessment of Respiratory Function → Resp Assessment</li>
     <li><b>Ch 18</b> Upper Respiratory Tract Disorders → <b>Upper Respiratory</b> (new section)</li>
     <li><b>Ch 19</b> Acute Disorders of the Chest and Lower Respiratory Tract → Acute Respiratory, Pneumonia</li>
     <li><b>Ch 20</b> Nonacute Disorders and Pulmonary Vasculature → Acute Respiratory (PE), Airway & Chest Tubes</li>
     <li><b>Ch 21</b> Chronic Pulmonary Disease → COPD & Asthma, Tuberculosis</li>
   </ul>
-</div>
-
-<div class="card" style="border-color:var(--amber)">
-  <h3>⚠️ Two things moved</h3>
-  <p><b>Fluids, electrolytes, ABGs, and IV therapy are gone from this guide.</b> That is <b>Ch 10</b>, and the calendar puts it on your <b>Unit 1 exam</b>. All 89 of those questions now live in the Unit 1 guide where they belong.</p>
-  <p style="margin-bottom:0"><b>Transfusion is not on this exam.</b> Blood products are covered in the hematology chapters, which are not on this calendar. That section is left in as reference only — it will not be tested on 9/14.</p>
 </div>
 
 <div class="card" style="border-color:var(--red)">
@@ -755,13 +911,17 @@ document.getElementById('sec-home').innerHTML=`
     <li><b>🎯 Trick Questions</b> — keyword patterns and the specific traps.</li>
     <li><b>🗄️ Wrong Answer Vault</b> — anything you miss lands here until you get it right.</li>
     <li><b>🎮 Flash / 🔗 Match / ⚡ Drill</b> — three separate banks, no recycled questions.</li>
-    <li><b>📝 Exam</b> — 194 questions with a topic and length picker.</li>
+    <li><b>📝 Exam</b> — 287 questions with a topic and length picker.</li>
   </ul>
 </div>
 
 <div class="card" style="border-color:var(--teal)">
   <h3>📌 What to nail for this exam</h3>
   <ul class="clean">
+    <li><b>Water follows solute.</b> Isotonic stays, hypotonic goes into cells, hypertonic pulls out.</li>
+    <li><b>Potassium 3.5-5.0</b> and the protect → shift → remove sequence for hyperkalemia.</li>
+    <li><b>Low calcium makes things fire. High calcium makes things slow.</b></li>
+    <li><b>ROME.</b> Respiratory Opposite, Metabolic Equal. Kidney problem = metabolic, lung problem = respiratory.</li>
     <li><b>Restlessness is the earliest sign of hypoxia.</b> Cyanosis is late.</li>
     <li><b>Silent chest and a normalizing CO₂</b> are both the patient getting worse, not better.</li>
     <li><b>Water-seal bubbling = leak. Suction-control bubbling = normal.</b> Three-sided tape on a dislodged tube.</li>
@@ -996,6 +1156,69 @@ document.getElementById('sec-why').innerHTML=`
   <div class="trap"><span class="tag">Where he turns the screw</span>This never means withholding oxygen from a hypoxic patient. If a COPD patient is in true respiratory distress, you oxygenate. The rule is about <b>controlled</b> delivery and monitoring, not rationing.</div>
 </div>
 
+<div class="card">
+  <h3>💧 Why tonicity decides where the water goes</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> Water always moves toward the <b>higher solute concentration</b>. That is the only rule.</li>
+    <li><b>2.</b> <b>Isotonic</b> fluid matches serum, so no gradient forms and it <b>stays in the vessel</b> → expands volume.</li>
+    <li><b>3.</b> <b>Hypotonic</b> fluid is more dilute, so water moves <b>into cells</b> → cells swell → danger is <b>cerebral edema</b>.</li>
+    <li><b>4.</b> <b>Hypertonic</b> fluid is more concentrated, so water is pulled <b>out of cells</b> → danger is <b>overload and phlebitis</b>.</li>
+    <li><b>5.</b> So the fluid you pick is decided by <b>where the patient needs water to go</b>, not by the diagnosis label.</li>
+  </ol>
+  <div class="trap"><span class="tag">Where he turns the screw</span>He gives you a hypotensive dehydrated patient and offers 0.45% saline, which sounds like "replacing water." It pulls water into cells and drops the BP further. Isotonic is the answer any time the problem is <b>intravascular volume</b>.</div>
+</div>
+
+<div class="card">
+  <h3>🫧 Why a third-spacing patient is swollen and dry at the same time</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> The liver makes <b>albumin</b>, which generates <b>plasma oncotic pressure</b> — the force holding water inside the vessel.</li>
+    <li><b>2.</b> Liver disease, malnutrition, burns, or sepsis drops albumin or damages the capillary wall.</li>
+    <li><b>3.</b> Oncotic pressure falls, hydrostatic pressure wins, and water leaves the vessel for the interstitium.</li>
+    <li><b>4.</b> The visible result is <b>edema and ascites</b>. The invisible result is <b>falling intravascular volume</b>.</li>
+    <li><b>5.</b> So the patient is <b>edematous outside and hypovolemic inside</b>, and diuresing the swelling worsens the shock.</li>
+  </ol>
+  <div class="trap"><span class="tag">Where he turns the screw</span>A swollen patient with a BP of 90/56 and a heart rate of 118. Every instinct says diurese. Look at the perfusion numbers, not the ankles.</div>
+</div>
+
+<div class="card">
+  <h3>⚡ Why potassium is the electrolyte that kills</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> Potassium sets the <b>resting membrane potential</b> of every excitable cell, including cardiac muscle.</li>
+    <li><b>2.</b> The normal range is narrow — <b>3.5 to 5.0</b> — because small shifts change how easily the heart depolarizes.</li>
+    <li><b>3.</b> <b>High</b> K makes the membrane easier to depolarize but harder to reset → <b>peaked T waves → wide QRS → asystole</b>.</li>
+    <li><b>4.</b> <b>Low</b> K makes it harder to depolarize → <b>flat T waves, U wave</b>, muscle weakness, ileus.</li>
+    <li><b>5.</b> Because the effect is on the myocardium, treatment order is <b>protect (calcium gluconate) → shift (insulin/dextrose, albuterol) → remove (kayexalate, dialysis)</b>.</li>
+    <li><b>6.</b> IV push is fatal <b>because</b> a sudden bolus reaches the heart before it can distribute.</li>
+  </ol>
+  <div class="hy"><span class="tag">Connect it</span>You cannot fix hypokalemia until magnesium is replaced, because magnesium is required for the cell to hold onto potassium. That is why he pairs the two.</div>
+</div>
+
+<div class="card">
+  <h3>🦴 Why hypocalcemia is an airway problem</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> Calcium <b>stabilizes the nerve membrane</b>, raising the threshold a nerve needs to fire.</li>
+    <li><b>2.</b> Low calcium lowers that threshold, so nerves fire on their own.</li>
+    <li><b>3.</b> Spontaneous firing produces <b>tingling, twitching, and tetany</b> — hence Chvostek and Trousseau.</li>
+    <li><b>4.</b> If the muscle that spasms is the <b>larynx</b>, the airway closes.</li>
+    <li><b>5.</b> So the priority in symptomatic hypocalcemia is <b>airway and seizure precautions</b>, not the constipation-and-bones list.</li>
+  </ol>
+  <div class="trap"><span class="tag">Where he turns the screw</span>He hands you the hypercalcemia symptom list as distractors. <b>Low calcium = things fire. High calcium = things slow down.</b></div>
+</div>
+
+<div class="card">
+  <h3>🫁 Why ROME works</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> <b>CO₂ is an acid</b> controlled by the <b>lungs</b>. <b>Bicarbonate is a base</b> controlled by the <b>kidneys</b>.</li>
+    <li><b>2.</b> If the lungs cause the problem, CO₂ rises and pH falls — <b>opposite</b> directions. Respiratory Opposite.</li>
+    <li><b>3.</b> If the kidneys cause it, bicarb falls and pH falls — the <b>same</b> direction. Metabolic Equal.</li>
+    <li><b>4.</b> The system that is NOT the cause tries to correct it, which is <b>compensation</b>.</li>
+    <li><b>5.</b> Lungs compensate in <b>minutes</b> by changing the rate; kidneys in <b>hours to days</b> by retaining or dumping bicarb.</li>
+    <li><b>6.</b> So the pH names it, the matching value locates it, and the third value tells you how long it has been going on.</li>
+  </ol>
+  <div class="hy"><span class="tag">Compensation shortcut</span>pH abnormal + one system abnormal = <b>uncompensated</b>. pH abnormal + both abnormal = <b>partially</b>. pH <b>normal</b> + both abnormal = <b>fully compensated</b>, which almost always means chronic.</div>
+  <div class="mnem" style="border-color:var(--gold)"><div class="tag">⭐ He asks this out loud</div><div class="big">Kidney problem → automatically METABOLIC. Lung problem → automatically RESPIRATORY.</div><div class="exp">Kidneys own bicarbonate, lungs own CO₂. And a failing kidney cannot compensate for a lung problem, so expect an uncompensated gas when both are involved.</div></div>
+</div>
+
 <div class="hy">🧠 <b>Self-test:</b> pick a question you missed and ask which link in the chain you did not know. If you cannot name the link, you were guessing from recognition. Go back to that chain before answering more questions.</div>
 
 <div id="whyQuiz"></div>`;
@@ -1003,11 +1226,125 @@ renderFilteredQuiz('whyQuiz', secQ(EXAM.filter(q=>q.topic==='clinical')), 'Why E
 
 </script>
 <script>
+document.getElementById('sec-hooks').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🪝</span> Memory Hooks</h2>
+<p class="intro-line">Unit 2 is dense. These are the hooks that collapse it into a handful of things you can actually hold onto under pressure.</p>
+
+<div class="tipbar">🧠 Don't memorize the hooks. Memorize <b>one</b> per topic, then derive the rest from it. That is the whole point.</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>💧 Fluids — one rule runs everything</h3>
+  <div class="mnem"><div class="tag">The master rule</div><div class="big">WATER FOLLOWS SOLUTES</div></div>
+  <table class="lab">
+    <tr><th>Hook</th><th>What it unlocks</th></tr>
+    <tr><td><b>Potassium INside, Sodium Outside</b></td><td>K problems hit the heart cell. Na problems move water and hit the brain</td></tr>
+    <tr><td><b>hypO makes cells swell like an O</b></td><td>Hypotonic → water INTO cells → swelling → <b>cerebral edema</b></td></tr>
+    <tr><td><b>hyPER = shrivelED</b></td><td>Hypertonic → water OUT of cells → shrinking</td></tr>
+    <tr><td><b>Push out, pull back</b></td><td>Hydrostatic pushes out at the arterial end. Oncotic pulls back at the venous end</td></tr>
+    <tr><td><b>Blood + saline. Nothing else.</b></td><td>Dextrose lyses cells, LR's calcium clots. <b>Only 0.9% NS</b></td></tr>
+    <tr><td><b>The scale doesn't lie</b></td><td><b>Daily weight is the best indicator.</b> 1 kg = 1 L</td></tr>
+    <tr><td><b>Deficit concentrates, overload dilutes</b></td><td>Deficit: ↑Hct, ↑BUN, osm &gt;300. Overload: ↓Hct, ↓BUN, osm &lt;270</td></tr>
+  </table>
+  <div class="hy"><span class="tag">Osmolality anchor</span><b>270–300.</b> Under 270 = too much water. Over 300 = not enough. One number sorts every fluid stem.</div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>⚡ Electrolytes — learn the direction, not the list</h3>
+  <table class="lab">
+    <tr><th>Hook</th><th>Meaning</th></tr>
+    <tr><td><b>Low Ca and low Mg → things FIRE</b></td><td>Tetany, tingling, <b>Chvostek and Trousseau</b>, hyperreflexia, seizures</td></tr>
+    <tr><td><b>High Ca and high Mg → things SLOW</b></td><td>Lethargy, constipation, weakness, <b>absent reflexes</b></td></tr>
+    <tr><td><b>Chvostek = CHeek. Trousseau = Tourniquet.</b></td><td>Tap the cheek → twitch. BP cuff → hand spasm</td></tr>
+    <tr><td><b>Low K = flat and Ushaped. High K = peaked.</b></td><td>Flat T with a U wave vs peaked T → wide QRS → asystole</td></tr>
+    <tr><td><b>Low K constipates, high K evacuates</b></td><td>The GI clue that separates two near-identical pictures</td></tr>
+    <tr><td><b>Can't fix K until you fix Mg</b></td><td>The stubborn-potassium stem. Magnesium first</td></tr>
+    <tr><td><b>Protect → Shift → Remove</b></td><td>Hyperkalemia: calcium gluconate, then insulin/D50 and albuterol, then kayexalate or dialysis</td></tr>
+    <tr><td><b>Low Na = brain swells</b></td><td>Confusion, headache, seizures. Correct <b>slowly</b> either direction</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">If you remember one thing</div><div class="big">Potassium kills the heart. Sodium swells the brain. Calcium and magnesium run the nerves.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🫁 ABGs — three steps, one mnemonic</h3>
+  <div class="mnem"><div class="tag">The method</div><div class="big">ROME — Respiratory Opposite, Metabolic Equal</div></div>
+  <table class="lab">
+    <tr><th>Hook</th><th>Meaning</th></tr>
+    <tr><td><b>Kidney = metabolic. Lung = respiratory.</b></td><td>Name the broken organ, you've named half the gas</td></tr>
+    <tr><td><b>CO₂ is the acid. Bicarb is the base.</b></td><td>Lungs own CO₂ (minutes). Kidneys own bicarb (days)</td></tr>
+    <tr><td><b>7.35–7.39 is the acid side of normal</b></td><td>How you name a fully compensated gas</td></tr>
+    <tr><td><b>Vomit acid, poop base</b></td><td>Vomiting/NG loses acid → alkalosis. Diarrhea loses bicarb → acidosis</td></tr>
+    <tr><td><b>One abnormal = un. Both = partial. pH normal + both = full.</b></td><td>The compensation ladder in one line</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--blue)">
+  <h3>🫁 Respiratory — the signs that lie</h3>
+  <table class="lab">
+    <tr><th>Hook</th><th>Meaning</th></tr>
+    <tr><td><b>Restless first, blue last</b></td><td><b>Restlessness is the earliest hypoxia sign.</b> Cyanosis is very late</td></tr>
+    <tr><td><b>A quiet chest is a dying chest</b></td><td>Silent chest in asthma = no air moving. Worse, not better</td></tr>
+    <tr><td><b>A normal CO₂ in a hyperventilating asthmatic = they're tiring</b></td><td>The number improving while the patient deteriorates</td></tr>
+    <tr><td><b>SHUNT = blood, no air. DEAD SPACE = air, no blood.</b></td><td>Pneumonia is shunt. PE is dead space</td></tr>
+    <tr><td><b>O₂ can't fix a shunt</b></td><td>Which is what <b>refractory hypoxemia = ARDS</b> means</td></tr>
+    <tr><td><b>88 to 92</b></td><td>COPD saturation target with controlled delivery</td></tr>
+    <tr><td><b>Both dull — fremitus decides</b></td><td>Consolidation ↑fremitus + egophony. Effusion ↓fremitus</td></tr>
+    <tr><td><b>Bronchodilator, then steroid, then rinse</b></td><td>Open the road before sending the traffic</td></tr>
+    <tr><td><b>Old + confused + no fever = pneumonia or UTI</b></td><td>Aging blunts the febrile response</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>🩹 Chest tubes — three sounds, three meanings</h3>
+  <table class="lab">
+    <tr><th>Hook</th><th>Meaning</th></tr>
+    <tr><td><b>Tidaling = good</b></td><td>Fluid rises and falls with breathing. The system is patent</td></tr>
+    <tr><td><b>Water seal bubbling = LEAK</b></td><td>Continuous bubbling there is a problem</td></tr>
+    <tr><td><b>Suction chamber bubbling = normal</b></td><td>That is what wall suction is supposed to do</td></tr>
+    <tr><td><b>Tape three sides, not four</b></td><td>Makes a one-way flutter valve so air escapes instead of building a tension pneumothorax</td></tr>
+    <tr><td><b>Disconnected → sterile water. Dislodged → three-sided gauze.</b></td><td>Two different emergencies, two different answers</td></tr>
+    <tr><td><b>Almost never clamp</b></td><td>Clamping traps air with no way out</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>🦠 TB and infection control</h3>
+  <table class="lab">
+    <tr><th>Hook</th><th>Meaning</th></tr>
+    <tr><td><b>RIPE</b></td><td>Rifampin (orange), Isoniazid (B6, liver), Pyrazinamide (liver), Ethambutol (eyes)</td></tr>
+    <tr><td><b>N95 on the nurse, surgical mask on the patient</b></td><td>The direction students reverse</td></tr>
+    <tr><td><b>Measure the bump, not the red</b></td><td>Mantoux: <b>induration</b> at 48–72 hours</td></tr>
+    <tr><td><b>A positive skin test = exposure, not disease</b></td><td>Sputum culture confirms active TB</td></tr>
+    <tr><td><b>CASEating = TB. NONcaseating = sarcoid.</b></td><td>One word, two diseases</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>⭐ If you only hold ten things</h3>
+  <ol class="chainlist">
+    <li><b>1.</b> Water follows solutes.</li>
+    <li><b>2.</b> Potassium inside, sodium outside. K kills the heart, Na swells the brain.</li>
+    <li><b>3.</b> Daily weight is the best fluid indicator. 1 kg = 1 L.</li>
+    <li><b>4.</b> Osmolality 270–300. Under = overload, over = deficit.</li>
+    <li><b>5.</b> Low Ca/Mg fire. High Ca/Mg slow.</li>
+    <li><b>6.</b> Blood hangs with 0.9% NS only.</li>
+    <li><b>7.</b> ROME. Kidney = metabolic, lung = respiratory.</li>
+    <li><b>8.</b> Restlessness is the first hypoxia sign; cyanosis is the last.</li>
+    <li><b>9.</b> A silent chest and a normalizing CO₂ both mean worse.</li>
+    <li><b>10.</b> Water seal bubbling = leak. Suction bubbling = fine.</li>
+  </ol>
+</div>
+
+<div id="q-hooks"></div>`;
+renderFilteredQuiz('q-hooks', secQ(EXAM.filter(q=>q.hot)), 'High-yield check', 'Memory Hooks');
+
+</script>
+<script>
 /* ===== CLASS NOTES ===== */
 let notesList=[], noteTopic='other', noteFilter='keep';
-const NOTE_TOPICS=['upper','resp','acute','pneumonia','airway','copd','tb','other'];
-const NOTE_LABEL={upper:'Upper Resp',resp:'Resp Assessment',acute:'Acute Resp',pneumonia:'Pneumonia',airway:'Airway/Tubes',copd:'COPD/Asthma',tb:'TB',other:'Other'};
+const NOTE_TOPICS=['fluids','lytes','abg','upper','resp','acute','pneumonia','airway','copd','tb','blood','other'];
+const NOTE_LABEL={fluids:'Fluids/IV',lytes:'Electrolytes',abg:'Acid-Base',upper:'Upper Resp',resp:'Resp Assessment',acute:'Acute Resp',pneumonia:'Pneumonia',airway:'Airway/Tubes',copd:'COPD/Asthma',tb:'TB',blood:'Transfusion',other:'Other'};
 (function restoreNotes(){ try{ const r=localStorage.getItem('nur256u2_notes'); if(r) notesList=JSON.parse(r); }catch(e){} })();
+const NOTES_STORAGE_KEY='nur256u2_notes';
 function saveNotes(){ try{ localStorage.setItem('nur256u2_notes', JSON.stringify(notesList)); }catch(e){} }
 function escN(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 let noteDraft='', noteDraftStar=false;
@@ -1045,6 +1382,76 @@ function fallbackCopy(txt,cb){
   try{ document.execCommand('copy'); cb(); }catch(e){ toast('Copy failed'); }
   document.body.removeChild(ta);
 }
+/* ---- notes backup: export / import / copy-all ---- */
+function notesKey(){ return NOTES_STORAGE_KEY; }
+function exportNotes(){
+  if(!notesList.length){ toast('No notes to export'); return; }
+  const payload=JSON.stringify({v:1,key:notesKey(),saved:new Date().toISOString(),notes:notesList});
+  showNotesBox('\u{1F4E6} Backup code', payload,
+    'Copy this whole block and keep it somewhere safe \u2014 a note on your phone, an email to yourself, or paste it to Claude. Paste it into Import on any device to restore.');
+}
+function copyAllNotes(){
+  if(!notesList.length){ toast('No notes yet'); return; }
+  const txt=notesList.map(n=>(n.star?'\u2605 ':'\u25CB ')+'['+(NOTE_LABEL[n.topic]||n.topic)+'] '+n.t).join('\n');
+  showNotesBox('\u{1F4CB} All notes as text', txt,
+    'Readable format \u2014 good for pasting to Claude or into a document. \u2605 means starred.');
+}
+function showNotesBox(title, content, hint){
+  const host=document.getElementById('notesBox'); if(!host)return;
+  host.innerHTML=`<div class="card" style="border-color:var(--purple)">
+    <h3>${title}</h3>
+    <p style="font-size:.86rem;color:var(--muted);margin-top:0">${hint}</p>
+    <textarea id="notesOut" class="noteinput" rows="7" readonly>${content.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>
+    <div class="chiprow" style="margin-top:10px">
+      <button class="mini" onclick="copyBoxText()">Copy to clipboard</button>
+      <button class="mini" onclick="document.getElementById('notesBox').innerHTML=''">Close</button>
+    </div>
+  </div>`;
+  const ta=document.getElementById('notesOut'); if(ta){ ta.focus(); ta.select(); ta.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function copyBoxText(){
+  const ta=document.getElementById('notesOut'); if(!ta)return;
+  const done=()=>toast('Copied');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();try{document.execCommand('copy');done();}catch(e){toast('Select and copy manually');}}); }
+  else { ta.select(); try{document.execCommand('copy'); done();}catch(e){ toast('Select and copy manually'); } }
+}
+function openImport(){
+  const host=document.getElementById('notesBox'); if(!host)return;
+  host.innerHTML=`<div class="card" style="border-color:var(--teal)">
+    <h3>\u{1F4E5} Import notes</h3>
+    <p style="font-size:.86rem;color:var(--muted);margin-top:0">Paste a backup code below. Existing notes are <b>kept</b> \u2014 this merges rather than replacing, and skips anything already here.</p>
+    <textarea id="notesIn" class="noteinput" rows="6" placeholder="Paste your backup code here"></textarea>
+    <div class="chiprow" style="margin-top:10px">
+      <button class="mini on" onclick="doImport()">Import</button>
+      <button class="mini" onclick="document.getElementById('notesBox').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+  const ta=document.getElementById('notesIn'); if(ta){ ta.focus(); ta.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function doImport(){
+  const ta=document.getElementById('notesIn'); if(!ta)return;
+  const raw=(ta.value||'').trim();
+  if(!raw){ toast('Paste a backup code first'); return; }
+  let data;
+  try{ data=JSON.parse(raw); }catch(e){ toast('That does not look like a backup code'); return; }
+  const incoming = Array.isArray(data)?data:(data&&Array.isArray(data.notes)?data.notes:null);
+  if(!incoming){ toast('No notes found in that code'); return; }
+  const have=new Set(notesList.map(n=>n.id));
+  const seen=new Set(notesList.map(n=>(n.t||'').trim()));
+  let added=0, skipped=0;
+  incoming.forEach(n=>{
+    if(!n||typeof n.t!=='string'||!n.t.trim()) return;
+    if(have.has(n.id) || seen.has(n.t.trim())){ skipped++; return; }
+    notesList.push({ id: n.id || (Date.now()+''+Math.floor(Math.random()*999)),
+      t: n.t, topic: (NOTE_LABEL[n.topic]?n.topic:'other'), star: !!n.star, ts: n.ts || Date.now() });
+    have.add(n.id); seen.add(n.t.trim()); added++;
+  });
+  notesList.sort((a,b)=>(b.ts||0)-(a.ts||0));
+  saveNotes();
+  document.getElementById('notesBox').innerHTML='';
+  renderNotes();
+  toast(added+' note'+(added===1?'':'s')+' imported'+(skipped?', '+skipped+' already here':''));
+}
 function renderNotes(){
   const host=document.getElementById('sec-notes'); if(!host)return;
   const keep=notesList.filter(n=>n.star), inbox=notesList.filter(n=>!n.star);
@@ -1080,13 +1487,463 @@ function renderNotes(){
     </div>
     ${keep.length>25&&noteFilter==='keep'?`<div class="trap"><span class="tag">Getting heavy</span>You have ${keep.length} starred notes. Past about 25 you are collecting, not studying. Reread them and unstar anything you already know cold.</div>`:''}
     ${rows}
+    <div class="hy"><span class="tag">Keeping your notes safe</span>
+  Notes are stored by your <b>browser, for this website address</b>. Replacing the file at the same GitHub Pages URL <b>keeps them</b>. They will NOT follow you to a different browser, a different device, a private/incognito window, or a copy opened from your Downloads folder. Use <b>📦 Export backup</b> to move them anywhere — or to send them to Claude.</div>
+  <div id="notesBox"></div>
     <div class="chiprow" style="margin-top:12px">
-      <button class="mini" onclick="copyNotes()">Copy starred notes</button>
+      <button class="mini" onclick="copyNotes()">Copy starred</button>
+      <button class="mini" onclick="copyAllNotes()">Copy all as text</button>
+      <button class="mini" onclick="exportNotes()">\u{1F4E6} Export backup</button>
+      <button class="mini" onclick="openImport()">\u{1F4E5} Import</button>
       <button class="mini danger" onclick="clearInbox()">Clear inbox</button>
     </div>
   </div>`;
 }
 renderNotes();
+
+</script>
+<script>
+document.getElementById('sec-fluids').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">💧</span> Fluid Balance & IV Therapy</h2>
+<p class="intro-line">Chapter 10, first half. Water follows solute. Every fluid answer on this exam traces back to that one sentence.</p>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>Why fluid matters at all — the three essential functions</h3>
+  <ul class="clean">
+    <li><b>Cellular metabolism</b></li>
+    <li><b>Temperature regulation</b></li>
+    <li><b>Delivery of oxygen and nutrients to cells</b></li>
+  </ul>
+  <div class="hy"><span class="tag">Why he starts here</span>Every fluid complication traces to one of these three failing. Dehydration → poor delivery. Overload → cells sit in excess water and metabolism suffers. It is the "so what" behind the whole chapter.</div>
+</div>
+
+<div class="card">
+  <h3>The three fluid compartments</h3>
+  <table class="lab">
+    <tr><th>Compartment</th><th>Where</th><th>Main cation</th></tr>
+    <tr><td><b>Intracellular (ICF)</b></td><td><b>Inside the cells</b> — about two thirds of body water</td><td><b>POTASSIUM</b></td></tr>
+    <tr><td><b>Extracellular (ECF)</b></td><td><b>Outside the cells</b> — intravascular (in the vessels) and interstitial</td><td><b>SODIUM</b></td></tr>
+    <tr><td><b>Transcellular</b></td><td><b>Pericardial</b> (around the heart), <b>cerebrospinal</b>, and <b>synovial</b> (between joints)</td><td>Small specialized volumes</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ Two words, whole chapter</div><div class="big">Potassium is INSIDE. Sodium is OUTSIDE.</div><div class="exp">Which is why a <b>potassium</b> problem hits the <b>heart muscle cell</b>, and a <b>sodium</b> problem moves <b>water between compartments</b> and hits the <b>brain</b>.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>⭐ The three spaces — and what "third spacing" means</h3>
+  <ol class="chainlist">
+    <li><b>First space</b> — the <b>vascular space</b>. Inside the blood vessels, where fluid belongs.</li>
+    <li><b>Second space</b> — the <b>interstitium</b>. Between the cells. Fluid pooling here is <b>edema</b>.</li>
+    <li><b>Third space</b> — <b>outside both</b>, in a body cavity where it does no work. <b>Ascites in the abdomen is third-spaced fluid.</b></li>
+  </ol>
+  <div class="hy"><span class="tag">Albumin's job</span><b>Albumin is a protein made by the liver</b> that holds water inside the vessel by generating <b>oncotic pressure</b>. Liver failure or malnutrition drops albumin → the pull weakens → water leaks into the second and third spaces.</div>
+  <div class="trap"><span class="tag">The clinical picture</span>Third-spaced fluid is <b>in the body but not in the circulation</b>. So the patient is <b>swollen and intravascularly dry at the same time</b> — edema with a falling BP and rising heart rate. Diuresing the swelling makes the shock worse.</div>
+</div>
+
+<div class="card">
+  <h3>How fluid actually moves</h3>
+  <div class="mnem"><div class="tag">⭐ The master rule</div><div class="big">WATER FOLLOWS SOLUTES</div><div class="exp">Electrolytes, colloids, glucose — anything dissolved. The more solutes, the higher the osmotic pressure, the harder water is pulled toward them.</div></div>
+  <table class="lab">
+    <tr><th>Process</th><th>What it is</th></tr>
+    <tr><td><b>Osmosis</b></td><td>Movement of <b>water</b> through a semipermeable membrane from <b>low solute concentration to high</b>, until equal. Water follows the solutes</td></tr>
+    <tr><td><b>Diffusion</b></td><td>Movement of <b>solute</b> from high concentration to low — the opposite direction from the water</td></tr>
+    <tr><td><b>Filtration</b></td><td>Fluid movement driven by <b>hydrostatic and oncotic pressure</b> at the capillary</td></tr>
+    <tr><td><b>Active transport</b></td><td>Movement <b>against</b> a gradient — requires energy (the sodium-potassium pump)</td></tr>
+  </table>
+  <div class="hy"><span class="tag">⭐ Filtration at the capillary</span>
+  <b>Hydrostatic pressure is higher at the ARTERIAL end</b> — it <b>PUSHES</b> fluid OUT of the capillary into the tissue.<br>
+  <b>Oncotic pressure is higher at the VENOUS end</b> — it <b>PULLS</b> fluid BACK into the capillary.<br>
+  Push out at the start, pull back at the end. When the pull fails (low albumin) or the push is too strong (heart failure, venous congestion), fluid stays out — and that is <b>edema</b>.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>The compartments</h3>
+  <ul class="clean">
+    <li>Total body water is about <b>60% of body weight</b> in an adult, lower in older adults and in obesity.</li>
+    <li><b>Intracellular (ICF)</b> ≈ two thirds. Principal cation is <b>potassium</b>.</li>
+    <li><b>Extracellular (ECF)</b> ≈ one third, split into interstitial and intravascular. Principal cation is <b>sodium</b>.</li>
+    <li><b>Osmosis</b> moves water toward the higher solute concentration. <b>Diffusion</b> moves solute from high to low. <b>Filtration</b> is driven by hydrostatic pressure.</li>
+    <li><b>Oncotic pressure</b> comes from albumin and holds water inside the vessel. <b>Hydrostatic pressure</b> pushes it out.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>⭐ Osmolality — the number everything is measured against</h3>
+  <ul class="clean">
+    <li><b>Osmolality</b> = milliosmoles per <b>kilogram of water</b>. Determined by dissolved particles — sodium, urea, glucose. Focused on concentration <b>in the body</b>.</li>
+    <li><b>Osmolarity</b> = milliosmoles per <b>liter of solution</b>. Focused on water concentration <b>in a solution, such as IV fluids</b>.</li>
+    <li><b>Osmosis:</b> water moves through a semipermeable membrane from <b>low particle concentration (hypotonic) to high particle concentration (hypertonic)</b> until concentrations equalize.</li>
+  </ul>
+  <table class="lab">
+    <tr><th>Hypo-osmolar</th><th>Iso-osmolar</th><th>Hyper-osmolar</th></tr>
+    <tr><td><b>&lt; 270 mOsm/kg</b></td><td><b>270–300 mOsm/kg</b></td><td><b>&gt; 300 mOsm/kg</b></td></tr>
+    <tr><td>Lower solute than plasma · <b>more water than solutes</b></td><td>Solute equals plasma · equal parts water and solutes</td><td>Higher solute than plasma · <b>more solutes than water</b></td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ Memorize this range</div><div class="big">Normal serum osmolality = 270 to 300 mOsm/kg</div><div class="exp"><b>Fluid overload dilutes → osmolality falls below 270.</b> <b>Fluid deficit concentrates → osmolality rises above 300.</b> One number tells you which imbalance you are looking at.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>⭐ The RN's role with IV fluids</h3>
+  <ul class="clean">
+    <li><b>IV fluids are a medication.</b> You need a provider order for <b>both the type of fluid and the rate</b>.</li>
+    <li><b>You cannot adjust the rate without obtaining an order.</b></li>
+    <li><b>It is not your role to determine which fluid type a patient receives.</b> <b>Rate (mL/hr) is calculated by the physician based on BMI and diagnosis.</b></li>
+    <li><b>Maintenance therapy:</b> roughly <b>60–80 mL/hr</b>. <b>Replacement therapy:</b> roughly <b>80–125 mL/hr</b>.</li>
+    <li><b>Assessment: changes in weight are the best indicator of fluid volume change.</b> Consider I&amp;O and clinical signs alongside it.</li>
+  </ul>
+  <div class="trap"><span class="tag">⭐ The scope-of-practice trap</span>He offers options where the nurse <b>slows, speeds up, or switches</b> the fluid independently. Even when the clinical judgment is right, the <b>action is outside nursing scope</b>. The correct answer is to <b>stop or slow for safety and notify the provider for a new order</b> — not to re-prescribe.</div>
+</div>
+
+<div class="card">
+  <h3>Who regulates fluid — organs</h3>
+  <table class="lab">
+    <tr><th>Organ</th><th>Job</th></tr>
+    <tr><td><b>Kidneys</b></td><td>Regulate ECF volume and osmolality, excrete waste, activate vitamin D, balance acid-base</td></tr>
+    <tr><td><b>Heart and vessels</b></td><td>Pump blood to the kidney so filtration can happen; baroreceptors sense pressure</td></tr>
+    <tr><td><b>Lungs</b></td><td>Remove about 300 mL of water daily as vapor; regulate CO₂</td></tr>
+    <tr><td><b>Osmoreceptors</b></td><td><b>Detect osmolality</b> — the amount of solutes in the blood — and trigger thirst and ADH release</td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>⭐ Hormones assisting in fluid regulation</h3>
+  <table class="lab">
+    <tr><th>Hormone</th><th>What it does</th></tr>
+    <tr><td><b>Aldosterone</b><br><i>Decreases loss of water</i></td><td>
+      • Secreted from the <b>adrenal cortex</b> in response to <b>↓serum Na⁺ in the ECF</b> or <b>↑Na⁺ in the urine</b><br>
+      • Acts on the <b>kidney nephrons</b><br>
+      • Promotes <b>Na⁺ and water reabsorption</b><br>
+      • Promotes <b>K⁺ excretion</b> from the renal tubules</td></tr>
+    <tr><td><b>Antidiuretic hormone (ADH)</b><br><i>Regulates water retention and excretion</i></td><td>
+      • <b>Produced by the hypothalamus, stored in the posterior pituitary</b><br>
+      • Secreted in response to changes in blood osmolarity — <b>ECF volume deficit or ↑osmolality</b><br>
+      • Promotes <b>water reabsorption from the distal tubules</b></td></tr>
+    <tr><td><b>Natriuretic peptides</b><br><i>Induce excretion of sodium by the kidneys</i></td><td>
+      • Triggered by <b>increased blood pressure and/or blood volume</b><br>
+      • <b>Secreted by cardiac cells</b><br>
+      • Kidney reabsorption of Na⁺ is <b>inhibited</b> with release<br>
+      • <b>Urine output increases</b></td></tr>
+    <tr><td><b>RAAS</b><br><i>Renin-Angiotensin-Aldosterone System</i></td><td>Low BP or low perfusion → <b>renin</b> → angiotensin I → <b>angiotensin II</b> (vasoconstriction) → <b>aldosterone</b> → sodium and water retained → volume and pressure rise</td></tr>
+    <tr><td><b>PTH</b></td><td>Raises serum calcium, lowers phosphorus</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ Three hormones, one line each</div><div class="big">Aldosterone holds SALT and water. ADH holds WATER. Natriuretic peptides DUMP both.</div><div class="exp">And notice the potassium: <b>aldosterone excretes K⁺</b>. That is exactly why <b>blocking aldosterone — with spironolactone, an ACE inhibitor, or an ARB — raises potassium</b>.</div></div>
+  <div class="hy"><span class="tag">Where ADH starts</span><b>Osmoreceptors</b> detect rising osmolality and trigger <b>thirst</b> and <b>ADH release</b>. So ADH going up means the body is trying to <b>hold onto water</b> — anti-diuretic, less urine.</div>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>Fluid Volume Deficit — by severity</h3>
+  <p class="why-chain"><b>Hypertonic in the plasma.</b> No water, no salt, or both. Fluid leaves faster than it is replaced, so what remains is concentrated.</p>
+  <ul class="clean">
+    <li><b>Causes:</b> vomiting and diarrhea (fluid <i>and</i> electrolytes), insufficient sodium intake, <b>diabetes insipidus</b>, lack of water intake, diuretics, hemorrhage, laxative abuse.</li>
+    <li><b>Older adults are the most susceptible.</b></li>
+  </ul>
+  <table class="lab">
+    <tr><th>Severity</th><th>Findings</th></tr>
+    <tr><td><b>Mild — 2% weight loss</b></td><td><b>Thirst</b></td></tr>
+    <tr><td><b>Marked — 5% weight loss</b></td><td>Extreme thirst, ↑temp, ↑HR and RR, ↓BP, dry mucous membranes, poor turgor, <b>urine under 25 mL/hr</b>, <b>specific gravity over 1.030</b>, <b>↑Hct, Hgb, BUN, and sodium</b></td></tr>
+    <tr><td><b>Severe — 8% weight loss</b></td><td>All of the above <b>plus</b> flushed skin, <b>systolic BP under 60</b>, <b>restlessness, irritability, disorientation</b>, metabolic acidosis</td></tr>
+    <tr><td><b>Fatal — 20–30% weight loss</b></td><td>Anuria, lethargy progressing to coma, <b>absence of tearing or sweating</b>, hemoconcentration</td></tr>
+  </table>
+  <div class="hy"><span class="tag">Labs and treatment</span><b>Serum osmolality over 300</b>, specific gravity over 1.030, ↑Hct/Hgb/BUN, ↑Na. <b>0.9% NS or D5NS are the most common fluids for replacement</b> — may also see LR, but <b>not as an everyday maintenance fluid</b>. <b>Priority nursing diagnosis: deficient fluid volume.</b></div>
+</div>
+
+<div class="card" style="border-color:var(--blue)">
+  <h3>Fluid Volume Overload</h3>
+  <p class="why-chain"><b>Hypotonic in the plasma</b> — excess fluid dilutes the solute concentration.</p>
+  <ul class="clean">
+    <li><b>Causes:</b> <b>congestive heart failure</b>, too much IV fluid, excessive water intake, <b>kidney injury or failure</b>.</li>
+    <li><b>Manifestations:</b> <b>pulmonary edema</b> (increased work of breathing, SOB, moist cough, moist crackles), <b>JVD</b>, bounding pulse, tachycardia, ↑BP, lethargy, cerebral edema, muscular cramping, <b>rapid weight gain — the best indication of fluid retention</b>, ↑CVP.</li>
+    <li><b>Labs:</b> <b>serum osmolality under 270</b>, <b>↓sodium (dilutional hyponatremia)</b>, <b>↓serum protein, albumin, BUN, Hgb, and Hct from hemodilution</b>.</li>
+    <li><b>Management:</b> <b>daily weight and strict I&amp;O</b>, fluid restriction, <b>low-sodium diet</b>, assess IV rate and whether it should be stopped, diuretics, safety.</li>
+    <li><b>Albumin</b> may be given to replace protein and <b>pull volume back into the intravascular space</b>.</li>
+  </ul>
+  <div class="mnem"><div class="tag">The lab mirror</div><div class="big">Deficit CONCENTRATES the labs. Overload DILUTES them.</div><div class="exp">Deficit: ↑Hct, ↑BUN, ↑Na, osmolality over 300. Overload: ↓Hct, ↓BUN, ↓Na, osmolality under 270. Same labs, opposite directions.</div></div>
+</div>
+
+<div class="card">
+  <h3>Fluid volume deficit vs. excess</h3>
+  <table class="lab">
+    <tr><th></th><th>Deficit (hypovolemia)</th><th>Excess (hypervolemia)</th></tr>
+    <tr><td><b>Cause</b></td><td>Vomiting, diarrhea, hemorrhage, diuresis, third spacing, poor intake</td><td>Heart failure, kidney failure, cirrhosis, excess sodium or IV fluid</td></tr>
+    <tr><td><b>Vitals</b></td><td>↑HR, ↓BP, orthostatic drop, weak thready pulse</td><td>Bounding pulse, ↑BP, ↑CVP</td></tr>
+    <tr><td><b>Exam</b></td><td>Poor turgor, dry mucous membranes, flat neck veins, ↓urine output</td><td>Crackles, edema, JVD, dyspnea</td></tr>
+    <tr><td><b>Labs</b></td><td>↑BUN:creatinine ratio, ↑hematocrit, ↑urine specific gravity</td><td>↓hematocrit and ↓BUN from dilution, ↓urine specific gravity</td></tr>
+    <tr><td><b>Weight</b></td><td>Rapid loss</td><td>Rapid gain</td></tr>
+    <tr><td><b>Treatment</b></td><td>Isotonic IV fluid, treat the cause, oral rehydration if tolerated</td><td>Diuretics, sodium and fluid restriction, daily weights, semi-Fowler</td></tr>
+  </table>
+  <div class="hy"><span class="tag">Best indicator</span><b>Daily weight on the same scale, same time, same clothing.</b> 1 kg ≈ 1 L. It beats intake and output because I&O misses insensible losses and charting gaps.</div>
+</div>
+
+<div class="card">
+  <h3>Third spacing</h3>
+  <p class="why-chain">Low albumin or a damaged capillary wall drops oncotic pressure → hydrostatic pressure wins → fluid leaves the vessel for the interstitium or a body cavity. The patient looks <b>edematous</b> and is simultaneously <b>intravascularly dry</b>.</p>
+  <ul class="clean">
+    <li>Seen in burns, sepsis, liver failure, hypoalbuminemia, major surgery, ascites.</li>
+    <li>Watch the perfusion numbers, not the ankles: falling BP, rising heart rate, falling urine output.</li>
+    <li>The fluid returns to the vasculature later — watch for <b>overload during the mobilization phase</b>.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>IV solutions by tonicity</h3>
+  <table class="lab">
+    <tr><th>Type</th><th>Examples</th><th>Where water goes</th><th>Used for / risk</th></tr>
+    <tr><td><b>Isotonic</b></td><td>0.9% NS, lactated Ringer, D5W (in the bag)</td><td>Stays in the vessel</td><td>Hypovolemia, blood loss. Risk: fluid overload</td></tr>
+    <tr><td><b>Hypotonic</b></td><td>0.45% NS, 0.33% NS, D5W (once dextrose is metabolized)</td><td>Moves INTO cells</td><td>Cellular dehydration, hypernatremia. Risk: <b>cerebral edema</b>, ↓BP</td></tr>
+    <tr><td><b>Hypertonic</b></td><td>3% NS, 5% NS, D10W, D5NS, D5LR</td><td>Pulls water OUT of cells</td><td>Severe symptomatic hyponatremia, cerebral edema. Risk: overload, phlebitis</td></tr>
+  </table>
+  <ul class="clean">
+    <li><b>D5W is isotonic in the bag and hypotonic in the patient.</b> Both descriptions are true and both appear as options.</li>
+    <li><b>Lactated Ringer contains calcium and potassium.</b> Avoid in liver failure (can't metabolize lactate) and never hang it with blood.</li>
+    <li><b>3% saline is high-alert.</b> Correct sodium slowly — too fast causes osmotic demyelination. Monitor lung sounds and neuro status.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>IV complications</h3>
+  <table class="lab">
+    <tr><th>Complication</th><th>Signs</th><th>Action</th></tr>
+    <tr><td><b>Infiltration</b></td><td><b>Cool</b>, swollen, pale, taut; slowed rate</td><td>Stop, remove catheter, elevate, warm or cool compress per policy</td></tr>
+    <tr><td><b>Extravasation</b></td><td>Same, but with a <b>vesicant</b> — tissue necrosis risk</td><td>Stop, leave catheter, aspirate residual, notify provider</td></tr>
+    <tr><td><b>Phlebitis</b></td><td><b>Warm</b>, red, tender, palpable cord</td><td>Discontinue, restart in a new site, warm compress</td></tr>
+    <tr><td><b>Fluid overload</b></td><td>Crackles, dyspnea, cough, JVD, ↑BP</td><td><b>Slow or stop</b>, raise the head of the bed, oxygen, notify provider</td></tr>
+    <tr><td><b>Air embolism</b></td><td>Sudden dyspnea, chest pain, hypotension, altered LOC</td><td>Clamp the line, <b>left side with head down</b>, oxygen, notify provider</td></tr>
+    <tr><td><b>Infection</b></td><td>Redness and drainage at the site, fever, chills</td><td>Discontinue, culture, aseptic technique on restart</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Cool vs warm</div><div class="big">Infiltration is COOL. Phlebitis is WARM.</div><div class="exp">That one word separates them in almost every stem he writes.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on this topic</h3>
+  <div class="trap"><span class="tag">Trap 1 — hypotonic fluid to "replace water"</span>A hypotensive dehydrated patient with <b>0.45% saline</b> offered. It sounds like replacing water. It moves water into cells and drops the BP further. An <b>intravascular volume</b> problem takes <b>isotonic</b> fluid.</div>
+  <div class="trap"><span class="tag">Trap 2 — edema read as overload</span>A swollen patient with a falling BP and rising heart rate. That is <b>third spacing</b>, so the vessel is dry. Diuresing them makes it worse.</div>
+  <div class="trap"><span class="tag">Trap 3 — the "best indicator" question</span>Blood pressure, skin turgor, and urine color all appear and all are real assessments. <b>Daily weight</b> wins because it is the most reliable and quantifiable.</div>
+  <div class="trap"><span class="tag">Trap 4 — the burning or aching IV site</span>"Slow the rate and continue" and "apply a warm compress" both sound caring. <b>Stop the infusion</b> and assess first.</div>
+  <div class="trap"><span class="tag">Trap 5 — turgor in an older adult</span>Age-related loss of skin elasticity makes forearm turgor unreliable. Check the <b>sternum or forehead</b>, plus mucous membranes and urine concentration.</div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>Tonicity — and when NOT to use each</h3>
+  <table class="lab">
+    <tr><th>Type</th><th>Osmolality</th><th>Key points</th></tr>
+    <tr><td><b>Hypotonic</b></td><td><b>&lt; 270</b></td><td>Seen in <b>NPO or post-surgical patients to help replace intracellular fluid losses</b> that occur during surgery or with malnutrition. <b>Do NOT give if hypotensive, ↑ICP, burn patient, liver dysfunction, or suspected head injury.</b> Continuous use causes <b>water intoxication</b>. Short-term, <b>on a pump</b></td></tr>
+    <tr><td><b>Isotonic</b></td><td><b>270–300</b></td><td><b>Rehydration or replacement</b> — similar to plasma. <b>Normal saline contains Na⁺ and Cl⁻ and is the most similar to human plasma</b>; it <b>restores ECF volume and replaces sodium and chloride deficits</b>. <b>Lactated Ringer's is similar to the electrolyte concentration of plasma, secondary to NS</b>, and is given <b>following trauma or surgery</b></td></tr>
+    <tr><td><b>Hypertonic</b></td><td><b>&gt; 300</b></td><td>Pulls water out of cells. <b>Constant use leads to dehydration.</b> <b>Most hypertonic fluids become hypotonic in the body</b> once the dextrose is metabolized — but <b>3% and 5% NS do not</b>, because there is no dextrose to metabolize. They stay hypertonic, which is why they are the ones used to pull water out of a swollen brain</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ Why dextrose confuses everyone</div><div class="big">Dextrose provides calories, then metabolizes and disappears.</div><div class="exp"><b>Why use it?</b> It <b>provides energy (calories) and assists with protein breakdown</b>. When part of an IV solution it <b>metabolizes quickly and disappears</b>. So a dextrose solution starts <b>hypertonic in the bag</b> and ends up <b>isotonic or hypotonic in the patient</b>. Both descriptions are true, and he offers both.</div></div>
+</div>
+
+<div class="card">
+  <h3>The solutions, one by one</h3>
+  <table class="lab">
+    <tr><th>Solution</th><th>Type</th><th>Uses</th><th>Nursing implications</th></tr>
+    <tr><td><b>½NS (0.45% NS)</b></td><td>Hypotonic</td><td>Establishing renal function, replacement therapy</td><td>Use with caution. May cause <b>cardiovascular collapse or ↑ICP</b>. <b>Not with liver disease, trauma, or burns</b></td></tr>
+    <tr><td><b>D5W</b></td><td>Hypotonic <i>(in the body)</i></td><td>Free water source, fluid loss and dehydration, <b>hypernatremia</b></td><td>Caution in renal and cardiac patients. Monitor for <b>fluid overload</b> — crackles, edema</td></tr>
+    <tr><td><b>0.9% NS</b></td><td>Isotonic</td><td>Rehydration or replacement, <b>blood transfusions</b></td><td>Monitor for fluid overload</td></tr>
+    <tr><td><b>LR</b></td><td>Isotonic</td><td>Following <b>trauma or surgery</b>, acute blood loss</td><td><b>Not for everyday maintenance.</b> Avoid with renal or liver dysfunction, burns, metabolic alkalosis, hyperkalemia, hyperlactemia</td></tr>
+    <tr><td><b>3% NS</b> <span class="pill">high alert</span></td><td>Hypertonic</td><td><b>Severe symptomatic hyponatremia</b> and <b>cerebral edema / ↑ICP</b>. Pulls water out of swollen cells and back into the vessel</td><td><b>Correct the sodium SLOWLY</b> — too fast causes <b>osmotic demyelination</b>. On a <b>pump</b>, in a monitored setting. Recheck <b>sodium every 4–6 hours</b>, monitor <b>neuro status and lung sounds</b>. Watch for fluid overload and phlebitis</td></tr>
+    <tr><td><b>D5½NS</b></td><td>Hypertonic</td><td>Hydration, fluid volume deficits, pre/post-surgical, NPO, <b>DKA once glucose hits a certain range</b></td><td>Avoid in hypotension. In DKA, <b>use only when blood glucose falls below 250 mg/dL</b> to avoid rapid overcorrection</td></tr>
+    <tr><td><b>D5NS</b></td><td>Hypertonic</td><td>Replacement of fluid and calories</td><td><b>Avoid in cardiac or renal patients</b></td></tr>
+    <tr><td><b>D10W</b></td><td>Hypertonic</td><td>Water replacement — pulls water out of cells into the intravascular space</td><td><b>Monitor blood glucose</b></td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💧 Fluid of choice by situation</h3>
+  <table class="lab">
+    <tr><th>Situation</th><th>Fluid</th><th>Why</th></tr>
+    <tr><td><b>Head injury</b></td><td><b>0.9% NS</b></td><td>Prevents increased ICP and maintains cerebral perfusion. <b>Never hypotonic</b> — water into brain cells worsens edema</td></tr>
+    <tr><td><b>Vomiting</b></td><td><b>0.9% NS</b></td><td>Maintains hydration and electrolyte balance, replaces losses</td></tr>
+    <tr><td><b>Diarrhea</b></td><td><b>0.9% NS</b></td><td>Replaces fluid and electrolytes; restores sodium, chloride, and fluid balance</td></tr>
+    <tr><td><b>Dehydration</b></td><td><b>0.9% NS or lactated Ringer</b></td><td>Replaces fluids and electrolytes, restores circulating volume</td></tr>
+    <tr><td><b>Burns</b></td><td><b>Lactated Ringer</b></td><td>Fluid resuscitation by the <b>Parkland formula</b>; helps restore perfusion and correct metabolic acidosis</td></tr>
+    <tr><td><b>DKA</b></td><td><b>0.9% NS initially</b></td><td>Expands intravascular volume first. Later fluids depend on the <b>sodium level and glucose</b></td></tr>
+    <tr><td><b>Blood transfusion</b></td><td><b>ONLY 0.9% NS</b></td><td>Given with blood to <b>prevent hemolysis</b>. <b>Never dextrose</b> — it lyses red cells. Never LR — its calcium promotes clotting</td></tr>
+    <tr><td><b>Severe symptomatic hyponatremia / cerebral edema</b></td><td><b>3% NS</b></td><td>Hypertonic saline pulls water <b>out of swollen cells</b>. <b>Raise the sodium slowly</b> — rapid correction causes osmotic demyelination</td></tr>
+    <tr><td><b>Liver failure</b></td><td><b>D5W</b></td><td>Provides calories and prevents hypoglycemia; used for free water replacement</td></tr>
+    <tr><td><b>Hypoglycemia</b></td><td><b>D50W or D5W</b></td><td>Rapidly raises glucose. <b>D50W for severe</b> hypoglycemia</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">The pattern</div><div class="big">When in doubt for volume loss — isotonic. 0.9% NS covers most of this table.</div><div class="exp">The exceptions worth memorizing: <b>burns → LR</b>, <b>liver failure → D5W</b>, <b>hypoglycemia → dextrose</b>, and <b>blood → NS only</b>.</div></div>
+  <div class="trap"><span class="tag">Three traps in this table</span><b>0.</b> <b>3% NS is the one hypertonic that is NOT a dextrose solution</b> — so it does not become hypotonic in the body. It is also <b>high alert</b>: correct the sodium slowly or you cause osmotic demyelination. <b>1.</b> Hypotonic fluid in a head injury — water enters brain cells and raises ICP. <b>2.</b> Any dextrose solution hung with blood — hemolysis. <b>3.</b> LR in <b>liver failure</b>, because a failing liver cannot metabolize lactate. LR is the burn answer, not the liver answer.</div>
+</div>
+
+<div id="q-fluids"></div>`;
+renderFilteredQuiz('q-fluids', secQ(EXAM.filter(q=>q.topic==='fluids')), 'Fluids & IV practice', 'Fluids');
+
+
+document.getElementById('sec-lytes').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">⚡</span> Electrolytes</h2>
+<p class="intro-line">Chapter 10, second half. Learn the normal range, the ECG or neuro sign, and the one intervention that kills if you get it wrong.</p>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>Normal ranges — memorize these cold</h3>
+  <table class="lab">
+    <tr><th>Electrolyte</th><th>Normal range</th></tr>
+    <tr><td><b>Sodium</b></td><td>135 – 145 mEq/L</td></tr>
+    <tr><td><b>Potassium</b></td><td>3.5 – 5.0 mEq/L</td></tr>
+    <tr><td><b>Calcium (total)</b></td><td>8.6 – 10.2 mg/dL</td></tr>
+    <tr><td><b>Magnesium</b></td><td>1.3 – 2.3 mg/dL</td></tr>
+    <tr><td><b>Phosphorus</b></td><td>2.5 – 4.5 mg/dL</td></tr>
+    <tr><td><b>Chloride</b></td><td>97 – 107 mEq/L</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Sodium — the water electrolyte</h3>
+  <table class="lab">
+    <tr><th></th><th>Hyponatremia (&lt;135)</th><th>Hypernatremia (&gt;145)</th></tr>
+    <tr><td><b>Causes</b></td><td>Vomiting, diarrhea, diuretics, SIADH, excess water intake, adrenal insufficiency</td><td>Water loss, poor intake, diabetes insipidus, hypertonic feeds, excess sodium</td></tr>
+    <tr><td><b>Cells</b></td><td>Water moves IN → cells <b>swell</b></td><td>Water moves OUT → cells <b>shrink</b></td></tr>
+    <tr><td><b>Signs</b></td><td>Headache, confusion, lethargy, muscle cramps, <b>seizures from cerebral edema</b></td><td><b>Intense thirst</b>, dry sticky mucous membranes, restlessness, weakness, seizures if severe</td></tr>
+    <tr><td><b>Treatment</b></td><td>Fluid restriction; hypertonic saline only if severe and symptomatic, corrected <b>slowly</b></td><td>Hypotonic fluid or D5W slowly, free water, treat the cause</td></tr>
+  </table>
+  <div class="trap"><span class="tag">Why "slowly" matters both ways</span>Correcting sodium too fast causes <b>osmotic demyelination</b> going up and <b>cerebral edema</b> coming down. "Rapidly normalize the sodium" is never the answer.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>Potassium — the one that kills</h3>
+  <table class="lab">
+    <tr><th></th><th>Hypokalemia (&lt;3.5)</th><th>Hyperkalemia (&gt;5.0)</th></tr>
+    <tr><td><b>Causes</b></td><td>Diuretics, vomiting, NG suction, diarrhea, insulin, alkalosis, poor intake</td><td>Kidney failure, ACE inhibitors/ARBs, spironolactone, acidosis, cell lysis, over-replacement</td></tr>
+    <tr><td><b>ECG</b></td><td><b>Flat T waves, U wave</b>, ST depression</td><td><b>Peaked narrow T waves</b> → widened QRS → asystole</td></tr>
+    <tr><td><b>Other signs</b></td><td>Muscle weakness, leg cramps, <b>ileus</b>, shallow respirations, digoxin toxicity risk</td><td>Muscle weakness, paresthesias, <b>abdominal cramping and diarrhea</b>, dysrhythmias</td></tr>
+    <tr><td><b>Treatment</b></td><td>Oral or diluted IV potassium <b>on a pump</b>; replace <b>magnesium</b> too; potassium-rich foods</td><td><b>Calcium gluconate</b> → insulin+dextrose and albuterol → kayexalate or dialysis</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Hyperkalemia sequence</div><div class="big">PROTECT → SHIFT → REMOVE</div><div class="exp">Calcium gluconate protects the myocardium. Insulin/dextrose and albuterol shift K into cells. Kayexalate or dialysis actually removes it.</div></div>
+  <div class="trap"><span class="tag">Never</span><b>IV push potassium is fatal.</b> Always dilute and infuse on a pump. Never give it to a patient with no urine output. Never exceed the ordered rate to "catch up."</div>
+  <div class="hy"><span class="tag">Potassium-rich foods</span>Banana, spinach, potato, avocado, orange, tomato, cantaloupe, dried fruit, legumes.</div>
+</div>
+
+<div class="card">
+  <h3>Calcium — the nerve stabilizer</h3>
+  <table class="lab">
+    <tr><th></th><th>Hypocalcemia (&lt;8.6)</th><th>Hypercalcemia (&gt;10.2)</th></tr>
+    <tr><td><b>Causes</b></td><td>Thyroid/parathyroid surgery, vitamin D deficiency, pancreatitis, massive transfusion, alkalosis</td><td>Malignancy with bone metastasis, hyperparathyroidism, immobility, thiazides, excess vitamin D</td></tr>
+    <tr><td><b>Direction</b></td><td>Things <b>FIRE</b></td><td>Things <b>SLOW DOWN</b></td></tr>
+    <tr><td><b>Signs</b></td><td><b>Chvostek</b> (tap the facial nerve, cheek twitches), <b>Trousseau</b> (BP cuff, hand spasms), perioral tingling, tetany, <b>laryngospasm</b>, seizures</td><td>Lethargy, confusion, <b>constipation</b>, muscle weakness, bone pain, kidney stones, polyuria</td></tr>
+    <tr><td><b>Treatment</b></td><td>Calcium gluconate IV for severe; oral calcium with vitamin D; <b>seizure and airway precautions</b></td><td><b>Isotonic saline</b> to promote urinary excretion, then a <b>bisphosphonate</b>; mobilize; increase fluids</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Keep them straight</div><div class="big">LOW calcium = things fire. HIGH calcium = things slow.</div><div class="exp">"Stones, bones, groans, and psychiatric overtones" is the HIGH side.</div></div>
+</div>
+
+<div class="card">
+  <h3>Magnesium and phosphorus</h3>
+  <table class="lab">
+    <tr><th></th><th>Low</th><th>High</th></tr>
+    <tr><td><b>Magnesium</b></td><td>Alcohol use, malabsorption, diuretics. Signs mirror <b>hypocalcemia</b>: tremor, tetany, positive Chvostek/Trousseau, dysrhythmias. Give IV magnesium slowly.</td><td>Kidney failure, magnesium-containing antacids/laxatives. <b>Loss of deep tendon reflexes</b>, hypotension, bradycardia, respiratory depression. Antidote: <b>calcium gluconate</b>.</td></tr>
+    <tr><td><b>Phosphorus</b></td><td>Refeeding syndrome, alcohol use, antacids. Muscle weakness, confusion, respiratory failure.</td><td>Kidney failure, tumor lysis. Symptoms are mostly from the resulting <b>hypocalcemia</b>. Phosphate binders with meals.</td></tr>
+  </table>
+  <div class="hy"><span class="tag">The pairings that get tested</span><b>Calcium and phosphorus move opposite.</b> <b>Magnesium and calcium move together</b> in their signs. And <b>you cannot correct hypokalemia until magnesium is replaced</b>, because magnesium is required for the cell to hold potassium.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on this topic</h3>
+  <div class="trap"><span class="tag">Trap 1 — the hyperkalemia order</span>All four options are real hyperkalemia treatments. The question is the <b>sequence</b>. Calcium gluconate first, because it protects the heart while the other drugs take time to work.</div>
+  <div class="trap"><span class="tag">Trap 2 — the calcium lists swapped</span>Hypocalcemia stems offered with "constipation, kidney stones, lethargy." That is the <b>hyper</b> list. Low calcium fires: tetany, tingling, laryngospasm, seizures.</div>
+  <div class="trap"><span class="tag">Trap 3 — the stubborn potassium</span>A hypokalemia that will not correct despite replacement. The answer is not more potassium, it is <b>replacing magnesium first</b>.</div>
+  <div class="trap"><span class="tag">Trap 4 — potassium and urine output</span>Any option giving potassium to a patient with poor urine output is wrong, no matter how low the level is. Check the output first.</div>
+  <div class="trap"><span class="tag">Trap 5 — priority among four abnormal labs</span>He gives you four out-of-range electrolytes. Rank by <b>what kills fastest</b>: potassium (dysrhythmia) and calcium (laryngospasm) beat sodium drift and phosphorus every time.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>⚡ Electrolyte imbalance symptoms at a glance</h3>
+  <table class="lab">
+    <tr><th>Electrolyte</th><th>HYPO ↓</th><th>HYPER ↑</th></tr>
+    <tr><td><b>Na⁺</b></td><td>Headaches, confusion, nausea · disrupted attention, disordered speech, <b>hallucinations</b> · <b>osmotic demyelination and cerebral edema</b></td><td><b>Agitation, unable to rest or sleep</b> · tachycardia or tachypnea</td></tr>
+    <tr><td><b>K⁺</b></td><td>Weakness and cramping · <b>arrhythmias</b> · <b>constipation</b></td><td>Weakness and cramping · <b>arrhythmias</b> · <b>abdominal pain or diarrhea</b></td></tr>
+    <tr><td><b>Ca²⁺</b></td><td>Weakness, nausea, cramping · <b>Trousseau sign</b> (BP cuff → hand spasm) · <b>Chvostek sign</b> (tap the cheek → twitch)</td><td>Weakness, nausea, <b>cramping</b></td></tr>
+    <tr><td><b>Mg²⁺</b></td><td><b>Tremor or personality changes</b></td><td>Decreased consciousness, confusion, muscle weakness, <b>ABSENCE of reflexes</b></td></tr>
+    <tr><td><b>PO₄³⁻</b></td><td>Muscle cramps, weakness, numbness · <b>↓bone density</b></td><td>Muscle cramps, weakness, numbness · <b>↓bone density</b></td></tr>
+    <tr><td><b>Cl⁻</b></td><td><b>Lack of symptoms</b> · extreme: confusion and swelling</td><td><b>Lack of symptoms</b> · extreme: confusion and swelling</td></tr>
+    <tr><td><b>HCO₃⁻</b></td><td>Headaches, fatigue, acid-base imbalance symptoms</td><td>Headaches, fatigue, acid-base imbalance symptoms</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ The pairing he tests</div><div class="big">Hypomagnesemia is associated with hypokalemia.</div><div class="exp">A potassium that will not correct despite replacement usually means the <b>magnesium is low</b>. Magnesium is required for the cell to hold onto potassium — replace it first.</div></div>
+  <div class="trap"><span class="tag">⭐ Magnesium and reflexes — get the direction right</span><b>LOW magnesium → HYPERreflexia.</b> Nerves fire too easily: tremor, tetany, positive Chvostek and Trousseau, seizures — the same picture as low calcium. <b>HIGH magnesium → LOSS of deep tendon reflexes</b>, and that absence is the <b>first sign</b>, followed by hypotension, bradycardia, and respiratory depression. Antidote for magnesium toxicity is <b>calcium gluconate</b>.</div>
+  <div class="trap"><span class="tag">Two directions worth noticing</span><b>Potassium looks similar high and low</b> — weakness, cramping, arrhythmias either way. The GI clue separates them: <b>low K constipates, high K causes abdominal pain and diarrhea</b>. And <b>hypermagnesemia is defined by the ABSENCE of reflexes</b>, which is the first thing you check.</div>
+</div>
+
+<div id="q-lytes"></div>`;
+renderFilteredQuiz('q-lytes', secQ(EXAM.filter(q=>q.topic==='lytes')), 'Electrolyte practice', 'Electrolytes');
+
+
+document.getElementById('sec-abg').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🫁</span> Acid-Base & ABGs</h2>
+<p class="intro-line">Chapter 10, final section. Three numbers, one rule, and you can name any gas he writes.</p>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>The three numbers</h3>
+  <table class="lab">
+    <tr><th>Value</th><th>Normal</th><th>Controlled by</th></tr>
+    <tr><td><b>pH</b></td><td>7.35 – 7.45</td><td>The net result</td></tr>
+    <tr><td><b>PaCO₂</b> (the acid)</td><td>35 – 45 mmHg</td><td><b>Lungs</b> — minutes</td></tr>
+    <tr><td><b>HCO₃</b> (the base)</td><td>22 – 26 mEq/L</td><td><b>Kidneys</b> — hours to days</td></tr>
+    <tr><td>PaO₂</td><td>80 – 100 mmHg</td><td>Oxygenation, not acid-base</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">The whole method</div><div class="big">ROME — Respiratory Opposite, Metabolic Equal</div><div class="exp">pH and CO₂ moving in <b>opposite</b> directions = respiratory. pH and bicarb moving in the <b>same</b> direction = metabolic.</div></div>
+  <div class="mnem" style="border-color:var(--gold)"><div class="tag">⭐ He asks this out loud</div><div class="big">Kidney problem → automatically METABOLIC. Lung problem → automatically RESPIRATORY.</div><div class="exp">The kidneys own bicarbonate and the lungs own CO₂. Name the broken organ and you have already named half the gas.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--gold)">
+  <h3>⭐ The organ shortcut</h3>
+  <p class="why-chain">If the stem tells you which organ is failing, you do not have to derive the type — the organ names it. <b>Kidneys regulate bicarbonate (the base), so a kidney problem is metabolic. Lungs regulate CO₂ (the acid), so a lung problem is respiratory.</b></p>
+  <ol class="chainlist">
+    <li><b>1.</b> Healthy kidneys excrete hydrogen ions and regenerate bicarbonate, which is how the body dumps fixed acid.</li>
+    <li><b>2.</b> In kidney failure both jobs stop. Acid accumulates and bicarbonate falls.</li>
+    <li><b>3.</b> pH down + bicarb down = same direction = <b>metabolic acidosis</b>. That is the default gas for a renal patient.</li>
+    <li><b>4.</b> The kidneys are also the <b>compensator</b> for respiratory problems. If they are failing, they cannot compensate — so expect an <b>uncompensated or only partially compensated</b> respiratory gas in a patient with renal disease.</li>
+    <li><b>5.</b> And renal metabolic acidosis travels with <b>hyperkalemia</b>: acidosis shifts potassium out of cells, and the failing kidney cannot excrete it either. Low pH in a renal patient → check the potassium and the ECG.</li>
+  </ol>
+  <div class="hy"><span class="tag">Same logic, other direction</span>Chronic <b>lung</b> disease → respiratory acidosis, and the healthy kidney compensates by retaining bicarbonate over days. That is why a stable COPD gas reads <b>fully compensated respiratory acidosis</b> — pH normal on the acid side, CO₂ high, bicarb high.</div>
+  <div class="trap"><span class="tag">Where he turns the screw</span>A dialysis or CKD patient with a low pH and options offering respiratory causes. The organ already told you the answer. Equally, do not force "metabolic" onto a patient whose only problem is hypoventilation — the shortcut runs organ → type, not backwards.</div>
+</div>
+
+<div class="card">
+  <h3>Read it in three steps</h3>
+  <ul class="clean">
+    <li><b>0. Check whether the stem names a failing organ.</b> Kidneys = metabolic. Lungs = respiratory. If it does, you already know the type.</li>
+    <li><b>1. Look at the pH.</b> Below 7.35 = acidosis. Above 7.45 = alkalosis. If it is 7.35–7.45, it is normal or fully compensated.</li>
+    <li><b>2. Find the culprit.</b> Which value moved the way that explains the pH? CO₂ opposite = respiratory. Bicarb same = metabolic.</li>
+    <li><b>3. Check compensation.</b> pH abnormal + one value abnormal = <b>uncompensated</b>. pH abnormal + both abnormal = <b>partially compensated</b>. pH <b>normal</b> + both abnormal = <b>fully compensated</b>.</li>
+  </ul>
+  <div class="hy"><span class="tag">Which side of normal</span>In full compensation the pH tells you the original problem. <b>7.35–7.39 = the acid side.</b> <b>7.41–7.45 = the alkalotic side.</b> That is how you name a gas whose pH looks normal.</div>
+</div>
+
+<div class="card">
+  <h3>Causes by type</h3>
+  <table class="lab">
+    <tr><th>Disorder</th><th>Causes</th><th>Signs</th></tr>
+    <tr><td><b>Respiratory acidosis</b><br>↓pH ↑CO₂</td><td>Anything that retains CO₂: COPD, oversedation, opioid overdose, atelectasis, pneumonia, chest trauma, neuromuscular weakness</td><td>Drowsiness, headache, confusion, ↑HR, dysrhythmias</td></tr>
+    <tr><td><b>Respiratory alkalosis</b><br>↑pH ↓CO₂</td><td>Hyperventilation: anxiety, pain, fever, early PE, high altitude, over-ventilation</td><td>Lightheaded, <b>tingling of fingers and around the mouth</b>, dizziness, tetany</td></tr>
+    <tr><td><b>Metabolic acidosis</b><br>↓pH ↓HCO₃</td><td>DKA, kidney failure, lactic acidosis from shock, prolonged diarrhea (loses bicarbonate)</td><td><b>Kussmaul respirations</b> (deep and rapid to blow off acid), headache, confusion, hyperkalemia</td></tr>
+    <tr><td><b>Metabolic alkalosis</b><br>↑pH ↑HCO₃</td><td>Vomiting or NG suction (loses acid), excess antacids, diuretics, hypokalemia</td><td>Tingling, dizziness, <b>hypoventilation</b> to retain CO₂, hypokalemia</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Practice reading</h3>
+  <table class="lab">
+    <tr><th>pH</th><th>PaCO₂</th><th>HCO₃</th><th>Interpretation</th></tr>
+    <tr><td>7.30</td><td>52</td><td>24</td><td>Uncompensated <b>respiratory acidosis</b></td></tr>
+    <tr><td>7.49</td><td>40</td><td>30</td><td>Uncompensated <b>metabolic alkalosis</b></td></tr>
+    <tr><td>7.25</td><td>36</td><td>16</td><td>Uncompensated <b>metabolic acidosis</b></td></tr>
+    <tr><td>7.52</td><td>28</td><td>23</td><td>Uncompensated <b>respiratory alkalosis</b></td></tr>
+    <tr><td>7.32</td><td>58</td><td>30</td><td>Partially compensated <b>respiratory acidosis</b></td></tr>
+    <tr><td>7.37</td><td>58</td><td>32</td><td><b>Fully compensated respiratory acidosis</b> — classic chronic COPD</td></tr>
+    <tr><td>7.43</td><td>30</td><td>20</td><td><b>Fully compensated respiratory alkalosis</b></td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on this topic</h3>
+  <div class="trap"><span class="tag">Trap 1 — a normal pH that is not normal</span>Fully compensated means <b>pH normal, both systems abnormal</b>. Stop at the pH and you will call a chronic COPD gas "normal."</div>
+  <div class="trap"><span class="tag">Trap 2 — which side of 7.40</span>In full compensation, 7.37 is the <b>acid</b> side and 7.43 is the <b>alkalotic</b> side. That single digit names the disorder.</div>
+  <div class="trap"><span class="tag">Trap 3 — treating the number</span>"Give sodium bicarbonate" and "apply 100% oxygen" get offered as fixes. Treat the <b>cause</b>: ventilation, perfusion, or the metabolic problem driving it.</div>
+  <div class="trap"><span class="tag">Trap 4 — vomiting vs diarrhea</span><b>Vomiting and NG suction lose acid</b> → metabolic <b>alkalosis</b>. <b>Diarrhea loses bicarbonate</b> → metabolic <b>acidosis</b>. He puts both in the same question.</div>
+  <div class="trap"><span class="tag">Trap 5 — ignoring the organ he handed you</span>A renal failure or dialysis patient with an abnormal pH, and respiratory options mixed in. <b>Kidneys = metabolic.</b> He tells you the organ precisely so he can see who uses it.</div>
+  <div class="trap"><span class="tag">Trap 6 — hyperventilation assumed to be anxiety</span>Respiratory alkalosis from hyperventilation can be anxiety, but it can also be an early <b>PE</b>, sepsis, or fever. Sedating that patient is how you miss the emergency.</div>
+</div>
+
+<div id="q-abg"></div>`;
+renderFilteredQuiz('q-abg', secQ(EXAM.filter(q=>q.topic==='abg')), 'ABG practice', 'Acid-Base');
 
 </script>
 <script>
@@ -1213,6 +2070,63 @@ document.getElementById('sec-resp-assess').innerHTML=`
   <div class="trap"><span class="tag">Trap 2 — restlessness treated as a psych problem</span>"Give the PRN sedative" and "call for a psych consult" both appear. Sedating a hypoxic patient is how you lose them.</div>
   <div class="trap"><span class="tag">Trap 3 — the oxygen device question</span>Non-rebreather delivers the <b>most</b> oxygen. Venturi delivers the <b>most precise</b> oxygen. Read which one the stem is asking for.</div>
 </div>
+<div class="card" style="border-color:var(--teal)">
+  <h3>Lung volumes and capacities</h3>
+  <table class="lab">
+    <tr><th>Term</th><th>Definition</th><th>Note</th></tr>
+    <tr><td><b>⭐ Tidal volume (TV)</b></td><td>Air moved in or out with each <b>normal</b> breath</td><td><b>He said "know tidal volume."</b> About 500 mL in an adult</td></tr>
+    <tr><td><b>Residual volume (RV)</b></td><td>Air <b>remaining after maximal exhalation</b> — you can never blow it out</td><td><b>Increases with aging and with COPD</b> from air trapping</td></tr>
+    <tr><td><b>Vital capacity (VC)</b></td><td>Maximum air exhaled after a maximum inhalation</td><td>Falls in restrictive disease</td></tr>
+    <tr><td>Inspiratory reserve volume</td><td>Extra air inhaled beyond a normal breath</td><td></td></tr>
+    <tr><td>Expiratory reserve volume</td><td>Extra air exhaled beyond a normal breath</td><td></td></tr>
+    <tr><td>Total lung capacity</td><td>Everything the lungs hold at maximum inflation</td><td>VC + RV</td></tr>
+    <tr><td>Functional residual capacity</td><td>Air left after a <b>normal</b> exhalation</td><td></td></tr>
+  </table>
+  <div class="hy"><span class="tag">Why residual volume matters</span>COPD is an <b>obstructive</b> problem — air gets in but cannot get out. Trapped air <b>raises residual volume</b>, flattens the diaphragm, and produces the <b>barrel chest</b>.</div>
+</div>
+
+<div class="card">
+  <h3>Compliance, resistance, and the work of breathing</h3>
+  <table class="lab">
+    <tr><th>Concept</th><th>What it means</th><th>When it goes wrong</th></tr>
+    <tr><td><b>Compliance</b></td><td><b>How easily the lungs stretch.</b> Distensibility</td><td><b>Decreased</b> in ARDS, fibrosis, pneumonia, pulmonary edema — stiff lungs. <b>Increased</b> in emphysema — floppy lungs that will not recoil</td></tr>
+    <tr><td><b>Airway resistance</b></td><td><b>Opposition to airflow</b> through the airways</td><td><b>Increased</b> by bronchoconstriction, secretions, edema, tumor. Higher resistance means more work of breathing</td></tr>
+    <tr><td><b>Air pressure variance</b></td><td>Air flows high pressure to low. The diaphragm drops, pressure falls, air moves in</td><td>Loss of negative pressure, as in pneumothorax, collapses the lung</td></tr>
+  </table>
+  <div class="trap"><span class="tag">The counterintuitive one</span>Emphysema <b>increases</b> compliance. Easy to inflate, hard to deflate — the elastic recoil that normally pushes air out is destroyed. Students assume diseased lung means low compliance and get it backwards.</div>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>Ventilation-perfusion (V/Q)</h3>
+  <ul class="clean">
+    <li><b>Ventilation</b> = air reaching the alveoli. <b>Perfusion</b> = blood reaching the capillaries. <b>Gas exchange needs both.</b></li>
+    <li><b>Pulmonary diffusion:</b> exchange of O₂ and CO₂ at the <b>alveolar-capillary membrane</b>. A <b>thin membrane and large surface area</b> make it work.</li>
+    <li><b>Pulmonary perfusion:</b> blood pumped by the <b>right ventricle through the pulmonary artery</b>. Influenced by <b>pulmonary artery pressure, gravity, and alveolar pressure</b>.</li>
+    <li><b>Shunted blood does not participate in gas exchange.</b></li>
+  </ul>
+  <table class="lab">
+    <tr><th>Pattern</th><th>What is happening</th><th>Classic cause</th></tr>
+    <tr><td><b>Low V/Q — SHUNT</b></td><td><b>Perfusion without ventilation.</b> Blood passes alveoli with no air</td><td><b>Pneumonia, atelectasis, pulmonary edema, ARDS</b></td></tr>
+    <tr><td><b>High V/Q — DEAD SPACE</b></td><td><b>Ventilation without perfusion.</b> Air reaches alveoli with no blood</td><td><b>Pulmonary embolism</b> — the clot blocks blood, not air</td></tr>
+    <tr><td><b>Silent unit</b></td><td><b>Neither</b> ventilation nor perfusion</td><td>Pneumothorax, severe ARDS</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Keep them straight</div><div class="big">SHUNT = blood but no air (pneumonia). DEAD SPACE = air but no blood (PE).</div><div class="exp">A shunt does <b>not</b> improve much with supplemental oxygen — the oxygen cannot reach blood bypassing filled alveoli. That is why <b>refractory hypoxemia means ARDS</b>.</div></div>
+</div>
+
+<div class="card">
+  <h3>Assessment findings worth naming</h3>
+  <table class="lab">
+    <tr><th>Finding</th><th>Meaning</th></tr>
+    <tr><td><b>Orthopnea</b></td><td>Dyspnea <b>lying flat</b>, relieved by sitting up. Heart failure and severe COPD. Ask how many pillows they sleep on</td></tr>
+    <tr><td><b>Paroxysmal nocturnal dyspnea</b></td><td>Waking suddenly breathless a few hours into sleep</td></tr>
+    <tr><td><b>Egophony</b></td><td>Patient says "E," it sounds like <b>"A"</b> — indicates <b>consolidation</b> (pneumonia)</td></tr>
+    <tr><td><b>Bronchophony / whispered pectoriloquy</b></td><td>Spoken or whispered words heard <b>unusually clearly</b> — also consolidation</td></tr>
+    <tr><td><b>Tactile fremitus</b></td><td><b>Increased</b> over consolidation, <b>decreased</b> over effusion or pneumothorax</td></tr>
+    <tr><td><b>Percussion</b></td><td><b>Dull</b> over fluid or consolidation. <b>Hyperresonant</b> over trapped air</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Consolidation vs effusion</div><div class="big">Consolidation: dull, INCREASED fremitus, egophony. Effusion: dull, DECREASED fremitus, no egophony.</div><div class="exp">Both are dull — fremitus is what separates them.</div></div>
+</div>
+
 <div id="q-resp-assess"></div>`;
 renderFilteredQuiz('q-resp-assess', secQ(EXAM.filter(q=>q.topic==='resp')), 'Respiratory assessment practice', 'Resp Assessment');
 
@@ -1537,6 +2451,40 @@ document.getElementById('sec-tb').innerHTML=`
   <div class="trap"><span class="tag">Trap 3 — reading the Mantoux</span>Measure <b>induration</b>, not redness, at 48 to 72 hours. And a positive test means <b>exposure</b>, not active disease.</div>
   <div class="trap"><span class="tag">Trap 4 — stopping treatment early</span>Any patient statement about stopping when symptoms improve is wrong. The full <b>6 to 12 months</b> prevents drug-resistant TB.</div>
 </div>
+<div class="card">
+  <h3>Pleurisy (pleuritis)</h3>
+  <ul class="clean">
+    <li><b>Inflammation of the pleura</b> — visceral covers the lungs, parietal lines the chest wall.</li>
+    <li><b>Hallmark:</b> sharp, <b>knife-like pain worse with inspiration, coughing, or movement</b>, relieved by holding the breath or splinting.</li>
+    <li><b>Pleural friction rub</b> — a grating sound on auscultation.</li>
+    <li><b>Treatment:</b> treat the cause, analgesics and NSAIDs, <b>splint the chest with a pillow when coughing</b>, lie on the affected side to limit motion.</li>
+    <li>The pain <b>disappears if an effusion develops</b> because fluid separates the inflamed surfaces — so pain relief is not always improvement.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Sarcoidosis</h3>
+  <ul class="clean">
+    <li><b>Pathophysiology:</b> a <b>hypersensitivity response to exogenous agents</b> — bacteria, fungi, viruses, chemicals. Forms <b>noncaseating granulomas</b> that may cause <b>fibrosis and reduced lung volumes</b>.</li>
+    <li><b>Manifestations:</b> <b>insidious onset with a lack of prominent symptoms.</b> Dyspnea, cough, hemoptysis, congestion. Also <b>uveitis, joint pain, fever</b>. Multisystem: fatigue, fever, anorexia, weight loss.</li>
+    <li><b>Diagnosis:</b> chest x-ray and CT show <b>hilar adenopathy</b> with miliary or nodular lesions. <b>Confirmed by biopsy showing noncaseating granulomas.</b> PFTs show restriction; ABG may show hypoxemia and hypercapnia.</li>
+    <li><b>Management:</b> <b>many achieve remission without treatment.</b> <b>Prednisone</b> for symptom relief, tapered over about <b>12 months</b>. Immune modulators (methotrexate, azathioprine) if the response is inadequate.</li>
+  </ul>
+  <div class="trap"><span class="tag">The word that matters</span><b>NONcaseating</b> granulomas are sarcoidosis. <b>Caseating</b> granulomas are <b>tuberculosis</b>. One word separates the two, and he can build a whole question on it.</div>
+</div>
+
+<div class="card">
+  <h3>Bronchiectasis</h3>
+  <ul class="clean">
+    <li><b>Chronic, irreversible dilation of the bronchi</b> from repeated infection and inflammation destroying the airway wall.</li>
+    <li><b>Hallmark:</b> chronic cough with <b>copious purulent sputum</b>, plus hemoptysis and clubbing.</li>
+    <li><b>Diagnosis:</b> <b>high-resolution CT</b> is the study of choice.</li>
+    <li><b>Management:</b> <b>postural drainage and chest physiotherapy</b>, bronchodilators, antibiotics for exacerbations, hydration to thin secretions, vaccination, smoking cessation.</li>
+    <li>Because it is <b>irreversible</b>, the goal is secretion clearance and infection prevention, not cure.</li>
+  </ul>
+  <div class="hy"><span class="tag">Distinguish it</span><b>Bronchiectasis</b> = irreversible airway dilation with copious purulent sputum. <b>Chronic bronchitis</b> = productive cough <b>3 months in each of 2 consecutive years</b>. Both produce sputum; the structural damage is what differs.</div>
+</div>
+
 <div id="q-tb"></div>`;
 renderFilteredQuiz('q-tb', secQ(EXAM.filter(q=>q.topic==='tb')), 'TB practice', 'Tuberculosis');
 
@@ -1906,6 +2854,67 @@ function renderVaultSection(){
 <script>
 /* ===== FLASH STUDY GAME ===== */
 const FLASH_DECK=[
+{topic:'resp',front:'Crackles mean what?',back:'Fluid or secretions in the small airways and alveoli. Heard in pneumonia, heart failure, pulmonary edema.'},
+{topic:'resp',front:'Wheezes mean what?',back:'Narrowed airways. Asthma, COPD, bronchospasm.'},
+{topic:'resp',front:'Stridor means what?',back:'Upper airway obstruction. This is an emergency.'},
+{topic:'resp',front:'What is the earliest sign of hypoxia?',back:'Restlessness, anxiety, and confusion. Cyanosis is a LATE sign.'},
+{topic:'resp',front:'Oxygen delivery — nasal cannula range?',back:'1 to 6 L/min, roughly 24 to 44 percent FiO2.'},
+{topic:'resp',front:'Which mask gives the most precise FiO2?',back:'Venturi mask. Best choice for a COPD patient who needs a controlled concentration.'},
+{topic:'resp',front:'Non-rebreather delivers what?',back:'Up to about 95 percent FiO2 at 10 to 15 L/min. The reservoir bag must stay inflated.'},
+{topic:'resp',front:'Best position for a dyspneic patient?',back:'High-Fowler, upright. Tripod position for COPD.'},
+{topic:'acute',front:'Hallmark of ARDS?',back:'Refractory hypoxemia — it does NOT improve with supplemental oxygen. Bilateral infiltrates on chest film.'},
+{topic:'acute',front:'Classic PE presentation?',back:'Sudden dyspnea, pleuritic chest pain, tachycardia, anxiety, and hypoxia. Often after immobility or surgery.'},
+{topic:'acute',front:'Criteria for acute respiratory failure?',back:'PaO2 below 60 and/or PaCO2 above 50 with a pH below 7.35.'},
+{topic:'acute',front:'Most common cause of post-op low-grade fever in the first 48 hours?',back:'Atelectasis. Treat with incentive spirometry, coughing, deep breathing, and early ambulation.'},
+{topic:'acute',front:'Tension pneumothorax signs?',back:'Tracheal deviation AWAY from the affected side, absent breath sounds, JVD, hypotension. Needle decompression.'},
+{topic:'pneumonia',front:'What physically happens in pneumonia?',back:'Alveoli fill with inflammatory fluid and exudate, blocking gas exchange.'},
+{topic:'pneumonia',front:'Most common bacterial cause of CAP?',back:'Streptococcus pneumoniae.'},
+{topic:'pneumonia',front:'Rust-colored sputum suggests?',back:'Streptococcus pneumoniae.'},
+{topic:'pneumonia',front:'Foul-smelling sputum suggests?',back:'Lung abscess or anaerobic infection.'},
+{topic:'pneumonia',front:'How does pneumonia present in an older adult?',back:'Confusion and functional decline, often WITHOUT fever. Mental status change is the presentation.'},
+{topic:'pneumonia',front:'Aspiration pneumonia most often affects which lung?',back:'The right lung, because the right main bronchus is wider and more vertical.'},
+{topic:'pneumonia',front:'Key aspiration prevention for a dysphagia patient?',back:'Head of bed 30 to 45 degrees, swallow evaluation, thickened liquids, chin-tuck, no straws.'},
+{topic:'airway',front:'Suctioning — how long per pass?',back:'No more than 10 to 15 seconds. Hyperoxygenate before and after. Suction only on withdrawal.'},
+{topic:'airway',front:'Tracheostomy emergency equipment at the bedside?',back:'Obturator, a spare trach of the same size, a size smaller, and suction equipment.'},
+{topic:'airway',front:'Ventilated patient suddenly desaturates — first action?',back:'Assess the patient and the airway and tubing. Do not silence the alarm and document.'},
+{topic:'airway',front:'DOPE mnemonic for a ventilated patient in distress?',back:'Displacement, Obstruction, Pneumothorax, Equipment failure.'},
+{topic:'chesttube',front:'Continuous bubbling in the WATER-SEAL chamber means?',back:'An air leak, which can progress to a tension pneumothorax. Not normal.'},
+{topic:'chesttube',front:'Continuous bubbling in the SUCTION-CONTROL chamber means?',back:'Normal, when connected to wall suction. This is the one place continuous bubbling is expected.'},
+{topic:'chesttube',front:'Tidaling in the water seal means?',back:'Normal. Fluid rises and falls with respiration. It stops when the lung has re-expanded or the tube is blocked.'},
+{topic:'chesttube',front:'Chest tube accidentally pulled out — what do you do?',back:'Cover the site with sterile occlusive gauze taped on THREE sides, creating a flutter valve. Notify the provider.'},
+{topic:'chesttube',front:'Chest drainage system falls over or disconnects?',back:'Submerge the tube end in sterile water or saline to restore the seal, then get a new system.'},
+{topic:'chesttube',front:'When do you clamp a chest tube?',back:'Almost never. Only briefly to change the system or to check for an air leak, on order. Clamping can cause a tension pneumothorax.'},
+{topic:'copd',front:'Physical hallmark of chronic COPD?',back:'Barrel chest with prolonged expiration. Also pursed-lip breathing and the tripod position.'},
+{topic:'copd',front:'Underlying problem in asthma?',back:'Reversible airway inflammation and bronchoconstriction.'},
+{topic:'copd',front:'Underlying problem in emphysema?',back:'Irreversible destruction of alveolar walls, losing surface area and elastic recoil.'},
+{topic:'copd',front:'Sudden silent chest during an asthma attack means?',back:'Severe obstruction and impending respiratory failure. Air is not moving enough to make a sound.'},
+{topic:'copd',front:'First-line medication mid-asthma attack?',back:'Short-acting beta agonist, albuterol.'},
+{topic:'copd',front:'Order of inhalers?',back:'Bronchodilator FIRST, then the corticosteroid. Rinse the mouth after the steroid to prevent thrush.'},
+{topic:'copd',front:'Why is high-flow oxygen risky in some COPD patients?',back:'Chronic CO2 retainers can lose their hypoxic drive. Target SpO2 88 to 92 percent with controlled delivery.'},
+{topic:'tb',front:'TB precautions?',back:'Airborne. Negative-pressure room, N95 respirator for staff, surgical mask on the patient if transported.'},
+{topic:'tb',front:'Classic TB symptoms?',back:'Productive cough over 3 weeks, hemoptysis, night sweats, unexplained weight loss, low-grade afternoon fever.'},
+{topic:'tb',front:'What does RIPE stand for?',back:'Rifampin, Isoniazid, Pyrazinamide, Ethambutol.'},
+{topic:'tb',front:'Rifampin key teaching?',back:'Turns urine, sweat, and tears orange. Harmless and expected. It also reduces oral contraceptive effectiveness.'},
+{topic:'tb',front:'Isoniazid key teaching?',back:'Give vitamin B6 (pyridoxine) to prevent peripheral neuropathy. Watch for hepatotoxicity, avoid alcohol.'},
+{topic:'tb',front:'Ethambutol key teaching?',back:'Watch for optic neuritis. Report any change in vision or color discrimination.'},
+{topic:'tb',front:'How is a Mantoux read?',back:'Measure INDURATION, not redness, at 48 to 72 hours. A positive test means exposure, not active disease.'},
+{topic:'tb',front:'Why must TB treatment run the full course?',back:'6 to 12 months. Stopping early breeds drug-resistant TB.'},
+{topic:'blood',front:'First action before starting a transfusion?',back:'Verify informed consent and the type and cross-match, with two licensed personnel checking at the bedside.'},
+{topic:'blood',front:'Which fluid can hang with blood?',back:'Only 0.9% normal saline. Dextrose lyses cells; LR contains calcium and can cause clotting.'},
+{topic:'blood',front:'How long can blood sit before it must be started?',back:'30 minutes from leaving the blood bank. Never store it in a unit refrigerator.'},
+{topic:'blood',front:'How long does a unit have to infuse in?',back:'Within 4 hours, because of bacterial growth risk.'},
+{topic:'blood',front:'When do you stay with the patient?',back:'The first 15 minutes and stay for the first 15 minutes, running slowly. Most reactions occur early.'},
+{topic:'blood',front:'Acute hemolytic reaction — signs and action?',back:'Fever, chills, low back pain, hypotension, dark urine. STOP the blood, keep NS running with new tubing, notify provider and blood bank.'},
+{topic:'blood',front:'Febrile nonhemolytic reaction?',back:'The most common reaction. Fever and chills without hemolysis. Stop, evaluate, and use leukocyte-reduced blood next time.'},
+{topic:'blood',front:'TACO vs TRALI?',back:'TACO is circulatory overload — dyspnea, JVD, hypertension. TRALI is acute lung injury — dyspnea with hypotension and no overload.'},
+{topic:'upper',front:'Position for an active nosebleed?',back:'Sit upright and lean FORWARD. Pinch the soft part of the nose 5-10 minutes. Never tilt the head back.'},
+{topic:'upper',front:'Earliest sign of post-tonsillectomy hemorrhage?',back:'Frequent swallowing. Blood is trickling down the throat. Also restlessness and tachycardia.'},
+{topic:'upper',front:'Earliest sign of laryngeal cancer?',back:'Hoarseness lasting more than 2 weeks. Smoking and alcohol are synergistic risk factors.'},
+{topic:'upper',front:'How long can a decongestant nasal spray be used?',back:'No more than 3 days. Beyond that causes rebound congestion (rhinitis medicamentosa).'},
+{topic:'upper',front:'Strep pharyngitis features?',back:'Sudden sore throat, fever, tonsillar exudate, tender nodes, and NO cough. Full antibiotic course prevents rheumatic fever.'},
+{topic:'upper',front:'Proper voice rest for laryngitis?',back:'Do not speak at all. Whispering strains the cords MORE than normal speech.'},
+{topic:'upper',front:'Why are OSA patients high risk after surgery?',back:'They are exquisitely sensitive to opioids and sedatives. Question any continuous basal opioid infusion.'},
+{topic:'upper',front:'Life change after total laryngectomy?',back:'Permanent neck stoma. The nose no longer humidifies air. Protect the stoma from water. They can never swim.'},
 {topic:'fluids',front:'Most reliable indicator of fluid balance?',back:'Daily weight on the same scale. 1 kg ≈ 1 L of fluid.'},
 {topic:'fluids',front:'Principal cation of the extracellular fluid?',back:'Sodium. Potassium is the principal intracellular cation.'},
 {topic:'fluids',front:'Signs of fluid volume DEFICIT?',back:'Tachycardia, hypotension, poor turgor, dry mucous membranes, concentrated urine, high BUN:creatinine, high hematocrit.'},
@@ -1915,7 +2924,6 @@ const FLASH_DECK=[
 {topic:'fluids',front:'First-line fluid for hypovolemia?',back:'Isotonic crystalloid: 0.9% normal saline or lactated Ringer.'},
 {topic:'fluids',front:'What does albumin do?',back:'Made by the liver. Generates plasma oncotic pressure, pulling water into the intravascular space.'},
 {topic:'fluids',front:'What does a high BNP suggest?',back:'Fluid overload or heart failure. The ventricle stretches and releases it.'},
-
 {topic:'iv',front:'Isotonic fluids — name them and what they do',back:'0.9% NS, lactated Ringer, D5W in the bag. They stay in the vessel and expand intravascular volume.'},
 {topic:'iv',front:'Hypotonic fluids — name them and what they do',back:'0.45% NS, 0.33% NS, D5W once dextrose is metabolized. Water moves INTO cells. Risk: cerebral edema.'},
 {topic:'iv',front:'Hypertonic fluids — name them and what they do',back:'3% NS, 5% NS, D10W, D5NS. Pull water OUT of cells into the vessel. Risk: fluid overload, phlebitis.'},
@@ -1923,7 +2931,6 @@ const FLASH_DECK=[
 {topic:'iv',front:'Infiltration vs extravasation?',back:'Both are fluid leaking into tissue. Extravasation is with a vesicant drug and causes tissue necrosis. Stop the infusion for either.'},
 {topic:'iv',front:'Signs of phlebitis?',back:'Redness, warmth, a palpable cord along the vein, and tenderness. Discontinue the IV and restart elsewhere.'},
 {topic:'iv',front:'Air embolism — position?',back:'Left side, head down (Trendelenburg), clamp the line, give oxygen. Traps air in the right ventricle apex.'},
-
 {topic:'lytes',front:'Normal potassium range?',back:'3.5 to 5.0 mEq/L'},
 {topic:'lytes',front:'Normal sodium range?',back:'135 to 145 mEq/L'},
 {topic:'lytes',front:'Normal calcium range?',back:'9.0 to 10.5 mg/dL'},
@@ -1939,7 +2946,6 @@ const FLASH_DECK=[
 {topic:'lytes',front:'Hypernatremia — main sign?',back:'Intense thirst with dry sticky mucous membranes. Cells shrink.'},
 {topic:'lytes',front:'Hypomagnesemia is linked to which other electrolyte?',back:'Hypokalemia. You cannot correct the potassium until the magnesium is replaced.'},
 {topic:'lytes',front:'Potassium-rich foods?',back:'Banana, spinach, potato, avocado, orange, tomato, cantaloupe.'},
-
 {topic:'abg',front:'What does ROME stand for?',back:'Respiratory Opposite, Metabolic Equal. pH and CO2 move opposite in respiratory; pH and bicarb move together in metabolic.'},
 {topic:'abg',front:'Normal pH, PaCO2, HCO3?',back:'pH 7.35 to 7.45 • PaCO2 35 to 45 mmHg • HCO3 22 to 26 mEq/L'},
 {topic:'abg',front:'Which system is the acid and which is the base?',back:'CO2 is the acid, controlled by the LUNGS. Bicarbonate is the base, controlled by the KIDNEYS.'},
@@ -1951,68 +2957,12 @@ const FLASH_DECK=[
 {topic:'abg',front:'Causes of metabolic alkalosis?',back:'Vomiting or NG suction (loses acid), excess antacids, diuretics, hypokalemia.'},
 {topic:'abg',front:'Asthma patient whose PaCO2 rises from 28 to 41 — what is happening?',back:'Not improvement. They are tiring and heading toward respiratory failure. A "normalizing" CO2 in a hyperventilating patient is an ominous sign.'},
 {topic:'abg',front:'ABG target for a COPD patient?',back:'SpO2 88 to 92 percent with controlled oxygen. Chronic CO2 retention means their gas is a compensated respiratory acidosis at baseline.'},
-
-{topic:'resp',front:'Crackles mean what?',back:'Fluid or secretions in the small airways and alveoli. Heard in pneumonia, heart failure, pulmonary edema.'},
-{topic:'resp',front:'Wheezes mean what?',back:'Narrowed airways. Asthma, COPD, bronchospasm.'},
-{topic:'resp',front:'Stridor means what?',back:'Upper airway obstruction. This is an emergency.'},
-{topic:'resp',front:'What is the earliest sign of hypoxia?',back:'Restlessness, anxiety, and confusion. Cyanosis is a LATE sign.'},
-{topic:'resp',front:'Oxygen delivery — nasal cannula range?',back:'1 to 6 L/min, roughly 24 to 44 percent FiO2.'},
-{topic:'resp',front:'Which mask gives the most precise FiO2?',back:'Venturi mask. Best choice for a COPD patient who needs a controlled concentration.'},
-{topic:'resp',front:'Non-rebreather delivers what?',back:'Up to about 95 percent FiO2 at 10 to 15 L/min. The reservoir bag must stay inflated.'},
-{topic:'resp',front:'Best position for a dyspneic patient?',back:'High-Fowler, upright. Tripod position for COPD.'},
-
-{topic:'acute',front:'Hallmark of ARDS?',back:'Refractory hypoxemia — it does NOT improve with supplemental oxygen. Bilateral infiltrates on chest film.'},
-{topic:'acute',front:'Classic PE presentation?',back:'Sudden dyspnea, pleuritic chest pain, tachycardia, anxiety, and hypoxia. Often after immobility or surgery.'},
-{topic:'acute',front:'Criteria for acute respiratory failure?',back:'PaO2 below 60 and/or PaCO2 above 50 with a pH below 7.35.'},
-{topic:'acute',front:'Most common cause of post-op low-grade fever in the first 48 hours?',back:'Atelectasis. Treat with incentive spirometry, coughing, deep breathing, and early ambulation.'},
-{topic:'acute',front:'Tension pneumothorax signs?',back:'Tracheal deviation AWAY from the affected side, absent breath sounds, JVD, hypotension. Needle decompression.'},
-
-{topic:'pneumonia',front:'What physically happens in pneumonia?',back:'Alveoli fill with inflammatory fluid and exudate, blocking gas exchange.'},
-{topic:'pneumonia',front:'Most common bacterial cause of CAP?',back:'Streptococcus pneumoniae.'},
-{topic:'pneumonia',front:'Rust-colored sputum suggests?',back:'Streptococcus pneumoniae.'},
-{topic:'pneumonia',front:'Foul-smelling sputum suggests?',back:'Lung abscess or anaerobic infection.'},
-{topic:'pneumonia',front:'How does pneumonia present in an older adult?',back:'Confusion and functional decline, often WITHOUT fever. Mental status change is the presentation.'},
-{topic:'pneumonia',front:'Aspiration pneumonia most often affects which lung?',back:'The right lung, because the right main bronchus is wider and more vertical.'},
-{topic:'pneumonia',front:'Key aspiration prevention for a dysphagia patient?',back:'Head of bed 30 to 45 degrees, swallow evaluation, thickened liquids, chin-tuck, no straws.'},
-
-{topic:'airway',front:'Suctioning — how long per pass?',back:'No more than 10 to 15 seconds. Hyperoxygenate before and after. Suction only on withdrawal.'},
-{topic:'airway',front:'Tracheostomy emergency equipment at the bedside?',back:'Obturator, a spare trach of the same size, a size smaller, and suction equipment.'},
-{topic:'airway',front:'Ventilated patient suddenly desaturates — first action?',back:'Assess the patient and the airway and tubing. Do not silence the alarm and document.'},
-{topic:'airway',front:'DOPE mnemonic for a ventilated patient in distress?',back:'Displacement, Obstruction, Pneumothorax, Equipment failure.'},
-
-{topic:'chesttube',front:'Continuous bubbling in the WATER-SEAL chamber means?',back:'An air leak, which can progress to a tension pneumothorax. Not normal.'},
-{topic:'chesttube',front:'Continuous bubbling in the SUCTION-CONTROL chamber means?',back:'Normal, when connected to wall suction. This is the one place continuous bubbling is expected.'},
-{topic:'chesttube',front:'Tidaling in the water seal means?',back:'Normal. Fluid rises and falls with respiration. It stops when the lung has re-expanded or the tube is blocked.'},
-{topic:'chesttube',front:'Chest tube accidentally pulled out — what do you do?',back:'Cover the site with sterile occlusive gauze taped on THREE sides, creating a flutter valve. Notify the provider.'},
-{topic:'chesttube',front:'Chest drainage system falls over or disconnects?',back:'Submerge the tube end in sterile water or saline to restore the seal, then get a new system.'},
-{topic:'chesttube',front:'When do you clamp a chest tube?',back:'Almost never. Only briefly to change the system or to check for an air leak, on order. Clamping can cause a tension pneumothorax.'},
-
-{topic:'copd',front:'Physical hallmark of chronic COPD?',back:'Barrel chest with prolonged expiration. Also pursed-lip breathing and the tripod position.'},
-{topic:'copd',front:'Underlying problem in asthma?',back:'Reversible airway inflammation and bronchoconstriction.'},
-{topic:'copd',front:'Underlying problem in emphysema?',back:'Irreversible destruction of alveolar walls, losing surface area and elastic recoil.'},
-{topic:'copd',front:'Sudden silent chest during an asthma attack means?',back:'Severe obstruction and impending respiratory failure. Air is not moving enough to make a sound.'},
-{topic:'copd',front:'First-line medication mid-asthma attack?',back:'Short-acting beta agonist, albuterol.'},
-{topic:'copd',front:'Order of inhalers?',back:'Bronchodilator FIRST, then the corticosteroid. Rinse the mouth after the steroid to prevent thrush.'},
-{topic:'copd',front:'Why is high-flow oxygen risky in some COPD patients?',back:'Chronic CO2 retainers can lose their hypoxic drive. Target SpO2 88 to 92 percent with controlled delivery.'},
-
-{topic:'tb',front:'TB precautions?',back:'Airborne. Negative-pressure room, N95 respirator for staff, surgical mask on the patient if transported.'},
-{topic:'tb',front:'Classic TB symptoms?',back:'Productive cough over 3 weeks, hemoptysis, night sweats, unexplained weight loss, low-grade afternoon fever.'},
-{topic:'tb',front:'What does RIPE stand for?',back:'Rifampin, Isoniazid, Pyrazinamide, Ethambutol.'},
-{topic:'tb',front:'Rifampin key teaching?',back:'Turns urine, sweat, and tears orange. Harmless and expected. It also reduces oral contraceptive effectiveness.'},
-{topic:'tb',front:'Isoniazid key teaching?',back:'Give vitamin B6 (pyridoxine) to prevent peripheral neuropathy. Watch for hepatotoxicity, avoid alcohol.'},
-{topic:'tb',front:'Ethambutol key teaching?',back:'Watch for optic neuritis. Report any change in vision or color discrimination.'},
-{topic:'tb',front:'How is a Mantoux read?',back:'Measure INDURATION, not redness, at 48 to 72 hours. A positive test means exposure, not active disease.'},
-{topic:'tb',front:'Why must TB treatment run the full course?',back:'6 to 12 months. Stopping early breeds drug-resistant TB.'},
-
-{topic:'blood',front:'First action before starting a transfusion?',back:'Verify informed consent and the type and cross-match, with two licensed personnel checking at the bedside.'},
-{topic:'blood',front:'Which fluid can hang with blood?',back:'Only 0.9% normal saline. Dextrose lyses cells; LR contains calcium and can cause clotting.'},
-{topic:'blood',front:'How long can blood sit before it must be started?',back:'30 minutes from leaving the blood bank. Never store it in a unit refrigerator.'},
-{topic:'blood',front:'How long does a unit have to infuse in?',back:'Within 4 hours, because of bacterial growth risk.'},
-{topic:'blood',front:'When do you stay with the patient?',back:'The first 15 minutes and stay for the first 15 minutes, running slowly. Most reactions occur early.'},
-{topic:'blood',front:'Acute hemolytic reaction — signs and action?',back:'Fever, chills, low back pain, hypotension, dark urine. STOP the blood, keep NS running with new tubing, notify provider and blood bank.'},
-{topic:'blood',front:'Febrile nonhemolytic reaction?',back:'The most common reaction. Fever and chills without hemolysis. Stop, evaluate, and use leukocyte-reduced blood next time.'},
-{topic:'blood',front:'TACO vs TRALI?',back:'TACO is circulatory overload — dyspnea, JVD, hypertension. TRALI is acute lung injury — dyspnea with hypotension and no overload.'},
+{topic:'abg',front:'Something is wrong with the kidneys \u2014 the imbalance is automatically what?',back:'METABOLIC. Kidneys regulate bicarbonate (the base). Lungs regulate CO2 (the acid), so a lung problem is respiratory.'},
+{topic:'abg',front:'What gas does kidney failure specifically produce?',back:'Metabolic acidosis. The kidney cannot excrete hydrogen ions or regenerate bicarbonate, so acid builds and bicarb falls.'},
+{topic:'abg',front:'Why does a COPD patient with kidney disease show an uncompensated gas?',back:'The kidneys are the compensator for a respiratory problem. If they are failing, they cannot retain the bicarbonate needed to compensate.'},
+{topic:'abg',front:'Renal metabolic acidosis travels with which electrolyte problem?',back:'Hyperkalemia. Acidosis shifts potassium out of cells AND the failing kidney cannot excrete it. Check the potassium and the ECG.'},
 ];
+
 
 let flashMastered=new Set();
 (function restoreFlash(){ try{ const r=localStorage.getItem('nur256u2_flashmastered'); if(r) JSON.parse(r).forEach(i=>flashMastered.add(i)); }catch(e){} })();
@@ -2029,8 +2979,8 @@ function updateFlashFilterBtn(){
   b.textContent = flashOnlyUnmastered ? '📚 Studying: Unmastered Only' : '📚 Studying: Full Deck (incl. mastered)';
   const t=document.getElementById('flashTopicBtn'); if(t)t.textContent=flashTopicLabel();
 }
-const FLASH_ORDER=['all','upper','resp','acute','pneumonia','airway','chesttube','copd','tb','blood'];
-const FLASH_LABELS={all:'All Topics',upper:'Upper Respiratory',resp:'Resp Assessment',acute:'Acute Respiratory',pneumonia:'Pneumonia',airway:'Airway & Tubes',chesttube:'Chest Tubes',copd:'COPD & Asthma',tb:'Tuberculosis',blood:'Transfusion'};
+const FLASH_ORDER=['all','fluids','iv','lytes','abg','upper','resp','acute','pneumonia','airway','chesttube','copd','tb','blood'];
+const FLASH_LABELS={all:'All Topics',fluids:'Fluid Balance',iv:'IV Therapy',lytes:'Electrolytes',abg:'ABGs',upper:'Upper Respiratory',resp:'Resp Assessment',acute:'Acute Respiratory',pneumonia:'Pneumonia',airway:'Airway & Tubes',chesttube:'Chest Tubes',copd:'COPD & Asthma',tb:'Tuberculosis',blood:'Transfusion'};
 function flashTopicLabel(){ return '\uD83C\uDFAF '+(FLASH_LABELS[flashTopic]||'All Topics'); }
 function cycleFlashTopic(){
   const i=FLASH_ORDER.indexOf(flashTopic);
@@ -2106,6 +3056,56 @@ updateFlashFilterBtn();
 <script>
 /* ===== RAPID DRILL ===== */
 const DRILL_POOL=[
+{topic:'resp',q:'Earliest sign of hypoxia?',o:['Restlessness and anxiety','Cyanosis','Bradycardia','Clubbing'],c:0,r:'Cyanosis is late. Clubbing is chronic.'},
+{topic:'resp',q:'Crackles indicate?',o:['Fluid in small airways and alveoli','Narrowed airways','Upper airway obstruction','Pleural inflammation'],c:0,r:'Pneumonia, heart failure, pulmonary edema.'},
+{topic:'resp',q:'Stridor indicates?',o:['Upper airway obstruction','Lower airway fluid','Alveolar collapse','Pleural effusion'],c:0,r:'This is an emergency.'},
+{topic:'resp',q:'Which mask gives the most precise oxygen concentration?',o:['Venturi mask','Nasal cannula','Simple face mask','Non-rebreather'],c:0,r:'Best for a COPD patient needing a controlled FiO2.'},
+{topic:'resp',q:'Non-rebreather flow rate?',o:['10 to 15 L/min','2 to 4 L/min','5 to 6 L/min','1 to 2 L/min'],c:0,r:'The reservoir bag must stay inflated.'},
+{topic:'resp',q:'Best position for a dyspneic patient?',o:['High-Fowler upright','Supine','Trendelenburg','Left lateral'],c:0,r:'Drops the diaphragm and maximizes lung expansion.'},
+{topic:'acute',q:'Hallmark of ARDS?',o:['Refractory hypoxemia','Productive green cough','Bradycardia','Unilateral wheezing'],c:0,r:'It does not improve with supplemental oxygen.'},
+{topic:'acute',q:'Classic PE presentation?',o:['Sudden dyspnea with pleuritic chest pain','Gradual productive cough','Barrel chest','Slow onset wheezing'],c:0,r:'Plus tachycardia, anxiety, and hypoxia after immobility.'},
+{topic:'acute',q:'Criteria for acute respiratory failure?',o:['PaO2 under 60 or PaCO2 over 50 with pH under 7.35','PaO2 over 100','pH 7.40','PaCO2 under 35'],c:0,r:'Oxygenation failure, ventilation failure, or both.'},
+{topic:'acute',q:'Tracheal deviation away from the affected side means?',o:['Tension pneumothorax','Atelectasis','Pleural effusion','Pneumonia'],c:0,r:'Needle decompression. This is a true emergency.'},
+{topic:'acute',q:'Most common cause of fever in the first 48 hours post-op?',o:['Atelectasis','Wound infection','UTI','DVT'],c:0,r:'Treat with spirometry, coughing, deep breathing, ambulation.'},
+{topic:'pneumonia',q:'What fills the alveoli in pneumonia?',o:['Inflammatory fluid and exudate','Pleural air','Blood only','Nothing, they collapse'],c:0,r:'That is why gas exchange fails and you hear crackles.'},
+{topic:'pneumonia',q:'Most common bacterial cause of community-acquired pneumonia?',o:['Streptococcus pneumoniae','Pseudomonas','MRSA','Klebsiella'],c:0,r:'Rust-colored sputum is the classic clue.'},
+{topic:'pneumonia',q:'Foul-smelling sputum suggests?',o:['Lung abscess or anaerobic infection','Asthma','Viral cold','Pulmonary edema'],c:0,r:'Anaerobes produce the odor.'},
+{topic:'pneumonia',q:'Pneumonia in an 82-year-old often presents as?',o:['New confusion without fever','A 103 degree fever','Loud productive cough','Pleuritic chest pain'],c:0,r:'Blunted febrile response. Mental status change is the sign.'},
+{topic:'pneumonia',q:'Aspiration pneumonia most commonly affects?',o:['The right lung','The left upper lobe','Both apices','The pleural space'],c:0,r:'The right main bronchus is wider and more vertical.'},
+{topic:'pneumonia',q:'Key aspiration prevention for dysphagia?',o:['HOB 30 to 45 degrees and swallow evaluation','Feed quickly','Use a straw','Lay flat during meals'],c:0,r:'Thickened liquids and chin-tuck also help.'},
+{topic:'airway',q:'Maximum suction pass duration?',o:['10 to 15 seconds','30 seconds','45 seconds','60 seconds'],c:0,r:'Hyperoxygenate before and after. Suction only on withdrawal.'},
+{topic:'airway',q:'Which must be at a trach patient bedside?',o:['Obturator and spare trach tubes','A chest tube kit','A defibrillator','An ambu bag only'],c:0,r:'Same size and one size smaller, plus suction.'},
+{topic:'airway',q:'A ventilated patient suddenly desaturates. First action?',o:['Assess the patient and the airway','Silence the alarm','Increase the tube feed','Document and wait'],c:0,r:'DOPE: Displacement, Obstruction, Pneumothorax, Equipment.'},
+{topic:'chesttube',q:'Continuous bubbling in the water-seal chamber means?',o:['An air leak','Normal function','The lung re-expanded','Suction too low'],c:0,r:'It can progress to tension pneumothorax.'},
+{topic:'chesttube',q:'Where is continuous bubbling normal?',o:['The suction-control chamber','The water-seal chamber','The drainage chamber','Nowhere'],c:0,r:'Only when connected to wall suction.'},
+{topic:'chesttube',q:'Tidaling in the water seal means?',o:['Normal fluid movement with respiration','An air leak','A blockage','Lung collapse'],c:0,r:'It stops when the lung re-expands or the tube blocks.'},
+{topic:'chesttube',q:'A chest tube is pulled out. What do you do?',o:['Occlusive gauze taped on three sides','Tape on all four sides','Reinsert it','Clamp the tube'],c:0,r:'Three sides creates a flutter valve so air escapes but cannot enter.'},
+{topic:'chesttube',q:'The drainage system tips over and disconnects. Do what?',o:['Submerge the tube end in sterile water','Clamp for an hour','Reconnect the dirty tubing','Nothing, it self-seals'],c:0,r:'Restore the water seal, then get a new system.'},
+{topic:'copd',q:'Physical hallmark of chronic COPD?',o:['Barrel chest with prolonged expiration','Tracheal deviation','Positive Trousseau','Rust-colored sputum'],c:0,r:'Plus pursed-lip breathing and tripod position.'},
+{topic:'copd',q:'Underlying problem in asthma?',o:['Reversible inflammation and bronchoconstriction','Irreversible alveolar destruction','Pleural air','Alveolar exudate'],c:0,r:'Reversible is the key word that separates it from emphysema.'},
+{topic:'copd',q:'A silent chest during a severe asthma attack means?',o:['Impending respiratory failure','Improvement','The medication worked','Less oxygen needed'],c:0,r:'Too little air moving to make a wheeze.'},
+{topic:'copd',q:'First-line medication mid-asthma attack?',o:['Albuterol','Salmeterol','Montelukast','Inhaled corticosteroid'],c:0,r:'Short-acting beta agonist for rescue.'},
+{topic:'copd',q:'Correct inhaler order?',o:['Bronchodilator then corticosteroid','Corticosteroid then bronchodilator','Either order','Both at once'],c:0,r:'Open the airway first. Rinse the mouth after the steroid.'},
+{topic:'copd',q:'Oxygen target for a COPD retainer?',o:['SpO2 88 to 92 percent','SpO2 above 98 percent','SpO2 80 to 85 percent','SpO2 100 percent'],c:0,r:'Controlled oxygen, ideally via Venturi mask.'},
+{topic:'tb',q:'TB requires which precautions?',o:['Airborne with negative pressure','Droplet','Contact','Standard only'],c:0,r:'N95 for staff, surgical mask on the patient if transported.'},
+{topic:'tb',q:'RIPE stands for?',o:['Rifampin, Isoniazid, Pyrazinamide, Ethambutol','Rifampin, Ibuprofen, Penicillin, Erythromycin','Rifabutin, INH, Prednisone, Ethionamide','None of these'],c:0,r:'Four drugs, 6 to 12 months.'},
+{topic:'tb',q:'Rifampin turns body fluids what color?',o:['Orange','Blue','Green','Black'],c:0,r:'Expected and harmless. It also reduces oral contraceptive effect.'},
+{topic:'tb',q:'Isoniazid needs which vitamin?',o:['B6 pyridoxine','B12','Vitamin K','Vitamin D'],c:0,r:'Prevents peripheral neuropathy.'},
+{topic:'tb',q:'Ethambutol requires monitoring of?',o:['Vision','Hearing','Kidney function','Blood glucose'],c:0,r:'Optic neuritis. Report color vision changes.'},
+{topic:'tb',q:'A Mantoux test is read by measuring?',o:['Induration','Redness','Blister size','Warmth'],c:0,r:'At 48 to 72 hours. Positive means exposure, not active disease.'},
+{topic:'blood',q:'Which IV fluid may hang with blood?',o:['0.9% normal saline','D5W','Lactated Ringer','0.45% saline'],c:0,r:'Dextrose lyses cells and LR contains calcium that promotes clotting.'},
+{topic:'blood',q:'Blood must be started within how long of leaving the bank?',o:['30 minutes','2 hours','4 hours','8 hours'],c:0,r:'Never store it in a unit refrigerator.'},
+{topic:'blood',q:'A unit must finish infusing within?',o:['4 hours','8 hours','2 hours','12 hours'],c:0,r:'Bacterial growth risk after that.'},
+{topic:'blood',q:'How long do you stay with the patient at the start?',o:['The first 15 minutes','The first 5 minutes','The first hour','No requirement'],c:0,r:'Run slowly. Most reactions appear early.'},
+{topic:'blood',q:'Fever, chills, and low back pain 10 minutes in. First action?',o:['Stop the blood, keep NS open','Give acetaminophen','Slow the rate','Document and continue'],c:0,r:'Acute hemolytic reaction. Notify provider and blood bank.'},
+{topic:'blood',q:'The most common transfusion reaction is?',o:['Febrile nonhemolytic','Acute hemolytic','Anaphylactic','TRALI'],c:0,r:'Use leukocyte-reduced blood next time.'},
+{topic:'blood',q:'Dyspnea with JVD and hypertension during transfusion suggests?',o:['TACO, circulatory overload','TRALI','Hemolytic reaction','Sepsis'],c:0,r:'TRALI presents with hypotension and no overload signs.'},
+{topic:'upper',q:'Position for an active nosebleed?',o:['Upright leaning forward','Upright with head back','Flat on the back','Trendelenburg'],c:0,r:'Forward drains blood out instead of down the throat.'},
+{topic:'upper',q:'Earliest sign of post-tonsillectomy bleeding?',o:['Frequent swallowing','Vomiting bright blood','A sore throat','Refusing fluids'],c:0,r:'Blood trickling down the throat. Also restlessness and tachycardia.'},
+{topic:'upper',q:'Hoarseness over 2 weeks suggests?',o:['Possible laryngeal cancer','Simple laryngitis','Allergic rhinitis','Normal aging'],c:0,r:'Requires evaluation. Smoking and alcohol are the risk factors.'},
+{topic:'upper',q:'Max days for a decongestant nasal spray?',o:['3','7','14','30'],c:0,r:'Beyond that causes rebound congestion.'},
+{topic:'upper',q:'Which finding argues AGAINST strep pharyngitis?',o:['A prominent cough','Tonsillar exudate','Sudden fever','Tender anterior nodes'],c:0,r:'Cough and coryza point to a viral cause.'},
+{topic:'upper',q:'Proper voice rest means?',o:['No speaking at all','Whispering only','Short quiet sentences','Humming instead'],c:0,r:'Whispering strains the cords more than speaking.'},
 {topic:'fluids',q:'Most reliable indicator of fluid balance?',o:['Daily weight','Blood pressure','Skin turgor','Urine color'],c:0,r:'1 kg of weight change is about 1 L of fluid.'},
 {topic:'fluids',q:'Principal cation of the extracellular fluid?',o:['Sodium','Potassium','Calcium','Magnesium'],c:0,r:'Sodium rules the ECF. Potassium rules the ICF.'},
 {topic:'fluids',q:'Minimum acceptable hourly urine output?',o:['30 mL','10 mL','60 mL','100 mL'],c:0,r:'Under 30 mL/hr means hypovolemia or renal hypoperfusion.'},
@@ -2114,13 +3114,11 @@ const DRILL_POOL=[
 {topic:'fluids',q:'Which sign belongs to fluid volume EXCESS?',o:['Bounding pulse with crackles','Poor skin turgor','Concentrated urine','Dry mucous membranes'],c:0,r:'Wet signs: JVD, crackles, bounding pulse, weight gain.'},
 {topic:'fluids',q:'Albumin primarily functions to?',o:['Pull water into the vessel','Buffer metabolic acids','Excrete potassium','Move sodium into cells'],c:0,r:'It generates plasma oncotic pressure. Low albumin means third spacing.'},
 {topic:'fluids',q:'A high BNP most likely means?',o:['Fluid overload or heart failure','Dehydration','Hypokalemia','Respiratory alkalosis'],c:0,r:'The stretched ventricle releases it.'},
-
 {topic:'iv',q:'0.45% saline is what tonicity?',o:['Hypotonic','Isotonic','Hypertonic','Colloid'],c:0,r:'Water moves into cells. Risk of cerebral edema.'},
 {topic:'iv',q:'3% saline is used for?',o:['Severe symptomatic hyponatremia','Routine maintenance','Hypovolemic shock','Hypernatremia'],c:0,r:'High alert. Correct sodium slowly and watch lung sounds.'},
 {topic:'iv',q:'Coolness, swelling, and pallor at an IV site means?',o:['Infiltration','Phlebitis','Infection','Normal finding'],c:0,r:'Stop the infusion and remove the catheter.'},
 {topic:'iv',q:'Redness, warmth, and a palpable cord along the vein means?',o:['Phlebitis','Infiltration','Air embolism','Extravasation'],c:0,r:'Discontinue and restart in a different site.'},
 {topic:'iv',q:'Suspected air embolism — position the patient how?',o:['Left side with head down','Right side upright','High-Fowler','Prone'],c:0,r:'Traps air at the apex of the right ventricle. Clamp the line and give oxygen.'},
-
 {topic:'lytes',q:'Normal potassium range?',o:['3.5 to 5.0','2.5 to 4.0','5.0 to 6.5','1.5 to 3.0'],c:0,r:'mEq/L. Narrow range, fatal outside it.'},
 {topic:'lytes',q:'Normal sodium range?',o:['135 to 145','120 to 130','145 to 160','100 to 120'],c:0,r:'mEq/L.'},
 {topic:'lytes',q:'Peaked T waves indicate?',o:['Hyperkalemia','Hypokalemia','Hypercalcemia','Hyponatremia'],c:0,r:'Then widened QRS. Risk of fatal dysrhythmia.'},
@@ -2134,7 +3132,6 @@ const DRILL_POOL=[
 {topic:'lytes',q:'You cannot correct hypokalemia until you replace which electrolyte?',o:['Magnesium','Calcium','Phosphate','Sodium'],c:0,r:'Magnesium is required for the potassium to stay in the cell.'},
 {topic:'lytes',q:'Best food choice to raise potassium?',o:['Banana and spinach','Cheese and yogurt','White rice','Egg whites'],c:0,r:'Also potato, avocado, orange, tomato, cantaloupe.'},
 {topic:'lytes',q:'Hypercalcemia signs?',o:['Lethargy, constipation, weakness','Tetany and tingling','Peaked T waves','Seizures'],c:0,r:'Stones, bones, groans, psychiatric overtones.'},
-
 {topic:'abg',q:'ROME stands for?',o:['Respiratory Opposite, Metabolic Equal','Renal Output Measures Everything','Respiratory Only, Metabolic Extra','Reverse Order, Match Exactly'],c:0,r:'pH vs CO2 opposite equals respiratory. pH vs bicarb same equals metabolic.'},
 {topic:'abg',q:'Which organ controls CO2?',o:['Lungs','Kidneys','Liver','Spleen'],c:0,r:'CO2 is the acid, controlled by ventilation. Bicarb is the base, controlled by kidneys.'},
 {topic:'abg',q:'Normal pH range?',o:['7.35 to 7.45','7.25 to 7.35','7.45 to 7.55','7.00 to 7.30'],c:0,r:'Below is acidosis, above is alkalosis.'},
@@ -2147,65 +3144,17 @@ const DRILL_POOL=[
 {topic:'abg',q:'Anxiety-driven hyperventilation causes?',o:['Respiratory alkalosis','Respiratory acidosis','Metabolic alkalosis','Metabolic acidosis'],c:0,r:'You blow off CO2, the acid, so pH rises.'},
 {topic:'abg',q:'Which compensates faster?',o:['Lungs, in minutes','Kidneys, in minutes','Lungs, in days','Neither compensates'],c:0,r:'Kidneys take hours to days.'},
 {topic:'abg',q:'An asthma patient whose PaCO2 rose from 28 to 41 is?',o:['Tiring toward respiratory failure','Improving','Now alkalotic','Fully compensated'],c:0,r:'A normalizing CO2 in a hyperventilating patient is ominous.'},
-
-{topic:'resp',q:'Earliest sign of hypoxia?',o:['Restlessness and anxiety','Cyanosis','Bradycardia','Clubbing'],c:0,r:'Cyanosis is late. Clubbing is chronic.'},
-{topic:'resp',q:'Crackles indicate?',o:['Fluid in small airways and alveoli','Narrowed airways','Upper airway obstruction','Pleural inflammation'],c:0,r:'Pneumonia, heart failure, pulmonary edema.'},
-{topic:'resp',q:'Stridor indicates?',o:['Upper airway obstruction','Lower airway fluid','Alveolar collapse','Pleural effusion'],c:0,r:'This is an emergency.'},
-{topic:'resp',q:'Which mask gives the most precise oxygen concentration?',o:['Venturi mask','Nasal cannula','Simple face mask','Non-rebreather'],c:0,r:'Best for a COPD patient needing a controlled FiO2.'},
-{topic:'resp',q:'Non-rebreather flow rate?',o:['10 to 15 L/min','2 to 4 L/min','5 to 6 L/min','1 to 2 L/min'],c:0,r:'The reservoir bag must stay inflated.'},
-{topic:'resp',q:'Best position for a dyspneic patient?',o:['High-Fowler upright','Supine','Trendelenburg','Left lateral'],c:0,r:'Drops the diaphragm and maximizes lung expansion.'},
-
-{topic:'acute',q:'Hallmark of ARDS?',o:['Refractory hypoxemia','Productive green cough','Bradycardia','Unilateral wheezing'],c:0,r:'It does not improve with supplemental oxygen.'},
-{topic:'acute',q:'Classic PE presentation?',o:['Sudden dyspnea with pleuritic chest pain','Gradual productive cough','Barrel chest','Slow onset wheezing'],c:0,r:'Plus tachycardia, anxiety, and hypoxia after immobility.'},
-{topic:'acute',q:'Criteria for acute respiratory failure?',o:['PaO2 under 60 or PaCO2 over 50 with pH under 7.35','PaO2 over 100','pH 7.40','PaCO2 under 35'],c:0,r:'Oxygenation failure, ventilation failure, or both.'},
-{topic:'acute',q:'Tracheal deviation away from the affected side means?',o:['Tension pneumothorax','Atelectasis','Pleural effusion','Pneumonia'],c:0,r:'Needle decompression. This is a true emergency.'},
-{topic:'acute',q:'Most common cause of fever in the first 48 hours post-op?',o:['Atelectasis','Wound infection','UTI','DVT'],c:0,r:'Treat with spirometry, coughing, deep breathing, ambulation.'},
-
-{topic:'pneumonia',q:'What fills the alveoli in pneumonia?',o:['Inflammatory fluid and exudate','Pleural air','Blood only','Nothing, they collapse'],c:0,r:'That is why gas exchange fails and you hear crackles.'},
-{topic:'pneumonia',q:'Most common bacterial cause of community-acquired pneumonia?',o:['Streptococcus pneumoniae','Pseudomonas','MRSA','Klebsiella'],c:0,r:'Rust-colored sputum is the classic clue.'},
-{topic:'pneumonia',q:'Foul-smelling sputum suggests?',o:['Lung abscess or anaerobic infection','Asthma','Viral cold','Pulmonary edema'],c:0,r:'Anaerobes produce the odor.'},
-{topic:'pneumonia',q:'Pneumonia in an 82-year-old often presents as?',o:['New confusion without fever','A 103 degree fever','Loud productive cough','Pleuritic chest pain'],c:0,r:'Blunted febrile response. Mental status change is the sign.'},
-{topic:'pneumonia',q:'Aspiration pneumonia most commonly affects?',o:['The right lung','The left upper lobe','Both apices','The pleural space'],c:0,r:'The right main bronchus is wider and more vertical.'},
-{topic:'pneumonia',q:'Key aspiration prevention for dysphagia?',o:['HOB 30 to 45 degrees and swallow evaluation','Feed quickly','Use a straw','Lay flat during meals'],c:0,r:'Thickened liquids and chin-tuck also help.'},
-
-{topic:'airway',q:'Maximum suction pass duration?',o:['10 to 15 seconds','30 seconds','45 seconds','60 seconds'],c:0,r:'Hyperoxygenate before and after. Suction only on withdrawal.'},
-{topic:'airway',q:'Which must be at a trach patient bedside?',o:['Obturator and spare trach tubes','A chest tube kit','A defibrillator','An ambu bag only'],c:0,r:'Same size and one size smaller, plus suction.'},
-{topic:'airway',q:'A ventilated patient suddenly desaturates. First action?',o:['Assess the patient and the airway','Silence the alarm','Increase the tube feed','Document and wait'],c:0,r:'DOPE: Displacement, Obstruction, Pneumothorax, Equipment.'},
-
-{topic:'chesttube',q:'Continuous bubbling in the water-seal chamber means?',o:['An air leak','Normal function','The lung re-expanded','Suction too low'],c:0,r:'It can progress to tension pneumothorax.'},
-{topic:'chesttube',q:'Where is continuous bubbling normal?',o:['The suction-control chamber','The water-seal chamber','The drainage chamber','Nowhere'],c:0,r:'Only when connected to wall suction.'},
-{topic:'chesttube',q:'Tidaling in the water seal means?',o:['Normal fluid movement with respiration','An air leak','A blockage','Lung collapse'],c:0,r:'It stops when the lung re-expands or the tube blocks.'},
-{topic:'chesttube',q:'A chest tube is pulled out. What do you do?',o:['Occlusive gauze taped on three sides','Tape on all four sides','Reinsert it','Clamp the tube'],c:0,r:'Three sides creates a flutter valve so air escapes but cannot enter.'},
-{topic:'chesttube',q:'The drainage system tips over and disconnects. Do what?',o:['Submerge the tube end in sterile water','Clamp for an hour','Reconnect the dirty tubing','Nothing, it self-seals'],c:0,r:'Restore the water seal, then get a new system.'},
-
-{topic:'copd',q:'Physical hallmark of chronic COPD?',o:['Barrel chest with prolonged expiration','Tracheal deviation','Positive Trousseau','Rust-colored sputum'],c:0,r:'Plus pursed-lip breathing and tripod position.'},
-{topic:'copd',q:'Underlying problem in asthma?',o:['Reversible inflammation and bronchoconstriction','Irreversible alveolar destruction','Pleural air','Alveolar exudate'],c:0,r:'Reversible is the key word that separates it from emphysema.'},
-{topic:'copd',q:'A silent chest during a severe asthma attack means?',o:['Impending respiratory failure','Improvement','The medication worked','Less oxygen needed'],c:0,r:'Too little air moving to make a wheeze.'},
-{topic:'copd',q:'First-line medication mid-asthma attack?',o:['Albuterol','Salmeterol','Montelukast','Inhaled corticosteroid'],c:0,r:'Short-acting beta agonist for rescue.'},
-{topic:'copd',q:'Correct inhaler order?',o:['Bronchodilator then corticosteroid','Corticosteroid then bronchodilator','Either order','Both at once'],c:0,r:'Open the airway first. Rinse the mouth after the steroid.'},
-{topic:'copd',q:'Oxygen target for a COPD retainer?',o:['SpO2 88 to 92 percent','SpO2 above 98 percent','SpO2 80 to 85 percent','SpO2 100 percent'],c:0,r:'Controlled oxygen, ideally via Venturi mask.'},
-
-{topic:'tb',q:'TB requires which precautions?',o:['Airborne with negative pressure','Droplet','Contact','Standard only'],c:0,r:'N95 for staff, surgical mask on the patient if transported.'},
-{topic:'tb',q:'RIPE stands for?',o:['Rifampin, Isoniazid, Pyrazinamide, Ethambutol','Rifampin, Ibuprofen, Penicillin, Erythromycin','Rifabutin, INH, Prednisone, Ethionamide','None of these'],c:0,r:'Four drugs, 6 to 12 months.'},
-{topic:'tb',q:'Rifampin turns body fluids what color?',o:['Orange','Blue','Green','Black'],c:0,r:'Expected and harmless. It also reduces oral contraceptive effect.'},
-{topic:'tb',q:'Isoniazid needs which vitamin?',o:['B6 pyridoxine','B12','Vitamin K','Vitamin D'],c:0,r:'Prevents peripheral neuropathy.'},
-{topic:'tb',q:'Ethambutol requires monitoring of?',o:['Vision','Hearing','Kidney function','Blood glucose'],c:0,r:'Optic neuritis. Report color vision changes.'},
-{topic:'tb',q:'A Mantoux test is read by measuring?',o:['Induration','Redness','Blister size','Warmth'],c:0,r:'At 48 to 72 hours. Positive means exposure, not active disease.'},
-
-{topic:'blood',q:'Which IV fluid may hang with blood?',o:['0.9% normal saline','D5W','Lactated Ringer','0.45% saline'],c:0,r:'Dextrose lyses cells and LR contains calcium that promotes clotting.'},
-{topic:'blood',q:'Blood must be started within how long of leaving the bank?',o:['30 minutes','2 hours','4 hours','8 hours'],c:0,r:'Never store it in a unit refrigerator.'},
-{topic:'blood',q:'A unit must finish infusing within?',o:['4 hours','8 hours','2 hours','12 hours'],c:0,r:'Bacterial growth risk after that.'},
-{topic:'blood',q:'How long do you stay with the patient at the start?',o:['The first 15 minutes','The first 5 minutes','The first hour','No requirement'],c:0,r:'Run slowly. Most reactions appear early.'},
-{topic:'blood',q:'Fever, chills, and low back pain 10 minutes in. First action?',o:['Stop the blood, keep NS open','Give acetaminophen','Slow the rate','Document and continue'],c:0,r:'Acute hemolytic reaction. Notify provider and blood bank.'},
-{topic:'blood',q:'The most common transfusion reaction is?',o:['Febrile nonhemolytic','Acute hemolytic','Anaphylactic','TRALI'],c:0,r:'Use leukocyte-reduced blood next time.'},
-{topic:'blood',q:'Dyspnea with JVD and hypertension during transfusion suggests?',o:['TACO, circulatory overload','TRALI','Hemolytic reaction','Sepsis'],c:0,r:'TRALI presents with hypotension and no overload signs.'},
+{topic:'abg',q:'Something is wrong with the kidneys. The imbalance is automatically?',o:['Metabolic','Respiratory','Always mixed','Cannot be predicted'],c:0,r:'Kidneys own bicarbonate. Lungs own CO2. The organ names the type.'},
+{topic:'abg',q:'Kidney failure produces which specific gas?',o:['Metabolic acidosis','Metabolic alkalosis','Respiratory acidosis','Respiratory alkalosis'],c:0,r:'Cannot excrete acid, cannot regenerate bicarbonate. pH down, bicarb down.'},
+{topic:'abg',q:'Which organ compensates for a respiratory acid-base problem?',o:['The kidneys','The lungs','The liver','The spleen'],c:0,r:'Over hours to days. A failing kidney cannot compensate, so the gas stays uncompensated.'},
 ];
+
 
 
 let drillList=[], drillIdx=0, drillScore=0, drillStreak=0, drillBest=0, drillAnswered=false;
 const DRILL_ROUND=20;
 function startDrill(){
-  const pool = hotOnlyGlobal ? DRILL_POOL.filter(q=>['upper','copd','chesttube','pneumonia','acute'].includes(q.topic)) : DRILL_POOL;
+  const pool = hotOnlyGlobal ? DRILL_POOL.filter(q=>['lytes','abg','upper','copd','chesttube'].includes(q.topic)) : DRILL_POOL;
   drillList=shuffle(pool.slice()).slice(0,Math.min(DRILL_ROUND,pool.length));
   drillIdx=0; drillScore=0; drillStreak=0; drillAnswered=false;
   renderDrillQ();
@@ -2270,14 +3219,17 @@ let examState={}, examIdx=0, examSubmitted=false, examMode='study', examChecked=
 let quizSet=[], examShuffleMap={};
 /* ---- topic + length picker ---- */
 const EXAM_TOPICS=[
+  {id:'fluids',   label:'\uD83D\uDCA7 Fluids & IV'},
+  {id:'lytes',    label:'\u26A1 Electrolytes'},
+  {id:'abg',      label:'\uD83E\uDEC1 Acid-Base'},
   {id:'upper',    label:'\uD83D\uDC43 Upper Resp'},
   {id:'resp',     label:'\uD83D\uDD0D Resp Assessment'},
   {id:'pneumonia',label:'\uD83E\uDDA0 Pneumonia'},
   {id:'airway',   label:'\uD83E\uDE7A Airway & Tubes'},
   {id:'copd',     label:'\uD83C\uDF2C\uFE0F COPD & Asthma'},
   {id:'tb',       label:'\uD83D\uDD2C TB'},
-  {id:'clinical', label:'\uD83E\uDDE0 Clinical Judgment'},
-  {id:'blood',    label:'\uD83E\uDE78 Transfusion (ref)'}
+  {id:'blood',    label:'\uD83E\uDE78 Transfusion'},
+  {id:'clinical', label:'\uD83E\uDDE0 Clinical Judgment'}
 ];
 const MAX_TOPICS=3;
 let examTopics=[];      /* empty = all topics */
