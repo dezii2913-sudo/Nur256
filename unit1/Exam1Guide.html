@@ -242,6 +242,23 @@ body.mobile-mode .match-stats{font-size:1rem}
 #backToTopBtn:focus{outline:none}
 #backToTopBtn:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 @media(min-width:940px){#backToTopBtn{right:calc(50vw - 470px)}}
+#listenFab{position:fixed;bottom:140px;right:16px;z-index:999;width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--teal),var(--purple));color:#fff;font-size:1.2rem;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.28);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#listenFab:active{transform:scale(.9)}
+#listenFab:focus{outline:none}
+#listenFab:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+@media(min-width:940px){#listenFab{right:calc(50vw - 470px)}}
+#listenBar{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--card);border-top:3px solid var(--purple);box-shadow:0 -4px 20px rgba(0,0,0,.18);padding:10px 12px calc(10px + env(safe-area-inset-bottom));font-family:inherit}
+.lb-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.lb-lab{flex:1;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-x{background:none;border:none;color:var(--muted);font-size:1.05rem;cursor:pointer;padding:4px 8px;font-family:inherit}
+.lb-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.lb-btn{font-family:inherit;font-size:1.05rem;padding:9px 14px;border-radius:12px;border:2px solid var(--card-border);background:var(--bg2);color:var(--ink);cursor:pointer;line-height:1}
+.lb-main{background:var(--purple);border-color:var(--purple);color:#fff;min-width:62px}
+.lb-sp{display:flex;gap:5px}
+.lb-rate{font-family:inherit;font-size:.75rem;font-weight:700;padding:7px 10px;border-radius:999px;border:2px solid var(--card-border);background:var(--card);color:var(--ink);cursor:pointer}
+.lb-rate.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.listen-now{outline:3px solid var(--purple);outline-offset:4px;border-radius:14px}
+body:has(#listenBar) footer{padding-bottom:120px}
 </style>
 </head>
 <body data-theme="day">
@@ -267,6 +284,7 @@ body.mobile-mode .match-stats{font-size:1rem}
 <div class="nav" id="nav"></div>
 <div class="content" id="content"></div>
 <div class="toast" id="toast"></div>
+<button id="listenFab" onclick="listenStart()" title="Listen to this section" aria-label="Listen to this section">🎧</button>
 <button id="backToTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top">⬆️</button>
 
 
@@ -871,6 +889,20 @@ document.getElementById('sec-home').innerHTML=`
     <li><b>ABC is a ranking by speed of death,</b> not a slogan. Use it on every priority stem.</li>
     <li><b>Palliative is defined by goal, hospice by prognosis.</b> Neither one is a DNR.</li>
   </ul>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🎧 Listen Mode — hands-free study</h3>
+  <p>Tap the <b>🎧 headphone button</b> on any section and it reads that section aloud, card by card, using your phone's built-in voice.</p>
+  <ul class="clean">
+    <li><b>⏮ ⏸ ⏭</b> to move between cards, so you can replay the one you missed instead of restarting.</li>
+    <li><b>Speed</b> 0.8× to 1.5×. Your setting is remembered.</li>
+    <li><b>Auto</b> keeps it rolling to the next card by itself — turn it off to study one card at a time.</li>
+    <li>The card being read is <b>outlined and scrolled to</b>, so you can glance down and know where you are.</li>
+    <li>Tables are converted to speech as <b>label-then-value</b> pairs rather than read as a wall of cells.</li>
+  </ul>
+  <div class="hy"><span class="tag">Good to know</span>It <b>keeps your screen from sleeping</b> while it plays, so you can set the phone down. But phone speech stops if you <b>switch apps or lock the screen</b> — that is a browser limitation, not a setting. Leave the guide open and face-down and it will keep going.</div>
+  <div class="hy"><span class="tag">If you want it fully in your pocket</span>Use your phone's own reader instead: <b>iPhone</b> — Settings › Accessibility › Spoken Content › <b>Speak Screen</b>, then swipe down with two fingers. <b>Android</b> — Settings › Accessibility › <b>Select to Speak</b>. Those keep reading with the screen off.</div>
 </div>
 
 <div class="tipbar">💡 Use <b>🌙 Night</b> for late sessions and <b>🔍 Big Text</b> when you are reading on your phone. Both settings save.</div>
@@ -4068,6 +4100,212 @@ renderExam();
 updateProg();
 updateHotToggleButtons();
 renderPicker();
+
+</script>
+<script>
+/* ===== LISTEN MODE — hands-free audio study ===== */
+(function(){
+if(!('speechSynthesis' in window)) return;
+
+let lsQueue=[], lsIdx=0, lsPlaying=false, lsRate=1, lsVoice=null, lsWake=null, lsUtter=null, lsAuto=true;
+try{ lsRate=parseFloat(localStorage.getItem('listen_rate')||'1')||1; }catch(e){}
+try{ lsAuto=localStorage.getItem('listen_auto')!=='0'; }catch(e){}
+
+/* ---- turn a card into speakable prose ---- */
+function speakable(el){
+  const parts=[];
+  const walk=(node)=>{
+    if(node.nodeType===3){ const t=node.textContent.replace(/\s+/g,' '); if(t.trim()) parts.push(t); return; }
+    if(node.nodeType!==1) return;
+    const tag=node.tagName;
+    if(tag==='BUTTON'||tag==='INPUT'||tag==='TEXTAREA'||tag==='SCRIPT'||tag==='STYLE') return;
+    if(node.classList && node.classList.contains('listen-skip')) return;
+    if(tag==='TABLE'){
+      const rows=[...node.querySelectorAll('tr')];
+      let heads=[];
+      rows.forEach((r,ri)=>{
+        const th=[...r.querySelectorAll('th')];
+        if(th.length){ heads=th.map(c=>clean(c.textContent)); return; }
+        const tds=[...r.querySelectorAll('td')].map(c=>clean(c.textContent));
+        if(!tds.length) return;
+        if(tds.length===1){ parts.push(tds[0]+'. '); return; }
+        if(heads.length>=2 && tds.length===heads.length){
+          parts.push(tds[0]+'. ');
+          for(let i=1;i<tds.length;i++) if(tds[i]) parts.push(heads[i]+': '+tds[i]+'. ');
+        } else {
+          parts.push(tds[0]+'. ');
+          for(let i=1;i<tds.length;i++) if(tds[i]) parts.push(tds[i]+'. ');
+        }
+      });
+      parts.push(' ');
+      return;
+    }
+    if(tag==='LI'){ [...node.childNodes].forEach(walk); parts.push('. '); return; }
+    if(tag==='H2'||tag==='H3'||tag==='H4'||tag==='P'||tag==='DIV'){
+      [...node.childNodes].forEach(walk); parts.push('. '); return;
+    }
+    [...node.childNodes].forEach(walk);
+  };
+  walk(el);
+  return clean(parts.join(' '));
+}
+function clean(s){
+  return s
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/gu,' ')
+    .replace(/\u2192/g,' leads to ')
+    .replace(/\u2191/g,' increased ').replace(/\u2193/g,' decreased ')
+    .replace(/\u2265/g,' greater than or equal to ').replace(/\u2264/g,' less than or equal to ')
+    .replace(/&gt;|>/g,' greater than ').replace(/&lt;|</g,' less than ')
+    .replace(/\u00b7/g,'. ').replace(/\u2014|\u2013/g,', ')
+    .replace(/(\s*\.){2,}/g,'.').replace(/\(\s+/g,'(').replace(/\s+\)/g,')')
+    .replace(/\s+/g,' ')
+    .replace(/\s+([.,;:])/g,'$1')
+    .trim();
+}
+
+/* ---- build the playlist from the visible section ---- */
+function buildQueue(){
+  const sec=document.querySelector('.section.active') || document.querySelector('[id^="sec-"]:not([style*="none"])');
+  if(!sec) return [];
+  const out=[];
+  const title=sec.querySelector('.sec-title');
+  const intro=sec.querySelector('.intro-line');
+  let opener='';
+  if(title) opener+=clean(title.textContent)+'. ';
+  if(intro) opener+=clean(intro.textContent);
+  if(opener.trim()) out.push({el:title||sec, text:opener, label:'Introduction'});
+  sec.querySelectorAll(':scope > .card, :scope > .tipbar, :scope > .hy, :scope > .mnem').forEach(c=>{
+    const t=speakable(c);
+    if(t && t.length>25){
+      const h=c.querySelector('h3');
+      out.push({el:c, text:t, label:h?clean(h.textContent).slice(0,44):'Note'});
+    }
+  });
+  return out;
+}
+
+/* ---- speech ---- */
+function pickVoice(){
+  const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  if(!vs.length) return null;
+  let saved=null; try{ saved=localStorage.getItem('listen_voice'); }catch(e){}
+  return vs.find(v=>v.name===saved)
+      || vs.find(v=>/Samantha|Karen|Moira|Google US English|Microsoft Aria/i.test(v.name))
+      || vs.find(v=>v.localService) || vs[0];
+}
+function chunk(text){
+  const out=[]; let buf='';
+  text.split(/(?<=[.!?])\s+/).forEach(s=>{
+    if((buf+' '+s).length>190){ if(buf) out.push(buf.trim()); buf=s; } else buf+=' '+s;
+  });
+  if(buf.trim()) out.push(buf.trim());
+  return out.length?out:[text];
+}
+function speakItem(i){
+  speechSynthesis.cancel();
+  if(i<0||i>=lsQueue.length){ stop(); return; }
+  lsIdx=i;
+  highlight();
+  renderBar();
+  const pieces=chunk(lsQueue[i].text);
+  let p=0;
+  const next=()=>{
+    if(!lsPlaying) return;
+    if(p>=pieces.length){
+      if(lsAuto && lsIdx+1<lsQueue.length) return speakItem(lsIdx+1);
+      stop(true); return;
+    }
+    const u=new SpeechSynthesisUtterance(pieces[p++]);
+    try{ u.rate=lsRate; }catch(e){}
+    try{ if(lsVoice) u.voice=lsVoice; }catch(e){ lsVoice=null; }
+    u.onend=next;
+    u.onerror=()=>{ if(lsPlaying) next(); };
+    lsUtter=u;
+    try{ speechSynthesis.speak(u); }catch(e){ next(); }
+  };
+  next();
+}
+function highlight(){
+  document.querySelectorAll('.listen-now').forEach(e=>e.classList.remove('listen-now'));
+  const el=lsQueue[lsIdx] && lsQueue[lsIdx].el;
+  if(el){ el.classList.add('listen-now'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+async function wakeOn(){
+  try{ if('wakeLock' in navigator && !lsWake) lsWake=await navigator.wakeLock.request('screen'); }catch(e){}
+}
+function wakeOff(){ try{ if(lsWake){ lsWake.release(); lsWake=null; } }catch(e){} }
+
+function start(){
+  lsQueue=buildQueue();
+  if(!lsQueue.length){ if(typeof toast==='function') toast('Nothing to read in this section'); return; }
+  lsVoice=pickVoice();
+  lsPlaying=true; wakeOn(); openBar(); speakItem(0);
+}
+function stop(finished){
+  lsPlaying=false; speechSynthesis.cancel(); wakeOff();
+  document.querySelectorAll('.listen-now').forEach(e=>e.classList.remove('listen-now'));
+  if(finished && typeof toast==='function') toast('Section finished');
+  renderBar();
+}
+function toggle(){
+  if(!lsPlaying){
+    if(!lsQueue.length) return start();
+    lsPlaying=true; wakeOn(); speakItem(lsIdx);
+  } else stop();
+}
+function jump(d){
+  const n=lsIdx+d;
+  if(n<0||n>=lsQueue.length) return;
+  if(!lsPlaying){ lsPlaying=true; wakeOn(); }
+  speakItem(n);
+}
+function setRate(r){
+  lsRate=r; try{ localStorage.setItem('listen_rate',String(r)); }catch(e){}
+  if(lsPlaying) speakItem(lsIdx); else renderBar();
+}
+function toggleAuto(){
+  lsAuto=!lsAuto; try{ localStorage.setItem('listen_auto', lsAuto?'1':'0'); }catch(e){}
+  renderBar();
+}
+
+/* ---- UI ---- */
+function openBar(){
+  if(document.getElementById('listenBar')) return renderBar();
+  const bar=document.createElement('div');
+  bar.id='listenBar';
+  document.body.appendChild(bar);
+  renderBar();
+}
+function closeBar(){ stop(); const b=document.getElementById('listenBar'); if(b) b.remove(); lsQueue=[]; lsIdx=0; }
+function renderBar(){
+  const bar=document.getElementById('listenBar'); if(!bar) return;
+  const cur=lsQueue[lsIdx];
+  bar.innerHTML=
+    '<div class="lb-top"><span class="lb-lab">'+(cur?('<b>'+(lsIdx+1)+' of '+lsQueue.length+'</b> \u00b7 '+cur.label):'Ready')+'</span>'
+    +'<button class="lb-x" onclick="listenClose()" aria-label="Close listen mode">\u2715</button></div>'
+    +'<div class="lb-row">'
+    +'<button class="lb-btn" onclick="listenJump(-1)" aria-label="Previous">\u23ee</button>'
+    +'<button class="lb-btn lb-main" onclick="listenToggle()" aria-label="Play or pause">'+(lsPlaying?'\u23f8':'\u25b6')+'</button>'
+    +'<button class="lb-btn" onclick="listenJump(1)" aria-label="Next">\u23ed</button>'
+    +'<span class="lb-sp">'
+      +[0.8,1,1.25,1.5].map(r=>'<button class="lb-rate'+(Math.abs(lsRate-r)<0.01?' on':'')+'" onclick="listenRate('+r+')">'+r+'\u00d7</button>').join('')
+    +'</span>'
+    +'<button class="lb-rate'+(lsAuto?' on':'')+'" onclick="listenAuto()" title="Continue to the next card automatically">Auto</button>'
+    +'</div>';
+}
+window.listenStart=start; window.listenToggle=toggle; window.listenJump=jump;
+window.listenRate=setRate; window.listenClose=closeBar; window.listenAuto=toggleAuto;
+
+if(speechSynthesis.onvoiceschanged!==undefined)
+  speechSynthesis.onvoiceschanged=()=>{ lsVoice=pickVoice(); };
+
+/* stop cleanly when the section changes */
+const origShow=window.showSection;
+if(typeof origShow==='function'){
+  window.showSection=function(id){ if(lsPlaying) stop(); origShow(id); };
+}
+document.addEventListener('visibilitychange',()=>{ if(document.hidden && lsPlaying) speechSynthesis.pause(); else if(!document.hidden && lsPlaying) speechSynthesis.resume(); });
+})();
 
 </script>
 <footer>Built for Des · NUR 256 Unit 1 retake prep · Everything saves on this device.</footer>
