@@ -260,6 +260,10 @@ body.mobile-mode .match-stats{font-size:1rem}
 .lb-rate.on{background:var(--teal);border-color:var(--teal);color:#fff}
 .listen-now{outline:3px solid var(--purple);outline-offset:4px;border-radius:14px}
 body:has(#listenBar) footer{padding-bottom:120px}
+.grphead{border-top:3px solid var(--purple);margin:26px 0 12px;padding-top:12px}
+.grphead:first-of-type{border-top:none;margin-top:4px;padding-top:0}
+.grphead h3{font-size:1.16rem;color:var(--purple);margin:0 0 3px;letter-spacing:-.01em}
+.grp-sub{font-size:.88rem;color:var(--muted);margin:0;line-height:1.45}
 </style>
 </head>
 <body data-theme="day">
@@ -346,14 +350,9 @@ const SECTIONS=[
   {id:'fluids',label:'💧 Fluids & IV Therapy'},
   {id:'lytes',label:'⚡ Electrolytes'},
   {id:'abg',label:'🫁 Acid-Base & ABGs'},
-  {id:'upper',label:'👃 Upper Respiratory'},
-  {id:'resp-assess',label:'🔍 Resp Assessment'},
-  {id:'acute',label:'🚨 Acute Respiratory'},
-  {id:'pneumonia',label:'🦠 Pneumonia'},
-  {id:'airway',label:'🩺 Airway & Tubes'},
-  {id:'chesttube',label:'🧯 Chest Tubes'},
-  {id:'copd',label:'🌬️ COPD & Asthma'},
-  {id:'tb',label:'🔬 Tuberculosis'},
+  {id:'respupper',label:'👃 Upper & Assessment'},
+  {id:'respacute',label:'🚨 Acute Respiratory'},
+  {id:'respchronic',label:'🌬️ Chronic Pulmonary'},
   {id:'blood',label:'🩸 Transfusion'},
   {id:'lytematch',label:'🔗 Airway & Tube Match'},
   {id:'respmatch',label:'🔗 Respiratory Match'},
@@ -804,6 +803,9 @@ const EXAM=[
 {topic:'copd',hot:true,q:'MANIFESTS — During a severe asthma attack, which finding is the MOST alarming?',o:['Loud expiratory wheezing','Prolonged expiration','A sudden silent chest','Coughing'],c:2,t:'single',r:'A silent chest means almost no air is moving — impending respiratory failure. Loud wheezing at least means air movement. Knowing how it MANIFESTS tells you which sign is the emergency.'},
 {topic:'clinical',hot:true,q:'Which patient should the nurse assess FIRST?',o:['Suddenly confused and restless with new-onset dyspnea','COPD patient with an oxygen saturation of 90 percent','Asking about discharge instructions for later today','Pneumonia patient with a temperature of 100.6 degrees'],c:0,t:'single',r:'Three are stable/expected; one is acute, unstable, unexpected. New confusion + restlessness + dyspnea = possible hypoxia/sepsis = see first. "First" questions reward acute-over-chronic thinking.'},
 {topic:'resp',hot:false,q:'Incentive spirometry technique should instruct the patient to:',o:['Use it once daily','Breathe rapidly and shallowly','Inhale slowly and hold for 3 seconds','Exhale forcefully into the device'],c:2,t:'single',r:'Slow deep inhalation with a 3-second hold maximizes alveolar expansion.'},
+{topic:'resp',hot:true,q:'A patient has an elevated D-dimer. What does this indicate?',o:['Further imaging is needed to confirm or exclude a clot','A pulmonary embolism is confirmed','No clot is present','Anticoagulation should be stopped immediately'],c:0,t:'single',r:'<b>D-dimer is a nonspecific marker of clot breakdown.</b> It rises with surgery, infection, pregnancy, cancer, and age. A normal value helps <b>rule out</b> PE in a low-risk patient; an elevated value earns <b>imaging</b>, not a diagnosis. <b>CT pulmonary angiography confirms.</b>'},
+{topic:'copd',hot:false,q:'A 38-year-old who has never smoked is diagnosed with emphysema. Which cause should the nurse suspect?',o:['Alpha-1 antitrypsin deficiency','Long-term secondhand smoke only','Occupational asbestos exposure','Untreated asthma in childhood'],c:0,t:'single',r:'<b>Alpha-1 antitrypsin deficiency</b> is an inherited cause of emphysema. Suspect it in a patient who is <b>young, a nonsmoker, or has a strong family history</b>. The protein normally protects lung tissue from enzymes that destroy it.'},
+{topic:'pneumonia',hot:true,q:'An 82-year-old is brought in for new confusion with a temperature of 98.9F. What should the nurse suspect?',o:['Pneumonia or a urinary tract infection','Progression of dementia','Normal age-related cognitive change','Dehydration from poor intake alone'],c:0,t:'single',r:'<b>Aging blunts the febrile response</b>, so an older adult with pneumonia may present with <b>confusion and no fever</b>. Other atypical presentations include new falls, decreased appetite, weakness, or worsening of a chronic condition. Attributing new confusion to age or dementia is the trap.'},
 ];
 
 </script>
@@ -817,11 +819,9 @@ document.getElementById('sec-home').innerHTML=`
   <p><b>Unit 2 exam: Monday 9/14.</b> The units did not shift this term — Casteel is <b>stacking chapters</b> around the Labor Day holiday, so several get taught on the same night. The exam content is the same as always.</p>
   <ul class="clean">
     <li><b>Ch 10</b> Fluid and Electrolytes → Fluids & IV Therapy, Electrolytes, Acid-Base & ABGs. <i>Taught 9/2 because of the stacking, but tested here.</i></li>
-    <li><b>Ch 17</b> Assessment of Respiratory Function → Resp Assessment</li>
-    <li><b>Ch 18</b> Upper Respiratory Tract Disorders → <b>Upper Respiratory</b> (new section)</li>
-    <li><b>Ch 19</b> Acute Disorders of the Chest and Lower Respiratory Tract → Acute Respiratory, Pneumonia</li>
-    <li><b>Ch 20</b> Nonacute Disorders and Pulmonary Vasculature → Acute Respiratory (PE), Airway & Chest Tubes</li>
-    <li><b>Ch 21</b> Chronic Pulmonary Disease → COPD & Asthma, Tuberculosis</li>
+    <li><b>Ch 17 + 18</b> Respiratory assessment and upper tract → <b>👃 Upper & Assessment</b></li>
+    <li><b>Ch 19 + 20</b> Acute chest and lower tract, pulmonary vasculature → <b>🚨 Acute Respiratory</b> (pneumonia, PE, ARDS, airway, chest tubes)</li>
+    <li><b>Ch 21</b> Chronic pulmonary disease → <b>🌬️ Chronic Pulmonary</b> (COPD, asthma, bronchiectasis, TB)</li>
   </ul>
 </div>
 
@@ -846,7 +846,7 @@ document.getElementById('sec-home').innerHTML=`
     <li><b>🎯 Trick Questions</b> — keyword patterns and the specific traps.</li>
     <li><b>🗄️ Wrong Answer Vault</b> — anything you miss lands here until you get it right.</li>
     <li><b>🎮 Flash / 🔗 Match / ⚡ Drill</b> — three separate banks, no recycled questions.</li>
-    <li><b>📝 Exam</b> — 229 questions with a topic and length picker. Section quizzes are 18, drawn from a deeper pool.</li>
+    <li><b>📝 Exam</b> — 232 questions with a topic and length picker. Section quizzes are 18, drawn from a deeper pool.</li>
   </ul>
 </div>
 
@@ -1989,77 +1989,15 @@ renderFilteredQuiz('q-abg', secQ(EXAM.filter(q=>q.topic==='abg')), 'ABG practice
 
 </script>
 <script>
-document.getElementById('sec-upper').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">👃</span> Upper Respiratory Tract Disorders</h2>
-<p class="intro-line">Chapter 18. Everything above the trachea. This is the section that was missing from the old guide entirely.</p>
 
-<div class="card">
-  <h3>Infections and inflammation</h3>
-  <table class="lab">
-    <tr><th>Condition</th><th>Key features</th><th>Nursing focus</th></tr>
-    <tr><td><b>Rhinitis</b></td><td>Allergic or viral. Sneezing, congestion, clear drainage, itchy eyes</td><td>Antihistamines, nasal steroids, allergen avoidance. <b>Rebound congestion</b> from decongestant sprays used over 3 days</td></tr>
-    <tr><td><b>Acute rhinosinusitis</b></td><td>Facial pain and pressure, purulent drainage, congestion over 7-10 days</td><td>Most are viral. Antibiotics only if symptoms persist or worsen. Humidification, fluids, warm compresses</td></tr>
-    <tr><td><b>Pharyngitis</b></td><td>Sore throat. Strep: sudden onset, fever, exudate, tender nodes, <b>no cough</b></td><td>Rapid strep test. Full antibiotic course prevents <b>rheumatic fever and glomerulonephritis</b>. Warm saline gargles</td></tr>
-    <tr><td><b>Tonsillitis / adenoiditis</b></td><td>Sore throat, dysphagia, mouth breathing, snoring</td><td>Post-tonsillectomy: watch for <b>frequent swallowing</b> — the earliest sign of bleeding</td></tr>
-    <tr><td><b>Peritonsillar abscess</b></td><td>Severe unilateral pain, "hot potato" voice, trismus, deviated uvula</td><td>Airway threat. Drainage plus antibiotics</td></tr>
-    <tr><td><b>Laryngitis</b></td><td>Hoarseness or voice loss</td><td><b>Voice rest</b>, humidification, no whispering (it strains more than speaking)</td></tr>
-  </table>
-  <div class="hy"><span class="tag">Post-tonsillectomy priority</span><b>Frequent swallowing</b> is the earliest hemorrhage sign — blood trickling down the throat. Also restlessness and tachycardia. Avoid coughing, clearing the throat, straws, and red or brown fluids that mask blood.</div>
-</div>
-
-<div class="card">
-  <h3>Epistaxis</h3>
-  <ul class="clean">
-    <li><b>Position:</b> sit up and lean <b>forward</b>, not back. Leaning back sends blood down the throat, causing aspiration and hiding the amount lost.</li>
-    <li><b>Pressure:</b> pinch the <b>soft part of the nose</b> continuously for 5 to 10 minutes. Ice to the bridge.</li>
-    <li>Persistent bleeding may need cautery or nasal packing. With packing, monitor for <b>airway obstruction and infection</b>.</li>
-    <li>Afterward: no nose blowing, no straining, humidify the air, avoid aspirin and NSAIDs.</li>
-  </ul>
-  <div class="trap"><span class="tag">The classic wrong answer</span>"Tilt the head back." It is intuitive, it is what everyone was taught as a child, and it is the option he offers.</div>
-</div>
-
-<div class="card">
-  <h3>Obstructive sleep apnea</h3>
-  <ul class="clean">
-    <li><b>Mechanism:</b> the pharyngeal muscles relax during sleep and the airway collapses repeatedly, causing apneic periods and desaturation.</li>
-    <li><b>Signs:</b> loud snoring, witnessed apnea, morning headache, daytime sleepiness, irritability. Long term: hypertension, dysrhythmias, right heart failure.</li>
-    <li><b>Risk factors:</b> obesity, thick neck, male sex, age, alcohol and sedatives at bedtime.</li>
-    <li><b>Treatment:</b> weight loss, side-lying position, <b>CPAP</b> (the mainstay — adherence is the nursing issue), oral appliances, surgery.</li>
-    <li><b>Perioperative red flag:</b> these patients are exquisitely sensitive to opioids and sedatives. Monitor closely after surgery.</li>
-  </ul>
-</div>
-
-<div class="card">
-  <h3>Laryngeal cancer</h3>
-  <ul class="clean">
-    <li><b>Earliest sign: hoarseness lasting more than 2 weeks.</b> That is the tested fact.</li>
-    <li>Later: persistent sore throat, dysphagia, a lump in the neck, a change in voice quality.</li>
-    <li><b>Risk factors:</b> smoking and alcohol, which are synergistic. Also HPV and chronic reflux.</li>
-    <li><b>Post-laryngectomy:</b> the patient now breathes through a <b>permanent stoma</b> — no nose to warm, filter, or humidify air. Humidify, protect the stoma from water, and teach that they cannot swim.</li>
-    <li>Communication plan is established <b>before</b> surgery: writing, board, electrolarynx, esophageal speech, or a tracheoesophageal puncture.</li>
-    <li>Nutrition, body image, and smoking cessation are all core to the plan.</li>
-  </ul>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>🎯 How he tricks you on this topic</h3>
-  <div class="trap"><span class="tag">Trap 1 — head back for a nosebleed</span>Lean <b>forward</b>. Tilting back causes aspiration and hides blood loss.</div>
-  <div class="trap"><span class="tag">Trap 2 — the quiet post-tonsillectomy child</span>Frequent <b>swallowing</b> is the earliest bleeding sign, not vomiting blood. A quiet swallowing patient is the emergency.</div>
-  <div class="trap"><span class="tag">Trap 3 — hoarseness dismissed</span>Hoarseness over <b>2 weeks</b> is a laryngeal cancer warning, not laryngitis. "Rest the voice and recheck in a month" is the trap.</div>
-  <div class="trap"><span class="tag">Trap 4 — the decongestant spray</span>Over 3 days causes <b>rebound congestion</b>, so the patient uses more and gets worse. Any teaching option allowing prolonged use is wrong.</div>
-  <div class="trap"><span class="tag">Trap 5 — whispering to rest the voice</span>Whispering strains the vocal cords <b>more</b> than normal speech. True voice rest means not speaking.</div>
-  <div class="trap"><span class="tag">Trap 6 — stopping strep antibiotics early</span>The full course prevents <b>rheumatic fever and glomerulonephritis</b>, not just symptom return.</div>
-</div>
-
-<div id="q-upper"></div>`;
-renderFilteredQuiz('q-upper', secQ(EXAM.filter(q=>q.topic==='upper')), 'Upper respiratory practice', 'Upper Respiratory');
 
 </script>
 <script>
-document.getElementById('sec-resp-assess').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🔍</span> Respiratory Assessment</h2>
-<p class="intro-line">The "how the lungs work + what you hear/see" chapter (Ch 17).</p>
+document.getElementById('sec-respupper').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">👃</span> Upper & Assessment</h2>
+<p class="intro-line">Chapters 17 and 18 — how the lungs work, how you assess them, and everything above the trachea.</p>
 
+<div class="grphead"><h3>Assessment of Respiratory Function</h3><p class="grp-sub">The "how the lungs work + what you hear/see" chapter (Ch 17).</p></div>
 <div class="card">
   <h3>🌬️ Key Definitions</h3>
   <ul class="clean">
@@ -2169,68 +2107,75 @@ document.getElementById('sec-resp-assess').innerHTML=`
   <div class="mnem"><div class="tag">Consolidation vs effusion</div><div class="big">Consolidation: dull, INCREASED fremitus, egophony. Effusion: dull, DECREASED fremitus, no egophony.</div><div class="exp">Both are dull — fremitus is what separates them.</div></div>
 </div>
 
-<div id="q-resp-assess"></div>`;
-renderFilteredQuiz('q-resp-assess', secQ(EXAM.filter(q=>q.topic==='resp')), 'Respiratory assessment practice', 'Resp Assessment');
 
-document.getElementById('sec-acute').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🚨</span> Acute Respiratory Disorders</h2>
-<p class="intro-line">Atelectasis, Acute Tracheobronchitis, Acute Respiratory Failure & ARDS.</p>
-
+<div class="grphead"><h3>Upper Respiratory Tract Disorders</h3><p class="grp-sub">Chapter 18. Everything above the trachea. This is the section that was missing from the old guide entirely.</p></div>
 <div class="card">
-  <h3>🎈 Atelectasis — collapsed alveoli</h3>
-  <p><b>Most common type = OBSTRUCTIVE</b> (blockage → trapped air absorbed → collapse). Most common timing = post-op.</p>
-  <p><b>Causes:</b> post-op, mucus plugs, shallow breathing, pain, prolonged supine/bedrest, foreign body, tumors.</p>
-  <p><b>Signs:</b> ↑work of breathing, dyspnea, ↑HR, ↑RR, ↓breath sounds + crackles over the area, SpO₂ &lt;92%, patchy/white on CXR.</p>
-  <p><b>Prevention/Tx:</b> <b>turn q2h</b>, early ambulation, deep breathing/coughing, <b>incentive spirometer</b> (inhale deep, hold 3 sec, keep float in "best" zone), pulmonary toilet.</p>
-  <div class="mnem"><div class="tag">🧠 IS technique</div><div class="big">Incentive Spirometer = "Sip slow, hold, keep the ball UP"</div></div>
+  <h3>Infections and inflammation</h3>
+  <table class="lab">
+    <tr><th>Condition</th><th>Key features</th><th>Nursing focus</th></tr>
+    <tr><td><b>Rhinitis</b></td><td>Allergic or viral. Sneezing, congestion, clear drainage, itchy eyes</td><td>Antihistamines, nasal steroids, allergen avoidance. <b>Rebound congestion</b> from decongestant sprays used over 3 days</td></tr>
+    <tr><td><b>Acute rhinosinusitis</b></td><td>Facial pain and pressure, purulent drainage, congestion over 7-10 days</td><td>Most are viral. Antibiotics only if symptoms persist or worsen. Humidification, fluids, warm compresses</td></tr>
+    <tr><td><b>Pharyngitis</b></td><td>Sore throat. Strep: sudden onset, fever, exudate, tender nodes, <b>no cough</b></td><td>Rapid strep test. Full antibiotic course prevents <b>rheumatic fever and glomerulonephritis</b>. Warm saline gargles</td></tr>
+    <tr><td><b>Tonsillitis / adenoiditis</b></td><td>Sore throat, dysphagia, mouth breathing, snoring</td><td>Post-tonsillectomy: watch for <b>frequent swallowing</b> — the earliest sign of bleeding</td></tr>
+    <tr><td><b>Peritonsillar abscess</b></td><td>Severe unilateral pain, "hot potato" voice, trismus, deviated uvula</td><td>Airway threat. Drainage plus antibiotics</td></tr>
+    <tr><td><b>Laryngitis</b></td><td>Hoarseness or voice loss</td><td><b>Voice rest</b>, humidification, no whispering (it strains more than speaking)</td></tr>
+  </table>
+  <div class="hy"><span class="tag">Post-tonsillectomy priority</span><b>Frequent swallowing</b> is the earliest hemorrhage sign — blood trickling down the throat. Also restlessness and tachycardia. Avoid coughing, clearing the throat, straws, and red or brown fluids that mask blood.</div>
 </div>
 
 <div class="card">
-  <h3>🗣️ Acute Tracheobronchitis</h3>
-  <p>Inflammation of trachea + bronchi, usually <b>follows a viral URI</b> that travels down. Can progress to pneumonia.</p>
-  <p><b>Signs:</b> dry irritating cough (→ later purulent sputum), fever, chills, night sweats, headache, malaise, stridor/wheeze.</p>
-  <p><b>Tx:</b> antibiotics if bacterial (per culture), <b>↑ fluids to thin secretions</b>, cool vapor/steam, mild analgesics, rest. <b>AVOID antihistamines</b> (dry out secretions) and avoid cough suppressants (you need to clear secretions).</p>
-</div>
-
-<div class="card" style="border-color:var(--red)">
-  <h3>🆘 Acute Respiratory Failure (ARF)</h3>
-  <p>Sudden, life-threatening failure of gas exchange.</p>
-  <div class="hy">⭐ <b>CRITERIA (memorize):</b> PaO₂ &lt; 60 mmHg AND/OR PaCO₂ &gt; 50 mmHg with pH &lt; 7.35.</div>
-  <p><b>Causes:</b> overdose, chest trauma, neuromuscular (myasthenia gravis), COPD exacerbation, asthma, airway obstruction.</p>
+  <h3>Epistaxis</h3>
   <ul class="clean">
-    <li><b>EARLY:</b> restlessness, fatigue, headache, air hunger, ↑HR, ↑BP (compensating).</li>
-    <li><b>LATE:</b> confusion, lethargy, tachypnea, cyanosis, diaphoresis → respiratory arrest.</li>
+    <li><b>Position:</b> sit up and lean <b>forward</b>, not back. Leaning back sends blood down the throat, causing aspiration and hiding the amount lost.</li>
+    <li><b>Pressure:</b> pinch the <b>soft part of the nose</b> continuously for 5 to 10 minutes. Ice to the bridge.</li>
+    <li>Persistent bleeding may need cautery or nasal packing. With packing, monitor for <b>airway obstruction and infection</b>.</li>
+    <li>Afterward: no nose blowing, no straining, humidify the air, avoid aspirin and NSAIDs.</li>
   </ul>
-  <p><b>Tx:</b> O₂, intubation + mechanical ventilation, treat the cause.</p>
-  <div class="prof"><span class="tag">📌 Slide note</span>Respiratory arrest → cardiac arrest = "the body just gives up." Catch the EARLY signs.</div>
+  <div class="trap"><span class="tag">The classic wrong answer</span>"Tilt the head back." It is intuitive, it is what everyone was taught as a child, and it is the option he offers.</div>
 </div>
 
-<div class="card" style="border-color:var(--red)">
-  <h3>💥 ARDS — Acute Respiratory Distress Syndrome</h3>
-  <p>Severe inflammatory lung injury → <b>noncardiogenic pulmonary edema</b>, diffuse alveolar damage, surfactant dysfunction.</p>
-  <div class="hy">⭐ <b>HALLMARK: hypoxemia REFRACTORY to oxygen</b> (O₂ doesn't fix it) + <b>bilateral infiltrates</b> on CXR. Rapid onset (within ~72h of trigger).</div>
-  <p><b>Causes:</b> sepsis, trauma, aspiration, pancreatitis, severe pneumonia.</p>
-  <p><b>Tx:</b> mechanical ventilation with <b>PEEP</b> (keeps alveoli open), treat underlying cause. <b>Prone positioning ~every 12 hours</b> improves oxygenation (esp. COVID-19). Nutritional support <b>35–45 kcal/kg/day</b> (enteral preferred). BNP helps rule out a cardiac cause. Mortality 27–50%.</p>
-  <p><b>Why it happens:</b> inflammation opens capillaries → fluid + WBCs flood lung tissue; <b>surfactant (which normally keeps alveoli open) is washed out</b> → alveolar collapse + severe shunting.</p>
-  <div class="mnem"><div class="tag">🧠 Tell ARDS apart</div><div class="big">"O₂ won't fix it + both lungs white = ARDS"</div></div>
+<div class="card">
+  <h3>Obstructive sleep apnea</h3>
+  <ul class="clean">
+    <li><b>Mechanism:</b> the pharyngeal muscles relax during sleep and the airway collapses repeatedly, causing apneic periods and desaturation.</li>
+    <li><b>Signs:</b> loud snoring, witnessed apnea, morning headache, daytime sleepiness, irritability. Long term: hypertension, dysrhythmias, right heart failure.</li>
+    <li><b>Risk factors:</b> obesity, thick neck, male sex, age, alcohol and sedatives at bedtime.</li>
+    <li><b>Treatment:</b> weight loss, side-lying position, <b>CPAP</b> (the mainstay — adherence is the nursing issue), oral appliances, surgery.</li>
+    <li><b>Perioperative red flag:</b> these patients are exquisitely sensitive to opioids and sedatives. Monitor closely after surgery.</li>
+  </ul>
 </div>
 
-
+<div class="card">
+  <h3>Laryngeal cancer</h3>
+  <ul class="clean">
+    <li><b>Earliest sign: hoarseness lasting more than 2 weeks.</b> That is the tested fact.</li>
+    <li>Later: persistent sore throat, dysphagia, a lump in the neck, a change in voice quality.</li>
+    <li><b>Risk factors:</b> smoking and alcohol, which are synergistic. Also HPV and chronic reflux.</li>
+    <li><b>Post-laryngectomy:</b> the patient now breathes through a <b>permanent stoma</b> — no nose to warm, filter, or humidify air. Humidify, protect the stoma from water, and teach that they cannot swim.</li>
+    <li>Communication plan is established <b>before</b> surgery: writing, board, electrolarynx, esophageal speech, or a tracheoesophageal puncture.</li>
+    <li>Nutrition, body image, and smoking cessation are all core to the plan.</li>
+  </ul>
+</div>
 
 <div class="card" style="border-color:var(--red)">
   <h3>🎯 How he tricks you on this topic</h3>
-  <div class="trap"><span class="tag">Trap 1 — ARDS defined by the wrong feature</span>The hallmark is <b>refractory hypoxemia</b> — it does not improve with oxygen. "Hypoxemia that improves with oxygen" is offered as the near-miss.</div>
-  <div class="trap"><span class="tag">Trap 2 — the direction of tracheal deviation</span>In a <b>tension</b> pneumothorax the trachea deviates <b>AWAY</b> from the affected side. Both directions appear as options.</div>
-  <div class="trap"><span class="tag">Trap 3 — first action versus first finding</span>Suspected PE: "obtain a CT" and "assess the calf" are both correct eventually. The <b>first action</b> is the independent one you can do now — raise the head of the bed and oxygenate.</div>
-  <div class="trap"><span class="tag">Trap 4 — post-op fever timing</span>Fever in the first 24 to 48 hours is <b>atelectasis</b>. Infection fevers arrive after day 3.</div>
+  <div class="trap"><span class="tag">Trap 1 — head back for a nosebleed</span>Lean <b>forward</b>. Tilting back causes aspiration and hides blood loss.</div>
+  <div class="trap"><span class="tag">Trap 2 — the quiet post-tonsillectomy child</span>Frequent <b>swallowing</b> is the earliest bleeding sign, not vomiting blood. A quiet swallowing patient is the emergency.</div>
+  <div class="trap"><span class="tag">Trap 3 — hoarseness dismissed</span>Hoarseness over <b>2 weeks</b> is a laryngeal cancer warning, not laryngitis. "Rest the voice and recheck in a month" is the trap.</div>
+  <div class="trap"><span class="tag">Trap 4 — the decongestant spray</span>Over 3 days causes <b>rebound congestion</b>, so the patient uses more and gets worse. Any teaching option allowing prolonged use is wrong.</div>
+  <div class="trap"><span class="tag">Trap 5 — whispering to rest the voice</span>Whispering strains the vocal cords <b>more</b> than normal speech. True voice rest means not speaking.</div>
+  <div class="trap"><span class="tag">Trap 6 — stopping strep antibiotics early</span>The full course prevents <b>rheumatic fever and glomerulonephritis</b>, not just symptom return.</div>
 </div>
-<div id="q-acute"></div>`;
-renderFilteredQuiz('q-acute', secQ(EXAM.filter(q=>q.topic==='resp')), 'Acute respiratory practice', 'Acute Respiratory');
 
-document.getElementById('sec-pneumonia').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🦠</span> Pneumonia</h2>
-<p class="intro-line">Your professor flagged "pneumonia assessment findings" as a guaranteed test point. Plus the VAP bundle.</p>
 
+<div id="q-respupper"></div>`;
+renderFilteredQuiz('q-respupper', secQ(EXAM.filter(q=>['resp','upper'].includes(q.topic))), 'Upper & Assessment practice', 'Upper & Assessment');
+
+document.getElementById('sec-respacute').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🚨</span> Acute Respiratory</h2>
+<p class="intro-line">Chapters 19 and 20 — pneumonia, PE, ARDS, pleural problems, airway management and chest tubes. The emergencies.</p>
+
+<div class="grphead"><h3>Pneumonia</h3><p class="grp-sub">Your professor flagged "pneumonia assessment findings" as a guaranteed test point. Plus the VAP bundle.</p></div>
 <div class="card">
   <h3>📚 The 4 Types (the 48-hour rule)</h3>
   <table class="lab">
@@ -2300,13 +2245,82 @@ document.getElementById('sec-pneumonia').innerHTML=`
   <div class="trap"><span class="tag">Trap 3 — sputum color as the whole answer</span><b>Rust-colored</b> points to strep pneumoniae, <b>foul-smelling</b> to anaerobes or abscess. He mixes the two.</div>
   <div class="trap"><span class="tag">Trap 4 — which finding to report</span>Yellow sputum and a 100.6 temp are expected in pneumonia. A <b>weak thready pulse with a falling BP</b> is sepsis. Rank by what kills fastest.</div>
 </div>
-<div id="q-pneumonia"></div>`;
-renderFilteredQuiz('q-pneumonia', secQ(EXAM.filter(q=>q.topic==='pneumonia')), 'Pneumonia practice', 'Pneumonia');
+<div class="card" style="border-color:var(--red)">
+  <h3>⭐ Gerontologic considerations in pneumonia</h3>
+  <ul class="clean">
+    <li>An older adult may present with <b>confusion and NO fever</b>. Aging blunts the febrile response, so a normal temperature proves nothing.</li>
+    <li>Other atypical presentations: <b>new falls, decreased appetite, generalized weakness, worsening of a chronic condition</b>.</li>
+    <li>Higher risk from <b>reduced cough and gag reflexes, decreased lung elasticity, poor nutrition, and comorbidities</b>.</li>
+    <li><b>Prevention:</b> pneumococcal and influenza vaccination, oral care, upright positioning for meals, mobility, swallow evaluation when indicated.</li>
+  </ul>
+  <div class="trap"><span class="tag">The classic stem</span>An 80-year-old brought in for <b>"new confusion"</b> with a normal temperature. <b>Suspect pneumonia or a UTI</b>, not dementia. Options that attribute it to age or dementia are the trap.</div>
+</div>
 
-document.getElementById('sec-airway').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🩺</span> Airway: ET Tubes & Tracheostomy</h2>
-<p class="intro-line">Cuff pressures, positioning, and what to keep at the bedside.</p>
 
+<div class="grphead"><h3>Acute Chest &amp; Lower Respiratory Disorders</h3><p class="grp-sub">Atelectasis, Acute Tracheobronchitis, Acute Respiratory Failure & ARDS.</p></div>
+<div class="card">
+  <h3>🎈 Atelectasis — collapsed alveoli</h3>
+  <p><b>Most common type = OBSTRUCTIVE</b> (blockage → trapped air absorbed → collapse). Most common timing = post-op.</p>
+  <p><b>Causes:</b> post-op, mucus plugs, shallow breathing, pain, prolonged supine/bedrest, foreign body, tumors.</p>
+  <p><b>Signs:</b> ↑work of breathing, dyspnea, ↑HR, ↑RR, ↓breath sounds + crackles over the area, SpO₂ &lt;92%, patchy/white on CXR.</p>
+  <p><b>Prevention/Tx:</b> <b>turn q2h</b>, early ambulation, deep breathing/coughing, <b>incentive spirometer</b> (inhale deep, hold 3 sec, keep float in "best" zone), pulmonary toilet.</p>
+  <div class="mnem"><div class="tag">🧠 IS technique</div><div class="big">Incentive Spirometer = "Sip slow, hold, keep the ball UP"</div></div>
+</div>
+
+<div class="card">
+  <h3>🗣️ Acute Tracheobronchitis</h3>
+  <p>Inflammation of trachea + bronchi, usually <b>follows a viral URI</b> that travels down. Can progress to pneumonia.</p>
+  <p><b>Signs:</b> dry irritating cough (→ later purulent sputum), fever, chills, night sweats, headache, malaise, stridor/wheeze.</p>
+  <p><b>Tx:</b> antibiotics if bacterial (per culture), <b>↑ fluids to thin secretions</b>, cool vapor/steam, mild analgesics, rest. <b>AVOID antihistamines</b> (dry out secretions) and avoid cough suppressants (you need to clear secretions).</p>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🆘 Acute Respiratory Failure (ARF)</h3>
+  <p>Sudden, life-threatening failure of gas exchange.</p>
+  <div class="hy">⭐ <b>CRITERIA (memorize):</b> PaO₂ &lt; 60 mmHg AND/OR PaCO₂ &gt; 50 mmHg with pH &lt; 7.35.</div>
+  <p><b>Causes:</b> overdose, chest trauma, neuromuscular (myasthenia gravis), COPD exacerbation, asthma, airway obstruction.</p>
+  <ul class="clean">
+    <li><b>EARLY:</b> restlessness, fatigue, headache, air hunger, ↑HR, ↑BP (compensating).</li>
+    <li><b>LATE:</b> confusion, lethargy, tachypnea, cyanosis, diaphoresis → respiratory arrest.</li>
+  </ul>
+  <p><b>Tx:</b> O₂, intubation + mechanical ventilation, treat the cause.</p>
+  <div class="prof"><span class="tag">📌 Slide note</span>Respiratory arrest → cardiac arrest = "the body just gives up." Catch the EARLY signs.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>💥 ARDS — Acute Respiratory Distress Syndrome</h3>
+  <p>Severe inflammatory lung injury → <b>noncardiogenic pulmonary edema</b>, diffuse alveolar damage, surfactant dysfunction.</p>
+  <div class="hy">⭐ <b>HALLMARK: hypoxemia REFRACTORY to oxygen</b> (O₂ doesn't fix it) + <b>bilateral infiltrates</b> on CXR. Rapid onset (within ~72h of trigger).</div>
+  <p><b>Causes:</b> sepsis, trauma, aspiration, pancreatitis, severe pneumonia.</p>
+  <p><b>Tx:</b> mechanical ventilation with <b>PEEP</b> (keeps alveoli open), treat underlying cause. <b>Prone positioning ~every 12 hours</b> improves oxygenation (esp. COVID-19). Nutritional support <b>35–45 kcal/kg/day</b> (enteral preferred). BNP helps rule out a cardiac cause. Mortality 27–50%.</p>
+  <p><b>Why it happens:</b> inflammation opens capillaries → fluid + WBCs flood lung tissue; <b>surfactant (which normally keeps alveoli open) is washed out</b> → alveolar collapse + severe shunting.</p>
+  <div class="mnem"><div class="tag">🧠 Tell ARDS apart</div><div class="big">"O₂ won't fix it + both lungs white = ARDS"</div></div>
+</div>
+
+
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🎯 How he tricks you on this topic</h3>
+  <div class="trap"><span class="tag">Trap 1 — ARDS defined by the wrong feature</span>The hallmark is <b>refractory hypoxemia</b> — it does not improve with oxygen. "Hypoxemia that improves with oxygen" is offered as the near-miss.</div>
+  <div class="trap"><span class="tag">Trap 2 — the direction of tracheal deviation</span>In a <b>tension</b> pneumothorax the trachea deviates <b>AWAY</b> from the affected side. Both directions appear as options.</div>
+  <div class="trap"><span class="tag">Trap 3 — first action versus first finding</span>Suspected PE: "obtain a CT" and "assess the calf" are both correct eventually. The <b>first action</b> is the independent one you can do now — raise the head of the bed and oxygenate.</div>
+  <div class="trap"><span class="tag">Trap 4 — post-op fever timing</span>Fever in the first 24 to 48 hours is <b>atelectasis</b>. Infection fevers arrive after day 3.</div>
+</div>
+<div class="card" style="border-color:var(--amber)">
+  <h3>Pulmonary embolism — the diagnostics</h3>
+  <table class="lab">
+    <tr><th>Test</th><th>What it tells you</th></tr>
+    <tr><td><b>D-dimer</b></td><td><b>Nonspecific marker of clot breakdown.</b> A normal value helps <b>rule PE out</b> in a low-risk patient. An elevated value means <b>image it</b>, not diagnose it — it rises with surgery, infection, pregnancy, cancer, and age</td></tr>
+    <tr><td><b>CT pulmonary angiography</b></td><td>The <b>confirmatory</b> study. Check renal function and contrast allergy</td></tr>
+    <tr><td><b>V/Q scan</b></td><td>Used when contrast is contraindicated. Shows the <b>ventilation-perfusion mismatch</b></td></tr>
+    <tr><td><b>ABG</b></td><td>Early PE often shows <b>respiratory alkalosis</b> from hyperventilation, with hypoxemia</td></tr>
+  </table>
+  <div class="trap"><span class="tag">The D-dimer trap</span>Any option that treats an elevated D-dimer as <b>proof</b> of a PE is wrong. It is a screening marker — it earns imaging, nothing more.</div>
+  <div class="hy"><span class="tag">Why PE is dead space</span>The clot blocks <b>blood</b>, not air. The alveoli are ventilated but not perfused — <b>air with no blood</b>. That is the mirror image of pneumonia, which is <b>blood with no air</b>.</div>
+</div>
+
+
+<div class="grphead"><h3>Airway Management</h3><p class="grp-sub">Cuff pressures, positioning, and what to keep at the bedside.</p></div>
 <div class="card">
   <h3>🫁 Endotracheal (ET) Tube</h3>
   <p>Passed through mouth (preferred) or nose into trachea. Used for airway protection, suctioning, and mechanical ventilation.</p>
@@ -2332,13 +2346,8 @@ document.getElementById('sec-airway').innerHTML=`
   <div class="trap"><span class="tag">Trap 2 — suction technique</span>Suction only on <b>withdrawal</b>, 10 to 15 seconds max, hyperoxygenate before and after. Options that suction on insertion or for 30 seconds are the near-misses.</div>
   <div class="trap"><span class="tag">Trap 3 — trach bedside equipment</span>The obturator and a spare tube of the <b>same size and one size smaller</b>. Options listing only one of those are incomplete.</div>
 </div>
-<div id="q-airway"></div>`;
-renderFilteredQuiz('q-airway', secQ(EXAM.filter(q=>q.topic==='airway')), 'Airway practice', 'Airway');
 
-document.getElementById('sec-chesttube').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🧯</span> Chest Tube Management</h2>
-<p class="intro-line">Your professor's speaker notes went DEEP here — that means it's coming. This is "easy points" if you know the chambers.</p>
-
+<div class="grphead"><h3>Chest Tubes</h3><p class="grp-sub">Your professor's speaker notes went DEEP here — that means it's coming. This is "easy points" if you know the chambers.</p></div>
 <div class="card" style="border-color:var(--pink)">
   <h3>🫧 The 3 Chambers (the whole game)</h3>
   <table class="lab">
@@ -2383,13 +2392,15 @@ document.getElementById('sec-chesttube').innerHTML=`
   <div class="trap"><span class="tag">Trap 3 — clamping as a reflex</span>"Clamp the tube" appears in almost every chest tube stem. You almost never clamp, because it traps air.</div>
   <div class="trap"><span class="tag">Trap 4 — tidaling read as a problem</span>Tidaling is <b>normal</b>. Absent tidaling means the lung re-expanded or the tube is obstructed.</div>
 </div>
-<div id="q-chesttube"></div>`;
-renderFilteredQuiz('q-chesttube', secQ(EXAM.filter(q=>q.topic==='airway')), 'Chest tube practice', 'Chest Tubes');
 
-document.getElementById('sec-copd').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🌬️</span> COPD & Asthma</h2>
-<p class="intro-line">Your professor specifically listed COPD + asthma manifestations + drugs as test points.</p>
+<div id="q-respacute"></div>`;
+renderFilteredQuiz('q-respacute', secQ(EXAM.filter(q=>['pneumonia','airway'].includes(q.topic))), 'Acute Respiratory practice', 'Acute Respiratory');
 
+document.getElementById('sec-respchronic').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🌬️</span> Chronic Pulmonary</h2>
+<p class="intro-line">Chapter 21 — COPD, asthma, bronchiectasis, and tuberculosis. The long-haul conditions.</p>
+
+<div class="grphead"><h3>COPD &amp; Asthma</h3><p class="grp-sub">Your professor specifically listed COPD + asthma manifestations + drugs as test points.</p></div>
 <div class="card">
   <h3>🚬 COPD — progressive, IRREVERSIBLE airflow obstruction</h3>
   <p>Includes <b>chronic bronchitis + emphysema</b>. #1 risk factor = <b>cigarette smoking</b>.</p>
@@ -2447,13 +2458,18 @@ document.getElementById('sec-copd').innerHTML=`
   <div class="trap"><span class="tag">Trap 3 — inhaler order</span>Bronchodilator <b>first</b>, then the corticosteroid, then rinse. Reversed order is the most common distractor.</div>
   <div class="trap"><span class="tag">Trap 4 — oxygen misread as withholding</span>The 88 to 92% target is about <b>controlled delivery</b>, not rationing. Any option that withholds oxygen from a patient in true distress is wrong.</div>
 </div>
-<div id="q-copd"></div>`;
-renderFilteredQuiz('q-copd', secQ(EXAM.filter(q=>q.topic==='copd')), 'COPD and asthma practice', 'COPD/Asthma');
+<div class="card">
+  <h3>Causes and risk factors in COPD</h3>
+  <ul class="clean">
+    <li><b>Smoking is the leading cause</b> — and the single most important modifiable factor. Cessation slows progression at any stage.</li>
+    <li><b>Alpha-1 antitrypsin deficiency</b> — an inherited cause. Suspect it in a patient with <b>emphysema who is young, never smoked, or has a strong family history</b>. Alpha-1 antitrypsin normally protects lung tissue from enzymes that break it down; without it, alveoli are destroyed early.</li>
+    <li>Occupational dusts and chemicals, indoor and outdoor air pollution, and repeated childhood respiratory infections.</li>
+  </ul>
+  <div class="hy"><span class="tag">The stem that signals it</span>A <b>40-year-old nonsmoker with emphysema</b> is not a random detail. That is the alpha-1 antitrypsin question.</div>
+</div>
 
-document.getElementById('sec-tb').innerHTML=`
-<h2 class="sec-title"><span class="sec-emoji">🔬</span> Tuberculosis (TB)</h2>
-<p class="intro-line">Test & treatment specifically flagged by your professor.</p>
 
+<div class="grphead"><h3>Tuberculosis</h3><p class="grp-sub">Test & treatment specifically flagged by your professor.</p></div>
 <div class="card">
   <h3>🦠 The Basics</h3>
   <p>Organism = <b>Mycobacterium tuberculosis</b>. Transmission = <b>AIRBORNE droplets</b>.</p>
@@ -2527,8 +2543,25 @@ document.getElementById('sec-tb').innerHTML=`
   <div class="hy"><span class="tag">Distinguish it</span><b>Bronchiectasis</b> = irreversible airway dilation with copious purulent sputum. <b>Chronic bronchitis</b> = productive cough <b>3 months in each of 2 consecutive years</b>. Both produce sputum; the structural damage is what differs.</div>
 </div>
 
-<div id="q-tb"></div>`;
-renderFilteredQuiz('q-tb', secQ(EXAM.filter(q=>q.topic==='tb')), 'TB practice', 'Tuberculosis');
+
+<div id="q-respchronic"></div>`;
+renderFilteredQuiz('q-respchronic', secQ(EXAM.filter(q=>['copd','tb'].includes(q.topic))), 'Chronic Pulmonary practice', 'Chronic Pulmonary');
+
+</script>
+<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.getElementById('sec-blood').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🩸</span> Blood Transfusion & IV Therapy</h2>
