@@ -346,6 +346,7 @@ function updateProg(){
 /* ===== NAV / SECTIONS ===== */
 const SECTIONS=[
   {id:'home',label:'🏠 Start'},
+  {id:'cram',label:'🎯 Final Cram'},
   {id:'hisquiz',label:'📄 His Practice Quiz'},
   {id:'howto',label:'🔎 How to Answer'},
   {id:'why',label:'🧠 Why Engine'},
@@ -966,6 +967,32 @@ document.getElementById('sec-home').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">🏠</span> Unit 2 Study Lab</h2>
 <p class="intro-line">Fluids, electrolytes, acid-base, and respiratory start to finish. Rebuilt for the Cohort 0527E retake.</p>
 
+<div class="card" style="border-color:var(--red);background:var(--red-soft)">
+  <h3>⭐ HIS FOCUS LIST — what he flagged for the exam</h3>
+  <p class="intro-line" style="margin-top:0">Straight from your notes and his lecture. <b>Everything here he named out loud.</b> Tap the tab listed and go to that card.</p>
+  <table class="lab">
+    <tr><th>Focus point</th><th>The detail he gave</th><th>Where</th></tr>
+    <tr><td><b>Pleural effusion</b></td><td>Fluid compressing the lung. Thoracentesis or chest tube</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Aspiration</b></td><td><b>SUDDEN.</b> Swallow study before oral intake. Airway protection prevents cardiac arrest</td><td>🚨 Acute</td></tr>
+    <tr><td><b>ARDS</b></td><td><b>Intubation and provide oxygen.</b> Refractory hypoxemia. Prone positioning</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Absent reflexes · compensating</b></td><td>Loss of deep tendon reflexes = <b>hypermagnesemia</b> (RENAL). Swallow study for airway protection</td><td>⚡ Lytes · 🚨 Acute</td></tr>
+    <tr><td><b>⭐ Acute respiratory failure</b></td><td><b>Hypoxemia PaO₂ under 60 · HYPERCAPNIA PaCO₂ over 50 WITH acidosis · SpO₂ below 90%.</b> Air hunger "like a fish out of water," gasping</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Tracheostomy</b></td><td><b>Suction when needed, not on a schedule.</b> Obturator and spare tube at the bedside</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Penetrating trauma</b></td><td><b>Top 3 ribs breaking is dangerous — they bleed out quickly.</b> Subclavian and aorta sit underneath</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Hemorrhagic shock</b></td><td><b>Crystalloids carry electrolytes. Colloid = albumin.</b> Blood loss is replaced with blood</td><td>💧 Fluids · 🚨 Acute</td></tr>
+    <tr><td><b>Tuberculosis</b></td><td><b>Signs and symptoms.</b> Cough over 3 weeks, night sweats, afternoon fever, weight loss, hemoptysis</td><td>🌬️ Chronic</td></tr>
+    <tr><td><b>Pulmonary edema / embolism</b></td><td><b>Give thrombolytics</b> for massive PE. Anticoagulants prevent; thrombolytics dissolve</td><td>🚨 Acute</td></tr>
+    <tr><td><b>VTE, DVT</b></td><td>Same disease, two locations. Virchow's triad. <b>Never massage a suspected DVT</b></td><td>🚨 Acute</td></tr>
+    <tr><td><b>⭐ COPD oxygen</b></td><td><b>No more than 2 L.</b> Target 88–92% with controlled delivery</td><td>🌬️ Chronic · 🚨 Acute</td></tr>
+    <tr><td><b>⭐ Oxygen therapy</b></td><td><b>Venturi mask → specific oxygen percentages.</b> The most precise device</td><td>🚨 Acute</td></tr>
+    <tr><td><b>Asthma</b></td><td>Reversible. Rescue vs controller. Silent chest is the emergency</td><td>🌬️ Chronic</td></tr>
+    <tr><td><b>Sleep apnea</b></td><td>Polysomnography. CPAP first-line. Opioid sensitivity after surgery</td><td>👃 Upper</td></tr>
+    <tr><td><b>Arteries vs veins</b></td><td><b>Arteries carry AWAY from the heart. Veins carry TO the heart.</b></td><td>💧 Fluids</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ The single most highlighted item in your notes</div><div class="big">HYPERCAPNIA — PaCO₂ over 50 WITH acidosis</div><div class="exp">You highlighted that one in yellow. Note the <b>"with acidosis"</b> — a high CO₂ alone in a compensated COPD patient is their baseline. It is <b>failure</b> when the pH drops with it.</div></div>
+  <div class="trap"><span class="tag">⚠️ Check your chapter list</span>Your notes say <b>"Unit 2 test: 10, 17, 20, 21."</b> The scope we have been working from is <b>10, 17, 18, 19, 20, 21</b>. If <b>18 (upper respiratory)</b> and <b>19 (pneumonia)</b> are actually off this exam, that changes what you study and the even-chapter draw. <b>Worth confirming with him.</b></div>
+</div>
+
 <div class="card" style="border-color:var(--teal)">
   <h3>✅ Unit scope is unchanged</h3>
   <p><b>Unit 2 exam: Monday 9/14.</b> The units did not shift this term — Casteel is <b>stacking chapters</b> around the Labor Day holiday, so several get taught on the same night. The exam content is the same as always.</p>
@@ -1159,6 +1186,145 @@ renderFilteredQuiz('q-tricks', secQ(EXAM.filter(q=>q.topic==='clinical'||q.hot))
 
 </script>
 <script>
+document.getElementById('sec-cram').innerHTML=`
+<h2 class="sec-title"><span class="sec-emoji">🎯</span> Final Cram</h2>
+<p class="intro-line">Everything that must be memorized, on one page. Read this last, and again in the parking lot.</p>
+
+<div class="tipbar">⏱️ <b>If you have 20 minutes, read only this page.</b> If you have an hour, read this page then do his 27 questions.</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>🔢 The numbers</h3>
+  <table class="lab">
+    <tr><td><b>pH</b></td><td>7.35–7.45 · <b>7.35–7.39 = acid side</b></td><td><b>Na⁺</b></td><td>135–145</td></tr>
+    <tr><td><b>PaCO₂</b></td><td>35–45 · lungs · acid</td><td><b>K⁺</b></td><td>3.5–5.0</td></tr>
+    <tr><td><b>HCO₃</b></td><td>22–26 · kidneys · base</td><td><b>Ca²⁺</b></td><td>8.5–10.5</td></tr>
+    <tr><td><b>PaO₂</b></td><td>80–100</td><td><b>Mg²⁺</b></td><td>1.5–2.5</td></tr>
+    <tr><td><b>SaO₂</b></td><td>95–100%</td><td><b>PO₄</b></td><td>2.5–4.5</td></tr>
+    <tr><td><b>Osmolality</b></td><td>270–300</td><td><b>Cl⁻</b></td><td>96–106</td></tr>
+    <tr><td colspan="4"><b>Respiratory failure:</b> PaO₂ <b>under 60</b> · PaCO₂ <b>over 50 WITH acidosis</b> · SpO₂ <b>under 90%</b> · <b>COPD target 88–92%, no more than 2 L</b></td></tr>
+  </table>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>🩸 ABG in 15 seconds</h3>
+  <div class="mnem"><div class="tag">Step 1</div><div class="big">ROME — Respiratory OPPOSITE, Metabolic EQUAL</div></div>
+  <div class="mnem"><div class="tag">Step 2 — compensation: just count</div><div class="big">ONE abnormal = none · BOTH + bad pH = partial · BOTH + normal pH = FULL</div></div>
+  <table class="lab">
+    <tr><th>Condition</th><th>Gas</th></tr>
+    <tr><td>COPD · opioid OD · hypoventilation · neuromuscular</td><td><b>↓pH ↑CO₂</b> — resp acidosis</td></tr>
+    <tr><td>Anxiety · pain · fever · early PE · over-ventilation</td><td><b>↑pH ↓CO₂</b> — resp alkalosis</td></tr>
+    <tr><td>DKA · shock/lactate · renal failure · <b>DIARRHEA</b></td><td><b>↓pH ↓HCO₃</b> — metabolic acidosis</td></tr>
+    <tr><td><b>VOMITING</b> · NG suction · diuretics · antacids</td><td><b>↑pH ↑HCO₃</b> — metabolic alkalosis</td></tr>
+  </table>
+  <div class="mnem"><div class="tag">The GI pair</div><div class="big">VOMIT acid → ALKALOSIS · POOP base → ACIDOSIS</div><div class="exp"><b>Kidney problem = automatically METABOLIC. Lung problem = automatically RESPIRATORY.</b> Kussmaul IS the compensation.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>💧 Fluids — the whole topic</h3>
+  <div class="mnem"><div class="tag">Tonicity</div><div class="big">hypO swells cells like an O · hypER shrivels them</div></div>
+  <table class="lab">
+    <tr><th>Situation</th><th>Fluid</th></tr>
+    <tr><td>Most things — head injury, vomiting, diarrhea, DKA start, dehydration</td><td><b>0.9% NS</b></td></tr>
+    <tr><td><b>Blood transfusion</b></td><td><b>0.9% NS ONLY</b> (dextrose lyses, LR clots)</td></tr>
+    <tr><td><b>Burns</b></td><td><b>LR</b> (Parkland)</td></tr>
+    <tr><td><b>Liver failure</b></td><td><b>D5W</b> (LR is contraindicated)</td></tr>
+    <tr><td><b>Severe symptomatic hyponatremia · cerebral edema</b></td><td><b>3% NS</b> — correct SLOWLY</td></tr>
+    <tr><td><b>Hypoglycemia</b></td><td>D50W / D5W</td></tr>
+  </table>
+  <ul class="clean">
+    <li><b>Crystalloids LEAK OUT</b> (3:1 for blood loss). <b>Colloids STAY IN and PULL</b> (albumin, ~1:1).</li>
+    <li><b>Hypotonic contraindicated:</b> ↑ICP, head injury, burns, liver dysfunction, hypotension.</li>
+    <li><b>D5W:</b> isotonic in the bag, <b>hypotonic in the body</b>. <b>D5½NS is HYPERTONIC.</b></li>
+    <li><b>LR avoid:</b> renal/liver dysfunction, <b>hyperkalemia</b>, lactic acidosis, burns for maintenance.</li>
+    <li><b>Daily weight is the best fluid indicator.</b> 1 kg = 1 L. <b>Deficit concentrates labs, overload dilutes them.</b></li>
+    <li><b>Nurse cannot change rate or fluid type without an order.</b> Slow or stop for safety, then notify.</li>
+    <li><b>Third spacing:</b> swollen AND intravascularly dry at the same time.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--amber)">
+  <h3>⚡ Electrolytes</h3>
+  <table class="lab">
+    <tr><th></th><th>LOW</th><th>HIGH</th><th>ECG</th></tr>
+    <tr><td><b>Na</b></td><td><b>SALT LOSS</b> · brain swells, seizures</td><td><b>FRIED</b> · thirst, fever, restless</td><td>—</td></tr>
+    <tr><td><b>K</b></td><td><b>6 L's</b> · <b>constipation</b></td><td><b>MURDER</b> · <b>diarrhea</b></td><td>Low <b>flat T + U</b> · High <b>peaked T</b></td></tr>
+    <tr><td><b>Ca</b></td><td><b>CATS go numb</b> · Trousseau/Chvostek</td><td><b>Bones Stones Groans Moans</b></td><td>Low <b>long QT</b> · High <b>short QT</b></td></tr>
+    <tr><td><b>Mg</b></td><td><b>STARVED</b> · reflexes <b>UP</b></td><td><b>RENAL</b> · reflexes <b>GONE</b> (1st sign)</td><td>Low <b>torsades</b> · High <b>long PR</b></td></tr>
+  </table>
+  <ul class="clean">
+    <li><b>Replace MAGNESIUM first</b> or potassium will not correct.</li>
+    <li><b>Hyperkalemia order: PROTECT (calcium gluconate) → SHIFT (insulin+D50, albuterol) → REMOVE (Kayexalate, dialysis).</b></li>
+    <li><b>NEVER IV push potassium.</b> Dilute, pump, check urine output.</li>
+    <li><b>Correct sodium slowly</b> — max 12 mEq/L per 24 hr. Too fast = <b>demyelination</b> or <b>cerebral edema</b>.</li>
+    <li><b>Hypercalcemia: saline FIRST, then loop diuretic, then bisphosphonate.</b> Encourage mobility, not bed rest.</li>
+    <li><b>Low Cl = alkalosis. High Cl = acidosis.</b> Phosphorus is <b>inverse to calcium</b>.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--blue)">
+  <h3>🫁 Oxygen · the devices</h3>
+  <table class="lab">
+    <tr><th>Device</th><th>Flow</th><th>FiO₂</th></tr>
+    <tr><td>Nasal cannula</td><td>1–6 L</td><td>24–44% (~4%/L)</td></tr>
+    <tr><td>Simple mask</td><td><b>5</b>–8 L (never under 5)</td><td>40–60%</td></tr>
+    <tr><td>Partial rebreather</td><td>6–11 L</td><td>60–75%</td></tr>
+    <tr><td><b>Non-rebreather</b></td><td>10–15 L</td><td><b>60–100% — MOST oxygen</b></td></tr>
+    <tr><td><b>⭐ VENTURI</b></td><td>4–12 L</td><td><b>24–50% EXACT — MOST PRECISE</b></td></tr>
+  </table>
+  <div class="mnem"><div class="tag">Two different questions</div><div class="big">Most PRECISE = Venturi · Most OXYGEN = non-rebreather</div><div class="exp"><b>Oxygen toxicity:</b> FiO₂ over 50% for 24–48 hr → substernal chest pain, dry cough. Keep entrainment ports uncovered. Reservoir bag must not collapse.</div></div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>❗ The findings that mean WORSE</h3>
+  <ul class="clean">
+    <li><b>Silent chest</b> in asthma — no air moving. Prepare to intubate.</li>
+    <li><b>CO₂ normalizing</b> in a hyperventilating asthmatic — they are tiring out.</li>
+    <li><b>Restlessness and confusion</b> — <b>earliest</b> hypoxia. Cyanosis is <b>last</b>.</li>
+    <li><b>Somnolence</b> in COPD — rising CO₂, not rest.</li>
+    <li><b>Frequent swallowing</b> post-tonsillectomy — bleeding.</li>
+    <li><b>Back or flank pain</b> during transfusion — acute hemolytic reaction.</li>
+    <li><b>Pain disappearing</b> in pleurisy — an effusion may have formed.</li>
+    <li><b>Falling respiratory rate</b> in a struggling patient — failure, not calm.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>🩹 Chest tubes · 🩸 Transfusion · 🧫 TB</h3>
+  <ul class="clean">
+    <li><b>Tidaling = good. WATER SEAL bubbling = LEAK. SUCTION chamber bubbling = normal.</b></li>
+    <li><b>Dislodged → gauze taped THREE sides. Disconnected → sterile water.</b> Almost never clamp. Over <b>100 mL/hr</b> = notify.</li>
+    <li><b>Transfusion:</b> 18–20 g · NS only · start within 30 min · <b>stay first 15 min</b> · finish in 4 hr · reaction → <b>STOP first</b>, NS with <b>new tubing</b>.</li>
+    <li><b>TACO = HYPERtension + JVD. TRALI = HYPOtension + fever.</b></li>
+    <li><b>RIPE:</b> Rifampin orange · INH needs B6 · Pyrazinamide uric acid · Ethambutol eyes. <b>All hepatotoxic.</b> <b>N95 on staff, surgical mask on patient.</b> Skin test = <b>exposure</b>; sputum confirms.</li>
+    <li><b>Anticoagulants PREVENT. Thrombolytics DISSOLVE.</b> Never massage a suspected DVT.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+  <h3>💊 Drugs</h3>
+  <div class="mnem"><div class="tag">The rule</div><div class="big">SHORT-acting = RESCUE · LONG-acting = MAINTENANCE</div><div class="exp"><b>Albuterol rescues. Salmeterol never during an attack.</b> Inhaler order: <b>bronchodilator → steroid → RINSE.</b></div></div>
+  <ul class="clean">
+    <li><b>Loop and thiazide WASTE potassium. Spironolactone KEEPS it</b> (so do ACE/ARBs).</li>
+    <li><b>Calcium gluconate has 3 jobs:</b> hypocalcemia, hyperkalemia cardiac protection, hypermagnesemia antidote.</li>
+    <li><b>Insulin/albuterol SHIFT potassium. Kayexalate REMOVES it.</b></li>
+    <li><b>Phosphate binders WITH meals.</b> Oxymetazoline <b>max 3 days</b> (rebound). Taper prednisone.</li>
+  </ul>
+</div>
+
+<div class="card" style="border-color:var(--teal)">
+  <h3>🧠 In the room</h3>
+  <ul class="clean">
+    <li><b>Cover the options.</b> Read the last sentence first. Circle <b>FIRST / BEST / EXCEPT / NOT / further teaching</b>.</li>
+    <li><b>Answer in your head</b> before looking at the choices.</li>
+    <li><b>Four sick patients?</b> Rank by what kills fastest — airway, breathing, circulation, neuro change.</li>
+    <li><b>Stalling answers</b> — notify, document, continue to monitor, recheck in an hour — are usually wrong if there is something you can do now.</li>
+    <li><b>Do not change answers</b> unless you misread a qualifier.</li>
+    <li><b>You passed Unit 1 with this method.</b> Same method, different content.</li>
+  </ul>
+</div>
+
+<div id="q-cram"></div>`;
+renderFilteredQuiz('q-cram', secQ(EXAM.filter(q=>q.hot)), 'High-yield check', 'Final Cram');
 document.getElementById('sec-hisquiz').innerHTML=`
 <h2 class="sec-title"><span class="sec-emoji">📄</span> His Practice Quiz</h2>
 <p class="intro-line">All 27 questions Casteel sent out, word for word, with his answer key and full rationales. This is the closest thing you have to the real exam.</p>
@@ -2798,7 +2964,7 @@ document.getElementById('sec-respacute').innerHTML=`
 
 <div class="card" style="border-color:var(--red)">
   <h3>🆘 Acute Respiratory Failure</h3>
-  <div class="mnem"><div class="tag">⭐ The defining numbers</div><div class="big">PaO₂ under 60 · PaCO₂ over 50 · pH under 7.35</div><div class="exp">Sometimes called the 50/50 rule. Failure means the lungs can no longer maintain gas exchange.</div></div>
+  <div class="mnem"><div class="tag">⭐ The defining numbers</div><div class="big">PaO₂ under 60 · PaCO₂ over 50 with acidosis · SpO₂ below 90%</div><div class="exp">Sometimes called the 50/50 rule. <b>Hypoxemia = PaO₂ under 60. Hypercapnia = PaCO₂ over 50 WITH acidosis (pH under 7.35).</b> Patients describe it as <b>air hunger — "like a fish out of water"</b>, and you will see <b>gasping</b>. Failure means the lungs can no longer maintain gas exchange.</div></div>
   <table class="lab">
     <tr><th>Type</th><th>Problem</th><th>Causes</th></tr>
     <tr><td><b>Hypoxemic (Type I)</b></td><td><b>Oxygenation</b> fails. Low PaO₂ with normal or low CO₂</td><td>Pneumonia, ARDS, pulmonary edema, PE, atelectasis</td></tr>
@@ -2861,7 +3027,7 @@ document.getElementById('sec-respacute').innerHTML=`
   <h3>💥 Chest trauma</h3>
   <table class="lab">
     <tr><th>Injury</th><th>Why it matters</th><th>Nursing focus</th></tr>
-    <tr><td><b>⭐ Upper rib fractures (1–3)</b></td><td><b>High mortality.</b> It takes enormous force to break them, and the <b>subclavian vessels and aorta</b> sit right there. A severed major vessel <b>exsanguinates rapidly</b></td><td>Suspect major vascular injury. Watch for signs of <b>hemorrhagic shock</b></td></tr>
+    <tr><td><b>⭐ Upper rib fractures (top 3) · penetrating trauma</b></td><td><b>High mortality — they bleed out quickly.</b> It takes enormous force to break them, and the <b>subclavian vessels and aorta</b> sit right there. A severed major vessel <b>exsanguinates rapidly</b></td><td>Suspect major vascular injury. Watch for signs of <b>hemorrhagic shock</b></td></tr>
     <tr><td><b>Lower rib fractures</b></td><td>Risk of <b>liver and spleen</b> injury underneath</td><td>Abdominal assessment, watch for internal bleeding</td></tr>
     <tr><td><b>Flail chest</b></td><td>Two or more ribs broken in two or more places → that segment moves <b>paradoxically</b> (in on inspiration, out on expiration)</td><td>Oxygen, pain control so they will breathe, positioning, often ventilation</td></tr>
     <tr><td><b>Pulmonary contusion</b></td><td><b>Bruised lung</b> from blunt trauma. Damaged vessels leak into alveoli and <b>gas exchange fails</b>. Often worsens over 24–48 hours</td><td>Monitor closely even if initially stable. Oxygen, careful fluids, pain control</td></tr>
@@ -2885,6 +3051,23 @@ document.getElementById('sec-respacute').innerHTML=`
     <tr><td><b>Colloids</b></td><td>Stay in the vessel and pull fluid in. Less volume for the same effect</td></tr>
   </table>
   <div class="hy"><span class="tag">The link back to acid-base</span>Shock means tissues are perfusing poorly → anaerobic metabolism → <b>lactic acid</b> → <b>metabolic acidosis</b> with a low pH and low bicarbonate. A falling pH in a trauma patient is a <b>perfusion</b> problem until proven otherwise.</div>
+</div>
+
+<div class="card" style="border-color:var(--red)">
+  <h3>⭐ VTE, DVT, and thrombolytics <span class="pill">he flagged this</span></h3>
+  <p class="why-chain"><b>VTE = venous thromboembolism</b>, the umbrella term. A <b>DVT</b> is the clot in the leg; a <b>PE</b> is that clot after it breaks loose and travels to the lung. Same disease, two locations.</p>
+  <table class="lab">
+    <tr><th>Topic</th><th>Detail</th></tr>
+    <tr><td><b>DVT signs</b></td><td>Unilateral <b>calf pain, swelling, warmth, redness</b>, a palpable cord. Often <b>silent</b> — the first sign can be the PE itself</td></tr>
+    <tr><td><b>Virchow's triad</b></td><td><b>Venous stasis</b> (immobility, surgery, long travel) · <b>hypercoagulability</b> (cancer, pregnancy, oral contraceptives, dehydration) · <b>endothelial injury</b> (trauma, central lines, surgery)</td></tr>
+    <tr><td><b>Prevention</b></td><td><b>Early ambulation</b> · leg exercises, ankle dorsiflexion and rotation · <b>SCDs</b> · prophylactic anticoagulation · hydration. <b>Never massage a suspected DVT</b> — it can dislodge the clot</td></tr>
+    <tr><td><b>PE signs</b></td><td><b>SUDDEN</b> dyspnea, pleuritic chest pain, tachycardia, anxiety and a sense of doom, hypoxemia, sometimes hemoptysis</td></tr>
+    <tr><td><b>⭐ Anticoagulants</b></td><td><b>Heparin, enoxaparin, warfarin, DOACs.</b> They <b>PREVENT the clot from growing</b> and stop new ones. They do <b>NOT</b> dissolve the existing clot — the body does that over time</td></tr>
+    <tr><td><b>⭐ Thrombolytics</b></td><td><b>Alteplase (tPA).</b> These <b>DISSOLVE the clot that is already there.</b> Reserved for <b>massive PE with hemodynamic instability</b> — hypotension, shock, right heart strain</td></tr>
+    <tr><td><b>Thrombolytic risk</b></td><td><b>BLEEDING</b> is the major complication. Contraindicated with <b>active bleeding, recent surgery or trauma, recent stroke, intracranial pathology, or uncontrolled hypertension</b>. Monitor neuro status closely — <b>intracranial hemorrhage</b> is the feared event</td></tr>
+    <tr><td><b>Nursing during thrombolytics</b></td><td>Minimize needle sticks · no IM injections · hold pressure longer · <b>watch for bleeding from any site, change in LOC, or sudden headache</b></td></tr>
+  </table>
+  <div class="mnem"><div class="tag">⭐ The distinction he can build on</div><div class="big">Anticoagulants PREVENT. Thrombolytics DISSOLVE.</div><div class="exp">Heparin will not break up an existing clot. If the stem describes a <b>massive PE with hypotension</b> and asks what dissolves it, the answer is a <b>thrombolytic</b>, not more heparin.</div></div>
 </div>
 
 <div class="card" style="border-color:var(--amber)">
@@ -3025,6 +3208,7 @@ document.getElementById('sec-respacute').innerHTML=`
     <li><b>Humidification is required</b> — the nose no longer warms or moistens the air. Dry air thickens secretions and crusts the tube.</li>
     <li><b>Cuffed vs uncuffed:</b> a cuff protects against aspiration and allows positive-pressure ventilation but prevents speech. Deflating the cuff or using a speaking valve allows phonation.</li>
   </ul>
+  <div class="hy"><span class="tag">⭐ Suction when NEEDED, not on a schedule</span>Suction based on <b>assessment</b> — visible or audible secretions, coarse crackles, a rising peak pressure on the ventilator, falling saturation, or the patient requesting it. <b>Routine scheduled suctioning is not evidence-based</b> and causes unnecessary hypoxia and airway trauma.</div>
   <div class="hy"><span class="tag">Suctioning technique</span><b>Hyperoxygenate first.</b> Insert <b>without suction applied</b>, apply suction <b>only on withdrawal</b> while rotating, and limit each pass to <b>10–15 seconds</b>. Allow recovery between passes. Suctioning removes oxygen along with secretions, and prolonged passes cause <b>hypoxia, bradycardia, and dysrhythmias</b>.</div>
   <div class="trap"><span class="tag">The trap</span>Any option that applies suction <b>on insertion</b>, suctions for <b>longer than 15 seconds</b>, or instills saline before suctioning is wrong. Saline instillation does not thin secretions and pushes bacteria into the lower airway.</div>
 </div>
