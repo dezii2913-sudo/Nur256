@@ -1151,6 +1151,9 @@ document.getElementById('sec-cram').innerHTML=`
   </ul>
 </div>
 
+<div class="tipbar">🎯 <b>18 exam-level questions (3 from every chapter plus asepsis and drugs) and 2 dropdown matches.</b> <button class="mini" style="margin-left:6px" onclick="drawCram();drawCramMatch()">🔄 New set</button></div>
+<div id="quiz-cram"></div>
+<div id="quiz-cram-match"></div>
 `;
 
 document.getElementById('sec-hooks').innerHTML=`
@@ -4389,7 +4392,6 @@ startDrill();
 const EXAM=[
 {topic:'dka',q:'A patient with Type 1 diabetes is admitted with glucose 480, ketones in urine, and deep rapid breathing. Which condition is this?',o:['Prediabetes','HHS','Hypoglycemia','DKA'],c:3,t:'single',r:'Type 1 + high glucose + ketones + Kussmaul breathing = DKA (ketoacidosis).'},
 {topic:'dka',q:'Which insulin is given IV in DKA?',o:['Regular','Lispro','Glargine','NPH'],c:0,t:'single',r:'Only regular insulin is given IV.'},
-{topic:'dka',hot:true,q:'What is the FIRST priority in treating DKA?',o:['An IV insulin bolus given first','Oral carbohydrates to raise intake','Sodium bicarbonate for the acidosis','IV fluid resuscitation with 0.9% NS'],c:3,t:'single',r:'Fluids first — the patient is profoundly dehydrated; insulin before rehydration risks hypotension.'},
 {topic:'dka',q:'After starting insulin in DKA, the nurse monitors closely for:',o:['Hyperkalemia','Hypokalemia','Hypercalcemia','Hypernatremia'],c:1,t:'single',r:'Insulin drives potassium into cells → serum K⁺ falls. Monitor and replace.'},
 {topic:'dka',q:'Which finding distinguishes DKA from HHS?',o:['Markedly elevated blood glucose','Ketoacidosis with Kussmaul breathing','Increased thirst and urination','Profound dehydration and thirst'],c:1,t:'single',r:'Only DKA has ketoacidosis and Kussmaul breathing; both share hyperglycemia and dehydration.'},
 {topic:'dka',q:'A Type 2 diabetic presents with glucose 720, profound dehydration, and altered mental status but no ketones. This is:',o:['Normal','Hypoglycemia','HHS','DKA'],c:2,t:'single',r:'HHS: extreme hyperglycemia + dehydration WITHOUT ketosis, in Type 2.'},
@@ -4429,7 +4431,6 @@ const EXAM=[
 {topic:'eye',hot:true,q:'A patient reports sudden floaters, flashes, and a curtain over vision. This suggests:',o:['Acute angle-closure glaucoma attack','Dry eye syndrome with irritation','Retinal detachment, an ocular emergency','A rapidly maturing cataract'],c:2,t:'single',r:'Retinal detachment — needs prompt surgery.'},
 {topic:'ear',q:'The classic triad of Ménière\'s disease is:',o:['Episodic vertigo, tinnitus, fluctuating hearing loss','Tinnitus with ear pain and persistent nausea','Headache with vertigo and a low-grade fever','Ear pain with fever and purulent discharge'],c:0,t:'single',r:'Vertigo + tinnitus + fluctuating sensorineural hearing loss.'},
 {topic:'ear',q:'Dietary management for Ménière\'s disease:',o:['Low sodium','Low fat','High protein','High sodium'],c:0,t:'single',r:'Low sodium (+ diuretics) reduces inner-ear fluid pressure.'},
-{topic:'ear',hot:true,q:'During a Ménière\'s vertigo attack, the priority is:',o:['Offer a large meal to settle the nausea','Encourage walking to help the dizziness pass','Fall safety: lie still in a quiet, darkened room','Turn on bright lights to help orientation'],c:2,t:'single',r:'Vertigo → falls; keep the patient safe and still.'},
 {topic:'ear',q:'Hearing loss from earwax or middle-ear fluid is:',o:['Conductive','Sensorineural','Central','Functional'],c:0,t:'single',r:'Conductive — blockage in outer/middle ear; often reversible.'},
 {topic:'ear',q:'Age-related sensorineural hearing loss is called:',o:['Otitis','Presbycusis','Presbyopia','Tinnitus'],c:1,t:'single',r:'Presbycusis — high-frequency loss first.'},
 {topic:'ear',q:'Which drugs are ototoxic? (SATA)',o:['High-dose aspirin','Furosemide (loop diuretic)','Acetaminophen','Aminoglycosides','Some chemo agents'],c:[0,1,3,4],t:'multi',r:'Aminoglycosides, loop diuretics, high-dose aspirin, and some chemo are ototoxic. Acetaminophen is not.'},
@@ -4453,18 +4454,15 @@ const EXAM=[
 {topic:'eye',q:'Which statement about lost vision in glaucoma is true?',o:['It resolves on its own within months','Surgery restores the vision that was lost','It fully returns once drops are started','It is permanent; treatment prevents further loss'],c:3,t:'single',r:'Optic nerve damage is permanent; treatment preserves remaining vision.'},
 {topic:'dka',q:'A patient with hypoglycemia unawareness needs:',o:['Frequent glucose checks and family taught to give glucagon','Only insulin adjustment with no other changes','No treatment is needed until symptoms return','Less frequent monitoring since symptoms are absent'],c:0,t:'single',r:'They lose early warning signs → check often; family should know glucagon.'},
 {topic:'skin',q:'When glucose reaches ~250 during DKA treatment, the nurse anticipates:',o:['Giving sodium bicarbonate by IV push','Adding dextrose (D5W) to the IV fluids','Stopping the insulin infusion entirely','Stopping the IV fluids at that point'],c:1,t:'single',r:'Add dextrose so glucose doesn\'t crash while insulin keeps clearing ketones.'},
-{topic:'eye',hot:true,q:'Which patient should the nurse see FIRST?',o:['Glaucoma patient due for scheduled drops','Healing Stage 2 pressure injury on the sacrum','Type 1 diabetic who is confused, sweaty, and shaky','Type 2 diabetic with a glucose of 190'],c:2,t:'single',r:'Hypoglycemia signs = acute brain emergency → see first.'},
 {topic:'dka',q:'Sick-day rules for diabetes include: (SATA)',o:['Check glucose/ketones every 3–4 hours','Never stop insulin','Take small carb portions','Sip fluids hourly','Stop all monitoring'],c:[0,1,2,3],t:'multi',r:'Continue insulin, monitor glucose/ketones, stay hydrated, small carbs. Never stop monitoring.'},
 {topic:'diabetes',hot:true,q:'A patient recovering from eye surgery suddenly reports severe eye pain. The nurse should:',o:['Remove the eye shield to inspect the surgical site','Document the report and reassess next rounds','Tell the patient to rub the eye for relief','Notify the provider, it could signal a complication'],c:3,t:'single',r:'Sudden pain post-eye-surgery can signal increased IOP or hemorrhage — report immediately.'},
 {topic:'diabetes',q:'Which is a sign of autonomic neuropathy in diabetes?',o:['Stocking-glove numbness in both lower legs','Peaked T waves on the cardiac monitor','Barrel chest with prolonged expiration','Orthostatic hypotension and delayed gastric emptying'],c:3,t:'single',r:'Autonomic neuropathy affects automatic functions: orthostatic hypotension, gastroparesis, silent MI, bladder issues.'},
 {topic:'eye',q:'A patient asks why their blurry cataract vision is worse in bright light. Best explanation:',o:['The cloudy lens scatters light, causing glare','The retina is bleeding behind the lens','The lens is beginning to detach','The pressure in the eye is climbing'],c:0,t:'single',r:'A cloudy lens scatters incoming light → glare and halos, worse in bright light/at night.'},
-{topic:'complications',hot:true,q:'Which finding in a diabetic foot exam is MOST concerning?',o:['A small callus under the great toe','Slightly thickened toenails on both feet','Dry skin over the heels bilaterally','A non-healing ulcer with drainage and redness'],c:3,t:'single',r:'A non-healing, draining, red ulcer signals infection that can progress to amputation — most concerning.'},
 {topic:'dka',q:'The nurse is teaching about metformin. Which side effect is common?',o:['GI upset with nausea and diarrhea','Hypoglycemia when used alone','Progressive loss of vision','Hyperkalemia from renal effects'],c:0,t:'single',r:'Metformin commonly causes GI upset; it does not cause hypoglycemia by itself.'},
 {topic:'diabetes',q:'Which insulins can be mixed in the same syringe?',o:['Regular and NPH','NPH and detemir','Glargine and regular','No insulins can be mixed'],c:0,t:'single',r:'Regular and NPH can be mixed (clear before cloudy). Long-acting insulins are never mixed.'},
 {topic:'dka',q:'A key difference in HHS management vs DKA is:',o:['No IV fluids are needed in HHS management','No glucose monitoring is required during treatment','Insulin is not needed to reverse acidosis, there is none','Bicarbonate is given routinely instead of insulin'],c:2,t:'single',r:'HHS has no acidosis, so insulin is for glucose, not acid reversal; fluids are even more central.'},
 {topic:'complications',q:'Which statement about A1C is correct?',o:['It changes hour to hour with intake','It shows the glucose value from today','It measures circulating insulin levels','It reflects average glucose over about 3 months'],c:3,t:'single',r:'A1C = ~3-month average glucose.'},
 {topic:'ear',q:'A patient with peripheral neuropathy describes their symptoms as:',o:['Sharp central chest pain with exertion','Sudden painless loss of vision in one eye','Numbness and burning in a stocking-glove pattern','A constant high-pitched ringing in the ears'],c:2,t:'single',r:'Peripheral neuropathy = stocking-glove numbness/burning starting in toes/fingers.'},
-{topic:'dka',hot:true,q:'Which is the priority teaching to prevent DKA?',o:['Reduce protein intake to lower ketone load','Never omit insulin, especially when ill','Cut back on exercise to conserve glucose','Avoid all carbohydrates in the daily diet'],c:1,t:'single',r:'Omitting insulin during illness is the top DKA cause — never stop it.'},
 {topic:'eye',q:'A patient with glaucoma must understand that eye drops:',o:['Cure the disease within a few months','Will restore the vision already lost','Must be used lifelong to control the pressure','Are optional once pressure normalizes'],c:2,t:'single',r:'Drops control IOP for life; they prevent further loss but don\'t restore vision.'},
 {topic:'dka',q:'Which are signs of hypoglycemia? (SATA)',o:['Sweating','Tachycardia','Confusion','Fruity breath','Shakiness'],c:[0,1,2,4],t:'multi',r:'Sweating, shakiness, tachycardia (adrenergic) and confusion (neuro) are hypoglycemia. Fruity breath is DKA.'},
 {topic:'skin',q:'A patient with a Stage 4 pressure injury needs which nutrition focus?',o:['Low protein to reduce the metabolic burden','Fluid restriction to reduce wound drainage','High protein with adequate calories for healing','Low calorie intake to prevent extra weight'],c:2,t:'single',r:'Wound healing needs protein and calories; correct albumin/protein deficits.'},
@@ -4646,7 +4644,6 @@ const EXAM=[
 {topic:'insulin',hot:false,q:'A client\'s morning glucose is consistently elevated. The 3 AM glucose is 52 mg/dL. What does the nurse anticipate?',o:['Decreasing the evening insulin dose','Increasing the evening insulin dose','Adding a rapid-acting insulin at bedtime','Withholding the morning dose'],c:0,t:'single',r:'<b>A LOW 3 AM glucose with a high morning glucose is the SOMOGYI effect</b> \\u2014 nighttime hypoglycemia triggers counterregulatory hormones and rebound hyperglycemia. The fix is <b>LESS evening insulin</b> or a bedtime snack. If the 3 AM had been <b>high</b>, that would be <b>DAWN phenomenon</b>, needing <b>more</b> evening insulin. Same morning number, opposite fixes.'},
 {topic:'dka',hot:true,q:'A client with DKA has a serum potassium of 3.2 mEq/L. The provider prescribes an insulin drip. What should the nurse do?',o:['Start the insulin drip and recheck potassium in 4 hours','Hold the insulin, notify the provider, and anticipate potassium replacement first','Start the insulin drip at half the prescribed rate','Administer the insulin and give oral potassium with it'],c:1,t:'single',r:'<b>Insulin drives potassium INTO cells</b>, so starting a drip on a client who is <b>already hypokalemic</b> can drop the level into a lethal range and cause dysrhythmias. <b>Replace potassium first.</b> In DKA the serum potassium often reads normal or high on arrival while <b>total body potassium is depleted</b>.'},
 {topic:'dka',hot:true,q:'A client being treated for DKA has a glucose that has fallen from 620 to 240 mg/dL on an insulin drip. Which change does the nurse anticipate?',o:['Switching to subcutaneous long-acting insulin only','Increasing the insulin drip rate','Adding dextrose to the IV fluids while continuing the insulin drip','Stopping the insulin drip immediately'],c:2,t:'single',r:'<b>Dextrose is added once glucose reaches about 250</b> so the <b>insulin can keep running to clear the ketones and close the anion gap</b> without dropping the glucose too low. <b>Stopping the insulin stops ketone clearance</b> and the acidosis returns.'},
-{topic:'dka',hot:false,q:'Which assessment finding distinguishes DKA from HHS?',o:['Blood glucose above 600 mg/dL','Profound dehydration','Kussmaul respirations with fruity breath','Altered level of consciousness'],c:2,t:'single',r:'<b>Kussmaul respirations and fruity breath mean KETOSIS AND ACIDOSIS \\u2014 DKA only.</b> Both conditions have <b>high glucose and dehydration</b>, and HHS often has the <b>higher</b> glucose and <b>more profound</b> mental status change. <b>The question is always: is there acidosis?</b>'},
 {topic:'diabetes',hot:true,q:'A client with type 2 diabetes asks whether exercise is safe when the morning glucose is 280 mg/dL and urine ketones are positive. What should the nurse advise?',o:['Exercise vigorously to bring the glucose down faster','Exercise is safe at any glucose level for type 2 diabetes','Exercise only after taking an extra dose of oral medication','Do not exercise until the glucose is lower and ketones have cleared'],c:3,t:'single',r:'<b>Restrict exercise when glucose is above 250, especially with ketones.</b> Without enough insulin the exercising cells <b>cannot use the glucose</b>, so the body burns fat instead and <b>produces MORE ketones</b>, worsening acidosis. Exercise is also a <b>physiologic stressor that raises cortisol and glucose</b>.'},
 {topic:'diabetes',hot:true,q:'A client newly diagnosed with type 2 diabetes has an A1C of 6.1%. How should the nurse interpret this value?',o:['It confirms poorly controlled diabetes','It is a normal result requiring no follow-up','It falls in the prediabetes range and is below the diabetes threshold','It indicates the client has type 1 diabetes'],c:2,t:'single',r:'<b>Under 5.7% is normal, 5.7 to 6.4% is PREDIABETES, and 6.5% or higher confirms diabetes.</b> An A1C of 6.1% is in the prediabetes range \\u2014 which is the stage where <b>lifestyle change can still reverse the trajectory</b>.'},
 {topic:'diabetes',hot:false,q:'A client had gestational diabetes during pregnancy that resolved after delivery. What teaching is most important?',o:['Ongoing screening is needed because the lifetime risk of type 2 diabetes is significantly increased','No further follow-up is needed since the condition resolved','Insulin will be required with every future pregnancy','The child is guaranteed to develop type 1 diabetes'],c:0,t:'single',r:'<b>Gestational diabetes usually resolves after delivery but greatly raises the lifetime risk of type 2.</b> These clients need <b>ongoing screening</b> and lifestyle counseling. It also raised risks during the pregnancy for <b>macrosomia, birth injury, and neonatal hypoglycemia</b>.'},
@@ -4657,20 +4654,195 @@ const EXAM=[
 {topic:'derm',hot:true,q:'A client has a painful unilateral vesicular rash along a single dermatome on the right chest that does not cross midline. What does the nurse suspect?',o:['Cellulitis','Herpes zoster (shingles)','Impetigo','Contact dermatitis'],c:1,t:'single',r:'<b>Unilateral vesicles following ONE dermatome and not crossing midline is shingles.</b> Burning pain often precedes the rash. Antivirals work best <b>within 72 hours</b> of rash onset.'},
 {topic:'derm',hot:true,q:'A client is diagnosed with herpes zoster. Which precaution is correct?',o:['Contagious for 6 weeks after the rash resolves','Contagious only through respiratory droplets','Not contagious at any stage','Contagious as chickenpox to anyone never infected, until lesions crust'],c:3,t:'single',r:'You cannot \'catch shingles\' from someone, but the vesicle fluid <b>transmits varicella to anyone who has never had chickenpox or been vaccinated</b>. Contagious <b>until lesions crust over</b>. Keep away from <b>pregnant women, newborns, and the immunocompromised</b>. Contact precautions, airborne if disseminated.'},
 {topic:'derm',hot:true,q:'A child has honey-colored crusted lesions around the nose and mouth. What is the priority teaching?',o:['It is highly contagious; keep the child home until 24 hours of antibiotic therapy','Share towels only with immediate family','The lesions are not contagious once crusted','Apply a heating pad to speed healing'],c:0,t:'single',r:'<b>Honey-colored crust is impetigo</b> — highly contagious. <b>Stay home until 24 hours of treatment</b>, no sharing towels or linens, wash hands, keep nails short to prevent spread by scratching.'},
-{topic:'derm',hot:true,q:'Which lesion description matches psoriasis?',o:['Thick silvery-white scales on raised red plaques over elbows and knees','Grouped vesicles on an erythematous base','Honey-colored crusts around the mouth','A ring-shaped scaly patch with a clear center'],c:0,t:'single',r:'<b>Psoriasis: thick silvery-white scale on red plaques</b>, classically elbows, knees, scalp, and sacrum. It is <b>chronic, autoimmune, and NOT contagious</b>. Ring with a clear center is <b>tinea</b>; grouped vesicles are <b>herpes simplex</b>.'},
 {topic:'derm',hot:true,q:'A client with atopic dermatitis asks when to apply moisturizer. What is the nurse\'s response?',o:['Only when the skin feels dry and tight','Within 3 minutes of bathing, on damp skin','Just before showering','At bedtime on completely dry skin'],c:1,t:'single',r:'<b>Moisturize within 3 minutes of bathing while the skin is still damp</b> — that traps water in. Use <b>lukewarm</b> water and mild soap, <b>pat</b> dry rather than rub, keep nails short, and wear cotton. <b>Controlling the itch breaks the itch-scratch cycle</b> that causes lichenification and infection.'},
 {topic:'derm',hot:true,q:'A client develops a widespread painful rash with blistering and mouth and eye involvement 5 days after starting a sulfonamide antibiotic. What is the priority action?',o:['Apply a topical corticosteroid and reassess in 24 hours','Encourage fluids and monitor the rash','Stop the medication immediately and notify the provider','Administer diphenhydramine and continue the antibiotic'],c:2,t:'single',r:'<b>Rash plus MUCOUS MEMBRANE involvement plus blistering after a new drug is Stevens-Johnson syndrome</b> until proven otherwise. <b>Stop the causative drug immediately.</b> The patient is managed like a burn — fluids, pain control, wound care, ophthalmology. Common triggers: <b>sulfonamides, anticonvulsants, allopurinol, NSAIDs</b>.'},
-{topic:'derm',hot:true,q:'Which mole finding is most concerning for melanoma?',o:['A mole that has changed in size and recently began to itch','A uniformly brown mole present since childhood','A mole 3 mm in diameter with regular borders','A flat freckle that darkens slightly in summer'],c:0,t:'single',r:'<b>ABCDE: Asymmetry, Border irregular, Color varied, Diameter over 6 mm, EVOLVING.</b> <b>Evolving is the most important single sign</b> — any change in size, shape, or color, or a mole that itches or bleeds, warrants evaluation regardless of the other letters.'},
-{topic:'derm',hot:true,q:'Which type of skin cancer is the most common?',o:['Kaposi sarcoma','Basal cell carcinoma','Melanoma','Squamous cell carcinoma'],c:1,t:'single',r:'<b>Basal cell is the MOST COMMON and least dangerous</b> — pearly waxy papule with rolled borders, rarely metastasizes but locally destructive. <b>Melanoma is the MOST DEADLY.</b> Squamous cell is scaly and crusted and <b>can</b> metastasize.'},
 {topic:'derm',hot:true,q:'When assessing for skin cancer in a client with darker skin, which areas require particular attention?',o:['Palms, soles, nail beds, and mucous membranes','The scalp and hairline exclusively','The trunk and upper back only','Only sun-exposed areas of the face and arms'],c:0,t:'single',r:'Melanoma is less common in darker skin but is <b>diagnosed later and has worse outcomes</b>. The characteristic sites are <b>palms, soles, nail beds, and mucous membranes</b>, which are easy to overlook on a routine exam.'},
 {topic:'derm',hot:true,q:'A client has a red, warm, swollen, tender area on the lower leg with poorly defined borders and a fever. What is the priority nursing action?',o:['Mark the border with a pen and note the time, and anticipate systemic antibiotics','Scrub the area vigorously with antiseptic','Apply an occlusive dressing to trap moisture','Apply ice and elevate the limb'],c:0,t:'single',r:'<b>Cellulitis.</b> <b>Marking the border and timing it</b> lets you objectively track spread. Systemic antibiotics, elevation, warm compresses, and watching for sepsis. Common in <b>diabetics</b> and after any break in the skin.'},
 {topic:'derm',hot:true,q:'A client with tinea pedis asks how to prevent recurrence. What should the nurse teach?',o:['Soak the feet in warm water several times daily','Wear the same shoes daily to limit exposure','Apply a thick occlusive ointment and cover with plastic wrap','Keep the feet clean and completely dry, and change socks when damp'],c:3,t:'single',r:'<b>Fungus needs moisture.</b> Keep the area <b>clean and DRY</b>, dry thoroughly between the toes, change damp socks, alternate shoes, and use antifungal powder. Occlusive dressings and repeated soaking make it worse.'},
 {topic:'derm',hot:true,q:'A client is diagnosed with scabies. Which instruction is essential?',o:['All household members must be treated at the same time','Linens may be washed in cold water','Only the client requires treatment','Itching that persists after treatment means it failed'],c:0,t:'single',r:'<b>Treat all household contacts simultaneously</b>, symptomatic or not. Permethrin from <b>neck to toe</b> left on 8–14 hours. Wash linens in <b>hot</b> water and bag what cannot be washed for 72 hours. <b>Itching can persist for weeks after successful treatment</b> — that is not failure.'},
 {topic:'derm',hot:true,q:'How should the nurse document a raised, fluid-filled lesion measuring 0.5 cm?',o:['Vesicle','Pustule','Papule','Bulla'],c:0,t:'single',r:'<b>Fluid-filled under 1 cm is a VESICLE</b>; over 1 cm is a <b>bulla</b>. <b>Pus</b>-filled is a pustule. <b>Raised and solid</b> is a papule. The 1 cm line splits most of these pairs.'},
 {topic:'derm',hot:true,q:'A client has a raised, flat-topped lesion larger than 1 cm. How is this documented?',o:['Nodule','Plaque','Macule','Wheal'],c:1,t:'single',r:'<b>Plaque — raised, flat-topped, over 1 cm</b>, classic in psoriasis. A <b>macule</b> is flat with color change only. A <b>nodule</b> is deeper and solid. A <b>wheal</b> is raised, irregular, and transient, as in hives.'},
-{topic:'derm',hot:true,q:'Which teaching about sun protection is correct?',o:['A single morning application of SPF 15 lasts all day','Tanning beds are a safe alternative to sun exposure','Sunscreen is only needed on cloudy-free days','Use broad-spectrum SPF 30 or higher and reapply every 2 hours and after swimming'],c:3,t:'single',r:'<b>Broad-spectrum SPF 30+, reapplied every 2 hours and after swimming or sweating.</b> Avoid sun <b>10 AM to 4 PM</b>, wear protective clothing and a wide-brim hat, <b>no tanning beds</b>, and do monthly self-examinations. UV penetrates clouds.'},
 {topic:'derm',hot:true,q:'Which findings would make the nurse suspect Stevens-Johnson syndrome? Select all that apply.',o:['Painful rash with blistering and skin sloughing','Localized rash in the shape of a watchband','Involvement of the oral and conjunctival mucosa','Positive Nikolsky sign','Recent start of a new sulfonamide antibiotic','Honey-colored crusting around the nares'],c:[0,2,3,4],t:'multi',r:'SJS follows a <b>new drug</b> (sulfonamides, anticonvulsants, allopurinol, NSAIDs), with a <b>painful blistering rash, MUCOUS MEMBRANE involvement, and a positive Nikolsky sign</b>. A watchband-shaped rash is <b>contact dermatitis</b>; honey crusting is <b>impetigo</b>.'},
 {topic:'derm',hot:true,q:'Which are components of the ABCDE melanoma assessment? Select all that apply.',o:['Color variation','Bleeding on palpation','Diameter greater than 6 mm','Asymmetry','Border irregularity','Central clearing'],c:[0,2,3,4],t:'multi',r:'<b>A</b>symmetry, <b>B</b>order irregular, <b>C</b>olor varied, <b>D</b>iameter over 6 mm, <b>E</b>volving. <b>Central clearing describes tinea</b>, not melanoma. Bleeding is concerning and falls under <b>Evolving</b>, but it is not one of the five letters.'},
+{topic:'skin',hot:true,q:'A nurse is assigned four clients. Which client is at HIGHEST risk for developing a pressure injury?',o:['A 45-year-old ambulatory client with well-controlled type 2 diabetes','A 30-year-old one day after appendectomy who is walking in the hall','An 84-year-old with stroke-related hemiplegia, urinary incontinence, and an albumin of 2.6 g/dL','A 70-year-old admitted for pneumonia who repositions independently'],c:2,t:'single',r:'Stack the Braden domains: <b>immobility</b> (hemiplegia), <b>moisture</b> (incontinence), <b>poor nutrition</b> (low albumin), and <b>aging skin</b> with less subcutaneous fat. Every other client can move independently, which is the single biggest protective factor.'},
+{topic:'skin',hot:true,q:'A client on a low-air-loss mattress has intact skin. The nursing assistant says the client no longer needs to be turned every 2 hours. What is the nurse\'s best response?',o:['Support surfaces redistribute pressure but do not relieve it, so turning continues','The mattress eliminates pressure, so turning is only needed for comfort','Turning can be reduced to every 4 hours on this surface','Turning is needed only if redness appears'],c:0,t:'single',r:'<b>Redistribution spreads the load; only repositioning relieves it.</b> A specialty surface never replaces the turning schedule. Waiting for redness means waiting for a Stage 1 injury.'},
+{topic:'skin',hot:true,q:'A nurse removes a dressing and finds a sacral wound with visible subcutaneous fat, tunneling at 3 o\'clock, and no bone or tendon visible. How should this be staged?',o:['Unstageable','Stage 2','Stage 3','Stage 4'],c:2,t:'single',r:'<b>Full-thickness loss into subcutaneous fat, with possible undermining or tunneling, but no muscle, tendon, or bone = Stage 3.</b> Stage 2 stops in the dermis. Stage 4 exposes muscle, tendon, or bone. Unstageable means the base is hidden by slough or eschar, and here you can see it.'},
+{topic:'skin',hot:true,q:'A client\'s heel wound is covered with firm black eschar and the depth cannot be seen. How is it documented, and what must happen before it can be staged?',o:['Deep tissue injury, because the tissue is discolored','Stage 3, because eschar forms only in full-thickness wounds','Stage 4, because eschar always indicates bone involvement','Unstageable; the eschar or necrotic tissue must be removed to see the depth'],c:3,t:'single',r:'<b>If you cannot see the base, you cannot stage it.</b> Depth is determined only after debridement removes the eschar or slough. Deep tissue injury requires <b>intact</b> purple or maroon skin, not eschar.'},
+{topic:'skin',hot:true,q:'A nurse is positioning a client who must remain in bed. Which action best prevents heel pressure injuries?',o:['Place a pillow lengthwise under the calves so the heels float off the mattress','Massage the heels every 2 hours','Apply a donut cushion under each heel','Place a pillow directly under the heels'],c:0,t:'single',r:'<b>Float the heels.</b> Support the calf so the heel touches nothing. A pillow under the heel still loads it, donut cushions create a ring of ischemia, and massaging a pressure point damages compromised capillaries.'},
+{topic:'skin',hot:true,q:'A client scores low on the moisture subscale of the Braden Scale. Which interventions are appropriate? Select all that apply.',o:['Institute a scheduled toileting plan','Layer several briefs and pads for extra protection','Use underpads that wick moisture away from the skin','Apply a moisture barrier cream','Keep the skin damp to prevent cracking','Cleanse promptly after each incontinent episode with a pH-balanced cleanser'],c:[0,2,3,5],t:'multi',r:'<b>Moisture macerates skin and multiplies the damage from pressure.</b> Cleanse promptly, protect with a barrier, wick moisture away, and reduce episodes with scheduled toileting. <b>Layering pads traps heat and moisture</b> and reduces the effectiveness of the support surface.'},
+{topic:'derm',hot:true,q:'A 72-year-old client reports burning pain along the left side of the chest for three days, and today a band of clustered vesicles appeared in the same area. The client\'s grandchild, who has never had chickenpox, visits daily. What is the priority teaching?',o:['The grandchild will develop shingles if exposed','The rash can transmit chickenpox to the grandchild until all lesions crust','Antivirals are ineffective after the rash appears, so treatment focuses on pain','Shingles is not contagious once the rash appears'],c:1,t:'single',r:'<b>Shingles fluid transmits varicella, which causes chickenpox, not shingles,</b> in anyone never infected or vaccinated, until the lesions crust. Antivirals work best <b>within 72 hours of rash onset</b>, so this client is still inside the window.'},
+{topic:'derm',hot:true,q:'A client reports a mole on the back that has recently begun to itch and bleed. It measures 4 mm, is round, and is uniformly brown. What is the nurse\'s best action?',o:['Apply a topical steroid for the itching','Refer for evaluation, because a changing mole is suspicious regardless of size or color','Advise the client to monitor it for another 6 months','Reassure the client, since the mole is under 6 mm with regular borders'],c:1,t:'single',r:'<b>E for Evolving outranks the other four letters.</b> A mole that itches, bleeds, or changes needs evaluation even if it passes A through D. Waiting 6 months on a changing lesion is the trap.'},
+{topic:'derm',hot:true,q:'A client started on allopurinol 10 days ago now has fever, a painful dusky rash that is blistering, erosions in the mouth, and red eyes. The skin sloughs with gentle pressure. Which action is the priority?',o:['Apply a thick emollient and reassess in the morning','Stop the allopurinol and notify the provider immediately','Encourage oral fluids and document the rash','Give diphenhydramine and continue the medication'],c:1,t:'single',r:'<b>New drug + mucous membrane involvement + blistering + positive Nikolsky sign = Stevens-Johnson syndrome.</b> Stop the causative drug first. The client is then managed like a burn: fluids, pain control, wound care, and eye care.'},
+{topic:'derm',hot:true,q:'A client asks why a basal cell carcinoma on the nose will be removed with Mohs surgery instead of a wide excision. What is the nurse\'s best explanation?',o:['Mohs uses liquid nitrogen to freeze the tumor','Mohs removes the cancer layer by layer, checking each under the microscope, so healthy tissue is preserved','Mohs is the only procedure that does not require local anesthesia','Wide excision is reserved for benign lesions'],c:1,t:'single',r:'<b>Mohs removes one layer at a time and examines each before taking the next.</b> It has the highest cure rate and spares the most healthy tissue, which is why it is chosen for the <b>face, ears, and hands</b>. Freezing with liquid nitrogen is cryosurgery.'},
+{topic:'derm',hot:true,q:'A mother reports that one child was diagnosed with scabies and treated. Two weeks later the child is still itching, and a sibling has begun itching. What is the nurse\'s best interpretation?',o:['Both children should use hydrocortisone cream instead of permethrin','The treatment failed and must be repeated on the first child immediately','Itching can persist after successful treatment, but the sibling should be treated since all household contacts need treatment','Scabies is not contagious, so the sibling\'s itching is unrelated'],c:2,t:'single',r:'<b>Itching can continue for weeks after successful treatment</b>, so persistent itch alone is not failure. The real error is that <b>every household contact should have been treated at the same time</b>, symptomatic or not, with linens washed in hot water.'},
+{topic:'derm',hot:true,q:'A client with atopic dermatitis asks how to control flares. Which instructions are appropriate? Select all that apply.',o:['Apply moisturizer within 3 minutes of bathing','Use wool clothing to keep skin warm','Bathe in lukewarm rather than hot water','Keep fingernails short','Pat the skin dry instead of rubbing','Take long hot showers to soothe itching'],c:[0,2,3,4],t:'multi',r:'Moisturizer on damp skin traps water in. Lukewarm water, patting dry, and short nails break the <b>itch-scratch cycle</b> that leads to lichenification and infection. Wool irritates, and hot water strips the skin barrier.'},
+{topic:'ear',hot:true,q:'A client with Ménière\'s disease is scheduled for a labyrinthectomy. Which statement shows the client understands the procedure?',o:['The surgery only drains extra fluid, so my hearing will not change','The surgery will restore my hearing and stop my vertigo','The surgery should stop my vertigo, but I will lose the hearing in that ear','I will need to follow a low-sodium diet for the rest of my life after surgery'],c:2,t:'single',r:'<b>A labyrinthectomy destroys the inner ear.</b> It ends the vertigo by sacrificing the hearing on that side. His handout states there is always some hearing loss with surgical treatment. Endolymphatic sac decompression is the procedure that drains fluid.'},
+{topic:'ear',hot:true,q:'A client reports ringing in the ears and difficulty hearing after starting a new medication. Which medication should the nurse suspect?',o:['Gentamicin','Metformin','Acetaminophen','Levothyroxine'],c:0,t:'single',r:'<b>Aminoglycosides like gentamicin are ototoxic</b> and cause sensorineural loss by damaging cochlear hair cells, which do not regenerate. Other ototoxic drugs include <b>loop diuretics given rapidly, high-dose aspirin, and cisplatin</b>. Tinnitus is often the first sign.'},
+{topic:'ear',hot:true,q:'An older adult with presbycusis is having difficulty understanding the nurse during discharge teaching. Which approach is most effective?',o:['Use a higher pitch so the voice carries','Speak louder and repeat the instructions several times','Speak directly into the client\'s better ear from behind','Face the client, lower the pitch of the voice, and speak slowly in a quiet room'],c:3,t:'single',r:'<b>Presbycusis destroys high-frequency hearing first</b>, so consonants blur and speech is audible but not understood. Raising volume or pitch makes it worse. <b>Lower pitch, slower speech, face-to-face for lip reading, less background noise.</b>'},
+{topic:'ear',hot:true,q:'A nurse is about to instill otic drops for an adult. The client had a recent ear infection with sudden relief of pain followed by drainage. What should the nurse do before instilling the drops?',o:['Warm the drops and pull the pinna down and back','Instill the drops and have the client lie on the affected side','Hold the drops and verify the tympanic membrane is intact, since sudden pain relief with drainage suggests perforation','Irrigate the canal to clear the drainage first'],c:2,t:'single',r:'<b>Sudden pain relief followed by drainage is the classic sign of a ruptured eardrum.</b> Drops through a perforation can reach the middle ear. <b>Assess for perforation first.</b> Adults are pulled up and back, and irrigation is contraindicated with a possible perforation.'},
+{topic:'ear',hot:true,q:'Which instructions should the nurse include for a client with Ménière\'s disease? Select all that apply.',o:['Avoid caffeine, alcohol, and nicotine','Increase fluid intake to 4 liters daily','Limit sodium to 1,000 to 1,500 mg daily','Drive only when vertigo is mild','Avoid sudden head movements','Lie still in a darkened room during an attack'],c:[0,2,4,5],t:'multi',r:'Ménière\'s is <b>too much endolymph</b>, so sodium and stimulants are limited. During an attack <b>safety comes first</b>: lie still, dark room, no sudden movements. Attacks come without warning, so <b>no driving</b> until episodes are controlled.'},
+{topic:'eye',t:'match',hot:true,q:'Read each description and select the eye condition it defines.',
+ items:[
+   {term:'Painless, gradual loss of PERIPHERAL vision from obstructed aqueous drainage; accounts for about 90% of cases', def:'Open-angle glaucoma'},
+   {term:'SUDDEN rise in IOP with severe eye pain, halos, nausea, and a fixed mid-dilated pupil', def:'Angle-closure glaucoma'},
+   {term:'Clouding of the LENS from protein buildup, causing dim vision, glare, and fading colors', def:'Cataract'},
+   {term:'Gradual CENTRAL vision loss as drusen accumulate and coalesce under the macula', def:'Dry macular degeneration'},
+   {term:'Fragile new vessels grow and leak under the macula, causing faster central vision loss', def:'Wet macular degeneration'},
+   {term:'Sudden painless floaters, flashes of light, and a curtain across the visual field', def:'Retinal detachment'}
+ ],
+ r:'<b>Glaucoma takes the periphery, macular degeneration takes the center.</b> Open-angle is gradual and painless; angle-closure is sudden and painful with a fixed mid-dilated pupil. Dry AMD is drusen; wet AMD is neovascular. A curtain with flashes and floaters is retinal detachment, a surgical emergency.'},
+{topic:'eye',t:'match',hot:true,q:'Match each clinical fact or treatment to the condition it belongs to.',
+ items:[
+   {term:'Photodynamic therapy with verteporfin, then avoid bright light for 5 days', def:'Wet macular degeneration'},
+   {term:'Phacoemulsification uses sound waves to break up the lens before suction', def:'Cataract'},
+   {term:'Eye drops are used for life; avoid heavy lifting, straining, and snow shoveling', def:'Open-angle glaucoma'},
+   {term:'A mydriatic drop can precipitate this emergency', def:'Angle-closure glaucoma'},
+   {term:'Client describes a shade being pulled over part of the vision; a surgical emergency', def:'Retinal detachment'},
+   {term:'Age-related stiffening of the lens makes it hard to focus up close', def:'Presbyopia'}
+ ],
+ r:'Verteporfin is <b>light-activated</b>, hence 5 days away from bright light. <b>Dilating drops close the drainage angle</b>, which is why they can trigger angle-closure. Glaucoma drops are lifelong because lost vision does not return. <b>Presbyopia is lens stiffening</b>, not clouding.'},
+{topic:'eye',t:'match',hot:true,q:'Match each glaucoma medication to its action or key nursing point.',
+ items:[
+   {term:'Beta blocker that DECREASES aqueous production; systemically absorbed, can cause bronchospasm', def:'Timolol'},
+   {term:'Prostaglandin that increases outflow; permanently darkens the iris; given at night', def:'Latanoprost'},
+   {term:'Miotic that CONSTRICTS the pupil to open the drainage angle; causes poor night vision', def:'Pilocarpine'},
+   {term:'Carbonic anhydrase inhibitor, a sulfa drug with systemic effects such as fatigue and GI upset', def:'Acetazolamide'},
+   {term:'Dilates the pupil; CONTRAINDICATED in angle-closure glaucoma', def:'Atropine'}
+ ],
+ r:'Timolol is the one that reaches the lungs and heart, so <b>punctal occlusion</b> matters. Latanoprost darkens the iris. Pilocarpine constricts; atropine dilates, which is why atropine is dangerous in angle-closure.'},
+{topic:'insulin',t:'match',hot:true,q:'Match each statement to the insulin it describes.',
+ items:[
+   {term:'The ONLY insulin given IV and the one added to TPN', def:'Regular'},
+   {term:'The ONLY insulin that should appear cloudy; roll, never shake', def:'NPH'},
+   {term:'Has NO peak and must NEVER be mixed with another insulin', def:'Glargine'},
+   {term:'Given immediately before eating, with the meal tray in front of the client', def:'Lispro'},
+ ],
+ r:'<b>Only Regular goes IV.</b> <b>Only NPH is cloudy</b>; any other cloudy insulin is discarded. <b>Long-acting has no peak and is never mixed.</b> Rapid-acting starts in 15 to 30 minutes, so the food must be present. NPH peaks 6 to 14 hours after the dose.'},
+{topic:'insulin',t:'match',hot:true,q:'Using his insulin handout, match each onset, peak, and duration to the insulin type.',
+ items:[
+   {term:'Onset 15 to 30 min · Peak 0.5 to 2.5 hr · Duration 3 to 6 hr', def:'Rapid-acting (lispro, aspart, glulisine)'},
+   {term:'Onset 0.5 to 1 hr · Peak 1 to 5 hr · Duration 6 to 14 hr', def:'Short-acting (Regular)'},
+   {term:'Onset 1 to 2 hr · Peak 6 to 14 hr · Duration 16 to 24 hr', def:'Intermediate-acting (NPH)'},
+   {term:'Onset 70 min · Peak NONE · Duration 18 to 24 hr', def:'Long-acting (glargine, detemir)'}
+ ],
+ r:'From his rates handout: <b>cheetah</b> rapid, <b>horse</b> short, <b>rain cloud</b> intermediate, <b>turtle</b> long. <b>Hypoglycemia happens at peak</b>, and long-acting has none.'},
+{topic:'insulin',t:'match',hot:true,q:'Match each insulin-related problem to its description.',
+ items:[
+   {term:'Thickened, rubbery fatty tissue from injecting the same spot; absorption becomes erratic', def:'Lipohypertrophy'},
+   {term:'Loss of subcutaneous fat at injection sites, leaving a dented area', def:'Lipoatrophy'},
+   {term:'High 3 AM glucose and high morning glucose; needs MORE evening insulin', def:'Dawn phenomenon'},
+   {term:'LOW 3 AM glucose followed by rebound high morning glucose; needs LESS evening insulin', def:'Somogyi effect'},
+   {term:'Muscle cramps and dysrhythmias in a client on large insulin doses', def:'Hypokalemia'}
+ ],
+ r:'Rotation prevents both <b>lipohypertrophy</b> and <b>lipoatrophy</b>. <b>The 3 AM value separates Dawn from Somogyi</b>, with opposite fixes. <b>Insulin drives potassium into cells</b>, so large doses can cause hypokalemia.'},
+{topic:'diabetes',t:'match',hot:true,q:'Match each description to the type of diabetes.',
+ items:[
+   {term:'Autoimmune destruction of beta cells, usually childhood onset, INSULIN ONLY', def:'Type 1'},
+   {term:'Insulin is produced but cells resist it; managed first with lifestyle and metformin', def:'Type 2'},
+   {term:'Autoimmune like type 1 but appears slowly in adults, often misdiagnosed as type 2', def:'LADA'},
+   {term:'Develops in pregnancy and usually resolves after delivery but raises lifetime type 2 risk', def:'Gestational'},
+   {term:'A1C of 5.7 to 6.4%, still reversible with lifestyle change', def:'Prediabetes'}
+ ],
+ r:'<b>Type 1 is insulin only</b> because there are no beta cells for oral agents to act on. <b>LADA is a slow-forming type 1</b> in adults. Gestational diabetes resolves but leaves risk. Prediabetes is where teaching changes outcomes most.'},
+{topic:'drugs',t:'match',hot:true,q:'Match each mechanism to the diabetes medication.',
+ items:[
+   {term:'Decreases liver glucose production and improves insulin sensitivity; first-line for type 2', def:'Metformin'},
+   {term:'FORCES the pancreas to release insulin, so it can cause hypoglycemia alone', def:'Glipizide'},
+   {term:'Blocks glucose reabsorption in the kidney so glucose is excreted in urine', def:'Empagliflozin'},
+   {term:'Slows gastric emptying and increases satiety; injectable but NOT insulin', def:'Liraglutide'},
+   {term:'Slows carbohydrate breakdown in the gut', def:'Acarbose'},
+   {term:'Increases insulin sensitivity in muscle and fat but causes fluid retention', def:'Pioglitazone'}
+ ],
+ r:'Know the class by the suffix: <b>-formin</b>, <b>-ide</b> sulfonylureas, <b>-flozin</b> SGLT2, <b>-tide</b> GLP-1, <b>-ose</b> alpha-glucosidase inhibitor, <b>-glitazone</b> TZD.'},
+{topic:'drugs',t:'match',hot:true,q:'Match each nursing concern to the medication it applies to.',
+ items:[
+   {term:'HOLD 48 hours before and after iodinated contrast; risk of lactic acidosis', def:'Metformin'},
+   {term:'If hypoglycemia occurs, treat ONLY with glucose tablets, not juice or candy', def:'Acarbose'},
+   {term:'Contraindicated in heart failure; report sudden weight gain and edema', def:'Pioglitazone'},
+   {term:'Teach perineal hygiene; watch for genital yeast infections and UTIs', def:'Empagliflozin'},
+   {term:'Contraindicated with a history of medullary thyroid carcinoma', def:'Liraglutide'},
+   {term:'Skip the dose if skipping the meal', def:'Repaglinide'}
+ ],
+ r:'These are the testable safety points for each class. <b>Acarbose blocks sucrose breakdown</b>, which is why only glucose works. <b>GLP-1 agonists carry a thyroid C-cell tumor warning.</b>'},
+{topic:'skin',t:'match',hot:true,q:'Match each definition to the pressure injury stage.',
+ items:[
+   {term:'Intact skin with NONBLANCHABLE redness; no break in the skin', def:'Stage 1'},
+   {term:'Partial-thickness loss into the dermis; has not reached subcutaneous tissue', def:'Stage 2'},
+   {term:'Full-thickness loss into subcutaneous fat; may tunnel; no muscle or bone', def:'Stage 3'},
+   {term:'Full-thickness loss with muscle, tendon, or bone exposed', def:'Stage 4'},
+   {term:'Intact skin with deep purple or maroon discoloration that feels boggy', def:'Deep tissue injury'},
+   {term:'Depth cannot be seen because the base is covered with slough or eschar', def:'Unstageable'}
+ ],
+ r:'Stage by two questions: <b>is the skin intact, and how deep does it go?</b> Stage 1 and deep tissue injury are both intact; Stage 1 is red, DTI is purple and boggy.'},
+{topic:'skin',t:'match',hot:true,q:'Match each bedside finding to how it should be documented.',
+ items:[
+   {term:'Red area over the sacrum that does not whiten when pressed; skin unbroken', def:'Stage 1'},
+   {term:'Shallow open area with a pink wound bed and a ruptured blister', def:'Stage 2'},
+   {term:'Wound on the hip with yellow fat visible and tunneling at 3 o\'clock', def:'Stage 3'},
+   {term:'Heel wound with firm black eschar covering the base', def:'Unstageable'},
+   {term:'Coccyx wound with bone visible at the base', def:'Stage 4'},
+   {term:'Maroon, boggy area over the sacrum on intact skin after surgery', def:'Deep tissue injury'}
+ ],
+ r:'Same six categories, written the way you will see them at the bedside. <b>If you cannot see the base, it is unstageable.</b>'},
+{topic:'skin',t:'match',hot:true,q:'Match each client finding to the Braden subscale it lowers.',
+ items:[
+   {term:'Client is sedated and does not respond to painful stimuli', def:'Sensory perception'},
+   {term:'Client is incontinent of urine and stool several times per shift', def:'Moisture'},
+   {term:'Client is bedfast and never gets out of bed', def:'Activity'},
+   {term:'Client cannot shift position in bed without full assistance', def:'Mobility'},
+   {term:'Client eats less than a third of each meal', def:'Nutrition'},
+   {term:'Client constantly slides down in bed and is dragged when repositioned', def:'Friction and shear'}
+ ],
+ r:'Six subscales. <b>Activity is how often they are out of bed; mobility is whether they can change position.</b> The lower the total score, the higher the risk.'},
+{topic:'derm',t:'match',hot:true,q:'Match each description to the skin condition.',
+ items:[
+   {term:'Honey-colored crusts around the nose and mouth; highly contagious', def:'Impetigo'},
+   {term:'Painful clustered vesicles along ONE dermatome that do not cross midline', def:'Herpes zoster'},
+   {term:'Thick silvery-white scales on red plaques over elbows and knees', def:'Psoriasis'},
+   {term:'Ring-shaped scaly patch with a clear center', def:'Tinea'},
+   {term:'Intense itching worse at night with burrows between the fingers', def:'Scabies'},
+   {term:'Blistering rash with mucous membrane involvement after a new drug', def:'Stevens-Johnson syndrome'}
+ ],
+ r:'Several of these give themselves away in one detail: <b>honey crust</b>, <b>one dermatome</b>, <b>silvery scale</b>, <b>clear center</b>, <b>night itching with burrows</b>, and <b>mucous membranes after a new drug</b>.'},
+{topic:'derm',t:'match',hot:true,q:'Match each description to the lesion type.',
+ items:[
+   {term:'Pearly, flesh-colored bump or pinkish patch; the MOST COMMON skin cancer', def:'Basal cell carcinoma'},
+   {term:'Red firm bump, scaly patch, or a sore that heals and then re-opens', def:'Squamous cell carcinoma'},
+   {term:'Scaly patches that are PRECANCEROUS and can progress to squamous cell', def:'Actinic keratosis'},
+   {term:'Changing, irregular, multicolored mole; the MOST DEADLY', def:'Melanoma'}
+ ],
+ r:'<b>Basal cell is most common, melanoma is most deadly</b>, squamous cell sits between them and can spread, and <b>actinic keratosis is precancerous</b>.'},
+{topic:'derm',t:'match',hot:true,q:'Match each lesion description to the correct term.',
+ items:[
+   {term:'Flat color change under 1 cm', def:'Macule'},
+   {term:'Raised solid lesion under 1 cm', def:'Papule'},
+   {term:'Raised, flat-topped lesion over 1 cm', def:'Plaque'},
+   {term:'Fluid-filled lesion under 1 cm', def:'Vesicle'},
+   {term:'Fluid-filled lesion over 1 cm', def:'Bulla'},
+   {term:'Pus-filled lesion', def:'Pustule'}
+ ],
+ r:'<b>The 1 cm line splits the pairs</b>: macule/patch, papule/plaque, vesicle/bulla. Flat, raised solid, fluid, or pus decides the family.'},
+{topic:'ear',t:'match',hot:true,q:'Match each description to the ear condition.',
+ items:[
+   {term:'Sound cannot get in because of cerumen, fluid, or a perforated drum; often correctable', def:'Conductive hearing loss'},
+   {term:'Damage to cochlear hair cells or cranial nerve VIII; usually permanent', def:'Sensorineural hearing loss'},
+   {term:'Age-related loss of high frequencies; speech is heard but not understood', def:'Presbycusis'},
+   {term:'Excess endolymph causing vertigo, buzzing tinnitus, and fluctuating hearing loss', def:'Meniere\'s disease'},
+   {term:'Pain when the pinna or tragus is moved; common after swimming', def:'Otitis externa'},
+   {term:'Red bulging eardrum, fever, and ear pain, common in young children', def:'Otitis media'}
+ ],
+ r:'<b>Conductive is plumbing, sensorineural is wiring.</b> Presbycusis takes high frequencies first. <b>Tragus pain points to the outer ear</b>; a bulging drum points to the middle ear.'},
+{topic:'ear',t:'match',hot:true,q:'Match each nursing fact to the ear condition or procedure.',
+ items:[
+   {term:'Limit sodium to 1,000 to 1,500 mg daily and take meclizine', def:'Meniere\'s disease'},
+   {term:'Destroys the inner ear to stop vertigo and sacrifices hearing on that side', def:'Labyrinthectomy'},
+   {term:'Pull the pinna UP and BACK and warm the drops first', def:'Adult ear drop instillation'},
+   {term:'Shorter, wider, more horizontal eustachian tube explains frequent infections', def:'Otitis media in toddlers'},
+   {term:'Aminoglycosides and rapid IV loop diuretics can cause it', def:'Ototoxic hearing loss'}
+ ],
+ r:'Each row is a single fact he can test. <b>Surgery for Meniere\'s always costs some hearing.</b> Adults are up and back; children under 3 are down and back.'},
+{topic:'eye',hot:true,q:'Which patient should the nurse see FIRST?',o:['Glaucoma patient due for scheduled drops','Healing Stage 2 pressure injury on the sacrum','Type 1 diabetic who is confused, sweaty, and shaky','Type 2 diabetic with a glucose of 190'],c:2,t:'single',r:'Hypoglycemia signs = acute brain emergency → see first.'},
+{topic:'complications',hot:true,q:'Which finding in a diabetic foot exam is MOST concerning?',o:['A small callus under the great toe','Slightly thickened toenails on both feet','Dry skin over the heels bilaterally','A non-healing ulcer with drainage and redness'],c:3,t:'single',r:'A non-healing, draining, red ulcer signals infection that can progress to amputation — most concerning.'},
 ];
 /* ===== Even-chapter draw: Ch 47 · 56 · 57 · 59 · 60 ===== */
 const CH_MAP=[
@@ -4697,6 +4869,54 @@ function startEvenChapters(total){
   if(typeof toast==='function') toast('Even draw: '+per+' from each of 5 chapters');
 }
 window.startEvenChapters=startEvenChapters; window.CH_MAP=CH_MAP;
+/* ===== Final Cram: balanced + scenario-level only ===== */
+const CRAM_GROUPS=[
+  {n:3, topics:['diabetes','insulin','dka','hypo','complications']},
+  {n:3, topics:['skin']}, {n:3, topics:['derm']},
+  {n:3, topics:['eye']},  {n:3, topics:['ear']},
+  {n:3, topics:['asepsis','drugs']}
+];
+function drawCram(){
+  const hard=EXAM.filter(q=>q.t!=='match'&&q.t!=='order'&&q.q.length>=100);
+  let pick=[];
+  CRAM_GROUPS.forEach(g=>{ pick=pick.concat(u3Shuffle(hard.filter(q=>g.topics.includes(q.topic))).slice(0,g.n)); });
+  pick=u3Shuffle(pick);
+  renderQuiz('quiz-cram', pick.map(x=>({q:x.q,opts:x.o.slice(),correct:(x.t==='multi'?x.c.slice():x.c),
+    type:(x.t==='multi'?'multi':'single'),rat:x.r})), 'High-yield check','Final Cram');
+  const n=document.getElementById('quiz-cram-poolnote'); if(n) n.remove();
+}
+window.drawCram=drawCram;
+/* ===== Final Cram: 2 dropdown-match questions per draw ===== */
+function drawCramMatch(){
+  const pool=EXAM.map((q,i)=>i).filter(i=>EXAM[i].t==='match');
+  const picked=[]; const seen=new Set();
+  u3Shuffle(pool).forEach(i=>{ if(picked.length<2 && !seen.has(EXAM[i].topic)){ picked.push(i); seen.add(EXAM[i].topic);} });
+  const host=document.getElementById('quiz-cram-match'); if(!host) return;
+  host.innerHTML=picked.map((qi,n)=>{
+    const q=EXAM[qi]; const order=u3Shuffle(q.items.map((_,i)=>i));
+    const opts=order.map(i=>`<option value="${i}">${q.items[i].def}</option>`).join('');
+    const rows=q.items.map((it,r)=>`<div class="dm-row" id="cm${n}r${r}"><div class="dm-term">${it.term}</div>
+      <select class="dm-select" data-ans="${r}"><option value="">\u2014 select \u2014</option>${opts}</select></div>`).join('');
+    return `<div class="card"><div><span class="qtype">Dropdown Match</span></div><div class="qtext" style="font-weight:700;margin:6px 0 10px">${q.q}</div>
+      ${rows}<div class="center"><button class="btn" onclick="checkCramMatch(${n},${qi})">\u2713 Check Answers</button></div>
+      <div id="cm${n}rat"></div></div>`;
+  }).join('');
+}
+function checkCramMatch(n,qi){
+  const q=EXAM[qi]; let right=0;
+  q.items.forEach((_,r)=>{
+    const row=document.getElementById(`cm${n}r${r}`); const sel=row.querySelector('select');
+    const ok=sel.value!=='' && Number(sel.value)===r; if(ok) right++;
+    row.classList.remove('dm-correct','dm-wrong'); row.classList.add(ok?'dm-correct':'dm-wrong');
+    if(!ok){ const t=row.querySelector('.cm-fix')||document.createElement('div'); t.className='cm-fix';
+      t.style.cssText='font-size:.82rem;margin-top:4px;color:var(--green);font-weight:700';
+      t.textContent='\u2713 '+q.items[r].def; row.appendChild(t); }
+    sel.disabled=true;
+  });
+  document.getElementById(`cm${n}rat`).innerHTML=`<div class="rationale show" style="display:block"><b>${right} / ${q.items.length} correct.</b> ${q.r}</div>`;
+}
+window.drawCramMatch=drawCramMatch; window.checkCramMatch=checkCramMatch;
+drawCram(); drawCramMatch();
 
 
 </script>
@@ -4908,7 +5128,7 @@ function drawExamMatchQ(qi,q,body){
       rowCls += isCorrect ? ' dm-correct' : ' dm-wrong';
     }
     html+=`<div class="${rowCls}"><div class="dm-term">${item.term}</div><select class="dm-select" ${checked?'disabled':''} onchange="examMatchPick(${itemIdx}, this.value)">`;
-    html+=`<option value="" ${selectedPos===undefined?'selected':''}>— choose a definition —</option>`;
+    html+=`<option value="" ${selectedPos===undefined?'selected':''}>— select —</option>`;
     q.defs.forEach((d,pos)=>{ html+=`<option value="${pos}" ${selectedPos===pos?'selected':''}>${d}</option>`; });
     html+=`</select></div>`;
   });
